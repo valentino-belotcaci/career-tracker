@@ -20,7 +20,12 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter'
-	implementation 'org.springframework.boot:spring-boot-starter-web' // This import is necessary for the RestController Annotation
+	// This import is necessary for the RestController Annotation
+	implementation 'org.springframework.boot:spring-boot-starter-web' 
+	// Spring Data JPA for repository support
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	// In-memory database for development/testing
+	runtimeOnly 'com.h2database:h2'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }

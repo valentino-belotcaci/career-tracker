@@ -1,3 +1,10 @@
 spring:
+  datasources:
+    dbName: defaultdb
+    dbPort:  13765
+    dbHostName: career-tracker-loca2gaming-18ad.g.aivencloud.com
+    dbUser: avnadmin
+    dbPassword: AVNS_pQo1WsnuBn7vq6uQGBu
+
   application:
     name: CareerTracker
