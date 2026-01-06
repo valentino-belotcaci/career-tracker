@@ -24,10 +24,8 @@ public class User {
     // to AUTO choose the best strategy itself(probably just number increasing e.g. 1, 2, 3...)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // To define actual SQL column
-
     private String name;
-    private String email;
-    private String password;
+    private Long accountId;
 
 
 }

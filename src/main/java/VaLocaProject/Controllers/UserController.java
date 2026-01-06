@@ -33,6 +33,6 @@ public class UserController{
     public ResponseEntity<User> insertUser(@RequestBody User user) {
         return ResponseEntity.ok(userService.saveUser(user));
     }
-    
+
     
 }
