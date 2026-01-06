@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
 @Entity // To define it as entity to springboot
-@Table(name = "user") // To define which table it represents
+@Table(name = "users") // To define which table it represents
 @Data // Generates getters, setters, toString(), equals(), hashCode()
 @NoArgsConstructor
 @AllArgsConstructor // Creates specific constructors for all fields
