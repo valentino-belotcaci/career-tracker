@@ -1,11 +1,14 @@
 package VaLocaProject.Services;
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 
 import VaLocaProject.Repositories.UserRepository;
-
-import org.springframework.stereotype.Service;
+import VaLocaProject.Models.User;
 
 
 @Service
@@ -15,7 +18,7 @@ public class UserService{
     UserRepository userRepository;
 
 
-    public String getUsername(){
-        userRepository.fi
+    public List<User> getUsername(){
+        return userRepository.findAll();
     }
 }

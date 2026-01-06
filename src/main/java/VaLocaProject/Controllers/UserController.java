@@ -10,7 +10,7 @@ import VaLocaProject.Services.UserService;
 @RestController
 public class UserController{
 
-    @Autowired
+    @Autowired // to automatically inject the service instance
     UserService UserService;
 
     @GetMapping("/User")
