@@ -1,5 +1,7 @@
 package VaLocaProject.Controllers;
 
+import java.util.List;
+
 import org.apache.catalina.connector.Response;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,21 +24,16 @@ public class UserController{
         this.userService = userService;
     }
 
-    @GetMapping("/User/all")
-    public String getUsername(){
-        return "User";
-    }
-    
-    @GetMapping("/User/{id}")
-    // Returns the full response with headers, status and the User object
-    public ResponseEntity<User> getUserById(@PathVariable Long id){  
-        return ResponseEntity.of(userService.getUserById(id));
+    @GetMapping("/User/getAllUsers")
+    // Returns all users
+    public ResponseEntity<List<User>> getAllUsers(){
+        return ResponseEntity.ok(userService.getAllUsers());
     }
 
+
     @PostMapping("/User/insertUser")
-    public String insertUser(@RequestBody User user) {
-        userService.insertUser(user);
-        return "Insertion Successful";
+    public ResponseEntity<User> insertUser(@RequestBody User user) {
+        return ResponseEntity.ok(userService.saveUser(user));
     }
     
     
