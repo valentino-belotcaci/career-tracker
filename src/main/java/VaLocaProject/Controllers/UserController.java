@@ -2,28 +2,40 @@ package VaLocaProject.Controllers;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.catalina.connector.Response;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
-import VaLocaProject.Models.User;
 import VaLocaProject.Services.UserService;
+import VaLocaProject.Models.User;
+
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
 public class UserController{
 
-    @Autowired // to automatically inject the service instance
-    UserService userService;
+    private final UserService userService;
 
-    @GetMapping("/User")
-    public List<User> getUsername(){
-        return userService.getUsers();
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
-    @GetMapping("/User2")
-    public String getUsername2(){
-        return "userService.getUsers()";
+    // Returns all users
+    @GetMapping("/User/getAllUsers")
+
+    public ResponseEntity<List<User>> getAllUsers(){
+        return ResponseEntity.ok(userService.getAllUsers());
     }
+
+    // Inserts a new user
+    @PostMapping("/User/insertUser")
+    public ResponseEntity<User> insertUser(@RequestBody User user) {
+        return ResponseEntity.ok(userService.saveUser(user));
+    }
+    
     
 }
