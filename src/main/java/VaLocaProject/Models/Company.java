@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,7 +18,8 @@ import lombok.NoArgsConstructor;
 public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public long companyId;
+    @JoinColumn(name = "company_id")
+    public long company_id;
     public String name;
     public String description;
     public long account_id;

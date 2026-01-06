@@ -4,6 +4,7 @@ package VaLocaProject.Models;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Table;
@@ -23,9 +24,10 @@ public class User {
     // "strategy = GenerationType.AUTO" tells JPA 
     // to AUTO choose the best strategy itself(probably just number increasing e.g. 1, 2, 3...)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // To define actual SQL column
+    @JoinColumn(name = "user_id")
+    private Long user_id; // To define actual SQL column
     private String name;
-    private Long accountId;
+    private Long account_id;
 
 
 }
