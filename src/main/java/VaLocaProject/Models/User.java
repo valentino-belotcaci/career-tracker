@@ -22,7 +22,7 @@ public class User {
     // "GeneratedValue" tells JPA that that value is generated.
     // "strategy = GenerationType.AUTO" tells JPA 
     // to AUTO choose the best strategy itself(probably just number increasing e.g. 1, 2, 3...)
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // To define actual SQL column
 
     private String name;

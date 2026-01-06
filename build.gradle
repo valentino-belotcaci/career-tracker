@@ -29,8 +29,6 @@ dependencies {
 	
 	// PostgreSQL driver for runtime when connecting to Postgres
 	runtimeOnly 'org.postgresql:postgresql:42.7.8'
-	// H2 fallback for local development when no Postgres env is present
-	runtimeOnly 'com.h2database:h2'
 
 	// Lombok (annotations like @Data, @NoArgsConstructor, etc.)
 	compileOnly 'org.projectlombok:lombok:1.18.32'
