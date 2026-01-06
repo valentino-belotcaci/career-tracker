@@ -5,6 +5,7 @@ import VaLocaProject.Models.User;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
-    // Custom finder that matches the user's request
+    // To return a specific user
     Optional<User> getUserById(Long id);
+
 }

@@ -16,10 +16,12 @@ public class UserService{
     UserRepository userRepository;
 
 
-    public Optional<User> getUserById(Long id ){ // Optional as a User may not be found
+    public Optional<User> getUserById(Long id ) { // Optional as a User may not be found
         // Delegate to the repository
         return userRepository.getUserById(id);
     }
 
-    
+    public void insertUser(User user) {
+        userRepository.save(user); // Save used for JPA repository to add a user
+    }
 }

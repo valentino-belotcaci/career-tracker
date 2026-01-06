@@ -1,3 +1,10 @@
 spring:
+  datasources:
+    dbName: 
+    dbPort:  
+    dbHostName: 
+    dbUser: 
+    dbPassword: 
+
   application:
     name: CareerTracker
