@@ -24,13 +24,14 @@ public class UserController{
         this.userService = userService;
     }
 
-    @GetMapping("/User/getAllUsers")
     // Returns all users
+    @GetMapping("/User/getAllUsers")
+
     public ResponseEntity<List<User>> getAllUsers(){
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
-
+    // Inserts a new user
     @PostMapping("/User/insertUser")
     public ResponseEntity<User> insertUser(@RequestBody User user) {
         return ResponseEntity.ok(userService.saveUser(user));

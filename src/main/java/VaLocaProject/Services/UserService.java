@@ -18,12 +18,6 @@ public class UserService{
     @Autowired
     UserRepository userRepository;
 
-
-    public Optional<User> getUserById(Long id ) { // Optional as a User may not be found
-        // Delegate to the repository
-        return userRepository.getUserById(id);
-    }
-
     public List<User> getAllUsers(){
         return userRepository.findAll();
     }

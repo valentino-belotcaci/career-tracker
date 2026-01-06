@@ -6,6 +6,5 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     // To return a specific user
-    Optional<User> getUserById(Long id);
 
 }
