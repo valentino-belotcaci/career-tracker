@@ -1,5 +1,5 @@
 /build/
 /.gradle/
 
-.gradle/
+gradle/
 !gradle/wrapper/gradle-wrapper.jar

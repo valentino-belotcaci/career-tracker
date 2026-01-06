@@ -22,7 +22,6 @@ public class UserService{
         return userRepository.findAll();
     }
 
-    @Transactional
     // Return saved user so callers get generated id
     public User saveUser(User user) {
         return userRepository.save(user);
