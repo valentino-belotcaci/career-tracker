@@ -85,3 +85,7 @@ This project is designed for:
 This project is intended for learning and portfolio use. You may choose and add a license (MIT recommended).
 
 ---
+
+## Run the project
+
+./gradlew bootRun
