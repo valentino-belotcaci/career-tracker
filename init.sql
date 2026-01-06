@@ -7,6 +7,3 @@ CREATE TABLE users(
 
 
 
-
-
-

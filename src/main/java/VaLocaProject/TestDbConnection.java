@@ -3,6 +3,7 @@ package VaLocaProject;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
+// NEEDS TO BE TESTED, SHOULD CHECK CONNECTION TO DB
 public class TestDbConnection {
     public static void main(String[] args) {
         String host = System.getenv().getOrDefault("DB_HOST", "career-tracker-loca2gaming-18ad.g.aivencloud.com");
