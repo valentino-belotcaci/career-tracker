@@ -6,10 +6,15 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class AccountDTO {
 
     private Long accountId;
     private String email;
-    private Boolean type;
+    private String type;
+
+    public AccountDTO(Long accountId, String email, String type){
+        this.accountId = accountId;
+        this.email = email;
+        this.type = type;
+    }
 }

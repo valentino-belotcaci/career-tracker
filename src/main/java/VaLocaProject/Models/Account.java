@@ -20,8 +20,8 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JoinColumn(name = "account_id")
-    public long account_id;
+    public Long account_id;
     public String email;
     public String password;
-    public Boolean type;
+    public String type;
 }
