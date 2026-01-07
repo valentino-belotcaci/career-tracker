@@ -26,19 +26,21 @@ public class AccountService {
 
     public Boolean authenticate(String email, String password){
         // Search account instance based on the email
-       Account account = accountRepository.getAccountByEmail(email);
+        Account account = accountRepository.findByEmail(email);
 
-       if (account == null) {
-        return false;
-       }
+        if (account == null) {
+            return false;
+        }
 
-       // Check if the password matches 
-       // TODO add password hashing
-       if (account.password != password){
-        return false;
-       }
+        // Check if the password matches (plain-text comparison for now)
+        // TODO: add password hashing + salting
+        if (account.password == null) return false;
+        return account.password.equals(password);
+    }
 
-       return true;
+    // Small helper to expose account 
+    public Account getAccountByEmail(String email) {
+        return accountRepository.findByEmail(email);
     }
 
 }

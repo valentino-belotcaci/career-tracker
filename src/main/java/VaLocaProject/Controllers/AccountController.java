@@ -39,8 +39,15 @@ public class AccountController {
         return ResponseEntity.ok(accountDTO);
     }
 
-    @GetMapping("Account/authenticate")
-    public Boolean authenticateAccount(@RequestBody String email, @RequestBody String password){
-        return accountService.authenticate(email, password);
+    @PostMapping("/Account/authenticate")
+    public ResponseEntity<Boolean> authenticateAccount(@RequestBody Account account) {
+        boolean isValid = accountService.authenticate(account.email, account.password);
+
+        if (!isValid) {
+            return ResponseEntity.status(401).body(false);
+        }
+
+        return ResponseEntity.ok(true);
     }
+
 }
