@@ -31,9 +31,9 @@ public class AccountService {
         if (account == null) {
             return false;
         }
-
-        // Check if the password matches (plain-text comparison for now)
-        // TODO: add password hashing + salting
+        
+        // Check if the password matches 
+        // TODO: add password hashing 
         if (account.password == null) return false;
         return account.password.equals(password);
     }

@@ -6,8 +6,10 @@ import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import VaLocaProject.DTO.AccountDTO;
@@ -39,10 +41,23 @@ public class AccountController {
         return ResponseEntity.ok(accountDTO);
     }
 
+    @PostMapping("/Account/getAccountByEmail")
+    public ResponseEntity<AccountDTO> getAccountByEmail(@RequestParam String email) {
+        Account account = accountService.getAccountByEmail(email);
+
+        AccountDTO accountDTO = new AccountDTO(
+            account.account_id,
+            account.email,
+            account.type
+        );
+
+        return ResponseEntity.ok(accountDTO);
+    }
+    
+
     @PostMapping("/Account/authenticate")
     public ResponseEntity<Boolean> authenticateAccount(@RequestBody Account account) {
-        boolean isValid = accountService.authenticate(
-            account.email,account.password);
+        boolean isValid = accountService.authenticate(account.email, account.password);
 
         if (!isValid) {
             return ResponseEntity.status(401).body(false);
