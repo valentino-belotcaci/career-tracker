@@ -1,5 +1,5 @@
 package VaLocaProject.Repositories;
 
-public class AccountRepository {
+public interface AccountRepository extends JpaRepository<Account, Long>{
     
 }
