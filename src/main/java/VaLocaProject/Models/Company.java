@@ -19,7 +19,7 @@ public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JoinColumn(name = "company_id")
-    public long company_id;
+    public Long company_id;
     public String name;
     public String description;
     public long account_id;
