@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 public class CompanyController {
-
+    /*
     @Autowired
     CompanyService companyService;
 
@@ -33,5 +33,6 @@ public class CompanyController {
     public ResponseEntity<Company> insertCompany(@RequestBody Company company) {
         return ResponseEntity.ok(companyService.insertCompany(company));
     }
+    */
     
 }
