@@ -24,6 +24,11 @@ public class AccountService {
         return accountRepository.save(account);
     }
 
+    // Small helper to expose account 
+    public Account getAccountByEmail(String email) {
+        return accountRepository.findByEmail(email);
+    }
+
     public Boolean authenticate(String email, String password){
         // Search account instance based on the email
         Account account = accountRepository.findByEmail(email);
@@ -38,9 +43,10 @@ public class AccountService {
         return account.password.equals(password);
     }
 
-    // Small helper to expose account 
-    public Account getAccountByEmail(String email) {
-        return accountRepository.findByEmail(email);
+    public void deleteAllAccounts(){
+        accountRepository.deleteAll();
     }
+
+
 
 }
