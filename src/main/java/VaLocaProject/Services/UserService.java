@@ -4,8 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import VaLocaProject.Models.User;
 import VaLocaProject.Repositories.UserRepository;
-import jakarta.transaction.Transactional;
-
 import org.springframework.stereotype.Service;
 
 import java.util.List;
