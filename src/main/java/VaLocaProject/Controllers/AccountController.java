@@ -38,4 +38,9 @@ public class AccountController {
 
         return ResponseEntity.ok(accountDTO);
     }
+
+    @GetMapping("Account/authenticate")
+    public Boolean authenticateAccount(@RequestBody String email, @RequestBody String password){
+        return accountService.authenticate(email, password);
+    }
 }
