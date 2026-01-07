@@ -41,7 +41,8 @@ public class AccountController {
 
     @PostMapping("/Account/authenticate")
     public ResponseEntity<Boolean> authenticateAccount(@RequestBody Account account) {
-        boolean isValid = accountService.authenticate(account.email, account.password);
+        boolean isValid = accountService.authenticate(
+            account.email,account.password);
 
         if (!isValid) {
             return ResponseEntity.status(401).body(false);
