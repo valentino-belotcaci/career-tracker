@@ -26,11 +26,9 @@ public class UserController{
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
-    // Inserts a new user (send JSON body without id/version)
+    // Inserts a new user 
     @PostMapping("/User/insertUser")
     public ResponseEntity<User> insertUser(@RequestBody User user) {
-        // Ensure server doesn't treat client-sent id as update
-        try { java.lang.reflect.Field f = user.getClass().getDeclaredField("user_id"); f.setAccessible(true); f.set(user, null); } catch (Exception ignored) {}
         return ResponseEntity.ok(userService.saveUser(user));
     }
 
