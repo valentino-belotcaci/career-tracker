@@ -7,7 +7,6 @@ import VaLocaProject.Repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 
 @Service
@@ -21,7 +20,7 @@ public class UserService{
     }
 
     // Return saved user so callers get generated id
-    public User saveUser(User user) {
+    public User insertUser(User user) {
         return userRepository.save(user);
     }
 }
