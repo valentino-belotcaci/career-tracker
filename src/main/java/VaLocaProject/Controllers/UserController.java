@@ -29,7 +29,7 @@ public class UserController{
     // Inserts a new user 
     @PostMapping("/User/insertUser")
     public ResponseEntity<User> insertUser(@RequestBody User user) {
-        return ResponseEntity.ok(userService.saveUser(user));
+        return ResponseEntity.ok(userService.insertUser(user));
     }
 
 }

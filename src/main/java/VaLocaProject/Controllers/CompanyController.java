@@ -18,21 +18,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 public class CompanyController {
-    /*
+    
     @Autowired
     CompanyService companyService;
 
     // Returns all company
-    @GetMapping("/User/getAllCompanies")
+    @GetMapping("/Company/getAllCompanies")
     public ResponseEntity<List<Company>> getAllCompanies(){
         return ResponseEntity.ok(companyService.getAllCompanies());
     }
 
     // Inserts a new company
-    @PostMapping("/User/insertUser")
+    @PostMapping("/Company/insertCompany")
     public ResponseEntity<Company> insertCompany(@RequestBody Company company) {
         return ResponseEntity.ok(companyService.insertCompany(company));
     }
-    */
     
 }
