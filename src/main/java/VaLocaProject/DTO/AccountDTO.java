@@ -8,7 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AccountDTO {
-    
+
     private Long accountId;
     private String email;
+    private Boolean type;
 }

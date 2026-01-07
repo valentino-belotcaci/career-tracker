@@ -23,5 +23,5 @@ public class Account {
     public long account_id;
     public String email;
     public String password;
-
+    public Boolean type;
 }
