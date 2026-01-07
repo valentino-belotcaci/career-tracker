@@ -35,8 +35,7 @@ public class AccountController {
 
         AccountDTO accountDTO = new AccountDTO(
             saved.account_id,
-            saved.email,
-            saved.type
+            saved.email 
         );
 
         return ResponseEntity.ok(accountDTO);
@@ -48,8 +47,7 @@ public class AccountController {
 
         AccountDTO accountDTO = new AccountDTO(
             account.account_id,
-            account.email,
-            account.type
+            account.email
         );
 
         return ResponseEntity.ok(accountDTO);
