@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import VaLocaProject.DTO.AccountDTO;
 import VaLocaProject.Models.Account;
 import VaLocaProject.Services.AccountService;
+import jakarta.websocket.server.PathParam;
 
 @RestController
 public class AccountController {
@@ -48,8 +49,8 @@ public class AccountController {
         return ResponseEntity.ok("All accounts deleted");
     }
 
-    @PostMapping("/Account/getAccountByEmail")
-    public ResponseEntity<AccountDTO> getAccountByEmail(@RequestParam String email) {
+    @PostMapping("/Account/getAccountByEmail/{email}")
+    public ResponseEntity<AccountDTO> getAccountByEmail(@PathVariable String email) {
         Account account = accountService.getAccountByEmail(email);
 
         AccountDTO accountDTO = new AccountDTO(
