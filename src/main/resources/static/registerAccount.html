@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Register - CareerTracker</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/style.css">
+    <title>Create Account - CareerTracker</title>
 </head>
 <body>
 
@@ -17,13 +17,13 @@
 
     <form id="acctForm">
         <label for="email">Email</label>
-        <input id="email" type="email" required>
+        <input id="email" name="email" type="email" required>
 
         <label for="password">Password</label>
-        <input id="password" type="password" required>
+        <input id="password" name="password" type="password" required>
 
         <label for="type">Account Type</label>
-        <select id="type">
+        <select id="type" name="type">
             <option value="CONSUMER">Consumer</option>
             <option value="COMPANY">Company</option>
         </select>
@@ -36,7 +36,12 @@
     document.getElementById('acctForm').addEventListener('submit', async function(e){
         e.preventDefault();
 
-        const data = { email: document.getElementById('email').value, password: document.getElementById('password').value, type: document.getElementById('type').value };
+        const data = {
+            email: document.getElementById('email').value,
+            password: document.getElementById('password').value,
+            type: document.getElementById('type').value
+        };
+
         const res = await fetch('/Account/insertAccount', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(data) });
 
         const msg = document.getElementById('message');
@@ -44,28 +49,28 @@
             msg.style.color = 'red';
             msg.textContent = 'Failed';
             return;
-        }   
-        console.log("aaaa")
+        }
 
         msg.style.color = 'green';
         msg.textContent = 'Account created';
 
-        setTimeout(() => {
-            if (data.type === 'COMPANY') {
+        // redirect to next registration step
+        if (data.type === 'COMPANY') {
+            setTimeout(() => {
                 window.location.href = '/registerCompany.html';
-            } else {
+            }, 500);
+        } else {
+            setTimeout(() => {
                 window.location.href = '/registerUser.html';
-            }
-        }, 300);
-        });
-
-        conosole.log("AAAAAIUTTTOTOOOOOO")
+            }, 500);
+        }
+    });
     </script>
 </main>
 
 <footer>
     <p>© 2026 CareerTracker</p>
-</footer>
+    </footer>
 
 </body>
 </html>
