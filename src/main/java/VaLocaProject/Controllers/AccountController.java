@@ -47,7 +47,7 @@ public class AccountController {
     }
 
     @PostMapping("/Account/getAccountByEmail/{email}")
-    public ResponseEntity<AccountDTO> getAccountByEmail(@PathVariable String email) {
+    public ResponseEntity<AccountDTO> getAccountByEmail(@PathVariable String email) { // We could have @RequestParam instead and give the key-value pair in the header
         Account account = accountService.getAccountByEmail(email);
 
         AccountDTO accountDTO = new AccountDTO(
