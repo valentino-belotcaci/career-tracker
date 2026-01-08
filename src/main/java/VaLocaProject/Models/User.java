@@ -26,6 +26,7 @@ public class User {
     private Long user_id; // To define actual SQL column
     private String name;
     private String email;
+    private String description;
     private Long account_id;
 
 
