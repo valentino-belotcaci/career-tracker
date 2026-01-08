@@ -33,7 +33,8 @@ public class AccountController {
 
         AccountDTO accountDTO = new AccountDTO(
             saved.account_id,
-            saved.email 
+            saved.email ,
+            saved.type  
         );
 
         return ResponseEntity.ok(accountDTO);
@@ -46,13 +47,14 @@ public class AccountController {
         return ResponseEntity.ok("All accounts deleted");
     }
 
-    @PostMapping("/Account/getAccountByEmail/{email}")
+    @PostMapping("/Account/getAccountByEmail")
     public ResponseEntity<AccountDTO> getAccountByEmail(@PathVariable String email) { // We could have @RequestParam instead and give the key-value pair in the header
         Account account = accountService.getAccountByEmail(email);
 
         AccountDTO accountDTO = new AccountDTO(
             account.account_id,
-            account.email
+            account.email,
+            account.type
         );
 
         return ResponseEntity.ok(accountDTO);
@@ -69,7 +71,5 @@ public class AccountController {
 
         return ResponseEntity.ok(true);
     }
-
-
 
 }

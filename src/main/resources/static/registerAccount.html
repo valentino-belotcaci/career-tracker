@@ -38,8 +38,24 @@
         const data = { email: document.getElementById('email').value, password: document.getElementById('password').value, type: document.getElementById('type').value };
         const res = await fetch('/Account/insertAccount', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(data) });
         const msg = document.getElementById('message');
-        if (res.ok) { msg.style.color='green'; msg.textContent='Account created'; } else { msg.style.color='red'; msg.textContent='Failed'; }
-    });
+        if (!res.ok) {
+            msg.style.color = 'red';
+            msg.textContent = 'Failed';
+            return;
+        }
+
+        msg.style.color = 'green';
+        msg.textContent = 'Account created';
+
+        // ⏳ small delay guarantees navigation
+        setTimeout(() => {
+            if (data.type === 'COMPANY') {
+                window.location.href = '/html/registerCompany.html';
+            } else {
+                window.location.href = '/html/registerUser.html';
+            }
+        }, 300);
+        });
     </script>
 </main>
 
