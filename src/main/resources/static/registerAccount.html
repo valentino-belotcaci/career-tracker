@@ -28,34 +28,38 @@
             <option value="COMPANY">Company</option>
         </select>
 
-        <button type="submit">Continue Registration</button>
+        <button type="submit" id="submitBtn">Continue Registration</button>
     </form>
     <p id="message"></p>
 
     <script>
     document.getElementById('acctForm').addEventListener('submit', async function(e){
         e.preventDefault();
+
         const data = { email: document.getElementById('email').value, password: document.getElementById('password').value, type: document.getElementById('type').value };
         const res = await fetch('/Account/insertAccount', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(data) });
+
         const msg = document.getElementById('message');
         if (!res.ok) {
             msg.style.color = 'red';
             msg.textContent = 'Failed';
             return;
-        }
+        }   
+        console.log("aaaa")
 
         msg.style.color = 'green';
         msg.textContent = 'Account created';
 
-        // ⏳ small delay guarantees navigation
         setTimeout(() => {
             if (data.type === 'COMPANY') {
-                window.location.href = '/html/registerCompany.html';
+                window.location.href = '/registerCompany.html';
             } else {
-                window.location.href = '/html/registerUser.html';
+                window.location.href = '/registerUser.html';
             }
         }, 300);
         });
+
+        conosole.log("AAAAAIUTTTOTOOOOOO")
     </script>
 </main>
 
