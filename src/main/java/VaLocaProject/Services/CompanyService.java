@@ -23,4 +23,8 @@ public class CompanyService {
         return companyRepository.save(company);
     }
 
+    public void deleteAllCompanies(){
+        companyRepository.deleteAll();
+    }
+
 }

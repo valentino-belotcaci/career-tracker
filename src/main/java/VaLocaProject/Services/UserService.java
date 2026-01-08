@@ -23,4 +23,8 @@ public class UserService{
     public User insertUser(User user) {
         return userRepository.save(user);
     }
+
+    public void deleteAllUsers(){
+        userRepository.deleteAll();
+    }
 }

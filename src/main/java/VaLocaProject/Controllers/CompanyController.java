@@ -11,6 +11,7 @@ import VaLocaProject.Services.CompanyService;
 import VaLocaProject.Models.Company;
 import VaLocaProject.Models.User;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,6 +33,13 @@ public class CompanyController {
     @PostMapping("/Company/insertCompany")
     public ResponseEntity<Company> insertCompany(@RequestBody Company company) {
         return ResponseEntity.ok(companyService.insertCompany(company));
+    }
+
+
+     @DeleteMapping("/Company/deleteAllCompanies")
+    public ResponseEntity deleteAllCompanies(){
+        companyService.deleteAllCompanies();
+        return ResponseEntity.ok("All companies deleted");
     }
     
 }
