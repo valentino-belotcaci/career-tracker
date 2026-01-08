@@ -48,8 +48,8 @@ public class AccountController {
         return ResponseEntity.ok("All accounts deleted");
     }
 
-    @PostMapping("/Account/getAccountByEmail/{email}")
-    public ResponseEntity<AccountDTO> getAccountByEmail(@PathVariable String email) {
+    @PostMapping("/Account/getAccountByEmail")
+    public ResponseEntity<AccountDTO> getAccountByEmail(@RequestParam String email) {
         Account account = accountService.getAccountByEmail(email);
 
         AccountDTO accountDTO = new AccountDTO(
