@@ -41,8 +41,15 @@ public class AccountController {
         return ResponseEntity.ok(accountDTO);
     }
 
-    @PostMapping("/Account/getAccountByEmail")
-    public ResponseEntity<AccountDTO> getAccountByEmail(@RequestParam String email) {
+
+    @DeleteMapping("/Account/deleteAllAccounts")
+    public ResponseEntity deleteAllAccounts(){
+        accountService.deleteAllAccounts();
+        return ResponseEntity.ok("All accounts deleted");
+    }
+
+    @PostMapping("/Account/getAccountByEmail/{email}")
+    public ResponseEntity<AccountDTO> getAccountByEmail(@PathVariable String email) {
         Account account = accountService.getAccountByEmail(email);
 
         AccountDTO accountDTO = new AccountDTO(
@@ -65,10 +72,6 @@ public class AccountController {
         return ResponseEntity.ok(true);
     }
 
-    @DeleteMapping("/Account/deleteAllAccounts")
-    public ResponseEntity deleteAllAccounts(){
-        accountService.deleteAllAccounts();
-        return ResponseEntity.ok("All accounts deleted");
-    }
+
 
 }

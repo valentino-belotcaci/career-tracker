@@ -25,6 +25,25 @@ public class User {
     @JoinColumn(name = "user_id")
     private Long user_id; // To define actual SQL column
     private String name;
+    private String email;
     private Long account_id;
 
+
+    public String getName(){
+        return name;
+    }
+
+    public void setName(String name){
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+  
 }
