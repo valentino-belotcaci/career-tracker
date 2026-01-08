@@ -39,7 +39,7 @@ public class UserController{
 
     // Deletes all users
     @DeleteMapping("/User/deleteAllUsers")
-    public ResponseEntity deleteAllUsers(){
+    public ResponseEntity<String> deleteAllUsers(){
        userService.deleteAllUsers();
         return ResponseEntity.ok("All users deleted");
     }
