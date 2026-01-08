@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Company Profile - CareerTracker</title>
+    <link rel="stylesheet" href="/css/style.css">
+  </head>
+  <body>
+    <header>
+      <a class="site-title" href="/index.html">CareerTracker</a>
+    </header>
+
+    <main class="wide-card">
+      <h2>Company Profile</h2>
+
+      <p id="note">Loading company profile…</p>
+
+      <form id="companyForm" style="display:none;">
+        <input type="hidden" id="companyId">
+
+        <label for="name">Company name</label>
+        <input id="name" type="text">
+
+        <label for="description">Description</label>
+        <input id="description" type="text">
+
+        <button type="submit">Save changes</button>
+      </form>
+
+      <p id="message"></p>
+    </main>
+
+    <footer>
+      <p>© 2026 CareerTracker</p>
+    </footer>
+
+    <script>
+      async function loadCompany() {
+        const accId = localStorage.getItem('loggedAccountId');
+        const note = document.getElementById('note');
+        if (!accId) {
+          note.textContent = 'No logged account found. Please log in.';
+          return;
+        }
+
+        try {
+          const res = await fetch('/Company/getAllCompanies');
+          if (!res.ok) throw new Error('Failed to load companies');
+          const companies = await res.json();
+          const c = companies.find(x => String(x.account_id) === String(accId));
+          if (!c) {
+            note.textContent = 'No company profile found for this account.';
+            return;
+          }
+
+          document.getElementById('companyId').value = c.company_id || c.id || '';
+          document.getElementById('name').value = c.name || '';
+          document.getElementById('description').value = c.description || '';
+
+          note.style.display = 'none';
+          document.getElementById('companyForm').style.display = 'block';
+        } catch (err) {
+          note.textContent = 'Error loading company profile.';
+        }
+      }
+
+      document.getElementById('companyForm').addEventListener('submit', async function(e){
+        e.preventDefault();
+        const id = document.getElementById('companyId').value;
+        const payload = {
+          name: document.getElementById('name').value,
+          description: document.getElementById('description').value,
+          account_id: localStorage.getItem('loggedAccountId')
+        };
+        const msg = document.getElementById('message');
+        try {
+          // There is no update endpoint for Company; use insertCompany as upsert for now
+          const res = await fetch('/Company/insertCompany', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(payload)
+          });
+          if (!res.ok) {
+            msg.style.color = 'red';
+            msg.textContent = 'Failed to save changes.';
+            return;
+          }
+          msg.style.color = 'green';
+          msg.textContent = 'Saved successfully.';
+        } catch (err) {
+          msg.style.color = 'red';
+          msg.textContent = 'Error saving changes.';
+        }
+      });
+
+      loadCompany();
+    </script>
+  </body>
+</html>
