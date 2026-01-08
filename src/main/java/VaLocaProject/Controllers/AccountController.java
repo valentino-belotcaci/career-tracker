@@ -2,10 +2,11 @@ package VaLocaProject.Controllers;
 
 import java.util.List;
 
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,10 +33,43 @@ public class AccountController {
 
         AccountDTO accountDTO = new AccountDTO(
             saved.account_id,
-            saved.email,
-            saved.type
+            saved.email 
         );
 
         return ResponseEntity.ok(accountDTO);
     }
+
+
+    @DeleteMapping("/Account/deleteAllAccounts")
+    public ResponseEntity<String> deleteAllAccounts(){
+        accountService.deleteAllAccounts();
+        return ResponseEntity.ok("All accounts deleted");
+    }
+
+    @PostMapping("/Account/getAccountByEmail/{email}")
+    public ResponseEntity<AccountDTO> getAccountByEmail(@PathVariable String email) {
+        Account account = accountService.getAccountByEmail(email);
+
+        AccountDTO accountDTO = new AccountDTO(
+            account.account_id,
+            account.email
+        );
+
+        return ResponseEntity.ok(accountDTO);
+    }
+    
+
+    @PostMapping("/Account/authenticate")
+    public ResponseEntity<Boolean> authenticateAccount(@RequestBody Account account) {
+        boolean isValid = accountService.authenticate(account.email, account.password);
+
+        if (!isValid) {
+            return ResponseEntity.status(401).body(false);
+        }
+
+        return ResponseEntity.ok(true);
+    }
+
+
+
 }

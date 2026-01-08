@@ -20,9 +20,33 @@ public class AccountService {
     }
 
     public Account insertAccount(Account account){
-        // Ensure we don't try to reuse a client-sent id — clear it so JPA will insert
-        try { account.account_id = null; } catch (Exception ignored) {}
+       account.account_id = null; // set as null the id to be set then by DB
         return accountRepository.save(account);
     }
+
+    // Small helper to expose account 
+    public Account getAccountByEmail(String email) {
+        return accountRepository.findByEmail(email);
+    }
+
+    public Boolean authenticate(String email, String password){
+        // Search account instance based on the email
+        Account account = accountRepository.findByEmail(email);
+
+        if (account == null) {
+            return false;
+        }
+        
+        // Check if the password matches 
+        // TODO: add password hashing 
+        if (account.password == null) return false;
+        return account.password.equals(password);
+    }
+
+    public void deleteAllAccounts(){
+        accountRepository.deleteAll();
+    }
+
+
 
 }

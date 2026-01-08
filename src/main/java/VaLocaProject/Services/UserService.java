@@ -7,6 +7,7 @@ import VaLocaProject.Repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -22,5 +23,27 @@ public class UserService{
     // Return saved user so callers get generated id
     public User insertUser(User user) {
         return userRepository.save(user);
+    }
+
+    public void deleteAllUsers(){
+        userRepository.deleteAll();
+    }
+
+    public User updateUser(Long id, User user){
+        User foundUser = userRepository.findById(id).orElseThrow(
+            () -> new RuntimeException("User not found"));
+
+        // Check if not null to not update some fields as null
+        if (user.getEmail() != null) {
+            foundUser.setEmail(user.getEmail());
+        }
+
+        if (user.getName() != null) {
+            foundUser.setName(user.getName());
+        }
+        // Add other fields to update...
+
+        // Actualy submit the new user version
+        return userRepository.save(foundUser);
     }
 }
