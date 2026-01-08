@@ -22,4 +22,5 @@ public class Account {
     public Long account_id;
     public String email;
     public String password;
+    public String type;
 }
