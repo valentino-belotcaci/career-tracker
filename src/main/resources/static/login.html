@@ -36,15 +36,35 @@
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password })
         });
+
         const msg = document.getElementById('message');
-        if (res.ok) {
-            msg.style.color = 'green';
-            msg.textContent = 'Login successful';
-            // Redirect logic could go here based on role/type
-        } else {
+        if (!res.ok) {
             msg.style.color = 'red';
             msg.textContent = 'Login failed';
+            return;
         }
+
+        // Parse returned AccountDTO and redirect based on its `type` field
+        let accountDTO;
+        try {
+            accountDTO = await res.json();
+        } catch (err) {
+            msg.style.color = 'red';
+            msg.textContent = 'Login succeeded but response parsing failed';
+            return;
+        }
+
+        msg.style.color = 'green';
+        msg.textContent = 'Login successful';
+
+        const type = accountDTO.type;
+        if (type == "USER") {
+            window.location.href = '/indexUser.html';
+        } else {
+            window.location.href = '/indexCompany.html';
+        }
+
+        
     });
     </script>
 </main>
