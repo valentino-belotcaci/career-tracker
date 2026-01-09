@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import VaLocaProject.Models.JobPost;
@@ -32,6 +33,12 @@ public class JobPostController {
     @PostMapping("JobPost/insertPost")
     public ResponseEntity<JobPost> insertPost(@RequestBody JobPost jobPost) {   
         return ResponseEntity.ok(jobPostService.insertPost(jobPost));
+    }
+
+    @DeleteMapping("JobPost/deleteAllPosts")
+    public ResponseEntity<String> deleteAllPosts(){
+       jobPostService.deleteAllPosts();
+        return ResponseEntity.ok("All posts deleted");
     }
     
     

@@ -38,7 +38,7 @@ public class CompanyController {
 
 
      @DeleteMapping("/Company/deleteAllCompanies")
-    public ResponseEntity deleteAllCompanies(){
+    public ResponseEntity<String> deleteAllCompanies(){
         companyService.deleteAllCompanies();
         return ResponseEntity.ok("All companies deleted");
     }

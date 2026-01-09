@@ -21,4 +21,8 @@ public class JobPostService {
     public JobPost insertPost(JobPost jobPost){
         return jobPostRepository.save(jobPost);
     }
+
+    public void deleteAllPosts(){
+        jobPostRepository.deleteAll();
+    }
 }
