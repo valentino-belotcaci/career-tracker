@@ -14,18 +14,34 @@
     <main class="wide-card">
       <h2>Company Profile</h2>
 
-      <p id="note">Loading company profile…</p>
+      <p id="note">Loading your company profile…</p>
 
-      <form id="companyForm" style="display:none;">
+      <div id="viewMode" style="display:none;">
+        <p><strong>Company name:</strong> <span id="viewName"></span></p>
+        <p><strong>Email:</strong> <span id="viewEmail"></span></p>
+        <p><strong>Account id:</strong> <span id="viewAccount"></span></p>
+        <p><strong>Description:</strong> <span id="viewDescription"></span></p>
+        <div>
+          <button id="editBtn">Edit</button>
+        </div>
+      </div>
+
+      <form id="editMode" style="display:none;">
         <input type="hidden" id="companyId">
 
-        <label for="name">Company name</label>
-        <input id="name" type="text">
+  <label for="name">Company name</label>
+  <input id="name" type="text">
 
-        <label for="description">Description</label>
-        <input id="description" type="text">
+  <label for="email">Email</label>
+  <input id="email" type="email">
 
-        <button type="submit">Save changes</button>
+  <label for="description">Description</label>
+  <input id="description" type="text">
+
+        <div style="display:flex; gap:0.5rem; margin-top:1rem;">
+          <button type="submit">Save</button>
+          <button type="button" id="cancelBtn">Cancel</button>
+        </div>
       </form>
 
       <p id="message"></p>
@@ -37,47 +53,67 @@
 
     <script>
       async function loadCompany() {
-        const accId = localStorage.getItem('loggedAccountId');
+        const loggedEmail = localStorage.getItem('loggedEmail');
         const note = document.getElementById('note');
-        if (!accId) {
+        if (!loggedEmail) {
           note.textContent = 'No logged account found. Please log in.';
           return;
         }
 
         try {
-          const res = await fetch('/Company/getAllCompanies');
-          if (!res.ok) throw new Error('Failed to load companies');
-          const companies = await res.json();
-          const c = companies.find(x => String(x.account_id) === String(accId));
-          if (!c) {
+          const res = await fetch(`/User/getCompanyByEmail/${encodeURIComponent(loggedEmail)}`);
+          if (res.status === 404) {
             note.textContent = 'No company profile found for this account.';
             return;
           }
+          if (!res.ok) throw new Error('Failed to load company');
 
-          document.getElementById('companyId').value = c.company_id || c.id || '';
+          const c = await res.json();
+
+          const cid = c.company_id || c.id || '';
+          document.getElementById('companyId').value = cid;
           document.getElementById('name').value = c.name || '';
+          document.getElementById('email').value = c.email || '';
           document.getElementById('description').value = c.description || '';
 
+          document.getElementById('viewName').textContent = c.name || '';
+          document.getElementById('viewEmail').textContent = c.email || '';
+          document.getElementById('viewAccount').textContent = c.account_id || c.accountId || '';
+          document.getElementById('viewDescription').textContent = c.description || '';
+
           note.style.display = 'none';
-          document.getElementById('companyForm').style.display = 'block';
+          document.getElementById('viewMode').style.display = 'block';
         } catch (err) {
+          console.error(err);
           note.textContent = 'Error loading company profile.';
         }
       }
 
-      document.getElementById('companyForm').addEventListener('submit', async function(e){
+      // Edit button
+      document.getElementById('editBtn').addEventListener('click', function(){
+        document.getElementById('viewMode').style.display = 'none';
+        document.getElementById('editMode').style.display = 'block';
+      });
+
+      // Cancel
+      document.getElementById('cancelBtn').addEventListener('click', function(){
+        document.getElementById('editMode').style.display = 'none';
+        document.getElementById('viewMode').style.display = 'block';
+      });
+
+      document.getElementById('editMode').addEventListener('submit', async function(e){
         e.preventDefault();
         const id = document.getElementById('companyId').value;
+        if (!id) return;
         const payload = {
           name: document.getElementById('name').value,
-          description: document.getElementById('description').value,
-          account_id: localStorage.getItem('loggedAccountId')
+          email: document.getElementById('email').value,
+          description: document.getElementById('description').value
         };
         const msg = document.getElementById('message');
         try {
-          // There is no update endpoint for Company; use insertCompany as upsert for now
-          const res = await fetch('/Company/insertCompany', {
-            method: 'POST',
+          const res = await fetch(`/Company/updateCompany/${id}`, {
+            method: 'PUT',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(payload)
           });
@@ -86,9 +122,17 @@
             msg.textContent = 'Failed to save changes.';
             return;
           }
+          // update view
+          document.getElementById('viewName').textContent = payload.name || '';
+          document.getElementById('viewEmail').textContent = payload.email || '';
+          document.getElementById('viewDescription').textContent = payload.description || '';
+
           msg.style.color = 'green';
           msg.textContent = 'Saved successfully.';
+          document.getElementById('editMode').style.display = 'none';
+          document.getElementById('viewMode').style.display = 'block';
         } catch (err) {
+          console.error(err);
           msg.style.color = 'red';
           msg.textContent = 'Error saving changes.';
         }

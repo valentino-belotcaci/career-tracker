@@ -9,10 +9,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import VaLocaProject.Services.CompanyService;
 import VaLocaProject.Models.Company;
+import VaLocaProject.Models.User;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
@@ -40,4 +43,20 @@ public class CompanyController {
         return ResponseEntity.ok("All companies deleted");
     }
     
+    // Updates a company's fields
+    @PutMapping("Company/updateCompany/{id}")
+    public ResponseEntity<Company> updateUser(@PathVariable Long id, @RequestBody Company company) {
+        return ResponseEntity.ok(companyService.updateCompany(id, company));
+    }
+
+    @GetMapping("/User/getCompanyByEmail/{email}")
+    public ResponseEntity<Company> getCompanyByEmail(@PathVariable String email) {
+        Company company = companyService.getCompanyByEmail(email);
+
+        // Additional check
+        if (company == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(company);
+    }
 }
