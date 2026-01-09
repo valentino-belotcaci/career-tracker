@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import VaLocaProject.Models.Company;
 import VaLocaProject.Models.JobPost;
+import VaLocaProject.Repositories.CompanyRepository;
 import VaLocaProject.Repositories.JobPostRepository;
 
 @Service
@@ -13,6 +15,9 @@ public class JobPostService {
     
     @Autowired
     JobPostRepository jobPostRepository;
+
+    @Autowired
+    CompanyRepository companyRepository;
 
     public List<JobPost> getAllPosts(){
         return jobPostRepository.findAll();
@@ -61,5 +66,20 @@ public class JobPostService {
 
         // Persist and return the updated entity
         return jobPostRepository.save(foundJobPost);
+    }
+
+    public List<JobPost> getPostByCompany(Long id){
+        Company foundcompany = companyRepository.findById(id).orElseThrow(
+            () -> new RuntimeException("Company not found"));
+        return jobPostRepository.findByCompanyId(foundcompany.company_id);
+    }
+
+    // New: get posts by company email. Returns empty list when company not found.
+    public List<JobPost> getPostByCompanyEmail(String email){
+        Company foundcompany = companyRepository.findByEmail(email);
+        if (foundcompany == null) {
+            return java.util.Collections.emptyList();
+        }
+        return jobPostRepository.findByCompanyId(foundcompany.company_id);
     }
 }

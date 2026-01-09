@@ -1,5 +1,6 @@
 package VaLocaProject.Models;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,7 +19,7 @@ import lombok.NoArgsConstructor;
 public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JoinColumn(name = "company_id")
+    @Column(name = "company_id")
     public Long company_id;
     public String name;
     public String email;

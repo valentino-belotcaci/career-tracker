@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
 
+import jakarta.websocket.server.PathParam;
+
 
 
 
@@ -50,6 +52,11 @@ public class JobPostController {
         return ResponseEntity.ok("All posts deleted");
     }
 
+    @GetMapping("JobPost/getPostByCompany/{id}")
+    public ResponseEntity<List<JobPost>> getPostByCompany(@PathVariable Long id) {
+        return ResponseEntity.ok(jobPostService.getPostByCompany(id));
+    }
+    
 
     @PutMapping("JobPost/updatePost/{id}")
     public ResponseEntity<JobPost> updatePost(@PathVariable Long id, @RequestBody JobPost jobPost) {

@@ -6,18 +6,21 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
+import jakarta.persistence.Column;
 import lombok.Data;
+
 @Entity
 @Table(name = "job_post") // To define which table it represents
-@Data
 public class JobPost {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JoinColumn(name = "post_id")
-    private Long post_id;
+    @Column(name = "post_id")
+    private Long postId;
+
+    @Column(name = "company_id")
     private Long company_id;
-    private int salary;
     private String name;
+    private int salary;
     private String description;
     private String duration;
     private String available;
@@ -27,35 +30,25 @@ public class JobPost {
     }
 
 
-    // Getters and setters
     public Long getPostId() {
-        return post_id;
+        return postId;
     }
 
-    public void setPostId(Long post_id) {
-        this.post_id = post_id;
+    public void setPostId(Long postId) {
+        this.postId = postId;
     }
 
     public Long getCompanyId() {
         return company_id;
     }
 
-    public void setCompanyId(Long company_id) {
-        this.company_id = company_id;
-    }
-
-    public int getSalary() {
-        return salary;
-    }
-
-    public void setSalary(int salary) {
-        this.salary = salary;
+    public void setCompanyId(Long companyId) {
+        this.company_id = companyId;
     }
 
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -83,5 +76,17 @@ public class JobPost {
     public void setAvailable(String available) {
         this.available = available;
     }
+
+    public int getSalary() {
+        return salary;
+    }
+
+    public void setSalary(int salary) {
+        this.salary = salary;
+    }
+
+
+
+
 
 }
