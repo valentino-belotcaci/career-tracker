@@ -45,4 +45,8 @@ public class UserService{
         // Actualy submit the new user version
         return userRepository.save(foundUser);
     }
+
+    public User getUserByEmail(String email){
+        return userRepository.findByEmail(email);
+    }
 }
