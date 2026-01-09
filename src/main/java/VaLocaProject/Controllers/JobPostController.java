@@ -12,6 +12,7 @@ import VaLocaProject.Models.JobPost;
 import VaLocaProject.Services.JobPostService;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,6 +34,12 @@ public class JobPostController {
     @PostMapping("JobPost/insertPost")
     public ResponseEntity<JobPost> insertPost(@RequestBody JobPost jobPost) {   
         return ResponseEntity.ok(jobPostService.insertPost(jobPost));
+    }
+
+    @DeleteMapping("JobPost/deletePost/{id}")
+    public ResponseEntity<String> deletePost(@PathVariable Long id){
+        jobPostService.deletePost(id);
+        return ResponseEntity.ok("The post has been deleted");
     }
 
     @DeleteMapping("JobPost/deleteAllPosts")

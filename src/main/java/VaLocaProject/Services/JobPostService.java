@@ -25,4 +25,8 @@ public class JobPostService {
     public void deleteAllPosts(){
         jobPostRepository.deleteAll();
     }
+
+    public void deletePost(Long id){
+        jobPostRepository.deleteById(id);
+    }
 }
