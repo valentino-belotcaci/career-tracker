@@ -16,7 +16,16 @@
 
       <p id="note">Loading your profile…</p>
 
-      <form id="profileForm" style="display:none;">
+      <div id="viewMode" style="display:none;">
+        <p><strong>Name:</strong> <span id="viewName"></span></p>
+        <p><strong>Email:</strong> <span id="viewEmail"></span></p>
+        <p><strong>Description:</strong> <span id="viewDescription"></span></p>
+        <div>
+          <button id="editBtn">Edit</button>
+        </div>
+      </div>
+
+      <form id="editMode" style="display:none;">
         <input type="hidden" id="userId">
 
         <label for="name">Name</label>
@@ -28,7 +37,10 @@
         <label for="description">Description</label>
         <input id="description" type="text">
 
-        <button type="submit">Save changes</button>
+        <div style="display:flex; gap:0.5rem; margin-top:1rem;">
+          <button type="submit">Save</button>
+          <button type="button" id="cancelBtn">Cancel</button>
+        </div>
       </form>
 
       <p id="message"></p>
@@ -48,7 +60,7 @@
         }
 
         try {
-          const res = await fetch('/User/getAllUsers');
+          const res = await fetch('/User/getUserByEmail');
           if (!res.ok) throw new Error('Failed to load users');
           const users = await res.json();
           const u = users.find(x => String(x.account_id) === String(accId));
@@ -57,20 +69,37 @@
             return;
           }
 
-          // populate form
-          document.getElementById('userId').value = u.user_id || u.id || '';
+          // populate view and edit fields
+          const uid = u.user_id || u.id || '';
+          document.getElementById('userId').value = uid;
           document.getElementById('name').value = u.name || '';
           document.getElementById('email').value = u.email || '';
           document.getElementById('description').value = u.description || '';
 
+          document.getElementById('viewName').textContent = u.name || '';
+          document.getElementById('viewEmail').textContent = u.email || '';
+          document.getElementById('viewDescription').textContent = u.description || '';
+
           note.style.display = 'none';
-          document.getElementById('profileForm').style.display = 'block';
+          document.getElementById('viewMode').style.display = 'block';
         } catch (err) {
           note.textContent = 'Error loading profile.';
         }
       }
 
-      document.getElementById('profileForm').addEventListener('submit', async function(e){
+      // Edit button toggles to edit mode
+      document.getElementById('editBtn').addEventListener('click', function(){
+        document.getElementById('viewMode').style.display = 'none';
+        document.getElementById('editMode').style.display = 'block';
+      });
+
+      // Cancel reverts to view mode
+      document.getElementById('cancelBtn').addEventListener('click', function(){
+        document.getElementById('editMode').style.display = 'none';
+        document.getElementById('viewMode').style.display = 'block';
+      });
+
+      document.getElementById('editMode').addEventListener('submit', async function(e){
         e.preventDefault();
         const id = document.getElementById('userId').value;
         if (!id) return;
@@ -91,8 +120,15 @@
             msg.textContent = 'Failed to save changes.';
             return;
           }
+          // update view mode values
+          document.getElementById('viewName').textContent = payload.name || '';
+          document.getElementById('viewEmail').textContent = payload.email || '';
+          document.getElementById('viewDescription').textContent = payload.description || '';
+
           msg.style.color = 'green';
           msg.textContent = 'Saved successfully.';
+          document.getElementById('editMode').style.display = 'none';
+          document.getElementById('viewMode').style.display = 'block';
         } catch (err) {
           msg.style.color = 'red';
           msg.textContent = 'Error saving changes.';

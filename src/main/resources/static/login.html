@@ -49,19 +49,19 @@
         msg.textContent = 'Login successful';
 
         try {
-            const accountsRes = await fetch('/Account/getAllAccounts');
-            if (!accountsRes.ok) {
-                msg.style.color = 'red';
-                msg.textContent = 'Could not retrieve account info.';
-                return;
-            }
-            const accounts = await accountsRes.json();
-            const account = accounts.find(a => String(a.email) === String(email));
-            if (!account) {
+            const acctRes = await fetch(`/Account/getAccountByEmail/${encodeURIComponent(email)}`);
+            if (acctRes.status === 404) {
                 msg.style.color = 'red';
                 msg.textContent = 'Account record not found.';
                 return;
             }
+            if (!acctRes.ok) {
+                msg.style.color = 'red';
+                msg.textContent = 'Could not retrieve account info.';
+                return;
+            }
+
+            const account = await acctRes.json();
 
             // store into localStorage
             try {
