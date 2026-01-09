@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 
 
@@ -46,6 +48,12 @@ public class JobPostController {
     public ResponseEntity<String> deleteAllPosts(){
        jobPostService.deleteAllPosts();
         return ResponseEntity.ok("All posts deleted");
+    }
+
+
+    @PutMapping("JobPost/updatePost/{id}")
+    public ResponseEntity<JobPost> updatePost(@PathVariable Long id, @RequestBody JobPost jobPost) {
+        return ResponseEntity.ok(jobPostService.updatePost(id, jobPost));
     }
     
     
