@@ -49,8 +49,14 @@ public class UserController{
         return ResponseEntity.ok(userService.updateUser(id, user));
     }
 
-    @PutMapping("User/getUserByEmail/{email}")
+    @GetMapping("/User/getUserByEmail/{email}")
     public ResponseEntity<User> getUserByEmail(@PathVariable String email) {
-        return ResponseEntity.ok(userService.getUserByEmail(email));
+        User user = userService.getUserByEmail(email);
+
+        // Additional check
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(user);
     }
 }

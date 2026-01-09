@@ -52,22 +52,22 @@
 
     <script>
       async function loadProfile() {
-        const accId = localStorage.getItem('loggedAccountId');
+        const loggedEmail = localStorage.getItem('loggedEmail');
         const note = document.getElementById('note');
-        if (!accId) {
+        if (!loggedEmail) {
           note.textContent = 'No logged account found. Please log in.';
           return;
         }
 
         try {
-          const res = await fetch('/User/getUserByEmail');
-          if (!res.ok) throw new Error('Failed to load users');
-          const users = await res.json();
-          const u = users.find(x => String(x.account_id) === String(accId));
-          if (!u) {
+          const res = await fetch(`/User/getUserByEmail/${encodeURIComponent(loggedEmail)}`);
+          if (res.status === 404) {
             note.textContent = 'No user profile found for this account.';
             return;
           }
+          if (!res.ok) throw new Error('Failed to load user');
+
+          const u = await res.json();
 
           // populate view and edit fields
           const uid = u.user_id || u.id || '';
