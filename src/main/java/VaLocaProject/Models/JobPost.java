@@ -18,7 +18,7 @@ public class JobPost {
     private Long postId;
 
     @Column(name = "company_id")
-    private Long company_id;
+    private Long companyId;
     private String name;
     private int salary;
     private String description;
@@ -39,11 +39,11 @@ public class JobPost {
     }
 
     public Long getCompanyId() {
-        return company_id;
+        return companyId;
     }
 
     public void setCompanyId(Long companyId) {
-        this.company_id = companyId;
+        this.companyId = companyId;
     }
 
     public String getName() {

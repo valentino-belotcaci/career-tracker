@@ -46,26 +46,32 @@
         }
 
         try {
-          // Get company by email
-          const companyRes = await fetch(`/User/getCompanyByEmail/${encodeURIComponent(loggedEmail)}`);
-          if (companyRes.status === 404) {
-            note.textContent = 'No company profile found for this account.';
-            return;
-          }
-          if (!companyRes.ok) throw new Error('Failed to load company');
-          const company = await companyRes.json();
-          const companyId = company.company_id || company.id || company.account_id;
-
-          // Ask server for posts for this company's email (single request)
-          const postsRes = await fetch(`/JobPost/getPostByCompanyEmail/${encodeURIComponent(loggedEmail)}`);
-          if (!postsRes.ok) {
-            if (postsRes.status === 404) {
-              note.textContent = 'No job posts found for this company.';
+            // Get company by email
+            const companyRes = await fetch(`/User/getCompanyByEmail/${encodeURIComponent(loggedEmail)}`);
+            if (companyRes.status === 404) {
+              note.textContent = 'No company profile found for this account.';
               return;
             }
-            throw new Error('Failed to load posts');
-          }
-          const myPosts = await postsRes.json();
+            if (!companyRes.ok) throw new Error('Failed to load company');
+            const company = await companyRes.json();
+
+            // normalize company id (server may return company_id, id, or companyId)
+            const companyId = company.company_id || company.companyId || company.id || company.account_id;
+            if (!companyId) {
+              note.textContent = 'Could not determine company id for this account.';
+              return;
+            }
+
+            // Ask server for posts by company id
+            const postsRes = await fetch(`/JobPost/getPostByCompany/${encodeURIComponent(companyId)}`);
+            if (!postsRes.ok) {
+              if (postsRes.status === 404) {
+                note.textContent = 'No job posts found for this company.';
+                return;
+              }
+              throw new Error('Failed to load posts');
+            }
+            const myPosts = await postsRes.json();
 
           if (!myPosts || myPosts.length === 0) {
             note.textContent = 'No job posts found for this company.';
@@ -74,10 +80,12 @@
 
           // populate table
           const tbody = document.getElementById('postsBody');
+          tbody.innerHTML = ''; // clear any previous rows
           myPosts.forEach(p => {
             const tr = document.createElement('tr');
+            const idVal = p.postId || p.post_id || p.id || '';
             tr.innerHTML = `
-              <td style="border:1px solid #ccc; padding:8px;">${p.post_id || p.id || ''}</td>
+              <td style="border:1px solid #ccc; padding:8px;">${idVal}</td>
               <td style="border:1px solid #ccc; padding:8px;">${p.name || ''}</td>
               <td style="border:1px solid #ccc; padding:8px;">${p.description || ''}</td>
               <td style="border:1px solid #ccc; padding:8px;">${p.duration || ''}</td>
