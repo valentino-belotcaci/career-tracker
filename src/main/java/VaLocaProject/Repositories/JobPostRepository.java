@@ -1,5 +1,9 @@
 package VaLocaProject.Repositories;
 
-public class JobPostRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import VaLocaProject.Models.JobPost;
+
+public interface  JobPostRepository extends JpaRepository<JobPost, Long> {
     
 }
