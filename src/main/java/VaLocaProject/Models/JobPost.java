@@ -16,11 +16,12 @@ public class JobPost {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JoinColumn(name = "post_id")
-    private Long post_id;
+    private Long post_id;   
     private Long company_id;
     private int salary;
     private String name;
     private String description;
+    private String duration;
     private String available;
 
 }

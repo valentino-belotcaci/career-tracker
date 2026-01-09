@@ -12,6 +12,9 @@ import VaLocaProject.Services.JobPostService;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 
 @RestController
@@ -25,5 +28,11 @@ public class JobPostController {
     public ResponseEntity<List<JobPost>> getAllPosts() {
         return ResponseEntity.ok(jobPostService.getAllPosts());
     }
+
+    @PostMapping("JobPost/insertPost")
+    public ResponseEntity<JobPost> insertPost(@RequestBody JobPost jobPost) {   
+        return ResponseEntity.ok(jobPostService.insertPost(jobPost));
+    }
+    
     
 }

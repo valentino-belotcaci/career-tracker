@@ -17,4 +17,8 @@ public class JobPostService {
     public List<JobPost> getAllPosts(){
         return jobPostRepository.findAll();
     }
+
+    public JobPost insertPost(JobPost jobPost){
+        return jobPostRepository.save(jobPost);
+    }
 }
