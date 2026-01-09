@@ -13,6 +13,9 @@
 
     <main class="wide-card">
       <h2>Your Job Posts</h2>
+      <div style="margin-bottom:12px;">
+        <a href="/createJobPost.html"><button id="addPostBtn">Add job post</button></a>
+      </div>
       <p id="note">Loading…</p>
 
       <table id="postsTable" style="width:100%; border-collapse: collapse; display:none;">
@@ -56,7 +59,7 @@
             const company = await companyRes.json();
 
             // normalize company id (server may return company_id, id, or companyId)
-            const companyId = company.company_id || company.companyId || company.id || company.account_id;
+            const companyId = company.company_id;
             if (!companyId) {
               note.textContent = 'Could not determine company id for this account.';
               return;
@@ -104,6 +107,22 @@
       }
 
       loadCompanyAndPosts();
+      // Keep track of last created post id to refresh when returning from create page
+      let seenCreatedPostId = localStorage.getItem('lastCreatedPostId') || '';
+
+      // Poll localStorage every 2.5s for changes (simple) and refresh if new post created
+      const pollInterval = setInterval(() => {
+        const curr = localStorage.getItem('lastCreatedPostId') || '';
+        if (curr && curr !== seenCreatedPostId) {
+          seenCreatedPostId = curr;
+          loadCompanyAndPosts();
+        }
+      }, 2500);
+
+      // Also refresh when page becomes visible again
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') loadCompanyAndPosts();
+      });
     </script>
   </body>
 </html>

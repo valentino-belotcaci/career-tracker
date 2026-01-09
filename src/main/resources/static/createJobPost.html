@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Create Job Post - CareerTracker</title>
+    <link rel="stylesheet" href="/css/style.css">
+  </head>
+  <body>
+    <header>
+      <a class="site-title" href="/indexCompany.html">CareerTracker</a>
+    </header>
+
+    <main class="wide-card">
+      <h2>Create Job Post</h2>
+      <p id="note">Fill the form and click Create.</p>
+
+      <form id="createForm">
+        <input type="hidden" id="companyId" name="companyId" />
+
+        <label for="name">Job title</label><br />
+        <input id="name" name="name" type="text" required /><br />
+
+        <label for="description">Description</label><br />
+        <textarea id="description" name="description" rows="4" required></textarea><br />
+
+        <label for="duration">Duration</label><br />
+        <input id="duration" name="duration" type="text" /><br />
+
+        <label for="available">Available</label><br />
+        <input id="available" name="available" type="text" /><br />
+
+        <label for="salary">Salary</label><br />
+        <input id="salary" name="salary" type="number" /><br />
+
+        <p id="message"></p>
+        <button type="submit">Create</button>
+        <a href="/displayJobPost.html"><button type="button">Cancel</button></a>
+      </form>
+
+    </main>
+
+    <footer>
+      <p>© 2026 CareerTracker</p>
+    </footer>
+
+    <script>
+      // Use loggedEmail to fetch company and obtain the company id
+      document.addEventListener('DOMContentLoaded', () => {
+        const loggedEmail = localStorage.getItem('loggedEmail');
+        const message = document.getElementById('message');
+        const companyIdInput = document.getElementById('companyId');
+
+        if (!loggedEmail) {
+          message.textContent = 'No logged account found. Please log in.';
+          document.getElementById('createForm').style.display = 'none';
+          return;
+        }
+
+        // Fetch company by email to get the company id
+        fetch(`/User/getCompanyByEmail/${encodeURIComponent(loggedEmail)}`)
+          .then(res => {
+            if (res.status === 404) throw new Error('No company profile for this account');
+            if (!res.ok) throw new Error('Could not fetch company');
+            return res.json();
+          })
+          .then(company => {
+            const id = company.company_id || company.companyId || company.id || company.account_id;
+            if (!id) throw new Error('Company id not found');
+            companyIdInput.value = Number.parseInt(id);
+
+            // wire submit handler after we have company id
+            document.getElementById('createForm').addEventListener('submit', async (e) => {
+              e.preventDefault();
+              const payload = {
+                companyId: Number.parseInt(companyIdInput.value),
+                name: document.getElementById('name').value,
+                description: document.getElementById('description').value,
+                duration: document.getElementById('duration').value,
+                available: document.getElementById('available').value,
+                salary: Number.parseInt(document.getElementById('salary').value) || 0
+              };
+
+              try {
+                const res = await fetch('/JobPost/insertPost', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify(payload)
+                });
+                if (!res.ok) throw new Error('Create failed');
+                const created = await res.json();
+                localStorage.setItem('lastCreatedPostId', created.postId || created.post_id || created.id || '');
+                globalThis.location.href = '/displayJobPost.html';
+              } catch (err) {
+                console.error(err);
+                document.getElementById('message').textContent = 'Failed to create job post.';
+              }
+            });
+          })
+          .catch(err => {
+            console.error(err);
+            message.textContent = 'Could not determine company id for this account. Make sure you have a company profile.';
+            document.getElementById('createForm').style.display = 'none';
+          });
+      });
+    </script>
+  </body>
+</html>
