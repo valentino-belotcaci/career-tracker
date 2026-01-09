@@ -18,8 +18,7 @@
 
       <div id="viewMode" style="display:none;">
         <p><strong>Company name:</strong> <span id="viewName"></span></p>
-        <p><strong>Email:</strong> <span id="viewEmail"></span></p>
-        <p><strong>Account id:</strong> <span id="viewAccount"></span></p>
+  <p><strong>Email:</strong> <span id="viewEmail"></span></p>
         <p><strong>Description:</strong> <span id="viewDescription"></span></p>
         <div>
           <button id="editBtn">Edit</button>
@@ -78,7 +77,6 @@
 
           document.getElementById('viewName').textContent = c.name || '';
           document.getElementById('viewEmail').textContent = c.email || '';
-          document.getElementById('viewAccount').textContent = c.account_id || c.accountId || '';
           document.getElementById('viewDescription').textContent = c.description || '';
 
           note.style.display = 'none';
