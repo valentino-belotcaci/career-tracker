@@ -8,7 +8,7 @@
 </head>
 <body>
 <header>
-	<a class="site-title" href="/index.html">CareerTracker</a>
+	<a class="site-title" href="/indexUser.html">CareerTracker</a>
 </header>
 <main class="wide-card">
 	<h2>User Dashboard</h2>
@@ -17,6 +17,18 @@
 	<div style="margin-top:1rem;">
 		<a href="/profileUser.html"><button>View profile</button></a>
 	</div>
+
+	<div style="margin-top:1rem;">
+		<button id="logoutBtn">Logout</button>
+	</div>
+
+	<script>
+	document.getElementById('logoutBtn').addEventListener('click', function(){
+		// Clear all localStorage entries to fully sign out the client
+		localStorage.clear();
+		globalThis.location.href = '/login.html';
+	});
+	</script>
 </main>
 <footer>
 	<p>© 2026 CareerTracker</p>

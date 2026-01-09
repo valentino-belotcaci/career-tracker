@@ -54,14 +54,26 @@
         msg.style.color = 'green';
         msg.textContent = 'Account created';
 
-        // redirect to next registration step
-        if (data.type === 'COMPANY') {
+        // read returned AccountDTO and store session info
+        const accountDto = await res.json();
+        if (accountDto) {
+            try {
+                // store minimal client session info
+                localStorage.setItem('loggedAccountId', String(accountDto.accountId));
+                localStorage.setItem('loggedEmail', accountDto.email || data.email);
+            } catch (err) {
+                console.error('Failed to write localStorage', err);
+            }
+        }
+
+        // redirect to correct index page
+        if ((accountDto && accountDto.type) ? accountDto.type === 'COMPANY' : data.type === 'COMPANY') {
             setTimeout(() => {
-                window.location.href = '/indexCompany.html';
+                globalThis.location.href = '/indexCompany.html';
             }, 500);
         } else {
             setTimeout(() => {
-                window.location.href = '/indexUser.html';
+                globalThis.location.href = '/indexUser.html';
             }, 500);
         }
     });
