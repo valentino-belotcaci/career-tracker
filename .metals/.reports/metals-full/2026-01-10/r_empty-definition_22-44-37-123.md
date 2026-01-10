@@ -1,9 +1,20 @@
+error id: file://<WORKSPACE>/src/main/java/VaLocaProject/Models/JobApplication.java:java/time/LocalDateTime#
+file://<WORKSPACE>/src/main/java/VaLocaProject/Models/JobApplication.java
+empty definition using pc, found symbol in pc: java/time/LocalDateTime#
+empty definition using semanticdb
+empty definition using fallback
+non-local guesses:
+
+offset: 99
+uri: file://<WORKSPACE>/src/main/java/VaLocaProject/Models/JobApplication.java
+text:
+```scala
 package VaLocaProject.Models;
 
 
 import java.sql.Date;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.@@LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,7 +28,7 @@ import lombok.NoArgsConstructor;
 
 @Entity // To define it as entity to springboot
 @Data
-@Table(name = "job_applications") // To define which table it represents
+@Table(name = "job_application") // To define which table it represents
 @NoArgsConstructor
 @AllArgsConstructor // Creates specific constructors for all fields
 public class JobApplication {
@@ -30,14 +41,14 @@ public class JobApplication {
     @Column(name = "user_id")
     private Long userId;
     private String status;
-    private Date created_at;
+    private LocalDateTime created_at;
 
 
-    public Date getCreatedAt() {
-        return created_at;
-    }
-
-    public void setCreatedAt(Date date) {
-        created_at = date;
-    }
 }
+
+```
+
+
+#### Short summary: 
+
+empty definition using pc, found symbol in pc: java/time/LocalDateTime#

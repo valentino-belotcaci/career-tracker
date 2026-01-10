@@ -1,3 +1,14 @@
+error id: file://<WORKSPACE>/src/main/java/VaLocaProject/Models/JobApplication.java:_empty_/Column#name#
+file://<WORKSPACE>/src/main/java/VaLocaProject/Models/JobApplication.java
+empty definition using pc, found symbol in pc: _empty_/Column#name#
+empty definition using semanticdb
+empty definition using fallback
+non-local guesses:
+
+offset: 868
+uri: file://<WORKSPACE>/src/main/java/VaLocaProject/Models/JobApplication.java
+text:
+```scala
 package VaLocaProject.Models;
 
 
@@ -27,17 +38,17 @@ public class JobApplication {
     private Long applicationId;
     @Column(name = "post_id")
     private Long postId;
-    @Column(name = "user_id")
+    @Column(@@name = "user_id")
     private Long userId;
     private String status;
-    private Date created_at;
+    private LocalDateTime created_at;
 
 
-    public Date getCreatedAt() {
-        return created_at;
-    }
-
-    public void setCreatedAt(Date date) {
-        created_at = date;
-    }
 }
+
+```
+
+
+#### Short summary: 
+
+empty definition using pc, found symbol in pc: _empty_/Column#name#

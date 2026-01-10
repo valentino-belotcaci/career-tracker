@@ -14,7 +14,7 @@ import java.sql.Date;
 import jakarta.persistence.Column;
 
 @Entity
-@Table(name = "job_post") // To define which table it represents
+@Table(name = "job_posts") // To define which table it represents
 @Data
 @NoArgsConstructor
 @AllArgsConstructor // Creates specific constructors for all fields

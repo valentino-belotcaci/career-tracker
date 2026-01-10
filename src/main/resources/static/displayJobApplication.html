@@ -12,9 +12,9 @@
     </header>
 
     <main class="wide-card">
-      <h2>Your Job Applications</h2>
+      <h2>Available Job Posts</h2>
       <div style="margin-bottom:12px;">
-        <a href="/createJobApplication.html"><button id="addAppBtn">Apply to a job</button></a>
+        <!-- Removed standalone apply button; each row is clickable to view details and apply -->
       </div>
       <p id="note">Loading…</p>
 
@@ -22,9 +22,12 @@
         <thead>
           <tr>
             <th style="border:1px solid #ccc; padding:8px; text-align:left;">ID</th>
-            <th style="border:1px solid #ccc; padding:8px; text-align:left;">Post ID</th>
-            <th style="border:1px solid #ccc; padding:8px; text-align:left;">User ID</th>
-            <th style="border:1px solid #ccc; padding:8px; text-align:left;">Created At</th>
+            <th style="border:1px solid #ccc; padding:8px; text-align:left;">Company ID</th>
+            <th style="border:1px solid #ccc; padding:8px; text-align:left;">Name</th>
+            <th style="border:1px solid #ccc; padding:8px; text-align:left;">Description</th>
+            <th style="border:1px solid #ccc; padding:8px; text-align:left;">Duration</th>
+            <th style="border:1px solid #ccc; padding:8px; text-align:left;">Available</th>
+            <th style="border:1px solid #ccc; padding:8px; text-align:left;">Salary</th>
           </tr>
         </thead>
         <tbody id="appsBody"></tbody>
@@ -38,54 +41,49 @@
     </footer>
 
     <script>
-      async function loadApplicationsForUser() {
-        const loggedEmail = localStorage.getItem('loggedEmail');
+      async function loadAllPosts() {
         const note = document.getElementById('note');
-        if (!loggedEmail) {
-          note.textContent = 'No logged account found. Please log in.';
-          return;
-        }
-
         try {
-          // Obtain user by email
-          const userRes = await fetch(`/User/getUserByEmail/${encodeURIComponent(loggedEmail)}`);
-          if (userRes.status === 404) {
-            note.textContent = 'No user profile found for this account.';
-            return;
-          }
-          if (!userRes.ok) throw new Error('Failed to load user');
-          const user = await userRes.json();
-          const userId = user.user_id || user.id || user.account_id;
-          if (!userId) {
-            note.textContent = 'Could not determine user id.';
-            return;
-          }
-
-          // Get applications for this user (server endpoint assumed)
-          const appsRes = await fetch(`/JobApplication/getByUser/${encodeURIComponent(userId)}`);
-          if (!appsRes.ok) {
-            if (appsRes.status === 404) {
-              note.textContent = 'No applications found.';
+          const res = await fetch('/JobPost/getAllPosts');
+          if (!res.ok) {
+            if (res.status === 404) {
+              note.textContent = 'No job posts found.';
               return;
             }
-            throw new Error('Failed to load applications');
+            throw new Error('Failed to load posts');
           }
-          const apps = await appsRes.json();
-          if (!apps || apps.length === 0) {
-            note.textContent = 'No applications found.';
+          const posts = await res.json();
+          if (!posts || posts.length === 0) {
+            note.textContent = 'No job posts found.';
             return;
           }
 
           const tbody = document.getElementById('appsBody');
           tbody.innerHTML = '';
-          apps.forEach(a => {
+          posts.forEach(p => {
             const tr = document.createElement('tr');
+            const idVal = p.postId || p.post_id || p.id || '';
+            const compVal = p.companyId || p.company_id || '';
             tr.innerHTML = `
-              <td style="border:1px solid #ccc; padding:8px;">${a.applicationId || a.application_id || a.id || ''}</td>
-              <td style="border:1px solid #ccc; padding:8px;">${a.postId || a.post_id || ''}</td>
-              <td style="border:1px solid #ccc; padding:8px;">${a.userId || a.user_id || ''}</td>
-              <td style="border:1px solid #ccc; padding:8px;">${a.created_at || a.createdAt || ''}</td>
+              <td style="border:1px solid #ccc; padding:8px;">${idVal}</td>
+              <td style="border:1px solid #ccc; padding:8px;">${compVal}</td>
+              <td style="border:1px solid #ccc; padding:8px;">${p.name || ''}</td>
+              <td style="border:1px solid #ccc; padding:8px;">${p.description || ''}</td>
+              <td style="border:1px solid #ccc; padding:8px;">${p.duration || ''}</td>
+              <td style="border:1px solid #ccc; padding:8px;">${p.available || ''}</td>
+              <td style="border:1px solid #ccc; padding:8px;">${p.salary || ''}</td>
             `;
+
+            // make the row clickable: open details page for the post
+            tr.style.cursor = 'pointer';
+            tr.addEventListener('click', () => {
+              const postId = idVal;
+              if (postId) {
+                // navigate to details page with query param
+                window.location.href = `/jobPostDetails.html?postId=${encodeURIComponent(postId)}`;
+              }
+            });
+
             tbody.appendChild(tr);
           });
 
@@ -93,11 +91,11 @@
           document.getElementById('appsTable').style.display = 'table';
         } catch (err) {
           console.error(err);
-          note.textContent = 'Error loading applications.';
+          note.textContent = 'Error loading job posts.';
         }
       }
 
-      loadApplicationsForUser();
+      loadAllPosts();
     </script>
   </body>
 </html>

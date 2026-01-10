@@ -1,0 +1,156 @@
+    <!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Job Post Details - CareerTracker</title>
+    <link rel="stylesheet" href="/css/style.css">
+  </head>
+  <body>
+    <header>
+      <a class="site-title" href="/indexUser.html">CareerTracker</a>
+    </header>
+
+    <main class="wide-card">
+      <h2 id="title">Job Post</h2>
+      <div id="details">
+        <p><strong>ID:</strong> <span id="postId"></span></p>
+        <p><strong>Company ID:</strong> <span id="companyId"></span></p>
+        <p><strong>Name:</strong> <span id="name"></span></p>
+        <p><strong>Description:</strong> <span id="description"></span></p>
+        <p><strong>Duration:</strong> <span id="duration"></span></p>
+        <p><strong>Available:</strong> <span id="available"></span></p>
+        <p><strong>Salary:</strong> <span id="salary"></span></p>
+        <p><strong>Created at:</strong> <span id="createdAt"></span></p>
+      </div>
+
+      <div style="margin-top:18px;">
+        <button id="applyBtn">Submit Application</button>
+        <p id="message" style="margin-top:12px;"></p>
+      </div>
+    </main>
+
+    <footer>
+      <p>© 2026 CareerTracker</p>
+    </footer>
+
+    <script>
+      function getQueryParam(name) {
+        const params = new URLSearchParams(window.location.search);
+        return params.get(name);
+      }
+
+      async function fetchPost(postId) {
+        const res = await fetch(`/JobPost/getPostByCompany/${encodeURIComponent(postId)}`);
+        // Note: getPostByCompany currently returns a list for a company; try fetching single post endpoint if available
+        if (!res.ok) throw new Error('Failed to fetch post');
+        return res.json();
+      }
+
+      async function fetchSinglePostById(postId) {
+        // The backend currently might not have a getPostById endpoint. Try a generic getAllPosts and find the id.
+        const res = await fetch('/JobPost/getAllPosts');
+        if (!res.ok) throw new Error('Failed to fetch posts');
+        const posts = await res.json();
+        return posts.find(p => String(p.postId || p.post_id || p.id) === String(postId));
+      }
+
+      async function loadDetails() {
+        const postId = getQueryParam('postId');
+        if (!postId) {
+          document.getElementById('message').textContent = 'No post selected.';
+          return;
+        }
+
+        try {
+          // Prefer a direct single-post endpoint if present; otherwise fall back to getAllPosts
+          let post = null;
+          try {
+            post = await fetchSinglePostById(postId);
+          } catch (e) {
+            console.warn('Single post fetch failed, falling back', e);
+          }
+
+          if (!post) {
+            document.getElementById('message').textContent = 'Post not found.';
+            return;
+          }
+
+          document.getElementById('postId').textContent = post.postId || post.post_id || post.id || '';
+          document.getElementById('companyId').textContent = post.companyId || post.company_id || '';
+          document.getElementById('name').textContent = post.name || '';
+          document.getElementById('description').textContent = post.description || '';
+          document.getElementById('duration').textContent = post.duration || '';
+          document.getElementById('available').textContent = post.available || '';
+          document.getElementById('salary').textContent = post.salary || '';
+          document.getElementById('createdAt').textContent = post.createdAt || post.created_at || '';
+
+        } catch (err) {
+          console.error(err);
+          document.getElementById('message').textContent = 'Error loading post details.';
+        }
+      }
+
+      async function submitApplication() {
+        const postId = document.getElementById('postId').textContent;
+        const msgEl = document.getElementById('message');
+        msgEl.textContent = '';
+        if (!postId) {
+          msgEl.textContent = 'No post selected.';
+          return;
+        }
+
+        // Get logged email from localStorage
+        const loggedEmail = localStorage.getItem('loggedEmail');
+        if (!loggedEmail) {
+          msgEl.textContent = 'You must be logged in to apply.';
+          return;
+        }
+
+        try {
+          // Fetch user by email to get user id
+          const userRes = await fetch(`/User/getUserByEmail/${encodeURIComponent(loggedEmail)}`);
+          if (!userRes.ok) throw new Error('Failed to get user');
+          const user = await userRes.json();
+          const userId = user.account_id || user.accountId || user.id || user.userId || user.user_id;
+          if (!userId) {
+            msgEl.textContent = 'Could not determine your user id.';
+            return;
+          }
+
+          const payload = {
+            postId: Number(postId),
+            userId: Number(userId),
+            // send a LocalDateTime-like string (YYYY-MM-DDTHH:mm:ss) so it maps to LocalDateTime
+            created_at: new Date().toISOString().slice(0,19),
+            status: 'SUBMITTED'
+          };
+
+          const res = await fetch('/JobApplication/insertApplication', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+
+          if (!res.ok) {
+            const txt = await res.text();
+            throw new Error(`Failed to submit application: ${res.status} ${txt}`);
+          }
+
+          const created = await res.json();
+          msgEl.textContent = 'Application submitted successfully.';
+          // Optionally redirect or disable the button
+          document.getElementById('applyBtn').disabled = true;
+
+        } catch (err) {
+          console.error(err);
+          msgEl.textContent = 'Error submitting application.';
+        }
+      }
+
+      document.getElementById('applyBtn').addEventListener('click', submitApplication);
+
+      loadDetails();
+    </script>
+  </body>
+</html>

@@ -1,3 +1,14 @@
+error id: file://<WORKSPACE>/src/main/java/VaLocaProject/Services/JobPostService.java:_empty_/Company#company_id#
+file://<WORKSPACE>/src/main/java/VaLocaProject/Services/JobPostService.java
+empty definition using pc, found symbol in pc: _empty_/Company#company_id#
+empty definition using semanticdb
+empty definition using fallback
+non-local guesses:
+
+offset: 2683
+uri: file://<WORKSPACE>/src/main/java/VaLocaProject/Services/JobPostService.java
+text:
+```scala
 package VaLocaProject.Services;
 
 import java.util.List;
@@ -29,8 +40,10 @@ public class JobPostService {
             throw new IllegalArgumentException("Company not found");
         }
 
-        // Creates the current date to save (not fully working)
-        jobPost.setCreatedAt(new java.sql.Date(System.currentTimeMillis()));
+        // Ensure createdAt is set (DB has NOT NULL constraint)
+        if (jobPost.getCreatedAt() == null) {
+            jobPost.setCreatedAt(new java.sql.Date(System.currentTimeMillis()));
+        }
 
         return jobPostRepository.save(jobPost);
     }
@@ -79,7 +92,7 @@ public class JobPostService {
     public List<JobPost> getPostByCompany(Long id){
         Company foundcompany = companyRepository.findById(id).orElseThrow(
             () -> new RuntimeException("Company not found"));
-        return jobPostRepository.findByCompanyId(foundcompany.company_id);
+        return jobPostRepository.findByCompanyId(foundcompany.@@company_id);
     }
 
     // New: get posts by company email. Returns empty list when company not found.
@@ -91,3 +104,10 @@ public class JobPostService {
         return jobPostRepository.findByCompanyId(foundcompany.company_id);
     }
 }
+
+```
+
+
+#### Short summary: 
+
+empty definition using pc, found symbol in pc: _empty_/Company#company_id#

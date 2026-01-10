@@ -19,6 +19,9 @@ public class JobApplicationService{
     }
 
     public JobApplication insertApplication(JobApplication jobApplication){
+        
+        jobApplication.setCreatedAt(new java.sql.Date(System.currentTimeMillis()));
+
         return jobApplicationRepository.save(jobApplication);
     }
 }
