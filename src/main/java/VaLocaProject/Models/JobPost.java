@@ -6,6 +6,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
+
+import java.sql.Date;
+
 import jakarta.persistence.Column;
 import lombok.Data;
 
@@ -24,6 +27,7 @@ public class JobPost {
     private String description;
     private String duration;
     private String available;
+    private Date created_at;
 
     // No-arg constructor required by JPA
     public JobPost() {
@@ -83,6 +87,14 @@ public class JobPost {
 
     public void setSalary(int salary) {
         this.salary = salary;
+    }
+
+    public Date getCreatedAt() {
+        return created_at;
+    }
+
+    public void setCreatedAt(Date date) {
+        created_at = date;
     }
 
 
