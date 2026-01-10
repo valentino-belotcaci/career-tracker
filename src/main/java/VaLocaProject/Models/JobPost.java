@@ -25,7 +25,7 @@ public class JobPost {
     private String description;
     private String duration;
     private String available;
-    private Date created_at;
+    private Date createdAt;
 
     // No-arg constructor required by JPA
     public JobPost() {
@@ -88,11 +88,11 @@ public class JobPost {
     }
 
     public Date getCreatedAt() {
-        return created_at;
+        return createdAt;
     }
 
     public void setCreatedAt(Date date) {
-        created_at = date;
+        createdAt = date;
     }
 
 
