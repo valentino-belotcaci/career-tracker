@@ -1,8 +1,18 @@
+error id: file://<WORKSPACE>/src/main/java/VaLocaProject/Controllers/JobApplicationController.java:_empty_/ResponseEntity#
+file://<WORKSPACE>/src/main/java/VaLocaProject/Controllers/JobApplicationController.java
+empty definition using pc, found symbol in pc: _empty_/ResponseEntity#
+empty definition using semanticdb
+empty definition using fallback
+non-local guesses:
+
+offset: 1522
+uri: file://<WORKSPACE>/src/main/java/VaLocaProject/Controllers/JobApplicationController.java
+text:
+```scala
 package VaLocaProject.Controllers;
 
 import java.util.List;
 
-import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,13 +46,12 @@ public class JobApplicationController {
     }
 
     @DeleteMapping("JobApplication/deleteAll")
-    public ResponseEntity<String> deleteAll(){
-        jobApplicationService.deleteAll();
-        return ResponseEntity.ok("All job applications deleted");
+    public ReponseEntity<String> deleteAll(){
+        return jobApplicationService.deleteAll();
     }
 
     @GetMapping("JobApplication/getApplicationsByPostId/{id}")
-    public ResponseEntity<List<JobApplication>> getApplicationsByPostId(@PathVariable Long id) {
+    public Respons@@eEntity<List<JobApplication>> getApplicationsByPostId(@PathVariable Long id) {
         return ResponseEntity.ok(jobApplicationService.getApplicationsByPostId(id));
     }
 
@@ -50,3 +59,10 @@ public class JobApplicationController {
     
     
 }
+
+```
+
+
+#### Short summary: 
+
+empty definition using pc, found symbol in pc: _empty_/ResponseEntity#

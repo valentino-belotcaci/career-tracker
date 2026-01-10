@@ -25,7 +25,13 @@ public class JobApplicationService{
         return jobApplicationRepository.save(jobApplication);
     }
 
+    public void deleteAll(){
+        jobApplicationRepository.deleteAll();
+    }
+
     public List<JobApplication> getApplicationsByPostId(Long postId){
         return jobApplicationRepository.findByPostId(postId);
     }
+
+
 }
