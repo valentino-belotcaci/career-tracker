@@ -76,7 +76,7 @@ public class JobPostService {
         return jobPostRepository.save(foundJobPost);
     }
 
-    public List<JobPost> getPostByCompany(Long id){
+    public List<JobPost> getPostsByCompany(Long id){
         Company foundcompany = companyRepository.findById(id).orElseThrow(
             () -> new RuntimeException("Company not found"));
         return jobPostRepository.findByCompanyId(foundcompany.company_id);

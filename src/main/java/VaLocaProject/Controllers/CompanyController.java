@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 public class CompanyController {
@@ -25,19 +27,19 @@ public class CompanyController {
     CompanyService companyService;
 
     // Returns all company
-    @GetMapping("/Company/getAllCompanies")
+    @GetMapping("Company/getAllCompanies")
     public ResponseEntity<List<Company>> getAllCompanies(){
         return ResponseEntity.ok(companyService.getAllCompanies());
     }
 
     // Inserts a new company
-    @PostMapping("/Company/insertCompany")
+    @PostMapping("Company/insertCompany")
     public ResponseEntity<Company> insertCompany(@RequestBody Company company) {
         return ResponseEntity.ok(companyService.insertCompany(company));
     }
 
 
-     @DeleteMapping("/Company/deleteAllCompanies")
+     @DeleteMapping("Company/deleteAllCompanies")
     public ResponseEntity<String> deleteAllCompanies(){
         companyService.deleteAllCompanies();
         return ResponseEntity.ok("All companies deleted");
@@ -49,7 +51,7 @@ public class CompanyController {
         return ResponseEntity.ok(companyService.updateCompany(id, company));
     }
 
-    @GetMapping("/User/getCompanyByEmail/{email}")
+    @GetMapping("Company/getCompanyByEmail/{email}")
     public ResponseEntity<Company> getCompanyByEmail(@PathVariable String email) {
         Company company = companyService.getCompanyByEmail(email);
 
@@ -59,4 +61,7 @@ public class CompanyController {
         }
         return ResponseEntity.ok(company);
     }
+
+
+
 }
