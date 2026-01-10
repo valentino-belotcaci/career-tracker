@@ -1,3 +1,14 @@
+error id: file://<WORKSPACE>/src/main/java/VaLocaProject/Controllers/UserController.java:_empty_/ResponseEntity#ok#
+file://<WORKSPACE>/src/main/java/VaLocaProject/Controllers/UserController.java
+empty definition using pc, found symbol in pc: _empty_/ResponseEntity#ok#
+empty definition using semanticdb
+empty definition using fallback
+non-local guesses:
+
+offset: 1225
+uri: file://<WORKSPACE>/src/main/java/VaLocaProject/Controllers/UserController.java
+text:
+```scala
 package VaLocaProject.Controllers;
 
 import java.util.List;
@@ -36,7 +47,7 @@ public class UserController{
     // Inserts a new user 
     @PostMapping("/User/insertUser")
     public ResponseEntity<User> insertUser(@RequestBody User user) {
-        return ResponseEntity.ok(userService.insertUser(user));
+        return ResponseEntity.ok@@(userService.insertUser(user));
     }   
 
     // Deletes all users
@@ -63,6 +74,15 @@ public class UserController{
         return ResponseEntity.ok(user);
     }
 
-
+    @GetMapping("User/getUsersByPostId")
+    public ResponseEntity<List<User>> getUsersByPostId(@RequestParam Long id) {
+        return ResponseEntity.ok(userService.getUsersByPostId(id));
+    }
     
 }
+```
+
+
+#### Short summary: 
+
+empty definition using pc, found symbol in pc: _empty_/ResponseEntity#ok#

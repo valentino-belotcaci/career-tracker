@@ -62,8 +62,8 @@
           tbody.innerHTML = '';
           posts.forEach(p => {
             const tr = document.createElement('tr');
-            const idVal = p.postId || p.post_id || p.id || '';
-            const compVal = p.companyId || p.company_id || '';
+            const idVal = p.post_id;
+            const compVal = p.company_id;
             tr.innerHTML = `
               <td style="border:1px solid #ccc; padding:8px;">${idVal}</td>
               <td style="border:1px solid #ccc; padding:8px;">${compVal}</td>

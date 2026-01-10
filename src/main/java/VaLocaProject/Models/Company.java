@@ -6,15 +6,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity // To define it as entity to springboot
 @Table(name = "companies") // To define which table it represents
 @Data // Generates getters, setters, toString(), equals(), hashCode()
-@NoArgsConstructor
-@AllArgsConstructor // Creates specific constructors for all fields
 public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,6 +45,19 @@ public class Company {
 
     public void setDescription(String description){
         this.description = description;
+    }
+
+    // Explicit all-args constructor to avoid relying on Lombok during compilation
+    public Company(Long company_id, String name, String email, String description, Long account_id) {
+        this.company_id = company_id;
+        this.name = name;
+        this.email = email;
+        this.description = description;
+        this.account_id = account_id;
+    }
+
+    // Explicit no-args constructor
+    public Company() {
     }
 
 }

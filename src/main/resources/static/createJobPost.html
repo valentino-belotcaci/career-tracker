@@ -47,18 +47,18 @@
     <script>
       // Use loggedEmail to fetch company and obtain the company id
       document.addEventListener('DOMContentLoaded', () => {
-        const loggedEmail = localStorage.getItem('loggedEmail');
+  const loggedAccountId = localStorage.getItem('loggedAccountId');
         const message = document.getElementById('message');
         const companyIdInput = document.getElementById('companyId');
 
-        if (!loggedEmail) {
+        if (!loggedAccountId) {
           message.textContent = 'No logged account found. Please log in.';
-          document.getElementById('createForm').style.display = 'none';
+          // keep form visible for troubleshooting
           return;
         }
 
-        // Fetch company by email to get the company id
-        fetch(`/User/getCompanyByEmail/${encodeURIComponent(loggedEmail)}`)
+        // Fetch company by account id to get the company id
+        fetch(`/Company/getCompanyByAccountId/${encodeURIComponent(loggedAccountId)}`)
           .then(res => {
             if (res.status === 404) throw new Error('No company profile for this account');
             if (!res.ok) throw new Error('Could not fetch company');
@@ -73,7 +73,7 @@
             document.getElementById('createForm').addEventListener('submit', async (e) => {
               e.preventDefault();
               const payload = {
-                companyId: Number.parseInt(companyIdInput.value),
+                company_id: Number.parseInt(companyIdInput.value),
                 name: document.getElementById('name').value,
                 description: document.getElementById('description').value,
                 duration: document.getElementById('duration').value,
@@ -100,7 +100,8 @@
           .catch(err => {
             console.error(err);
             message.textContent = 'Could not determine company id for this account. Make sure you have a company profile.';
-            document.getElementById('createForm').style.display = 'none';
+            // keep the form visible so the user can inspect fields; disable create button
+            document.querySelector('#createForm button[type="submit"]').disabled = true;
           });
       });
     </script>

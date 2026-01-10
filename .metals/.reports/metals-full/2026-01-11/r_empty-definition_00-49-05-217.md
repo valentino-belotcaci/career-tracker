@@ -1,3 +1,14 @@
+error id: file://<WORKSPACE>/src/main/java/VaLocaProject/Services/JobApplicationService.java:_empty_/JobApplication#
+file://<WORKSPACE>/src/main/java/VaLocaProject/Services/JobApplicationService.java
+empty definition using pc, found symbol in pc: _empty_/JobApplication#
+empty definition using semanticdb
+empty definition using fallback
+non-local guesses:
+
+offset: 418
+uri: file://<WORKSPACE>/src/main/java/VaLocaProject/Services/JobApplicationService.java
+text:
+```scala
 package VaLocaProject.Services;
 
 import java.util.List;
@@ -14,7 +25,7 @@ public class JobApplicationService{
     @Autowired
     JobApplicationRepository jobApplicationRepository;
 
-    public List<JobApplication> getAllApplications(){
+    public List<JobApplicati@@on> getAllApplications(){
         return jobApplicationRepository.findAll();
     }
 
@@ -26,7 +37,7 @@ public class JobApplicationService{
     }
 
     public void deleteAllApplications(){
-        jobApplicationRepository.deleteAll();
+        jobApplicationRepository.deleteAllApplications();
     }
 
     public List<JobApplication> getApplicationsByPostId(Long postId){
@@ -35,3 +46,9 @@ public class JobApplicationService{
 
 
 }
+```
+
+
+#### Short summary: 
+
+empty definition using pc, found symbol in pc: _empty_/JobApplication#

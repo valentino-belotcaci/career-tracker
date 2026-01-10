@@ -1,3 +1,14 @@
+error id: file://<WORKSPACE>/src/main/java/VaLocaProject/Controllers/UserController.java:_empty_/UserService#getUsersByPostId#
+file://<WORKSPACE>/src/main/java/VaLocaProject/Controllers/UserController.java
+empty definition using pc, found symbol in pc: _empty_/UserService#getUsersByPostId#
+empty definition using semanticdb
+empty definition using fallback
+non-local guesses:
+
+offset: 2246
+uri: file://<WORKSPACE>/src/main/java/VaLocaProject/Controllers/UserController.java
+text:
+```scala
 package VaLocaProject.Controllers;
 
 import java.util.List;
@@ -63,6 +74,15 @@ public class UserController{
         return ResponseEntity.ok(user);
     }
 
-
+    @GetMapping("User/getUsersByPostId")
+    public ResponseEntity<List<User>> getUsersByPostId(@RequestParam Long id) {
+        return ResponseEntity.ok(userService.getUser@@sByPostId(id));
+    }
     
 }
+```
+
+
+#### Short summary: 
+
+empty definition using pc, found symbol in pc: _empty_/UserService#getUsersByPostId#

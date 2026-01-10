@@ -1,3 +1,14 @@
+error id: file://<WORKSPACE>/src/main/java/VaLocaProject/Services/AccountService.java:VaLocaProject/Repositories/UserRepository#
+file://<WORKSPACE>/src/main/java/VaLocaProject/Services/AccountService.java
+empty definition using pc, found symbol in pc: VaLocaProject/Repositories/UserRepository#
+empty definition using semanticdb
+empty definition using fallback
+non-local guesses:
+
+offset: 416
+uri: file://<WORKSPACE>/src/main/java/VaLocaProject/Services/AccountService.java
+text:
+```scala
 package VaLocaProject.Services;
 
 import java.util.List;
@@ -10,7 +21,7 @@ import VaLocaProject.Models.Company;
 import VaLocaProject.Models.User;
 import VaLocaProject.Repositories.AccountRepository;
 import VaLocaProject.Repositories.CompanyRepository;
-import VaLocaProject.Repositories.UserRepository;
+import VaLocaProject.Repositories.@@UserRepository;
 
 @Service
 public class AccountService {
@@ -74,3 +85,10 @@ public class AccountService {
 
 
 }
+
+```
+
+
+#### Short summary: 
+
+empty definition using pc, found symbol in pc: VaLocaProject/Repositories/UserRepository#

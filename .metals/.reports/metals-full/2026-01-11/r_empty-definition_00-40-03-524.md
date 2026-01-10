@@ -1,3 +1,14 @@
+error id: file://<WORKSPACE>/src/main/java/VaLocaProject/Services/AccountService.java:_empty_/t#equals#
+file://<WORKSPACE>/src/main/java/VaLocaProject/Services/AccountService.java
+empty definition using pc, found symbol in pc: _empty_/t#equals#
+empty definition using semanticdb
+empty definition using fallback
+non-local guesses:
+
+offset: 1106
+uri: file://<WORKSPACE>/src/main/java/VaLocaProject/Services/AccountService.java
+text:
+```scala
 package VaLocaProject.Services;
 
 import java.util.List;
@@ -35,11 +46,11 @@ public class AccountService {
         // After creating the Account, also create a blank Company or User linked via account_id
         if (saved != null) {
             String type = saved.type;
-            if (type.equals("COMPANY")) {
+            if (t.eq@@uals("company")) {
                 // Company constructor order: company_id, name, email, description, account_id
                 Company c = new Company(null, "", saved.email, "", saved.account_id);
                 companyRepository.save(c);
-            } else if (type.equals("USER")) {
+            } else if (t.equals("user")) {
                 // User constructor order: user_id, name, email, description, account_id
                 User u = new User(null, "", saved.email, "", saved.account_id);
                 userRepository.save(u);
@@ -74,3 +85,10 @@ public class AccountService {
 
 
 }
+
+```
+
+
+#### Short summary: 
+
+empty definition using pc, found symbol in pc: _empty_/t#equals#

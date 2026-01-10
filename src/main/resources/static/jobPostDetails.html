@@ -28,6 +28,21 @@
         <button id="applyBtn">Submit Application</button>
         <p id="message" style="margin-top:12px;"></p>
       </div>
+      <section id="applicationsSection" style="margin-top:20px; display:none;">
+        <h3>Applications for this post</h3>
+        <p id="appsNote">Loading…</p>
+        <table id="appsTable" style="width:100%; border-collapse: collapse; display:none;">
+          <thead>
+            <tr>
+              <th style="border:1px solid #ccc; padding:8px; text-align:left;">Application ID</th>
+              <th style="border:1px solid #ccc; padding:8px; text-align:left;">User ID</th>
+              <th style="border:1px solid #ccc; padding:8px; text-align:left;">Status</th>
+              <th style="border:1px solid #ccc; padding:8px; text-align:left;">Created At</th>
+            </tr>
+          </thead>
+          <tbody id="appsBody"></tbody>
+        </table>
+      </section>
     </main>
 
     <footer>
@@ -85,6 +100,14 @@
           document.getElementById('salary').textContent = post.salary || '';
           document.getElementById('createdAt').textContent = post.createdAt || post.created_at || '';
 
+          // If companyView query param is present, load applications for this post
+          const companyView = getQueryParam('companyView') === 'true';
+          if (companyView) {
+            // hide apply button for company users
+            document.getElementById('applyBtn').style.display = 'none';
+            loadApplicationsForPost(postId);
+          }
+
         } catch (err) {
           console.error(err);
           document.getElementById('message').textContent = 'Error loading post details.';
@@ -109,10 +132,16 @@
 
         try {
           // Fetch user by email to get user id
-          const userRes = await fetch(`/User/getUserByEmail/${encodeURIComponent(loggedEmail)}`);
+          // Use account id lookup to get user id
+          const loggedAccountId = localStorage.getItem('loggedAccountId');
+          if (!loggedAccountId) {
+            msgEl.textContent = 'You must be logged in to apply.';
+            return;
+          }
+          const userRes = await fetch(`/User/getUserByAccountId/${encodeURIComponent(loggedAccountId)}`);
           if (!userRes.ok) throw new Error('Failed to get user');
           const user = await userRes.json();
-          const userId = user.account_id || user.accountId || user.id || user.userId || user.user_id;
+          const userId = user.user_id || user.userId || user.id || user.account_id || user.accountId;
           if (!userId) {
             msgEl.textContent = 'Could not determine your user id.';
             return;
@@ -121,8 +150,6 @@
           const payload = {
             postId: Number(postId),
             userId: Number(userId),
-            // send a LocalDateTime-like string (YYYY-MM-DDTHH:mm:ss) so it maps to LocalDateTime
-            created_at: new Date().toISOString().slice(0,19),
             status: 'SUBMITTED'
           };
 
@@ -149,6 +176,40 @@
       }
 
       document.getElementById('applyBtn').addEventListener('click', submitApplication);
+
+      async function loadApplicationsForPost(postId) {
+        const appsNote = document.getElementById('appsNote');
+        const appsBody = document.getElementById('appsBody');
+        try {
+          const res = await fetch(`/JobApplication/getApplicationsByPostId/${encodeURIComponent(postId)}`);
+          if (!res.ok) {
+            appsNote.textContent = 'No applications found.';
+            return;
+          }
+          const apps = await res.json();
+          if (!apps || apps.length === 0) {
+            appsNote.textContent = 'No applications found for this post.';
+            return;
+          }
+          appsBody.innerHTML = '';
+          apps.forEach(a => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td style="border:1px solid #ccc; padding:8px;">${a.applicationId || a.application_id || ''}</td>
+              <td style="border:1px solid #ccc; padding:8px;">${a.userId || a.user_id || ''}</td>
+              <td style="border:1px solid #ccc; padding:8px;">${a.status || ''}</td>
+              <td style="border:1px solid #ccc; padding:8px;">${a.createdAt || a.created_at || ''}</td>
+            `;
+            appsBody.appendChild(tr);
+          });
+          appsNote.style.display = 'none';
+          document.getElementById('appsTable').style.display = 'table';
+          document.getElementById('applicationsSection').style.display = 'block';
+        } catch (err) {
+          console.error(err);
+          appsNote.textContent = 'Error loading applications.';
+        }
+      }
 
       loadDetails();
     </script>

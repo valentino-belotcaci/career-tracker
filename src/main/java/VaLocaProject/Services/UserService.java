@@ -53,4 +53,6 @@ public class UserService{
     public User getUserByAccountId(Long id){
         return userRepository.findByAccountId(id);
     }
+
+
 }

@@ -52,15 +52,15 @@
 
     <script>
       async function loadCompany() {
-        const loggedEmail = localStorage.getItem('loggedEmail');
+        const loggedAccountId = localStorage.getItem('loggedAccountId');
         const note = document.getElementById('note');
-        if (!loggedEmail) {
-          note.textContent = 'No logged account found. Please log in.';
+          if (!loggedAccountId) {
+            note.textContent = 'No logged account found. Please log in.';
           return;
         }
 
-        try {
-          const res = await fetch(`/User/getCompanyByEmail/${encodeURIComponent(loggedEmail)}`);
+          try {
+            const res = await fetch(`/Company/getCompanyByAccountId/${encodeURIComponent(loggedAccountId)}`);
           if (res.status === 404) {
             note.textContent = 'No company profile found for this account.';
             return;

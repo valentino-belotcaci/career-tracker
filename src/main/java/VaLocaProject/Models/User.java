@@ -8,14 +8,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Table;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
 
 @Entity // To define it as entity to springboot
 @Table(name = "users") // To define which table it represents
 @Data // Generates getters, setters, toString(), equals(), hashCode()
-@NoArgsConstructor
-@AllArgsConstructor // Creates specific constructors for all fields
 public class User {
     @Id // To define the id column of the table
     // "GeneratedValue" tells JPA that that value is generated.
@@ -53,6 +49,19 @@ public class User {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    // Explicit all-args constructor
+    public User(Long user_id, String name, String email, String description, Long account_id) {
+        this.user_id = user_id;
+        this.name = name;
+        this.email = email;
+        this.description = description;
+        this.account_id = account_id;
+    }
+
+    // Explicit no-args constructor
+    public User() {
     }
 
   

@@ -1,3 +1,14 @@
+error id: file://<WORKSPACE>/src/main/java/VaLocaProject/Controllers/JobApplicationController.java:_empty_/JobApplicationService#deleteAll#
+file://<WORKSPACE>/src/main/java/VaLocaProject/Controllers/JobApplicationController.java
+empty definition using pc, found symbol in pc: _empty_/JobApplicationService#deleteAll#
+empty definition using semanticdb
+empty definition using fallback
+non-local guesses:
+
+offset: 1503
+uri: file://<WORKSPACE>/src/main/java/VaLocaProject/Controllers/JobApplicationController.java
+text:
+```scala
 package VaLocaProject.Controllers;
 
 import java.util.List;
@@ -36,9 +47,9 @@ public class JobApplicationController {
         return ResponseEntity.ok(jobApplicationService.insertApplication(jobApplication));
     }
 
-    @DeleteMapping("JobApplication/deleteAllApplications")
+    @DeleteMapping("JobApplication/deleteAll")
     public ResponseEntity<String> deleteAll(){
-        jobApplicationService.deleteAllApplications();
+        jobApplicationService.deleteA@@ll();
         return ResponseEntity.ok("All job applications deleted");
     }
 
@@ -51,3 +62,10 @@ public class JobApplicationController {
 
     
 }
+
+```
+
+
+#### Short summary: 
+
+empty definition using pc, found symbol in pc: _empty_/JobApplicationService#deleteAll#

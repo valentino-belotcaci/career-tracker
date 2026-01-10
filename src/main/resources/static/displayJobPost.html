@@ -41,16 +41,16 @@
 
     <script>
       async function loadCompanyAndPosts() {
-        const loggedEmail = localStorage.getItem('loggedEmail');
+        const loggedAccountId = localStorage.getItem('loggedAccountId');
         const note = document.getElementById('note');
-        if (!loggedEmail) {
+        if (!loggedAccountId) {
           note.textContent = 'No logged account found. Please log in.';
           return;
         }
 
         try {
-            // Get company by email
-            const companyRes = await fetch(`/User/getCompanyByEmail/${encodeURIComponent(loggedEmail)}`);
+            // Get company by account id
+            const companyRes = await fetch(`/Company/getCompanyByAccountId/${encodeURIComponent(loggedAccountId)}`);
             if (companyRes.status === 404) {
               note.textContent = 'No company profile found for this account.';
               return;
@@ -58,15 +58,18 @@
             if (!companyRes.ok) throw new Error('Failed to load company');
             const company = await companyRes.json();
 
-            // normalize company id (server may return company_id, id, or companyId)
-            const companyId = company.company_id;
-            if (!companyId) {
-              note.textContent = 'Could not determine company id for this account.';
+            // If company endpoint returned null or empty, show message and stop
+            if (!company) {
+              note.textContent = 'No company profile found for this account.';
               return;
             }
 
-            // Ask server for posts by company id
-            const postsRes = await fetch(`/JobPost/getPostByCompany/${encodeURIComponent(companyId)}`);
+            // Backend expects the account id as the path parameter for this endpoint.
+            // Use the loggedAccountId that we already retrieved from localStorage.
+            const accountId = loggedAccountId;
+
+            // Ask server for posts by account id (backend will resolve the company)
+            const postsRes = await fetch(`/JobPost/getPostsByCompanyId/${encodeURIComponent(accountId)}`);
             if (!postsRes.ok) {
               if (postsRes.status === 404) {
                 note.textContent = 'No job posts found for this company.';
@@ -95,6 +98,16 @@
               <td style="border:1px solid #ccc; padding:8px;">${p.available || ''}</td>
               <td style="border:1px solid #ccc; padding:8px;">${p.salary || ''}</td>
             `;
+
+            // Make rows clickable to open details (company view)
+            tr.style.cursor = 'pointer';
+            tr.addEventListener('click', () => {
+              const postId = idVal;
+              if (postId) {
+                window.location.href = `/jobPostDetails.html?postId=${encodeURIComponent(postId)}&companyView=true`;
+              }
+            });
+
             tbody.appendChild(tr);
           });
 

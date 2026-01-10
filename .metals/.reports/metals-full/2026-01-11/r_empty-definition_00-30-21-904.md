@@ -1,3 +1,14 @@
+error id: file://<WORKSPACE>/src/main/java/VaLocaProject/Controllers/JobApplicationController.java:VaLocaProject/Models/User#
+file://<WORKSPACE>/src/main/java/VaLocaProject/Controllers/JobApplicationController.java
+empty definition using pc, found symbol in pc: VaLocaProject/Models/User#
+empty definition using semanticdb
+empty definition using fallback
+non-local guesses:
+
+offset: 354
+uri: file://<WORKSPACE>/src/main/java/VaLocaProject/Controllers/JobApplicationController.java
+text:
+```scala
 package VaLocaProject.Controllers;
 
 import java.util.List;
@@ -8,7 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import VaLocaProject.Models.JobApplication;
-import VaLocaProject.Models.User;
+import VaLocaProject.Models.@@User;
 import VaLocaProject.Services.JobApplicationService;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -36,9 +47,9 @@ public class JobApplicationController {
         return ResponseEntity.ok(jobApplicationService.insertApplication(jobApplication));
     }
 
-    @DeleteMapping("JobApplication/deleteAllApplications")
+    @DeleteMapping("JobApplication/deleteAll")
     public ResponseEntity<String> deleteAll(){
-        jobApplicationService.deleteAllApplications();
+        jobApplicationService.deleteAll();
         return ResponseEntity.ok("All job applications deleted");
     }
 
@@ -51,3 +62,10 @@ public class JobApplicationController {
 
     
 }
+
+```
+
+
+#### Short summary: 
+
+empty definition using pc, found symbol in pc: VaLocaProject/Models/User#
