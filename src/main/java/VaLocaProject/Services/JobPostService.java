@@ -67,7 +67,6 @@ public class JobPostService {
             foundJobPost.setAvailable(jobPost.getAvailable());
         }
 
-        // For salary (primitive int) only update when non-zero
         if (jobPost.getSalary() != 0) {
             foundJobPost.setSalary(jobPost.getSalary());
         }
@@ -82,7 +81,6 @@ public class JobPostService {
         return jobPostRepository.findByCompanyId(foundcompany.company_id);
     }
 
-    // New: get posts by company email. Returns empty list when company not found.
     public List<JobPost> getPostByCompanyEmail(String email){
         Company foundcompany = companyRepository.findByEmail(email);
         if (foundcompany == null) {

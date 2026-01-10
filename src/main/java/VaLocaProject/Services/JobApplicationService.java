@@ -24,4 +24,8 @@ public class JobApplicationService{
 
         return jobApplicationRepository.save(jobApplication);
     }
+
+    public List<JobApplication> getApplicationsByPostId(Long postId){
+        return jobApplicationRepository.findByPostId(postId);
+    }
 }

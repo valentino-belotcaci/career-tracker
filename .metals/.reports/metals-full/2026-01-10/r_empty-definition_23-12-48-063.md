@@ -1,3 +1,14 @@
+error id: file://<WORKSPACE>/src/main/java/VaLocaProject/Controllers/JobApplicationController.java:_empty_/JobApplicationService#getApplicationsByPostId#
+file://<WORKSPACE>/src/main/java/VaLocaProject/Controllers/JobApplicationController.java
+empty definition using pc, found symbol in pc: _empty_/JobApplicationService#getApplicationsByPostId#
+empty definition using semanticdb
+empty definition using fallback
+non-local guesses:
+
+offset: 1446
+uri: file://<WORKSPACE>/src/main/java/VaLocaProject/Controllers/JobApplicationController.java
+text:
+```scala
 package VaLocaProject.Controllers;
 
 import java.util.List;
@@ -35,8 +46,15 @@ public class JobApplicationController {
 
     @GetMapping("JobApplication/getApplicationsByPostId/{id}")
     public ResponseEntity<List<JobApplication>> getApplicationsByPostId(@PathVariable Long id) {
-        return ResponseEntity.ok(jobApplicationService.getApplicationsByPostId(id));
+        return ReponseEntity.ok(jobApplicationService.get@@ApplicationsByPostId);
     }
     
     
 }
+
+```
+
+
+#### Short summary: 
+
+empty definition using pc, found symbol in pc: _empty_/JobApplicationService#getApplicationsByPostId#
