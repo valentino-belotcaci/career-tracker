@@ -33,11 +33,11 @@ public class JobApplication {
     private Date created_at;
 
 
-    public Date getCreatedAt() {
+    public Date getCreated_at() {
         return created_at;
     }
 
-    public void setCreatedAt(Date date) {
+    public void setCreated_at(Date date) {
         created_at = date;
     }
 }

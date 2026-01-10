@@ -30,7 +30,7 @@ public class JobPostService {
         }
 
         // Creates the current date to save (not fully working)
-        jobPost.setCreatedAt(new java.sql.Date(System.currentTimeMillis()));
+        jobPost.setCreated_at(new java.sql.Date(System.currentTimeMillis()));
 
         return jobPostRepository.save(jobPost);
     }

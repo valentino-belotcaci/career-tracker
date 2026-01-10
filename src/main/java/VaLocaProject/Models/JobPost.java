@@ -31,8 +31,7 @@ public class JobPost {
     private String description;
     private String duration;
     private String available;
-    @Column(name = "created_at")
-    private Date createdAt;
+    private Date created_at;
     
 
 
@@ -91,12 +90,12 @@ public class JobPost {
         this.salary = salary;
     }
 
-    public Date getCreatedAt() {
-        return createdAt;
+    public Date getCreated_at() {
+        return created_at;
     }
 
-    public void setCreatedAt(Date date) {
-        createdAt = date;
+    public void setCreated_at(Date date) {
+        created_at = date;
     }
 
 
