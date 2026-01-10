@@ -17,4 +17,8 @@ public class JobApplicationService{
     public List<JobApplication> getAllApplications(){
         return jobApplicationRepository.findAll();
     }
+
+    public JobApplication insertApplication(JobApplication jobApplication){
+        return jobApplicationRepository.save(jobApplication);
+    }
 }

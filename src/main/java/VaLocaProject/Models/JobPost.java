@@ -31,7 +31,9 @@ public class JobPost {
     private String description;
     private String duration;
     private String available;
+    @Column(name = "created_at")
     private Date createdAt;
+    
 
 
     public Long getPostId() {
@@ -96,9 +98,6 @@ public class JobPost {
     public void setCreatedAt(Date date) {
         createdAt = date;
     }
-
-
-
 
 
 }

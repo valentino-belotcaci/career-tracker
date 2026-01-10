@@ -24,6 +24,16 @@ public class JobPostService {
     }
 
     public JobPost insertPost(JobPost jobPost){
+        // Validate company exists
+        if (jobPost.getCompanyId() == null || !companyRepository.existsById(jobPost.getCompanyId())) {
+            throw new IllegalArgumentException("Company not found");
+        }
+
+        // Ensure createdAt is set (DB has NOT NULL constraint)
+        if (jobPost.getCreatedAt() == null) {
+            jobPost.setCreatedAt(new java.sql.Date(System.currentTimeMillis()));
+        }
+
         return jobPostRepository.save(jobPost);
     }
 
