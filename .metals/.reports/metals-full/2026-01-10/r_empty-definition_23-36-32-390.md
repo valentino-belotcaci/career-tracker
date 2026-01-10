@@ -1,3 +1,14 @@
+error id: file://<WORKSPACE>/src/main/java/VaLocaProject/Models/JobPost.java:java/lang/String#
+file://<WORKSPACE>/src/main/java/VaLocaProject/Models/JobPost.java
+empty definition using pc, found symbol in pc: 
+empty definition using semanticdb
+empty definition using fallback
+non-local guesses:
+
+offset: 804
+uri: file://<WORKSPACE>/src/main/java/VaLocaProject/Models/JobPost.java
+text:
+```scala
 package VaLocaProject.Models;
 
 import jakarta.persistence.Entity;
@@ -28,27 +39,27 @@ public class JobPost {
     private Long company_id;
     private String name;
     private int salary;
-    private String description;
+    private String@@ description;
     private String duration;
     private String available;
     private Date created_at;
     
 
 
-    public Long getPost_id() {
-        return post_id;
+    public Long getPostId() {
+        return postId;
     }
 
-    public void setPost_id(Long postId) {
-        this.post_id = postId;
+    public void setPostId(Long postId) {
+        this.postId = postId;
     }
 
-    public Long getCompany_id() {
-        return company_id;
+    public Long getCompanyId() {
+        return companyId;
     }
 
-    public void setCompany_id(Long companyId) {
-        this.company_id = companyId;
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
     }
 
     public String getName() {
@@ -100,3 +111,10 @@ public class JobPost {
 
 
 }
+
+```
+
+
+#### Short summary: 
+
+empty definition using pc, found symbol in pc: 

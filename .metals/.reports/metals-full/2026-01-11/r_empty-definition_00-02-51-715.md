@@ -1,3 +1,14 @@
+error id: file://<WORKSPACE>/src/main/java/VaLocaProject/Services/JobPostService.java:_empty_/JobPost#
+file://<WORKSPACE>/src/main/java/VaLocaProject/Services/JobPostService.java
+empty definition using pc, found symbol in pc: _empty_/JobPost#
+empty definition using semanticdb
+empty definition using fallback
+non-local guesses:
+
+offset: 529
+uri: file://<WORKSPACE>/src/main/java/VaLocaProject/Services/JobPostService.java
+text:
+```scala
 package VaLocaProject.Services;
 
 import java.util.List;
@@ -19,7 +30,7 @@ public class JobPostService {
     @Autowired
     CompanyRepository companyRepository;
 
-    public List<JobPost> getAllPosts(){
+    public List<JobPos@@t> getAllPosts(){
         return jobPostRepository.findAll();
     }
 
@@ -76,10 +87,16 @@ public class JobPostService {
     }
 
 
-    public List<JobPost> getPostsByCompanyId(Long id){
-        // Checks if the company exists
+    public List<JobPost> getPostByCompanyid(Long id){
         Company foundcompany = companyRepository.findByAccountId(id);
         
         return jobPostRepository.findByCompanyId(foundcompany.company_id);
     }
 }
+
+```
+
+
+#### Short summary: 
+
+empty definition using pc, found symbol in pc: _empty_/JobPost#

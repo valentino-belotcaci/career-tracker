@@ -51,9 +51,9 @@ public class CompanyController {
         return ResponseEntity.ok(companyService.updateCompany(id, company));
     }
 
-    @GetMapping("Company/getCompanyByEmail/{email}")
-    public ResponseEntity<Company> getCompanyByEmail(@PathVariable String email) {
-        Company company = companyService.getCompanyByEmail(email);
+    @GetMapping("Company/getCompanyByAccountId/{id}")
+    public ResponseEntity<Company> getCompanyByAccountId(@PathVariable Long id) {
+        Company company = companyService.getCompanyByAccountId(id);
 
         // Additional check
         if (company == null) {

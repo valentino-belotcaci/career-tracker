@@ -1,3 +1,14 @@
+error id: file://<WORKSPACE>/src/main/java/VaLocaProject/Controllers/UserController.java:java/util/List#
+file://<WORKSPACE>/src/main/java/VaLocaProject/Controllers/UserController.java
+empty definition using pc, found symbol in pc: java/util/List#
+empty definition using semanticdb
+empty definition using fallback
+non-local guesses:
+
+offset: 857
+uri: file://<WORKSPACE>/src/main/java/VaLocaProject/Controllers/UserController.java
+text:
+```scala
 package VaLocaProject.Controllers;
 
 import java.util.List;
@@ -26,7 +37,7 @@ public class UserController{
 
     // Returns all users
     @GetMapping("/User/getAllUsers")
-    public ResponseEntity<List<User>> getAllUsers(){
+    public ResponseEntity<L@@ist<User>> getAllUsers(){
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
@@ -60,3 +71,9 @@ public class UserController{
         return ResponseEntity.ok(user);
     }
 }
+```
+
+
+#### Short summary: 
+
+empty definition using pc, found symbol in pc: java/util/List#

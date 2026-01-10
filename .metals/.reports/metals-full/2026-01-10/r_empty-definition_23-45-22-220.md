@@ -1,3 +1,14 @@
+error id: file://<WORKSPACE>/src/main/java/VaLocaProject/Controllers/JobPostController.java:_empty_/JobPostService#
+file://<WORKSPACE>/src/main/java/VaLocaProject/Controllers/JobPostController.java
+empty definition using pc, found symbol in pc: _empty_/JobPostService#
+empty definition using semanticdb
+empty definition using fallback
+non-local guesses:
+
+offset: 765
+uri: file://<WORKSPACE>/src/main/java/VaLocaProject/Controllers/JobPostController.java
+text:
+```scala
 package VaLocaProject.Controllers;
 
 import java.util.List;
@@ -22,7 +33,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 public class JobPostController {
     
     @Autowired
-    JobPostService jobPostService;
+    JobPostSe@@rvice jobPostService;
 
 
     @GetMapping("JobPost/getAllPosts")
@@ -48,7 +59,7 @@ public class JobPostController {
     }
 
     @GetMapping("JobPost/getPostsByCompanyId/{id}")
-    public ResponseEntity<List<JobPost>> getPostsByCompanyId(@PathVariable Long id) {
+    public ResponseEntity<List<JobPost>> getPostsByCompany(@PathVariable Long id) {
         return ResponseEntity.ok(jobPostService.getPostsByCompanyId(id));
     }
     
@@ -60,3 +71,10 @@ public class JobPostController {
     
     
 }
+
+```
+
+
+#### Short summary: 
+
+empty definition using pc, found symbol in pc: _empty_/JobPostService#

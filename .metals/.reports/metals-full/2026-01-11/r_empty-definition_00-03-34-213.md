@@ -1,3 +1,14 @@
+error id: file://<WORKSPACE>/src/main/java/VaLocaProject/Controllers/JobPostController.java:_empty_/JobPost#
+file://<WORKSPACE>/src/main/java/VaLocaProject/Controllers/JobPostController.java
+empty definition using pc, found symbol in pc: _empty_/JobPost#
+empty definition using semanticdb
+empty definition using fallback
+non-local guesses:
+
+offset: 863
+uri: file://<WORKSPACE>/src/main/java/VaLocaProject/Controllers/JobPostController.java
+text:
+```scala
 package VaLocaProject.Controllers;
 
 import java.util.List;
@@ -26,7 +37,7 @@ public class JobPostController {
 
 
     @GetMapping("JobPost/getAllPosts")
-    public ResponseEntity<List<JobPost>> getAllPosts() {
+    public ResponseEntity<List<JobP@@ost>> getAllPosts() {
         return ResponseEntity.ok(jobPostService.getAllPosts());
     }
 
@@ -60,3 +71,10 @@ public class JobPostController {
     
     
 }
+
+```
+
+
+#### Short summary: 
+
+empty definition using pc, found symbol in pc: _empty_/JobPost#

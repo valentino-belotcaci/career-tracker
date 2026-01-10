@@ -1,3 +1,14 @@
+error id: file://<WORKSPACE>/src/main/java/VaLocaProject/Controllers/UserController.java:_empty_/UserService#
+file://<WORKSPACE>/src/main/java/VaLocaProject/Controllers/UserController.java
+empty definition using pc, found symbol in pc: _empty_/UserService#
+empty definition using semanticdb
+empty definition using fallback
+non-local guesses:
+
+offset: 750
+uri: file://<WORKSPACE>/src/main/java/VaLocaProject/Controllers/UserController.java
+text:
+```scala
 package VaLocaProject.Controllers;
 
 import java.util.List;
@@ -22,7 +33,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class UserController{
 
     @Autowired
-    UserService userService;
+    UserServ@@ice userService;
 
     // Returns all users
     @GetMapping("/User/getAllUsers")
@@ -60,3 +71,9 @@ public class UserController{
         return ResponseEntity.ok(user);
     }
 }
+```
+
+
+#### Short summary: 
+
+empty definition using pc, found symbol in pc: _empty_/UserService#

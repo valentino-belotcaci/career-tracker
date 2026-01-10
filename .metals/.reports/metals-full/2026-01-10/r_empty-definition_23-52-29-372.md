@@ -1,3 +1,14 @@
+error id: file://<WORKSPACE>/src/main/java/VaLocaProject/Controllers/UserController.java:_empty_/UserService#getUserByAccountId#
+file://<WORKSPACE>/src/main/java/VaLocaProject/Controllers/UserController.java
+empty definition using pc, found symbol in pc: _empty_/UserService#getUserByAccountId#
+empty definition using semanticdb
+empty definition using fallback
+non-local guesses:
+
+offset: 1775
+uri: file://<WORKSPACE>/src/main/java/VaLocaProject/Controllers/UserController.java
+text:
+```scala
 package VaLocaProject.Controllers;
 
 import java.util.List;
@@ -49,9 +60,9 @@ public class UserController{
         return ResponseEntity.ok(userService.updateUser(id, user));
     }
 
-    @GetMapping("/User/getUserByAccountId/{id}")
-    public ResponseEntity<User> getUserByAccountId(@PathVariable Long id) {
-        User user = userService.getUserByAccountId(id);
+    @GetMapping("/User/getUserById/{id}")
+    public ResponseEntity<User> getUserByEmail(@PathVariable Long id) {
+        User user = userService.getUserByAccou@@ntId(id);
 
         // Additional check
         if (user == null) {
@@ -60,3 +71,9 @@ public class UserController{
         return ResponseEntity.ok(user);
     }
 }
+```
+
+
+#### Short summary: 
+
+empty definition using pc, found symbol in pc: _empty_/UserService#getUserByAccountId#

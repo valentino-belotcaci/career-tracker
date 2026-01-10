@@ -1,3 +1,14 @@
+error id: file://<WORKSPACE>/src/main/java/VaLocaProject/Services/UserService.java:_empty_/UserRepository#getUserByAccountId#
+file://<WORKSPACE>/src/main/java/VaLocaProject/Services/UserService.java
+empty definition using pc, found symbol in pc: _empty_/UserRepository#getUserByAccountId#
+empty definition using semanticdb
+empty definition using fallback
+non-local guesses:
+
+offset: 1419
+uri: file://<WORKSPACE>/src/main/java/VaLocaProject/Services/UserService.java
+text:
+```scala
 package VaLocaProject.Services;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +62,12 @@ public class UserService{
     }
 
     public User getUserByAccountId(Long id){
-        return userRepository.findByAccountId(id);
+        return userRepository.@@getUserByAccountId(id);
     }
 }
+```
+
+
+#### Short summary: 
+
+empty definition using pc, found symbol in pc: _empty_/UserRepository#getUserByAccountId#

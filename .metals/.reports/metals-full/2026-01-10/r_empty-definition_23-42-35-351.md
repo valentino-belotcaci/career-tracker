@@ -1,3 +1,14 @@
+error id: file://<WORKSPACE>/src/main/java/VaLocaProject/Services/JobPostService.java:java/lang/Long#
+file://<WORKSPACE>/src/main/java/VaLocaProject/Services/JobPostService.java
+empty definition using pc, found symbol in pc: java/lang/Long#
+empty definition using semanticdb
+empty definition using fallback
+non-local guesses:
+
+offset: 2360
+uri: file://<WORKSPACE>/src/main/java/VaLocaProject/Services/JobPostService.java
+text:
+```scala
 package VaLocaProject.Services;
 
 import java.util.List;
@@ -75,11 +86,24 @@ public class JobPostService {
         return jobPostRepository.save(foundJobPost);
     }
 
+    public List<JobPost> getPostsByCompany(Lon@@g id){
+        Company foundcompany = companyRepository.findById(id).orElseThrow(
+            () -> new RuntimeException("Company not found"));
+        return jobPostRepository.findByCompany_id(foundcompany.company_id);
+    }
 
-    public List<JobPost> getPostsByCompanyId(Long id){
-        // Checks if the company exists
+    public List<JobPost> getPostByCompanyid(Long id){
         Company foundcompany = companyRepository.findByAccountId(id);
-        
-        return jobPostRepository.findByCompanyId(foundcompany.company_id);
+        if (foundcompany == null) {
+            return java.util.Collections.emptyList();
+        }
+        return jobPostRepository.findByCompany_id(foundcompany.company_id);
     }
 }
+
+```
+
+
+#### Short summary: 
+
+empty definition using pc, found symbol in pc: java/lang/Long#

@@ -23,6 +23,7 @@ public class Company {
     public String name;
     public String email;
     public String description;
+    @Column(name = "account_id")
     public Long account_id;
 
 

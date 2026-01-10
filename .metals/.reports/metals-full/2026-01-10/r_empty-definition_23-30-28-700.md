@@ -1,3 +1,14 @@
+error id: file://<WORKSPACE>/src/main/java/VaLocaProject/Services/CompanyService.java:_empty_/CompanyRepository#findByEmail#
+file://<WORKSPACE>/src/main/java/VaLocaProject/Services/CompanyService.java
+empty definition using pc, found symbol in pc: _empty_/CompanyRepository#findByEmail#
+empty definition using semanticdb
+empty definition using fallback
+non-local guesses:
+
+offset: 1528
+uri: file://<WORKSPACE>/src/main/java/VaLocaProject/Services/CompanyService.java
+text:
+```scala
 package VaLocaProject.Services;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +61,13 @@ public class CompanyService {
     }
 
     public Company getCompanyByAccountId(Long id){
-        return companyRepository.findByAccountId(id);
+        return companyRepository.findBy@@Email(id);
     }
 }
+
+```
+
+
+#### Short summary: 
+
+empty definition using pc, found symbol in pc: _empty_/CompanyRepository#findByEmail#
