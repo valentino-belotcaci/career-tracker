@@ -12,7 +12,7 @@ import jakarta.persistence.Table;
 
 
 @Entity // To define it as entity to springboot
-@Table(name = "companies") // To define which table it represents
+@Table(name = "job_application") // To define which table it represents
 public class JobApplication {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
