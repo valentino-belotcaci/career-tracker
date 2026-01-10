@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Job Applications - CareerTracker</title>
+    <link rel="stylesheet" href="/css/style.css">
+  </head>
+  <body>
+    <header>
+      <a class="site-title" href="/indexUser.html">CareerTracker</a>
+    </header>
+
+    <main class="wide-card">
+      <h2>Your Job Applications</h2>
+      <div style="margin-bottom:12px;">
+        <a href="/createJobApplication.html"><button id="addAppBtn">Apply to a job</button></a>
+      </div>
+      <p id="note">Loading…</p>
+
+      <table id="appsTable" style="width:100%; border-collapse: collapse; display:none;">
+        <thead>
+          <tr>
+            <th style="border:1px solid #ccc; padding:8px; text-align:left;">ID</th>
+            <th style="border:1px solid #ccc; padding:8px; text-align:left;">Post ID</th>
+            <th style="border:1px solid #ccc; padding:8px; text-align:left;">User ID</th>
+            <th style="border:1px solid #ccc; padding:8px; text-align:left;">Created At</th>
+          </tr>
+        </thead>
+        <tbody id="appsBody"></tbody>
+      </table>
+
+      <p id="message"></p>
+    </main>
+
+    <footer>
+      <p>© 2026 CareerTracker</p>
+    </footer>
+
+    <script>
+      async function loadApplicationsForUser() {
+        const loggedEmail = localStorage.getItem('loggedEmail');
+        const note = document.getElementById('note');
+        if (!loggedEmail) {
+          note.textContent = 'No logged account found. Please log in.';
+          return;
+        }
+
+        try {
+          // Obtain user by email
+          const userRes = await fetch(`/User/getUserByEmail/${encodeURIComponent(loggedEmail)}`);
+          if (userRes.status === 404) {
+            note.textContent = 'No user profile found for this account.';
+            return;
+          }
+          if (!userRes.ok) throw new Error('Failed to load user');
+          const user = await userRes.json();
+          const userId = user.user_id || user.id || user.account_id;
+          if (!userId) {
+            note.textContent = 'Could not determine user id.';
+            return;
+          }
+
+          // Get applications for this user (server endpoint assumed)
+          const appsRes = await fetch(`/JobApplication/getByUser/${encodeURIComponent(userId)}`);
+          if (!appsRes.ok) {
+            if (appsRes.status === 404) {
+              note.textContent = 'No applications found.';
+              return;
+            }
+            throw new Error('Failed to load applications');
+          }
+          const apps = await appsRes.json();
+          if (!apps || apps.length === 0) {
+            note.textContent = 'No applications found.';
+            return;
+          }
+
+          const tbody = document.getElementById('appsBody');
+          tbody.innerHTML = '';
+          apps.forEach(a => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td style="border:1px solid #ccc; padding:8px;">${a.applicationId || a.application_id || a.id || ''}</td>
+              <td style="border:1px solid #ccc; padding:8px;">${a.postId || a.post_id || ''}</td>
+              <td style="border:1px solid #ccc; padding:8px;">${a.userId || a.user_id || ''}</td>
+              <td style="border:1px solid #ccc; padding:8px;">${a.created_at || a.createdAt || ''}</td>
+            `;
+            tbody.appendChild(tr);
+          });
+
+          note.style.display = 'none';
+          document.getElementById('appsTable').style.display = 'table';
+        } catch (err) {
+          console.error(err);
+          note.textContent = 'Error loading applications.';
+        }
+      }
+
+      loadApplicationsForUser();
+    </script>
+  </body>
+</html>
