@@ -9,21 +9,25 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity // To define it as entity to springboot
+@Data
 @Table(name = "job_application") // To define which table it represents
+@NoArgsConstructor
+@AllArgsConstructor // Creates specific constructors for all fields
 public class JobApplication {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "application_id")
-    public Long applicationId;
+    private Long applicationId;
     @Column(name = "post_id")
-    public Long postId;
+    private Long postId;
     @Column(name = "user_id")
-    public Long userId;
-    public Date created_at;
+    private Long userId;
+    private Date created_at;
 
 
-    public JobApplication(){}
 }

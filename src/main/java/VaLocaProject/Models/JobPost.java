@@ -5,6 +5,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.sql.Date;
 
@@ -12,6 +15,9 @@ import jakarta.persistence.Column;
 
 @Entity
 @Table(name = "job_post") // To define which table it represents
+@Data
+@NoArgsConstructor
+@AllArgsConstructor // Creates specific constructors for all fields
 public class JobPost {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,10 +32,6 @@ public class JobPost {
     private String duration;
     private String available;
     private Date createdAt;
-
-    // No-arg constructor required by JPA
-    public JobPost() {
-    }
 
 
     public Long getPostId() {
