@@ -40,4 +40,21 @@ public class JobApplication {
     public void setCreatedAt(Date date) {
         createdAt = date;
     }
+
+    public Long getPostId() {
+        return postId;
+    }
+
+    public void getPostId(Long id) {
+        postId = id;
+    }
+
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void getUsertId(Long id) {
+        userId = id;
+    }
 }

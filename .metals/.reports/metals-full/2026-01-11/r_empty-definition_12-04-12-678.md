@@ -1,3 +1,14 @@
+error id: file://<WORKSPACE>/src/main/java/VaLocaProject/Services/JobApplicationService.java:
+file://<WORKSPACE>/src/main/java/VaLocaProject/Services/JobApplicationService.java
+empty definition using pc, found symbol in pc: 
+empty definition using semanticdb
+empty definition using fallback
+non-local guesses:
+
+offset: 560
+uri: file://<WORKSPACE>/src/main/java/VaLocaProject/Services/JobApplicationService.java
+text:
+```scala
 package VaLocaProject.Services;
 
 import java.util.List;
@@ -18,13 +29,9 @@ public class JobApplicationService{
         return jobApplicationRepository.findAll();
     }
 
-    public JobApplication insertApplication(JobApplication jobApplication){
+    public JobApplication insertApplication(JobApplication@@ jobApplication){
         JobApplication foundApplication = getApplicationByIds(jobApplication.getPostId(), jobApplication.getUserId());
-        // If the user already submitted an application for this post, return it and don't create a duplicate
-        if (foundApplication != null) {
-            return foundApplication;
-        }
-
+        
         jobApplication.setCreatedAt(new java.sql.Date(System.currentTimeMillis()));
 
         return jobApplicationRepository.save(jobApplication);
@@ -43,3 +50,9 @@ public class JobApplicationService{
     }
 
 }
+```
+
+
+#### Short summary: 
+
+empty definition using pc, found symbol in pc: 
