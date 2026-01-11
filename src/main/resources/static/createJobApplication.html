@@ -61,8 +61,11 @@
           if (!res.ok) throw new Error('Apply failed');
           msg.style.color = 'green';
           msg.textContent = 'Application submitted.';
-          localStorage.setItem('lastCreatedApplication', (await res.json()).applicationId || '');
-          globalThis.location.href = '/displayJobApplication.html';
+          // store created id (handle snake_case or camelCase)
+          const created = await res.json();
+          localStorage.setItem('lastCreatedApplication', created.applicationId || created.application_id || created.id || '');
+          // disable submit to avoid duplicate clicks and keep the user on the same page
+          e.target.querySelector('button[type="submit"]').disabled = true;
         } catch (err) {
           console.error(err);
           msg.style.color = 'red';

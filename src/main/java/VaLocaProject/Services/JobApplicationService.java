@@ -26,6 +26,7 @@ public class JobApplicationService{
             return Optional.empty();
         }
 
+        // Create the timestamp of the job application
         jobApplication.setCreatedAt(new java.sql.Date(System.currentTimeMillis()));
         JobApplication saved = jobApplicationRepository.save(jobApplication);
         return Optional.ofNullable(saved);

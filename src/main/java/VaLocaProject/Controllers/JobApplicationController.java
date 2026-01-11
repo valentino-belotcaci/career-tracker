@@ -1,6 +1,7 @@
 package VaLocaProject.Controllers;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.apache.catalina.connector.Response;
@@ -35,10 +36,11 @@ public class JobApplicationController {
     @PostMapping("JobApplication/insertApplication")
     public ResponseEntity<?> insertApplication(@RequestBody JobApplication jobApplication) {
         Optional<JobApplication> inserted = jobApplicationService.insertApplication(jobApplication);
-        if (!inserted.isEmpty()) {
-            // application already existed
-            return ResponseEntity.status(409).body(java.util.Map.of("error", "Application already exists"));
+        // If the Optional is empty the service found an existing application and did not create a new one
+        if (inserted.isEmpty()) {
+            return ResponseEntity.status(409).body(Map.of("error", "Application already exists"));
         }
+
         return ResponseEntity.ok(inserted.get());
     }
 

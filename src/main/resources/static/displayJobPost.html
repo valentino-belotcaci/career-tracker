@@ -89,7 +89,7 @@
           tbody.innerHTML = ''; // clear any previous rows
           myPosts.forEach(p => {
             const tr = document.createElement('tr');
-            const idVal = p.postId || p.post_id || p.id || '';
+            const idVal = p.postId;
             tr.innerHTML = `
               <td style="border:1px solid #ccc; padding:8px;">${idVal}</td>
               <td style="border:1px solid #ccc; padding:8px;">${p.name || ''}</td>

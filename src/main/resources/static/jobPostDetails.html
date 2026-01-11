@@ -8,7 +8,7 @@
   </head>
   <body>
     <header>
-      <a class="site-title" href="/indexUser.html">CareerTracker</a>
+      <a id="homeLink" class="site-title" href="/indexUser.html">CareerTracker</a>
     </header>
 
     <main class="wide-card">
@@ -25,7 +25,9 @@
       </div>
 
       <div style="margin-top:18px;">
-        <button id="applyBtn">Submit Application</button>
+        <!-- Hidden and disabled by default to avoid flicker while JS checks server state -->
+        <button id="applyBtn" style="display:none;" disabled>Submit Application</button>
+        <button id="backBtn" type="button" style="margin-left:8px;">Back</button>
         <p id="message" style="margin-top:12px;"></p>
       </div>
       <section id="applicationsSection" style="margin-top:20px; display:none;">
@@ -102,10 +104,72 @@
 
           // If companyView query param is present, load applications for this post
           const companyView = getQueryParam('companyView') === 'true';
+          const applyBtn = document.getElementById('applyBtn');
+          // Update header/home link when in company view so "Back" or header returns to company index
+          const homeLink = document.getElementById('homeLink');
+          if (companyView && homeLink) {
+            homeLink.href = '/indexCompany.html';
+          }
           if (companyView) {
             // hide apply button for company users
-            document.getElementById('applyBtn').style.display = 'none';
+            applyBtn.style.display = 'none';
+            applyBtn.disabled = true;
             loadApplicationsForPost(postId);
+          } else {
+            // For normal users, check if they already applied and show/enable the button only when appropriate
+            const loggedAccountId = localStorage.getItem('loggedAccountId');
+            const loggedEmail = localStorage.getItem('loggedEmail');
+            // prefer accountId lookup; if missing, fall back to email lookup (new users sometimes only have email stored)
+            if (!loggedAccountId && !loggedEmail) {
+              // not logged in -> keep hidden
+              applyBtn.style.display = 'none';
+              applyBtn.disabled = true;
+            } else {
+              try {
+                let user = null;
+                if (loggedAccountId) {
+                  const userRes = await fetch(`/User/getUserByAccountId/${encodeURIComponent(loggedAccountId)}`);
+                  if (userRes.ok) user = await userRes.json();
+                }
+                // fallback to email lookup when account lookup not available or failed
+                if (!user && loggedEmail) {
+                  try {
+                    const ue = await fetch(`/User/getUserByEmail/${encodeURIComponent(loggedEmail)}`);
+                    if (ue.ok) user = await ue.json();
+                  } catch (ee) {
+                    // ignore email lookup failure, will treat as not logged
+                  }
+                }
+
+                if (!user) {
+                  // Could not find a user record: keep hidden
+                  applyBtn.style.display = 'none';
+                  applyBtn.disabled = true;
+                } else {
+                  // tolerate both snake_case and camelCase shapes
+                  const userId = user.userId || user.user_id || user.id || user.accountId || user.account_id;
+                  if (userId) {
+                    const exists = await checkExistingApplication(postId, userId);
+                    if (exists) {
+                      applyBtn.style.display = 'none';
+                      applyBtn.disabled = true;
+                    } else {
+                      // show and enable the button if the user hasn't applied yet
+                      applyBtn.style.display = '';
+                      applyBtn.disabled = false;
+                    }
+                  } else {
+                    // user record without id? keep hidden to be safe
+                    applyBtn.style.display = 'none';
+                    applyBtn.disabled = true;
+                  }
+                }
+              } catch (e) {
+                console.warn('Could not check existing application', e);
+                applyBtn.style.display = 'none';
+                applyBtn.disabled = true;
+              }
+            }
           }
 
         } catch (err) {
@@ -159,6 +223,19 @@
             body: JSON.stringify(payload)
           });
 
+          const applyBtn = document.getElementById('applyBtn');
+          if (res.status === 409) {
+            // Already exists
+            msgEl.textContent = 'You have already submitted an application for this post.';
+            applyBtn.style.display = 'none';
+            applyBtn.disabled = true;
+            // Only refresh applications for company view
+            if (getQueryParam('companyView') === 'true') {
+              loadApplicationsForPost(postId);
+            }
+            return;
+          }
+
           if (!res.ok) {
             const txt = await res.text();
             throw new Error(`Failed to submit application: ${res.status} ${txt}`);
@@ -166,8 +243,17 @@
 
           const created = await res.json();
           msgEl.textContent = 'Application submitted successfully.';
-          // Optionally redirect or disable the button
-          document.getElementById('applyBtn').disabled = true;
+          // after creating, check existence and hide the button
+          const userIdForCheck = payload.userId || payload.user_id;
+          const exists = await checkExistingApplication(postId, userIdForCheck);
+          if (exists) {
+            applyBtn.style.display = 'none';
+            applyBtn.disabled = true;
+          }
+          // Only refresh applications for company users viewing this post
+          if (getQueryParam('companyView') === 'true') {
+            loadApplicationsForPost(postId);
+          }
 
         } catch (err) {
           console.error(err);
@@ -176,6 +262,7 @@
       }
 
       document.getElementById('applyBtn').addEventListener('click', submitApplication);
+  document.getElementById('backBtn').addEventListener('click', function(){ history.back(); });
 
       async function loadApplicationsForPost(postId) {
         const appsNote = document.getElementById('appsNote');
@@ -208,6 +295,22 @@
         } catch (err) {
           console.error(err);
           appsNote.textContent = 'Error loading applications.';
+        }
+      }
+
+      async function checkExistingApplication(postId, userId) {
+        if (!postId || !userId) return false;
+        try {
+          const url = `/JobApplication/getApplicationByIds?post_id=${encodeURIComponent(postId)}&user_id=${encodeURIComponent(userId)}`;
+          const res = await fetch(url);
+          if (!res.ok) return false;
+          const body = await res.json();
+          if (!body) return false;
+          if (Array.isArray(body)) return body.length > 0;
+          return Object.keys(body).length > 0;
+        } catch (e) {
+          console.warn('checkExistingApplication failed', e);
+          return false;
         }
       }
 
