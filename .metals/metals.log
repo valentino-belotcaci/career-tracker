@@ -5784,3 +5784,5 @@ AVVERTENZA: Unmatched cancel notification for request id 10777
 2026.01.11 01:02:22 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/CompanyService.java. Using fallback presentation compiler.
 2026.01.11 01:02:22 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/CompanyService.java. Using fallback presentation compiler.
 2026.01.11 01:02:22 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/CompanyService.java. Using fallback presentation compiler.
+2026.01.11 01:08:33 WARN  no build target for: /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java
+2026.01.11 01:11:33 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
