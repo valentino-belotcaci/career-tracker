@@ -142,9 +142,14 @@
                 }
 
                 if (!user) {
-                  // Could not find a user record: keep hidden
-                  applyBtn.style.display = 'none';
-                  applyBtn.disabled = true;
+                  // Could not find a user record. If we have an email in localStorage, allow optimistic apply (submit will re-resolve).
+                  if (loggedEmail) {
+                    applyBtn.style.display = '';
+                    applyBtn.disabled = false;
+                  } else {
+                    applyBtn.style.display = 'none';
+                    applyBtn.disabled = true;
+                  }
                 } else {
                   // tolerate both snake_case and camelCase shapes
                   const userId = user.userId || user.user_id || user.id || user.accountId || user.account_id;
@@ -187,27 +192,39 @@
           return;
         }
 
-        // Get logged email from localStorage
+        // Require at least an email in localStorage to attempt apply
         const loggedEmail = localStorage.getItem('loggedEmail');
         if (!loggedEmail) {
           msgEl.textContent = 'You must be logged in to apply.';
           return;
         }
 
+        const applyBtn = document.getElementById('applyBtn');
+        applyBtn.disabled = true;
+
         try {
-          // Fetch user by email to get user id
-          // Use account id lookup to get user id
+          // Resolve user by accountId first, then by email
+          let user = null;
           const loggedAccountId = localStorage.getItem('loggedAccountId');
-          if (!loggedAccountId) {
-            msgEl.textContent = 'You must be logged in to apply.';
+          if (loggedAccountId) {
+            const ur = await fetch(`/User/getUserByAccountId/${encodeURIComponent(loggedAccountId)}`);
+            if (ur.ok) user = await ur.json();
+          }
+          if (!user && loggedEmail) {
+            const ue = await fetch(`/User/getUserByEmail/${encodeURIComponent(loggedEmail)}`);
+            if (ue.ok) user = await ue.json();
+          }
+
+          if (!user) {
+            msgEl.textContent = 'Could not find your user record. Please complete your profile.';
+            applyBtn.disabled = false;
             return;
           }
-          const userRes = await fetch(`/User/getUserByAccountId/${encodeURIComponent(loggedAccountId)}`);
-          if (!userRes.ok) throw new Error('Failed to get user');
-          const user = await userRes.json();
-          const userId = user.user_id || user.userId || user.id || user.account_id || user.accountId;
+
+          const userId = user.userId || user.user_id || user.id || user.accountId || user.account_id;
           if (!userId) {
             msgEl.textContent = 'Could not determine your user id.';
+            applyBtn.disabled = false;
             return;
           }
 
@@ -223,41 +240,35 @@
             body: JSON.stringify(payload)
           });
 
-          const applyBtn = document.getElementById('applyBtn');
           if (res.status === 409) {
-            // Already exists
             msgEl.textContent = 'You have already submitted an application for this post.';
             applyBtn.style.display = 'none';
             applyBtn.disabled = true;
-            // Only refresh applications for company view
-            if (getQueryParam('companyView') === 'true') {
-              loadApplicationsForPost(postId);
-            }
+            if (getQueryParam('companyView') === 'true') loadApplicationsForPost(postId);
             return;
           }
 
           if (!res.ok) {
-            const txt = await res.text();
-            throw new Error(`Failed to submit application: ${res.status} ${txt}`);
+            let bodyText = '';
+            try { bodyText = JSON.stringify(await res.json()); } catch (e) {
+              try { bodyText = await res.text(); } catch (ee) { bodyText = '<no body>'; }
+            }
+            msgEl.textContent = `Failed to submit application (${res.status}): ${bodyText}`;
+            console.error('Submit failed', res.status, bodyText);
+            applyBtn.disabled = false;
+            return;
           }
 
           const created = await res.json();
           msgEl.textContent = 'Application submitted successfully.';
-          // after creating, check existence and hide the button
-          const userIdForCheck = payload.userId || payload.user_id;
-          const exists = await checkExistingApplication(postId, userIdForCheck);
-          if (exists) {
-            applyBtn.style.display = 'none';
-            applyBtn.disabled = true;
-          }
-          // Only refresh applications for company users viewing this post
-          if (getQueryParam('companyView') === 'true') {
-            loadApplicationsForPost(postId);
-          }
+          const exists = await checkExistingApplication(postId, payload.userId);
+          if (exists) { applyBtn.style.display = 'none'; applyBtn.disabled = true; }
+          if (getQueryParam('companyView') === 'true') loadApplicationsForPost(postId);
 
         } catch (err) {
-          console.error(err);
-          msgEl.textContent = 'Error submitting application.';
+          console.error('Submit exception', err);
+          msgEl.textContent = err && err.message ? `Error: ${err.message}` : 'Error submitting application.';
+          applyBtn.disabled = false;
         }
       }
 
