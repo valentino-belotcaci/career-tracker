@@ -73,7 +73,7 @@
             document.getElementById('createForm').addEventListener('submit', async (e) => {
               e.preventDefault();
               const payload = {
-                company_id: Number.parseInt(companyIdInput.value),
+                companyId: Number.parseInt(companyIdInput.value),
                 name: document.getElementById('name').value,
                 description: document.getElementById('description').value,
                 duration: document.getElementById('duration').value,

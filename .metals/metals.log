@@ -11681,3 +11681,44 @@ AVVERTENZA: Unmatched cancel notification for request id 22126
 2026.01.11 12:39:26 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobApplicationController.java. Using fallback presentation compiler.
 2026.01.11 12:39:26 INFO  Created report: Optional[file:///Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobApplicationController.java]
 2026.01.11 12:39:26 INFO  empty definition using pc, found symbol in pc: java/util/Optional#isEmpty(). (full report at: "/Users/luca/Documents/SideQuests/career-tracker/.metals/.reports/metals-full/2026-01-11/r_empty-definition_12-39-26-733.md")
+2026.01.11 12:42:24 WARN  no build target for: /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobPostController.java
+2026.01.11 12:42:24 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobPostController.java. Using fallback presentation compiler.
+2026.01.11 12:42:24 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobPostController.java. Using fallback presentation compiler.
+2026.01.11 12:43:35 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobPostController.java. Using fallback presentation compiler.
+2026.01.11 12:43:36 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobPostController.java. Using fallback presentation compiler.
+gen 11, 2026 12:43:36 PM org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+AVVERTENZA: Unmatched cancel notification for request id 22684
+2026.01.11 12:43:36 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobPostController.java. Using fallback presentation compiler.
+2026.01.11 12:43:36 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobPostController.java. Using fallback presentation compiler.
+2026.01.11 12:43:37 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobPostController.java. Using fallback presentation compiler.
+2026.01.11 12:43:37 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobPostController.java. Using fallback presentation compiler.
+gen 11, 2026 12:43:37 PM org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+AVVERTENZA: Unmatched cancel notification for request id 22688
+2026.01.11 12:43:38 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobPostController.java. Using fallback presentation compiler.
+2026.01.11 12:43:38 INFO  Created report: Optional[file:///Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobPostController.java]
+2026.01.11 12:43:38 INFO  empty definition using pc, found symbol in pc: _empty_/ResponseEntity#ok# (full report at: "/Users/luca/Documents/SideQuests/career-tracker/.metals/.reports/metals-full/2026-01-11/r_empty-definition_12-43-38-507.md")
+2026.01.11 12:43:39 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobPostController.java. Using fallback presentation compiler.
+2026.01.11 12:43:39 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobPostController.java. Using fallback presentation compiler.
+2026.01.11 12:43:39 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobPostController.java. Using fallback presentation compiler.
+2026.01.11 12:43:39 INFO  Created report: Optional[file:///Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobPostController.java]
+2026.01.11 12:43:39 INFO  empty definition using pc, found symbol in pc: _empty_/GetMapping# (full report at: "/Users/luca/Documents/SideQuests/career-tracker/.metals/.reports/metals-full/2026-01-11/r_empty-definition_12-43-39-508.md")
+2026.01.11 12:43:39 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobPostController.java. Using fallback presentation compiler.
+2026.01.11 12:43:39 INFO  empty definition using pc, found symbol in pc: _empty_/JobPostService# (full report at: "/Users/luca/Documents/SideQuests/career-tracker/.metals/.reports/metals-full/2026-01-10/r_empty-definition_23-45-22-220.md")
+2026.01.11 12:43:39 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobPostController.java. Using fallback presentation compiler.
+2026.01.11 12:43:39 INFO  empty definition using pc, found symbol in pc: _empty_/JobPostService# (full report at: "/Users/luca/Documents/SideQuests/career-tracker/.metals/.reports/metals-full/2026-01-10/r_empty-definition_23-45-22-220.md")
+2026.01.11 12:43:39 WARN  no build target for: /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobPostService.java
+2026.01.11 12:43:39 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobPostService.java. Using fallback presentation compiler.
+2026.01.11 12:43:39 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobPostService.java. Using fallback presentation compiler.
+2026.01.11 12:43:54 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobPostService.java. Using fallback presentation compiler.
+2026.01.11 12:43:54 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobPostService.java. Using fallback presentation compiler.
+2026.01.11 12:44:05 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobPostService.java. Using fallback presentation compiler.
+2026.01.11 12:44:08 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobPostService.java. Using fallback presentation compiler.
+2026.01.11 12:44:08 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobPostService.java. Using fallback presentation compiler.
+2026.01.11 12:44:08 INFO  Created report: Optional[file:///Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobPostService.java]
+2026.01.11 12:44:08 INFO  empty definition using pc, found symbol in pc: _empty_/JobPost#setCreatedAt# (full report at: "/Users/luca/Documents/SideQuests/career-tracker/.metals/.reports/metals-full/2026-01-11/r_empty-definition_12-44-08-239.md")
+2026.01.11 12:44:08 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobPostService.java. Using fallback presentation compiler.
+2026.01.11 12:44:13 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobPostService.java. Using fallback presentation compiler.
+2026.01.11 12:44:13 INFO  Created report: Optional[file:///Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobPostService.java]
+2026.01.11 12:44:13 INFO  empty definition using pc, found symbol in pc: java/sql/Date# (full report at: "/Users/luca/Documents/SideQuests/career-tracker/.metals/.reports/metals-full/2026-01-11/r_empty-definition_12-44-13-602.md")
+2026.01.11 12:44:13 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobPostService.java. Using fallback presentation compiler.
+2026.01.11 12:45:10 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobPostService.java. Using fallback presentation compiler.
