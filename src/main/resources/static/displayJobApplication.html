@@ -63,11 +63,12 @@
           tbody.innerHTML = '';
           posts.forEach(p => {
             const tr = document.createElement('tr');
-            const idVal = p.post_id;
-            const compVal = p.company_id;
+            // accept either camelCase or snake_case from the backend
+            const idVal = p.postId;
+            const compVal = p.companyId;
             tr.innerHTML = `
-                <td style="display:none; border:1px solid #ccc; padding:8px;">${idVal}</td>
-                <td style="display:none; border:1px solid #ccc; padding:8px;">${compVal}</td>
+              <td style="display:none; border:1px solid #ccc; padding:8px;">${idVal}</td>
+              <td style="display:none; border:1px solid #ccc; padding:8px;">${compVal}</td>
               <td style="border:1px solid #ccc; padding:8px;">${p.name || ''}</td>
               <td style="border:1px solid #ccc; padding:8px;">${p.description || ''}</td>
               <td style="border:1px solid #ccc; padding:8px;">${p.duration || ''}</td>

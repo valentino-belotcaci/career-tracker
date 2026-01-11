@@ -1,7 +1,17 @@
+error id: file://<WORKSPACE>/src/main/java/VaLocaProject/Controllers/JobApplicationController.java:_empty_/ResponseEntity#ok#
+file://<WORKSPACE>/src/main/java/VaLocaProject/Controllers/JobApplicationController.java
+empty definition using pc, found symbol in pc: _empty_/ResponseEntity#ok#
+empty definition using semanticdb
+empty definition using fallback
+non-local guesses:
+
+offset: 1564
+uri: file://<WORKSPACE>/src/main/java/VaLocaProject/Controllers/JobApplicationController.java
+text:
+```scala
 package VaLocaProject.Controllers;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,19 +43,14 @@ public class JobApplicationController {
     }
 
     @PostMapping("JobApplication/insertApplication")
-    public ResponseEntity<?> insertApplication(@RequestBody JobApplication jobApplication) {
-        Optional<JobApplication> inserted = jobApplicationService.insertApplication(jobApplication);
-        if (!inserted.isEmpty()) {
-            // application already existed
-            return ResponseEntity.status(409).body(java.util.Map.of("error", "Application already exists"));
-        }
-        return ResponseEntity.ok(inserted.get());
+    public ResponseEntity<JobApplication> insertApplication(@RequestBody JobApplication jobApplication) {
+        return ResponseEntity.ok(jobApplicationService.insertApplication(jobApplication));
     }
 
     @DeleteMapping("JobApplication/deleteAllApplications")
     public ResponseEntity<String> deleteAll(){
         jobApplicationService.deleteAllApplications();
-        return ResponseEntity.ok("All job applications deleted");
+        return ResponseEntity.o@@k("All job applications deleted");
     }
 
     @GetMapping("JobApplication/getApplicationsByPostId/{id}")
@@ -62,3 +67,10 @@ public class JobApplicationController {
 
     
 }
+
+```
+
+
+#### Short summary: 
+
+empty definition using pc, found symbol in pc: _empty_/ResponseEntity#ok#

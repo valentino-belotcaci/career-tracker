@@ -1,7 +1,17 @@
+error id: file://<WORKSPACE>/src/main/java/VaLocaProject/Controllers/JobApplicationController.java:_empty_/JobApplication#
+file://<WORKSPACE>/src/main/java/VaLocaProject/Controllers/JobApplicationController.java
+empty definition using pc, found symbol in pc: _empty_/JobApplication#
+empty definition using semanticdb
+empty definition using fallback
+non-local guesses:
+
+offset: 1714
+uri: file://<WORKSPACE>/src/main/java/VaLocaProject/Controllers/JobApplicationController.java
+text:
+```scala
 package VaLocaProject.Controllers;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,13 +43,8 @@ public class JobApplicationController {
     }
 
     @PostMapping("JobApplication/insertApplication")
-    public ResponseEntity<?> insertApplication(@RequestBody JobApplication jobApplication) {
-        Optional<JobApplication> inserted = jobApplicationService.insertApplication(jobApplication);
-        if (!inserted.isEmpty()) {
-            // application already existed
-            return ResponseEntity.status(409).body(java.util.Map.of("error", "Application already exists"));
-        }
-        return ResponseEntity.ok(inserted.get());
+    public ResponseEntity<JobApplication> insertApplication(@RequestBody JobApplication jobApplication) {
+        return ResponseEntity.ok(jobApplicationService.insertApplication(jobApplication));
     }
 
     @DeleteMapping("JobApplication/deleteAllApplications")
@@ -49,7 +54,7 @@ public class JobApplicationController {
     }
 
     @GetMapping("JobApplication/getApplicationsByPostId/{id}")
-    public ResponseEntity<List<JobApplication>> getApplicationsByPostId(@PathVariable Long id) {
+    public ResponseEntity<List<JobApplication@@>> getApplicationsByPostId(@PathVariable Long id) {
         return ResponseEntity.ok(jobApplicationService.getApplicationsByPostId(id));
     }
 
@@ -62,3 +67,10 @@ public class JobApplicationController {
 
     
 }
+
+```
+
+
+#### Short summary: 
+
+empty definition using pc, found symbol in pc: _empty_/JobApplication#

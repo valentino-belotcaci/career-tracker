@@ -1,3 +1,14 @@
+error id: file://<WORKSPACE>/src/main/java/VaLocaProject/Controllers/JobApplicationController.java:java/util/Optional#isEmpty().
+file://<WORKSPACE>/src/main/java/VaLocaProject/Controllers/JobApplicationController.java
+empty definition using pc, found symbol in pc: java/util/Optional#isEmpty().
+empty definition using semanticdb
+empty definition using fallback
+non-local guesses:
+
+offset: 1412
+uri: file://<WORKSPACE>/src/main/java/VaLocaProject/Controllers/JobApplicationController.java
+text:
+```scala
 package VaLocaProject.Controllers;
 
 import java.util.List;
@@ -35,7 +46,7 @@ public class JobApplicationController {
     @PostMapping("JobApplication/insertApplication")
     public ResponseEntity<?> insertApplication(@RequestBody JobApplication jobApplication) {
         Optional<JobApplication> inserted = jobApplicationService.insertApplication(jobApplication);
-        if (!inserted.isEmpty()) {
+        if (!inserted.i@@sEmpty()) {
             // application already existed
             return ResponseEntity.status(409).body(java.util.Map.of("error", "Application already exists"));
         }
@@ -62,3 +73,10 @@ public class JobApplicationController {
 
     
 }
+
+```
+
+
+#### Short summary: 
+
+empty definition using pc, found symbol in pc: java/util/Optional#isEmpty().

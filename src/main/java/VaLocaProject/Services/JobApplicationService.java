@@ -1,6 +1,7 @@
 package VaLocaProject.Services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,16 +19,16 @@ public class JobApplicationService{
         return jobApplicationRepository.findAll();
     }
 
-    public JobApplication insertApplication(JobApplication jobApplication){
+    public Optional<JobApplication> insertApplication(JobApplication jobApplication){
         JobApplication foundApplication = getApplicationByIds(jobApplication.getPostId(), jobApplication.getUserId());
-        // If the user already submitted an application for this post, return it and don't create a duplicate
+        // If the user already submitted an application for this post, return empty to indicate no new creation
         if (foundApplication != null) {
-            return foundApplication;
+            return Optional.empty();
         }
 
         jobApplication.setCreatedAt(new java.sql.Date(System.currentTimeMillis()));
-
-        return jobApplicationRepository.save(jobApplication);
+        JobApplication saved = jobApplicationRepository.save(jobApplication);
+        return Optional.ofNullable(saved);
     }
 
     public void deleteAllApplications(){
