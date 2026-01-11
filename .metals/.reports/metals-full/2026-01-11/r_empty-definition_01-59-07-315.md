@@ -1,3 +1,14 @@
+error id: file://<WORKSPACE>/src/main/java/VaLocaProject/Models/Company.java:java/lang/Long#
+file://<WORKSPACE>/src/main/java/VaLocaProject/Models/Company.java
+empty definition using pc, found symbol in pc: java/lang/Long#
+empty definition using semanticdb
+empty definition using fallback
+non-local guesses:
+
+offset: 590
+uri: file://<WORKSPACE>/src/main/java/VaLocaProject/Models/Company.java
+text:
+```scala
 package VaLocaProject.Models;
 
 import jakarta.persistence.Column;
@@ -15,7 +26,7 @@ public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "company_id")
-    public Long companyId;
+    public Lo@@ng companyId;
     public String name;
     public String email;
     public String description;
@@ -47,12 +58,6 @@ public class Company {
         this.description = description;
     }
 
-    public Long getCompanyId(){
-        return companyId;
-    }
-
-
-
     // Explicit all-args constructor to avoid relying on Lombok during compilation
     public Company(Long companyId, String name, String email, String description, Long accountId) {
         this.companyId = companyId;
@@ -67,3 +72,10 @@ public class Company {
     }
 
 }
+
+```
+
+
+#### Short summary: 
+
+empty definition using pc, found symbol in pc: java/lang/Long#

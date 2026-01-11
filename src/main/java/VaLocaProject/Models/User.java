@@ -19,11 +19,11 @@ public class User {
     // to AUTO choose the best strategy itself(probably just number increasing e.g. 1, 2, 3...)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JoinColumn(name = "user_id")
-    private Long user_id; // To define actual SQL column
+    private Long userId; // To define actual SQL column
     private String name;
     private String email;
     private String description;
-    private Long account_id;
+    private Long accountId;
 
 
     public String getName(){
@@ -53,11 +53,11 @@ public class User {
 
     // Explicit all-args constructor
     public User(Long user_id, String name, String email, String description, Long account_id) {
-        this.user_id = user_id;
+        this.userId = user_id;
         this.name = name;
         this.email = email;
         this.description = description;
-        this.account_id = account_id;
+        this.accountId = account_id;
     }
 
     // Explicit no-args constructor

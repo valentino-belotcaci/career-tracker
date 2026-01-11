@@ -1,3 +1,14 @@
+error id: file://<WORKSPACE>/src/main/java/VaLocaProject/Services/AccountService.java:Account#
+file://<WORKSPACE>/src/main/java/VaLocaProject/Services/AccountService.java
+empty definition using pc, found symbol in pc: 
+empty definition using semanticdb
+empty definition using fallback
+non-local guesses:
+
+offset: 754
+uri: file://<WORKSPACE>/src/main/java/VaLocaProject/Services/AccountService.java
+text:
+```scala
 package VaLocaProject.Services;
 
 import java.util.List;
@@ -28,7 +39,8 @@ public class AccountService {
         return accountRepository.findAll();
     }
 
-    public Account insertAccount(Account account){
+    public Account@@ insertAccount(Account account){
+       account.getAccountId() = null; // set as null the id to be set then by DB
         Account saved = accountRepository.save(account);
 
         // After creating the Account, also create a blank Company or User linked via account_id
@@ -36,11 +48,11 @@ public class AccountService {
             String type = saved.type;
             if (type.equals("COMPANY")) {
                 // Company constructor order: company_id, name, email, description, account_id
-                Company c = new Company(null, "", saved.getEmail(), "", saved.getAccountId());
+                Company c = new Company(null, "", saved.email, "", saved.account_id);
                 companyRepository.save(c);
             } else if (type.equals("USER")) {
                 // User constructor order: user_id, name, email, description, account_id
-                User u = new User(null, "", saved.getEmail(), "", saved.getAccountId());
+                User u = new User(null, "", saved.email, "", saved.account_id);
                 userRepository.save(u);
             }
         }
@@ -64,7 +76,7 @@ public class AccountService {
         // Check if the password matches 
         // TODO: add password hashing 
         if (account.password == null) return false;
-        return account.getPassword().equals(password);
+        return account.password.equals(password);
     }
 
     public void deleteAllAccounts(){
@@ -73,3 +85,10 @@ public class AccountService {
 
 
 }
+
+```
+
+
+#### Short summary: 
+
+empty definition using pc, found symbol in pc: 

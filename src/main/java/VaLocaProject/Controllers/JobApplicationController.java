@@ -47,7 +47,11 @@ public class JobApplicationController {
         return ResponseEntity.ok(jobApplicationService.getApplicationsByPostId(id));
     }
 
-
+    @GetMapping("JobApplication/getApplicationByIds")
+    public ResponseEntity<JobApplication> getApplicationByIds(@RequestParam Long post_id, @RequestParam Long user_id) {
+        return ResponseEntity.ok(jobApplicationService.getApplicationByIds(post_id, user_id));
+    }
+    
 
     
 }

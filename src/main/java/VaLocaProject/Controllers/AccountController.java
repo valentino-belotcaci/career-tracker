@@ -34,7 +34,7 @@ public class AccountController {
         Account saved = accountService.insertAccount(account);
 
         AccountDTO accountDTO = new AccountDTO(
-            saved.account_id,
+            saved.accountId,
             saved.email ,
             saved.type  
         );
@@ -58,7 +58,7 @@ public class AccountController {
         }
 
         AccountDTO accountDTO = new AccountDTO(
-            account.account_id,
+            account.accountId,
             account.email,
             account.type
         );

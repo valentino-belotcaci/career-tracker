@@ -1,3 +1,14 @@
+error id: file://<WORKSPACE>/src/main/java/VaLocaProject/Models/Account.java:java/lang/String#
+file://<WORKSPACE>/src/main/java/VaLocaProject/Models/Account.java
+empty definition using pc, found symbol in pc: java/lang/String#
+empty definition using semanticdb
+empty definition using fallback
+non-local guesses:
+
+offset: 1024
+uri: file://<WORKSPACE>/src/main/java/VaLocaProject/Models/Account.java
+text:
+```scala
 package VaLocaProject.Models;
 
 import jakarta.persistence.Column;
@@ -25,24 +36,26 @@ public class Account {
     public String type;
 
 
-    public Long getAccountId(){
-        return accountId;
+    public Long getAccountId(Account account){
+        return account.accountId;
     }
 
     public void setAccountId(Long id){
         this.accountId = id;
     }
 
-    public String getEmail(){
-        return email;
+    public Long getEmail(@@String email){
+        return this.email;
     }
 
     public void setEmail(String email){
         this.email = email;
     }
-
-    public String getPassword(){
-        return password;
-    }
-
 }
+
+```
+
+
+#### Short summary: 
+
+empty definition using pc, found symbol in pc: java/lang/String#

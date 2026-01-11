@@ -30,14 +30,14 @@ public class JobApplication {
     @Column(name = "user_id")
     private Long userId;
     private String status;
-    private Date created_at;
+    private Date createdAt;
 
 
-    public Date getCreated_at() {
-        return created_at;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreated_at(Date date) {
-        created_at = date;
+    public void setCreatedAt(Date date) {
+        createdAt = date;
     }
 }

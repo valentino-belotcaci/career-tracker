@@ -1,3 +1,14 @@
+error id: file://<WORKSPACE>/src/main/java/VaLocaProject/Services/JobPostService.java:_empty_/JobPostRepository#findByCompanyId#
+file://<WORKSPACE>/src/main/java/VaLocaProject/Services/JobPostService.java
+empty definition using pc, found symbol in pc: _empty_/JobPostRepository#findByCompanyId#
+empty definition using semanticdb
+empty definition using fallback
+non-local guesses:
+
+offset: 2537
+uri: file://<WORKSPACE>/src/main/java/VaLocaProject/Services/JobPostService.java
+text:
+```scala
 package VaLocaProject.Services;
 
 import java.util.List;
@@ -25,12 +36,12 @@ public class JobPostService {
 
     public JobPost insertPost(JobPost jobPost){
         // Validate company exists
-        if (jobPost.getCompanyId() == null) {
+        if (jobPost.getCompany_id() == null || !companyRepository.existsById(jobPost.getCompany_id())) {
             throw new IllegalArgumentException("Company not found");
         }
 
         // Creates the current date to save (not fully working)
-        jobPost.setCreatedAt(new java.sql.Date(System.currentTimeMillis()));
+        jobPost.setCreated_at(new java.sql.Date(System.currentTimeMillis()));
 
         return jobPostRepository.save(jobPost);
     }
@@ -47,8 +58,8 @@ public class JobPostService {
         JobPost foundJobPost = jobPostRepository.findById(id).orElseThrow(
             () -> new RuntimeException("JobPost not found"));
         // Check each field and update when non-null (or non-zero for primitives)
-        if (jobPost.getCompanyId() != null) {
-            foundJobPost.setCompanyId(jobPost.getCompanyId());
+        if (jobPost.getCompany_id() != null) {
+            foundJobPost.setCompany_id(jobPost.getCompany_id());
         }
 
         if (jobPost.getName() != null) {
@@ -80,6 +91,13 @@ public class JobPostService {
         // Checks if the company exists
         Company foundcompany = companyRepository.findByAccountId(id);
         
-        return jobPostRepository.findByCompanyId(foundcompany.getCompanyId());
+        return jobPostRepository.findByCompanyId@@(foundcompany.getCompanyId());
     }
 }
+
+```
+
+
+#### Short summary: 
+
+empty definition using pc, found symbol in pc: _empty_/JobPostRepository#findByCompanyId#
