@@ -12114,3 +12114,13 @@ AVVERTENZA: Unmatched cancel notification for request id 23799
 2026.01.12 21:13:00 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobPostController.java. Using fallback presentation compiler.
 2026.01.12 21:13:02 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobPostController.java. Using fallback presentation compiler.
 2026.01.12 21:13:02 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobPostController.java. Using fallback presentation compiler.
+2026.01.12 21:14:13 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 21:14:13 INFO  Created report: Optional[file:///Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java]
+2026.01.12 21:14:13 INFO  empty definition using pc, found symbol in pc: VaLocaProject/Models/User# (full report at: "/Users/luca/Documents/SideQuests/career-tracker/.metals/.reports/metals-full/2026-01-12/r_empty-definition_21-14-13-440.md")
+2026.01.12 21:14:13 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 21:14:13 INFO  empty definition using pc, found symbol in pc: VaLocaProject/Models/User# (full report at: "/Users/luca/Documents/SideQuests/career-tracker/.metals/.reports/metals-full/2026-01-12/r_empty-definition_21-14-13-440.md")
+2026.01.12 21:14:58 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobPostController.java. Using fallback presentation compiler.
+2026.01.12 21:14:58 WARN  no build target for: /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobPostController.java
+2026.01.12 21:14:58 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobPostController.java. Using fallback presentation compiler.
+2026.01.12 21:14:58 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobPostController.java. Using fallback presentation compiler.
+2026.01.12 21:14:59 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobPostController.java. Using fallback presentation compiler.

@@ -54,13 +54,13 @@
       async function loadProfile() {
         const loggedAccountId = localStorage.getItem('loggedAccountId');
         const note = document.getElementById('note');
-          if (!loggedAccountId) {
-            note.textContent = 'No logged account found. Please log in.';
+        if (!loggedAccountId) {
+          note.textContent = 'No logged account found. Please log in.';
           return;
         }
 
-          try {
-            const res = await fetch(`/User/getUserByAccountId/${encodeURIComponent(loggedAccountId)}`);
+        try {
+          const res = await fetch(`/User/getUserByAccountId/${encodeURIComponent(loggedAccountId)}`);
           if (res.status === 404) {
             note.textContent = 'No user profile found for this account.';
             return;
@@ -70,19 +70,19 @@
           const user = await res.json();
 
           // populate view and edit fields
-          const uid = user.userId;
-          document.getElementById('userId').value = uid;
-          document.getElementById('name').value = u.name || '';
-          document.getElementById('email').value = u.email || '';
-          document.getElementById('description').value = u.description || '';
+          document.getElementById('userId').value = user.userId || '';
+          document.getElementById('name').value = user.name || '';
+          document.getElementById('email').value = user.email || '';
+          document.getElementById('description').value = user.description || '';
 
-          document.getElementById('viewName').textContent = u.name || '';
-          document.getElementById('viewEmail').textContent = u.email || '';
-          document.getElementById('viewDescription').textContent = u.description || '';
+          document.getElementById('viewName').textContent = user.name || '';
+          document.getElementById('viewEmail').textContent = user.email || '';
+          document.getElementById('viewDescription').textContent = user.description || '';
 
           note.style.display = 'none';
           document.getElementById('viewMode').style.display = 'block';
         } catch (err) {
+          console.error(err);
           note.textContent = 'Error loading profile.';
         }
       }
@@ -101,18 +101,47 @@
 
       document.getElementById('editMode').addEventListener('submit', async function(e){
         e.preventDefault();
-        const id = user.userId;
-        if (!id) return;
-        const payload = {
-          name: document.getElementById('name').value,
-          email: document.getElementById('email').value,
-          description: document.getElementById('description').value
-        };
+
         const msg = document.getElementById('message');
         const saveBtn = e.target.querySelector('button[type="submit"]');
         saveBtn.disabled = true;
+
         try {
-          const res = await fetch(`/User/updateUser/${id}`, {
+          // Try to get id from hidden input
+          let id = document.getElementById('userId').value;
+
+          // If missing, fetch user by account id to obtain it
+          if (!id) {
+            const loggedAccountId = localStorage.getItem('loggedAccountId');
+            if (!loggedAccountId) {
+              msg.style.color = 'red';
+              msg.textContent = 'No logged account found. Please log in.';
+              saveBtn.disabled = false;
+              return;
+            }
+
+            const res = await fetch(`/User/getUserByAccountId/${encodeURIComponent(loggedAccountId)}`);
+            if (res.status === 404) {
+              msg.style.color = 'red';
+              msg.textContent = 'No user profile found for this account.';
+              saveBtn.disabled = false;
+              return;
+            }
+            if (!res.ok) {
+              throw new Error('Failed to fetch user id');
+            }
+            const user = await res.json();
+            id = user.userId;
+            document.getElementById('userId').value = id || '';
+          }
+
+          const payload = {
+            name: document.getElementById('name').value,
+            email: document.getElementById('email').value,
+            description: document.getElementById('description').value
+          };
+
+          const res = await fetch(`/User/updateUser/${encodeURIComponent(id)}`, {
             method: 'PUT',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(payload)
@@ -128,6 +157,7 @@
             saveBtn.disabled = false;
             return;
           }
+
           // update view mode values
           document.getElementById('viewName').textContent = payload.name || '';
           document.getElementById('viewEmail').textContent = payload.email || '';
