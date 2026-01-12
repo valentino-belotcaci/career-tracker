@@ -2,7 +2,6 @@ package VaLocaProject.Controllers;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,8 +17,11 @@ import VaLocaProject.Services.AccountService;
 @RestController
 public class AccountController {
     
-    @Autowired
-    AccountService accountService;
+    private final AccountService accountService;
+
+    public AccountController(AccountService accountService) {
+        this.accountService = accountService;
+    }
 
     @GetMapping("/Account/getAllAccounts")
     public ResponseEntity<List<Account>> getAllAccounts(){
@@ -32,8 +34,9 @@ public class AccountController {
         Account saved = accountService.insertAccount(account);
 
         AccountDTO accountDTO = new AccountDTO(
-            saved.account_id,
-            saved.email 
+            saved.accountId,
+            saved.email ,
+            saved.type  
         );
 
         return ResponseEntity.ok(accountDTO);
@@ -46,13 +49,18 @@ public class AccountController {
         return ResponseEntity.ok("All accounts deleted");
     }
 
-    @PostMapping("/Account/getAccountByEmail/{email}")
+    @GetMapping("/Account/getAccountByEmail/{email}")
     public ResponseEntity<AccountDTO> getAccountByEmail(@PathVariable String email) {
+        // return 404 if account not found
         Account account = accountService.getAccountByEmail(email);
+        if (account == null) {
+            return ResponseEntity.notFound().build();
+        }
 
         AccountDTO accountDTO = new AccountDTO(
-            account.account_id,
-            account.email
+            account.accountId,
+            account.email,
+            account.type
         );
 
         return ResponseEntity.ok(accountDTO);
@@ -69,7 +77,5 @@ public class AccountController {
 
         return ResponseEntity.ok(true);
     }
-
-
 
 }

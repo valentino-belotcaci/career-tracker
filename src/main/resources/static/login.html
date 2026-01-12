@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style.css">
+    <title>Document</title>
+</head>
+<body>
+
+<header>
+    <a class="site-title" href="/index.html">CareerTracker</a>
+</header>
+
+<main class="wide-card">
+    <h2>Login</h2>
+
+    <form id="loginForm">
+        <label for="email">Email</label>
+        <input id="email" type="email" placeholder="email@example.com" required>
+
+        <label for="password">Password</label>
+        <input id="password" type="password" required>
+
+        <button type="submit">Login</button>
+    </form>
+    <p id="message" aria-live="polite"></p>
+
+    <script>
+    document.getElementById('loginForm').addEventListener('submit', async function(e){
+        e.preventDefault();
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const res = await fetch('/Account/authenticate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
+
+        const msg = document.getElementById('message');
+        if (!res.ok) {
+            msg.style.color = 'red';
+            msg.textContent = 'Login failed';
+            return;
+        }
+
+        // Server returned OK for authentication (boolean). Now fetch accounts to find the authenticated account
+        msg.style.color = 'green';
+        msg.textContent = 'Login successful';
+
+        try {
+            const acctRes = await fetch(`/Account/getAccountByEmail/${encodeURIComponent(email)}`);
+            if (acctRes.status === 404) {
+                msg.style.color = 'red';
+                msg.textContent = 'Account record not found.';
+                return;
+            }
+            if (!acctRes.ok) {
+                msg.style.color = 'red';
+                msg.textContent = 'Could not retrieve account info.';
+                return;
+            }
+
+            const account = await acctRes.json();
+
+            // store into localStorage
+            try {
+                if (account.email) localStorage.setItem('loggedEmail', account.email);
+                const acctId = account.accountId ?? account.account_id ?? account.id ?? null;
+                if (acctId) localStorage.setItem('loggedAccountId', String(acctId));
+            } catch (_) {}
+
+            const t = (account.type) ? String(account.type).toUpperCase() : '';
+            if (t.includes('COMPANY')) {
+                window.location.href = '/indexCompany.html';
+            } else {
+                window.location.href = '/indexUser.html';
+            }
+        } catch (err) {
+            msg.style.color = 'red';
+            msg.textContent = 'Error retrieving account information.';
+        }
+
+        
+    });
+    </script>
+</main>
+
+<footer>
+    <p>© 2026 CareerTracker</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<link rel="stylesheet" href="/css/style.css">
+	<title>User Dashboard</title>
+</head>
+<body>
+<header>
+	<a class="site-title" href="/indexUser.html">CareerTracker</a>
+</header>
+<main class="wide-card">
+	<h2>User Dashboard</h2>
+	<p>Welcome, user. Use the navigation to manage your data.</p>
+
+	<div style="margin-top:1rem;">
+		<a href="/profileUser.html"><button>View profile</button></a>
+	</div>
+
+	<div style="margin-top:1rem;">
+		<a href="/displayJobApplication.html"><button>Job Applications</button></a>
+	</div>
+
+	<div style="margin-top:1rem;">
+		<button id="logoutBtn">Logout</button>
+	</div>
+
+	<script>
+	document.getElementById('logoutBtn').addEventListener('click', function(){
+		// Clear all localStorage entries to fully sign out the client
+		localStorage.clear();
+		globalThis.location.href = '/index.html';
+	});
+	</script>
+</main>
+<footer>
+	<p>© 2026 CareerTracker</p>
+</footer>
+</body>
+</html>

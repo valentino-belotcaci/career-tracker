@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Create Job Application - CareerTracker</title>
+    <link rel="stylesheet" href="/css/style.css">
+  </head>
+  <body>
+    <header>
+      <a class="site-title" href="/indexUser.html">CareerTracker</a>
+    </header>
+
+    <main class="wide-card">
+      <h2>Apply to Job</h2>
+      <p id="note">Select a job post and submit your application.</p>
+
+      <form id="applyForm">
+        <label for="postId">Post ID</label><br />
+        <input id="postId" name="postId" type="number" required /><br />
+
+        <p id="message"></p>
+        <button type="submit">Apply</button>
+        <a href="/displayJobApplication.html"><button type="button">Cancel</button></a>
+      </form>
+
+    </main>
+
+    <footer>
+      <p>© 2026 CareerTracker</p>
+    </footer>
+
+    <script>
+      document.getElementById('applyForm').addEventListener('submit', async function(e){
+        e.preventDefault();
+        const loggedEmail = localStorage.getItem('loggedEmail');
+        const msg = document.getElementById('message');
+        if (!loggedEmail) {
+          msg.textContent = 'Please log in first.';
+          return;
+        }
+
+        try {
+          // get user id from email
+          const userRes = await fetch(`/User/getUserByEmail/${encodeURIComponent(loggedEmail)}`);
+          if (!userRes.ok) throw new Error('Cannot fetch user');
+          const user = await userRes.json();
+          const userId = user.user_id || user.id || user.account_id;
+          if (!userId) throw new Error('User id not found');
+
+          const payload = {
+            postId: Number.parseInt(document.getElementById('postId').value),
+            userId: Number.parseInt(userId)
+          };
+
+          const res = await fetch('/JobApplication/insert', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(payload)
+          });
+          if (!res.ok) throw new Error('Apply failed');
+          msg.style.color = 'green';
+          msg.textContent = 'Application submitted.';
+          // store created id (handle snake_case or camelCase)
+          const created = await res.json();
+          localStorage.setItem('lastCreatedApplication', created.applicationId || created.application_id || created.id || '');
+          // disable submit to avoid duplicate clicks and keep the user on the same page
+          e.target.querySelector('button[type="submit"]').disabled = true;
+        } catch (err) {
+          console.error(err);
+          msg.style.color = 'red';
+          msg.textContent = 'Failed to submit application.';
+        }
+      });
+    </script>
+  </body>
+</html>

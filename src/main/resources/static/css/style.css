@@ -1,0 +1,201 @@
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+}
+
+/* GENERAL LAYOUT */
+body {
+    background-color: #f4f6f8;
+    color: #333;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding-top: 80px; /* reserve space for the larger fixed header */
+}
+
+div {
+    display: block;
+}
+
+/* HEADER */
+header {
+    background-color: #1f2937;
+    color: white;
+    padding: 0 1.25rem;
+    text-align: left;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    height: 80px; /* larger fixed header height */
+}
+
+header .site-title {
+    color: white;
+    text-decoration: none;
+    font-size: 2rem; /* bigger title */
+    font-weight: 700;
+}
+
+/* don't underline the header title on hover and show pointer */
+.site-title:hover {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* smaller header on narrow screens */
+@media (max-width: 600px) {
+    body { padding-top: 64px; }
+    header { height: 64px; }
+    header .site-title { font-size: 1.25rem; }
+}
+
+header p {
+    opacity: 0.8;
+    margin-top: 0.5rem;
+}
+
+/* MAIN CONTENT */
+main {
+    /* make the main "card" shrink-to-fit its contents */
+    display: table; /* shrink-to-fit behavior */
+    margin: 3rem auto;
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+/* Wider card variant used by login/register pages */
+.wide-card {
+    max-width: 640px;
+    padding: 3rem;
+}
+
+.wide-card h2 {
+    font-size: 1.6rem;
+}
+
+.wide-card p {
+    margin-bottom: 1rem;
+    color: #555;
+}
+
+/* Index landing tweaks */
+.index-landing p {
+    font-size: 1.05rem;
+    margin-bottom: 1rem;
+}
+
+/* Slightly larger site title on landing */
+header.index-header h1 {
+    font-size: 2.2rem;
+}
+
+/* TITLES */
+main h2 {
+    margin-bottom: 1.5rem;
+    text-align: center;
+    color: #1f2937;
+}
+
+/* FORMS */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-bottom: 0.3rem;
+    font-weight: 600;
+}
+
+input {
+    padding: 0.6rem;
+    margin-bottom: 1.2rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+}
+
+input:focus {
+    outline: none;
+    border-color: #2563eb;
+}
+
+/* BUTTONS */
+button {
+    padding: 0.8rem;
+    background-color: #2563eb;
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+button:hover {
+    background-color: #1e40af;
+}
+
+/* LINKS */
+a {
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* MESSAGES */
+#message {
+    margin-top: 1rem;
+    text-align: center;
+    font-weight: 600;
+}
+
+/* FOOTER */
+footer {
+    background-color: #1f2937;
+    color: white;
+    text-align: center;
+    padding: 1rem;
+    margin-top: auto; /* to keeep the footer at the bottom */
+    font-size: 0.9rem;
+}
+
+/* INDEX PAGE BUTTONS */
+.button-group {
+    display: flex;
+    flex-direction: column; /* stack buttons vertically */
+    gap: 1rem;
+    margin-top: 2rem;
+    width: max-content; /* shrink to fit the buttons */
+    margin-left: auto; /* center the group horizontally */
+    margin-right: auto;
+}
+
+.button-group button {
+    flex: initial; /* don't force equal flex growth */
+    width: 100%; /* fill the shrink-wrapped container */
+}
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+    main {
+        /* revert to block flow on narrow screens so content can wrap naturally */
+        display: block;
+        margin: 2rem 1rem;
+        width: auto;
+    }
+}

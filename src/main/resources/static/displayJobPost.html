@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Company Job Posts - CareerTracker</title>
+    <link rel="stylesheet" href="/css/style.css">
+  </head>
+  <body>
+    <header>
+      <a class="site-title" href="/indexCompany.html">CareerTracker</a>
+    </header>
+
+    <main class="wide-card">
+      <h2>Your Job Posts</h2>
+      <div style="margin-bottom:12px;">
+        <a href="/createJobPost.html"><button id="addPostBtn">Add job post</button></a>
+      </div>
+      <p id="note">Loading…</p>
+
+      <table id="postsTable" style="width:100%; border-collapse: collapse; display:none;">
+        <thead>
+          <tr>
+            <th style="border:1px solid #ccc; padding:8px; text-align:left;">ID</th>
+            <th style="border:1px solid #ccc; padding:8px; text-align:left;">Name</th>
+            <th style="border:1px solid #ccc; padding:8px; text-align:left;">Description</th>
+            <th style="border:1px solid #ccc; padding:8px; text-align:left;">Duration</th>
+            <th style="border:1px solid #ccc; padding:8px; text-align:left;">Available</th>
+            <th style="border:1px solid #ccc; padding:8px; text-align:left;">Salary</th>
+          </tr>
+        </thead>
+        <tbody id="postsBody"></tbody>
+      </table>
+
+      <p id="message"></p>
+    </main>
+
+    <footer>
+      <p>© 2026 CareerTracker</p>
+    </footer>
+
+    <script>
+      async function loadCompanyAndPosts() {
+        const loggedAccountId = localStorage.getItem('loggedAccountId');
+        const note = document.getElementById('note');
+        if (!loggedAccountId) {
+          note.textContent = 'No logged account found. Please log in.';
+          return;
+        }
+
+        try {
+            // Get company by account id
+            const companyRes = await fetch(`/Company/getCompanyByAccountId/${encodeURIComponent(loggedAccountId)}`);
+            if (companyRes.status === 404) {
+              note.textContent = 'No company profile found for this account.';
+              return;
+            }
+            if (!companyRes.ok) throw new Error('Failed to load company');
+            const company = await companyRes.json();
+
+            // If company endpoint returned null or empty, show message and stop
+            if (!company) {
+              note.textContent = 'No company profile found for this account.';
+              return;
+            }
+
+            // Backend expects the account id as the path parameter for this endpoint.
+            // Use the loggedAccountId that we already retrieved from localStorage.
+            const accountId = loggedAccountId;
+
+            // Ask server for posts by account id (backend will resolve the company)
+            const postsRes = await fetch(`/JobPost/getPostsByCompanyId/${encodeURIComponent(accountId)}`);
+            if (!postsRes.ok) {
+              if (postsRes.status === 404) {
+                note.textContent = 'No job posts found for this company.';
+                return;
+              }
+              throw new Error('Failed to load posts');
+            }
+            const myPosts = await postsRes.json();
+
+          if (!myPosts || myPosts.length === 0) {
+            note.textContent = 'No job posts found for this company.';
+            return;
+          }
+
+          // populate table
+          const tbody = document.getElementById('postsBody');
+          tbody.innerHTML = ''; // clear any previous rows
+          myPosts.forEach(p => {
+            const tr = document.createElement('tr');
+            const idVal = p.postId;
+            tr.innerHTML = `
+              <td style="border:1px solid #ccc; padding:8px;">${idVal}</td>
+              <td style="border:1px solid #ccc; padding:8px;">${p.name || ''}</td>
+              <td style="border:1px solid #ccc; padding:8px;">${p.description || ''}</td>
+              <td style="border:1px solid #ccc; padding:8px;">${p.duration || ''}</td>
+              <td style="border:1px solid #ccc; padding:8px;">${p.available || ''}</td>
+              <td style="border:1px solid #ccc; padding:8px;">${p.salary || ''}</td>
+            `;
+
+            // Make rows clickable to open details (company view)
+            tr.style.cursor = 'pointer';
+            tr.addEventListener('click', () => {
+              const postId = idVal;
+              if (postId) {
+                window.location.href = `/jobPostDetails.html?postId=${encodeURIComponent(postId)}&companyView=true`;
+              }
+            });
+
+            tbody.appendChild(tr);
+          });
+
+          note.style.display = 'none';
+          document.getElementById('postsTable').style.display = 'table';
+        } catch (err) {
+          console.error(err);
+          note.textContent = 'Error loading job posts.';
+        }
+      }
+
+      loadCompanyAndPosts();
+      // Keep track of last created post id to refresh when returning from create page
+      let seenCreatedPostId = localStorage.getItem('lastCreatedPostId') || '';
+
+      // Poll localStorage every 2.5s for changes (simple) and refresh if new post created
+      const pollInterval = setInterval(() => {
+        const curr = localStorage.getItem('lastCreatedPostId') || '';
+        if (curr && curr !== seenCreatedPostId) {
+          seenCreatedPostId = curr;
+          loadCompanyAndPosts();
+        }
+      }, 2500);
+
+      // Also refresh when page becomes visible again
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') loadCompanyAndPosts();
+      });
+    </script>
+  </body>
+</html>

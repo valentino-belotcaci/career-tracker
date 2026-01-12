@@ -1,27 +1,69 @@
 package VaLocaProject.Models;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity // To define it as entity to springboot
 @Table(name = "companies") // To define which table it represents
 @Data // Generates getters, setters, toString(), equals(), hashCode()
-@NoArgsConstructor
-@AllArgsConstructor // Creates specific constructors for all fields
 public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JoinColumn(name = "company_id")
-    public Long company_id;
+    @Column(name = "company_id")
+    public Long companyId;
     public String name;
+    public String email;
     public String description;
-    public long account_id;
+    @Column(name = "account_id")
+    public Long accountId;
+
+
+    public String getName(){
+        return name;
+    }
+
+    public void setName(String name){
+        this.name = name;
+    }
+
+    public String getEmail(){
+        return email;
+    }
+
+    public void setEmail(String email){
+        this.email = email;
+    }
+
+    public String getDescription(){
+        return description;
+    }
+
+    public void setDescription(String description){
+        this.description = description;
+    }
+
+    public Long getCompanyId(){
+        return companyId;
+    }
+
+
+
+    // Explicit all-args constructor to avoid relying on Lombok during compilation
+    public Company(Long companyId, String name, String email, String description, Long accountId) {
+        this.companyId = companyId;
+        this.name = name;
+        this.email = email;
+        this.description = description;
+        this.accountId = accountId;
+    }
+
+    // Explicit no-args constructor
+    public Company() {
+    }
 
 }

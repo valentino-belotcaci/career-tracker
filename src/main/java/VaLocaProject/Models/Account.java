@@ -1,10 +1,10 @@
 package VaLocaProject.Models;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,8 +18,31 @@ import lombok.NoArgsConstructor;
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JoinColumn(name = "account_id")
-    public Long account_id;
+    @Column(name = "account_id")
+    public Long accountId;
     public String email;
     public String password;
+    public String type;
+
+
+    public Long getAccountId(){
+        return accountId;
+    }
+
+    public void setAccountId(Long id){
+        this.accountId = id;
+    }
+
+    public String getEmail(){
+        return email;
+    }
+
+    public void setEmail(String email){
+        this.email = email;
+    }
+
+    public String getPassword(){
+        return password;
+    }
+
 }

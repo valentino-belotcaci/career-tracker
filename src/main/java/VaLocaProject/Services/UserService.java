@@ -40,9 +40,19 @@ public class UserService{
         if (user.getName() != null) {
             foundUser.setName(user.getName());
         }
+        
+        if (user.getDescription() != null) {
+            foundUser.setDescription(user.getDescription());
+        }
         // Add other fields to update...
 
         // Actualy submit the new user version
         return userRepository.save(foundUser);
     }
+
+    public User getUserByAccountId(Long id){
+        return userRepository.findByAccountId(id);
+    }
+
+
 }
