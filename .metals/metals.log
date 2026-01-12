@@ -11886,3 +11886,231 @@ AVVERTENZA: Unmatched cancel notification for request id 23002
 2026.01.11 13:26:55 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
 2026.01.11 13:28:23 WARN  no build target for: /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java
 2026.01.11 13:31:23 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.11 14:03:41 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobApplicationService.java. Using fallback presentation compiler.
+2026.01.11 14:03:41 WARN  no build target for: /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobApplicationService.java
+2026.01.11 14:03:41 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobApplicationService.java. Using fallback presentation compiler.
+2026.01.11 17:22:21 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/AccountRepository.java. Using fallback presentation compiler.
+2026.01.11 17:22:21 WARN  no build target for: /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/AccountRepository.java
+2026.01.11 17:22:21 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/AccountRepository.java. Using fallback presentation compiler.
+2026.01.11 17:22:21 WARN  no build target for: /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/CompanyRepository.java
+2026.01.11 17:22:21 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/CompanyRepository.java. Using fallback presentation compiler.
+2026.01.11 17:22:21 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/CompanyRepository.java. Using fallback presentation compiler.
+2026.01.11 17:22:22 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/CompanyRepository.java. Using fallback presentation compiler.
+2026.01.11 17:22:22 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/CompanyRepository.java. Using fallback presentation compiler.
+2026.01.11 17:22:25 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/CompanyRepository.java. Using fallback presentation compiler.
+2026.01.11 17:22:25 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/CompanyRepository.java. Using fallback presentation compiler.
+2026.01.11 17:22:26 WARN  no build target for: /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/JobPostRepository.java
+2026.01.11 17:22:26 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/JobPostRepository.java. Using fallback presentation compiler.
+2026.01.11 17:22:26 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/JobPostRepository.java. Using fallback presentation compiler.
+2026.01.11 17:22:26 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/JobPostRepository.java. Using fallback presentation compiler.
+2026.01.11 17:22:26 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/UserRepository.java. Using fallback presentation compiler.
+2026.01.11 17:22:27 WARN  no build target for: /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/UserRepository.java
+2026.01.11 17:22:28 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/UserRepository.java. Using fallback presentation compiler.
+2026.01.11 17:22:28 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/UserRepository.java. Using fallback presentation compiler.
+2026.01.11 17:22:30 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/UserRepository.java. Using fallback presentation compiler.
+2026.01.11 17:22:30 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/UserRepository.java. Using fallback presentation compiler.
+2026.01.11 17:22:31 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/UserRepository.java. Using fallback presentation compiler.
+2026.01.11 17:22:31 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/UserRepository.java. Using fallback presentation compiler.
+2026.01.11 17:22:31 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/UserRepository.java. Using fallback presentation compiler.
+2026.01.11 17:22:32 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/UserRepository.java. Using fallback presentation compiler.
+2026.01.11 17:22:33 WARN  no build target for: /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/UserRepository.java
+2026.01.11 17:22:32 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/UserRepository.java. Using fallback presentation compiler.
+2026.01.11 17:22:32 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/UserRepository.java. Using fallback presentation compiler.
+2026.01.11 17:22:32 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/UserRepository.java. Using fallback presentation compiler.
+2026.01.11 17:22:34 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/UserRepository.java. Using fallback presentation compiler.
+2026.01.11 17:22:34 WARN  no build target for: /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/UserRepository.java
+2026.01.11 17:22:34 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/UserRepository.java. Using fallback presentation compiler.
+2026.01.11 17:22:34 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/UserRepository.java. Using fallback presentation compiler.
+2026.01.11 17:22:34 WARN  Running javac-semanticdb failed for file:///Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/UserRepository.java. Output:
+
+2026.01.11 17:22:34 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/UserRepository.java. Using fallback presentation compiler.
+2026.01.11 17:22:34 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/UserRepository.java. Using fallback presentation compiler.
+2026.01.11 17:22:35 WARN  Running javac-semanticdb failed for file:///Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/UserRepository.java. Output:
+
+2026.01.11 17:22:35 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/UserRepository.java. Using fallback presentation compiler.
+2026.01.11 17:22:35 WARN  no build target for: /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/UserRepository.java
+2026.01.11 17:22:35 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/UserRepository.java. Using fallback presentation compiler.
+2026.01.11 17:22:36 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/UserRepository.java. Using fallback presentation compiler.
+2026.01.11 17:22:37 WARN  no build target for: /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/JobPostRepository.java
+2026.01.11 17:22:36 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/JobPostRepository.java. Using fallback presentation compiler.
+2026.01.11 17:22:36 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/JobPostRepository.java. Using fallback presentation compiler.
+2026.01.11 17:22:37 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/JobPostRepository.java. Using fallback presentation compiler.
+2026.01.11 17:22:37 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/JobApplicationRepository.java. Using fallback presentation compiler.
+2026.01.11 17:22:38 WARN  no build target for: /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/JobApplicationRepository.java
+2026.01.11 17:22:37 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/JobApplicationRepository.java. Using fallback presentation compiler.
+2026.01.11 17:22:40 WARN  no build target for: /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/JobPostRepository.java
+2026.01.11 17:22:40 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/JobPostRepository.java. Using fallback presentation compiler.
+2026.01.11 17:22:40 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/JobPostRepository.java. Using fallback presentation compiler.
+2026.01.11 17:22:40 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/JobPostRepository.java. Using fallback presentation compiler.
+2026.01.11 17:22:41 WARN  no build target for: /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/CompanyRepository.java
+2026.01.11 17:22:41 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/CompanyRepository.java. Using fallback presentation compiler.
+2026.01.11 17:22:41 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/CompanyRepository.java. Using fallback presentation compiler.
+2026.01.11 17:22:41 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/CompanyRepository.java. Using fallback presentation compiler.
+2026.01.11 17:22:41 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/CompanyRepository.java. Using fallback presentation compiler.
+2026.01.11 17:22:43 WARN  no build target for: /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/AccountRepository.java
+2026.01.11 17:22:43 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/AccountRepository.java. Using fallback presentation compiler.
+2026.01.11 17:22:43 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/AccountRepository.java. Using fallback presentation compiler.
+2026.01.11 17:22:44 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/UserRepository.java. Using fallback presentation compiler.
+2026.01.11 17:22:44 WARN  no build target for: /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/UserRepository.java
+2026.01.11 17:22:44 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/UserRepository.java. Using fallback presentation compiler.
+2026.01.11 17:22:44 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Repositories/UserRepository.java. Using fallback presentation compiler.
+2026.01.11 17:23:37 WARN  no build target for: /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/AccountController.java
+2026.01.11 17:23:37 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/AccountController.java. Using fallback presentation compiler.
+2026.01.11 17:23:37 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/AccountController.java. Using fallback presentation compiler.
+2026.01.11 17:23:44 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/AccountController.java. Using fallback presentation compiler.
+2026.01.11 17:23:44 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/AccountController.java. Using fallback presentation compiler.
+2026.01.11 17:23:45 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/AccountController.java. Using fallback presentation compiler.
+2026.01.11 17:23:45 INFO  Created report: Optional[file:///Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/AccountController.java]
+2026.01.11 17:23:45 INFO  empty definition using pc, found symbol in pc: _empty_/AccountService#authenticate# (full report at: "/Users/luca/Documents/SideQuests/career-tracker/.metals/.reports/metals-full/2026-01-11/r_empty-definition_17-23-45-640.md")
+2026.01.11 17:23:44 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/AccountController.java. Using fallback presentation compiler.
+2026.01.11 17:23:45 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/AccountController.java. Using fallback presentation compiler.
+2026.01.11 17:23:45 INFO  empty definition using pc, found symbol in pc: _empty_/AccountService#authenticate# (full report at: "/Users/luca/Documents/SideQuests/career-tracker/.metals/.reports/metals-full/2026-01-11/r_empty-definition_17-23-45-640.md")
+2026.01.11 17:23:45 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/AccountController.java. Using fallback presentation compiler.
+2026.01.11 17:23:45 INFO  empty definition using pc, found symbol in pc: _empty_/AccountService#authenticate# (full report at: "/Users/luca/Documents/SideQuests/career-tracker/.metals/.reports/metals-full/2026-01-11/r_empty-definition_17-23-45-640.md")
+2026.01.11 17:23:46 WARN  no build target for: /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/AccountService.java
+2026.01.11 17:23:46 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/AccountService.java. Using fallback presentation compiler.
+2026.01.11 17:23:46 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/AccountService.java. Using fallback presentation compiler.
+2026.01.11 17:23:46 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/AccountService.java. Using fallback presentation compiler.
+2026.01.11 17:23:46 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/AccountService.java. Using fallback presentation compiler.
+2026.01.11 17:23:46 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/AccountService.java. Using fallback presentation compiler.
+2026.01.11 17:23:47 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/AccountService.java. Using fallback presentation compiler.
+2026.01.11 17:23:50 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/AccountService.java. Using fallback presentation compiler.
+2026.01.12 20:45:45 WARN  no build target for: /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/AccountController.java
+2026.01.12 20:45:45 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/AccountController.java. Using fallback presentation compiler.
+2026.01.12 20:45:45 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/AccountController.java. Using fallback presentation compiler.
+2026.01.12 20:45:45 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobApplicationController.java. Using fallback presentation compiler.
+2026.01.12 20:45:45 WARN  no build target for: /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobApplicationController.java
+2026.01.12 20:45:46 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobApplicationController.java. Using fallback presentation compiler.
+2026.01.12 20:45:46 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobApplicationController.java. Using fallback presentation compiler.
+2026.01.12 20:45:47 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobApplicationController.java. Using fallback presentation compiler.
+2026.01.12 20:45:47 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobApplicationController.java. Using fallback presentation compiler.
+2026.01.12 20:47:56 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobApplicationController.java. Using fallback presentation compiler.
+2026.01.12 20:47:56 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobApplicationController.java. Using fallback presentation compiler.
+2026.01.12 20:47:57 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobApplicationController.java. Using fallback presentation compiler.
+2026.01.12 20:49:52 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobApplicationController.java. Using fallback presentation compiler.
+2026.01.12 20:50:02 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobApplicationController.java. Using fallback presentation compiler.
+2026.01.12 20:50:02 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobApplicationController.java. Using fallback presentation compiler.
+2026.01.12 20:50:02 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobApplicationController.java. Using fallback presentation compiler.
+2026.01.12 20:50:02 INFO  Created report: Optional[file:///Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobApplicationController.java]
+2026.01.12 20:50:02 INFO  empty definition using pc, found symbol in pc: _empty_/GetMapping# (full report at: "/Users/luca/Documents/SideQuests/career-tracker/.metals/.reports/metals-full/2026-01-12/r_empty-definition_20-50-03-021.md")
+2026.01.12 20:50:03 WARN  no build target for: /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobPostController.java
+2026.01.12 20:50:03 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobPostController.java. Using fallback presentation compiler.
+2026.01.12 20:50:03 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobPostController.java. Using fallback presentation compiler.
+2026.01.12 20:50:03 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobPostController.java. Using fallback presentation compiler.
+2026.01.12 20:50:07 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobPostController.java. Using fallback presentation compiler.
+2026.01.12 20:50:07 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobPostController.java. Using fallback presentation compiler.
+2026.01.12 20:50:08 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobPostController.java. Using fallback presentation compiler.
+2026.01.12 20:50:08 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobPostController.java. Using fallback presentation compiler.
+2026.01.12 20:50:23 WARN  no build target for: /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java
+2026.01.12 20:50:23 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 20:50:23 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 20:50:23 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 20:50:23 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 20:50:25 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 20:50:25 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 20:50:38 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 20:51:49 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 20:51:49 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 20:51:49 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 20:51:51 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 20:51:51 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 20:51:52 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 20:51:52 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 20:51:52 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 20:52:40 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 20:52:44 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 20:52:48 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 20:52:51 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 20:52:53 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 20:52:53 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 20:52:54 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 20:52:54 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 20:52:59 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 20:52:59 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 20:52:59 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 20:53:00 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 20:53:00 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 20:53:00 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 20:53:00 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 20:53:01 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 20:53:01 WARN  no build target for: /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java
+2026.01.12 20:53:01 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 20:53:01 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 20:53:01 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 20:53:02 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 20:53:02 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 20:53:03 WARN  no build target for: /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java
+2026.01.12 20:53:02 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 20:53:03 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 20:53:03 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 20:53:03 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 20:53:04 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 20:53:04 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 20:53:04 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 20:53:04 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 20:53:05 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 20:53:05 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 20:53:05 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 20:53:07 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 20:53:08 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 21:11:40 WARN  no build target for: /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobApplicationService.java
+2026.01.12 21:11:40 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobApplicationService.java. Using fallback presentation compiler.
+2026.01.12 21:11:40 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobApplicationService.java. Using fallback presentation compiler.
+2026.01.12 21:11:41 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobApplicationService.java. Using fallback presentation compiler.
+2026.01.12 21:11:45 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobApplicationService.java. Using fallback presentation compiler.
+2026.01.12 21:11:45 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobApplicationService.java. Using fallback presentation compiler.
+2026.01.12 21:11:47 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobApplicationService.java. Using fallback presentation compiler.
+2026.01.12 21:11:49 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobApplicationService.java. Using fallback presentation compiler.
+2026.01.12 21:11:49 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobApplicationService.java. Using fallback presentation compiler.
+2026.01.12 21:11:50 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobApplicationService.java. Using fallback presentation compiler.
+2026.01.12 21:11:52 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobApplicationService.java. Using fallback presentation compiler.
+2026.01.12 21:11:52 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobApplicationService.java. Using fallback presentation compiler.
+2026.01.12 21:11:57 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobApplicationService.java. Using fallback presentation compiler.
+2026.01.12 21:11:57 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobApplicationService.java. Using fallback presentation compiler.
+2026.01.12 21:11:59 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobApplicationService.java. Using fallback presentation compiler.
+2026.01.12 21:12:01 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 21:12:01 INFO  Created report: Optional[file:///Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java]
+2026.01.12 21:12:01 INFO  empty definition using pc, found symbol in pc: VaLocaProject/Models/Company# (full report at: "/Users/luca/Documents/SideQuests/career-tracker/.metals/.reports/metals-full/2026-01-12/r_empty-definition_21-12-01-405.md")
+2026.01.12 21:12:19 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobApplicationService.java. Using fallback presentation compiler.
+2026.01.12 21:12:22 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/CompanyService.java. Using fallback presentation compiler.
+2026.01.12 21:12:22 WARN  no build target for: /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/CompanyService.java
+2026.01.12 21:12:22 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/CompanyService.java. Using fallback presentation compiler.
+2026.01.12 21:12:22 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/CompanyService.java. Using fallback presentation compiler.
+2026.01.12 21:12:27 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobApplicationService.java. Using fallback presentation compiler.
+2026.01.12 21:12:27 WARN  no build target for: /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobApplicationService.java
+2026.01.12 21:12:27 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobApplicationService.java. Using fallback presentation compiler.
+2026.01.12 21:12:27 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobApplicationService.java. Using fallback presentation compiler.
+2026.01.12 21:12:31 WARN  no build target for: /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobPostService.java
+2026.01.12 21:12:31 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobPostService.java. Using fallback presentation compiler.
+2026.01.12 21:12:31 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobPostService.java. Using fallback presentation compiler.
+2026.01.12 21:12:31 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobPostService.java. Using fallback presentation compiler.
+2026.01.12 21:12:35 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobPostService.java. Using fallback presentation compiler.
+2026.01.12 21:12:36 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobPostService.java. Using fallback presentation compiler.
+2026.01.12 21:12:36 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobPostService.java. Using fallback presentation compiler.
+2026.01.12 21:12:38 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobPostService.java. Using fallback presentation compiler.
+2026.01.12 21:12:38 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobPostService.java. Using fallback presentation compiler.
+2026.01.12 21:12:40 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobPostService.java. Using fallback presentation compiler.
+2026.01.12 21:12:41 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobPostService.java. Using fallback presentation compiler.
+2026.01.12 21:12:42 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobPostService.java. Using fallback presentation compiler.
+2026.01.12 21:12:42 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobPostService.java. Using fallback presentation compiler.
+2026.01.12 21:12:46 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobPostService.java. Using fallback presentation compiler.
+gen 12, 2026 9:12:46 PM org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+AVVERTENZA: Unmatched cancel notification for request id 23799
+2026.01.12 21:12:46 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Services/JobPostService.java. Using fallback presentation compiler.
+2026.01.12 21:12:47 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobPostController.java. Using fallback presentation compiler.
+2026.01.12 21:12:47 WARN  no build target for: /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobPostController.java
+2026.01.12 21:12:47 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobPostController.java. Using fallback presentation compiler.
+2026.01.12 21:12:51 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobPostController.java. Using fallback presentation compiler.
+2026.01.12 21:12:52 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobPostController.java. Using fallback presentation compiler.
+2026.01.12 21:12:53 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobPostController.java. Using fallback presentation compiler.
+2026.01.12 21:12:53 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobPostController.java. Using fallback presentation compiler.
+2026.01.12 21:12:55 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobPostController.java. Using fallback presentation compiler.
+2026.01.12 21:12:55 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobPostController.java. Using fallback presentation compiler.
+2026.01.12 21:12:58 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobPostController.java. Using fallback presentation compiler.
+2026.01.12 21:12:58 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 21:12:58 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/CompanyController.java. Using fallback presentation compiler.
+2026.01.12 21:12:58 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobPostController.java. Using fallback presentation compiler.
+2026.01.12 21:13:00 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobPostController.java. Using fallback presentation compiler.
+2026.01.12 21:13:00 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobPostController.java. Using fallback presentation compiler.
+2026.01.12 21:13:02 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobPostController.java. Using fallback presentation compiler.
+2026.01.12 21:13:02 INFO  no build target found for /Users/luca/Documents/SideQuests/career-tracker/src/main/java/VaLocaProject/Controllers/JobPostController.java. Using fallback presentation compiler.

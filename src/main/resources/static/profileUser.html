@@ -67,10 +67,10 @@
           }
           if (!res.ok) throw new Error('Failed to load user');
 
-          const u = await res.json();
+          const user = await res.json();
 
           // populate view and edit fields
-          const uid = u.user_id || u.id || '';
+          const uid = user.userId;
           document.getElementById('userId').value = uid;
           document.getElementById('name').value = u.name || '';
           document.getElementById('email').value = u.email || '';
@@ -101,7 +101,7 @@
 
       document.getElementById('editMode').addEventListener('submit', async function(e){
         e.preventDefault();
-        const id = document.getElementById('userId').value;
+        const id = user.userId;
         if (!id) return;
         const payload = {
           name: document.getElementById('name').value,
@@ -109,6 +109,8 @@
           description: document.getElementById('description').value
         };
         const msg = document.getElementById('message');
+        const saveBtn = e.target.querySelector('button[type="submit"]');
+        saveBtn.disabled = true;
         try {
           const res = await fetch(`/User/updateUser/${id}`, {
             method: 'PUT',
@@ -116,8 +118,14 @@
             body: JSON.stringify(payload)
           });
           if (!res.ok) {
+            let bodyText = '';
+            try { bodyText = JSON.stringify(await res.json()); } catch(_) {
+              try { bodyText = await res.text(); } catch(_) { bodyText = '<no body>'; }
+            }
+            console.error('Update user failed', res.status, bodyText);
             msg.style.color = 'red';
-            msg.textContent = 'Failed to save changes.';
+            msg.textContent = `Failed to save changes (${res.status}): ${bodyText}`;
+            saveBtn.disabled = false;
             return;
           }
           // update view mode values
@@ -129,9 +137,12 @@
           msg.textContent = 'Saved successfully.';
           document.getElementById('editMode').style.display = 'none';
           document.getElementById('viewMode').style.display = 'block';
+          saveBtn.disabled = false;
         } catch (err) {
+          console.error('Error saving user', err);
           msg.style.color = 'red';
-          msg.textContent = 'Error saving changes.';
+          msg.textContent = `Error saving changes: ${err && err.message ? err.message : err}`;
+          saveBtn.disabled = false;
         }
       });
 
