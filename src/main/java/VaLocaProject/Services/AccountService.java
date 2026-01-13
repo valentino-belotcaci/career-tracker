@@ -72,7 +72,9 @@ public class AccountService {
         if (account == null) {
             return false;
         }
-        
+
+
+
         // Check if the password matches 
         if (account.getPassword() == null) return false;
         return passwordEncoder.matches(password, account.getPassword());
