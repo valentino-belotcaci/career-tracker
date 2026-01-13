@@ -62,7 +62,7 @@ public class AccountService {
         }
         
         // Check if the password matches 
-        // TODO: add password hashing 
+        // TODO: add password hashing
         if (account.password == null) return false;
         return account.getPassword().equals(password);
     }

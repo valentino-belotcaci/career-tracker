@@ -17,41 +17,43 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
+@RequestMapping("/Company")
 public class CompanyController {
     
     @Autowired
     CompanyService companyService;
 
     // Returns all company
-    @GetMapping("Company/getAllCompanies")
+    @GetMapping("/getAllCompanies")
     public ResponseEntity<List<Company>> getAllCompanies(){
         return ResponseEntity.ok(companyService.getAllCompanies());
     }
 
     // Inserts a new company
-    @PostMapping("Company/insertCompany")
+    @PostMapping("/insertCompany")
     public ResponseEntity<Company> insertCompany(@RequestBody Company company) {
         return ResponseEntity.ok(companyService.insertCompany(company));
     }
 
 
-     @DeleteMapping("Company/deleteAllCompanies")
+     @DeleteMapping("/deleteAllCompanies")
     public ResponseEntity<String> deleteAllCompanies(){
         companyService.deleteAllCompanies();
         return ResponseEntity.ok("All companies deleted");
     }
     
     // Updates a company's fields
-    @PutMapping("Company/updateCompany/{id}")
+    @PutMapping("/updateCompany/{id}")
     public ResponseEntity<Company> updateUser(@PathVariable Long id, @RequestBody Company company) {
         return ResponseEntity.ok(companyService.updateCompany(id, company));
     }
 
-    @GetMapping("Company/getCompanyByAccountId/{id}")
+    @GetMapping("/getCompanyByAccountId/{id}")
     public ResponseEntity<Company> getCompanyByAccountId(@PathVariable Long id) {
         Company company = companyService.getCompanyByAccountId(id);
 

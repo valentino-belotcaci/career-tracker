@@ -1,3 +1,14 @@
+error id: file://<WORKSPACE>/src/main/java/VaLocaProject/Controllers/UserController.java:_empty_/RequestMapping#
+file://<WORKSPACE>/src/main/java/VaLocaProject/Controllers/UserController.java
+empty definition using pc, found symbol in pc: _empty_/RequestMapping#
+empty definition using semanticdb
+empty definition using fallback
+non-local guesses:
+
+offset: 877
+uri: file://<WORKSPACE>/src/main/java/VaLocaProject/Controllers/UserController.java
+text:
+```scala
 package VaLocaProject.Controllers;
 
 import java.util.List;
@@ -23,7 +34,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
-@RequestMapping("/User")
+@RequestMapp@@ing("/User")
 public class UserController{
 
     @Autowired
@@ -68,3 +79,9 @@ public class UserController{
 
     
 }
+```
+
+
+#### Short summary: 
+
+empty definition using pc, found symbol in pc: _empty_/RequestMapping#

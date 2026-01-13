@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import VaLocaProject.DTO.AccountDTO;
@@ -15,6 +16,7 @@ import VaLocaProject.Models.Account;
 import VaLocaProject.Services.AccountService;
 
 @RestController
+@RequestMapping("/Account")
 public class AccountController {
     
     private final AccountService accountService;
@@ -23,13 +25,13 @@ public class AccountController {
         this.accountService = accountService;
     }
 
-    @GetMapping("/Account/getAllAccounts")
+    @GetMapping("/getAllAccounts")
     public ResponseEntity<List<Account>> getAllAccounts(){
 
         return ResponseEntity.ok(accountService.getAllAccounts());
     }
 
-    @PostMapping("Account/insertAccount")
+    @PostMapping("/insertAccount")
     public ResponseEntity<AccountDTO> insertAccount(@RequestBody Account account){
         Account saved = accountService.insertAccount(account);
 
@@ -43,13 +45,13 @@ public class AccountController {
     }
 
 
-    @DeleteMapping("/Account/deleteAllAccounts")
+    @DeleteMapping("/deleteAllAccounts")
     public ResponseEntity<String> deleteAllAccounts(){
         accountService.deleteAllAccounts();
         return ResponseEntity.ok("All accounts deleted");
     }
 
-    @GetMapping("/Account/getAccountByEmail/{email}")
+    @GetMapping("/getAccountByEmail/{email}")
     public ResponseEntity<AccountDTO> getAccountByEmail(@PathVariable String email) {
         // return 404 if account not found
         Account account = accountService.getAccountByEmail(email);
@@ -67,7 +69,7 @@ public class AccountController {
     }
     
 
-    @PostMapping("/Account/authenticate")
+    @PostMapping("/authenticate")
     public ResponseEntity<Boolean> authenticateAccount(@RequestBody Account account) {
         boolean isValid = accountService.authenticate(account.email, account.password);
 

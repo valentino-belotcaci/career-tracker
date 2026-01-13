@@ -14,46 +14,49 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
 
 
 @RestController
+@RequestMapping("/JobPost")
+
 public class JobPostController {
     
     @Autowired
     JobPostService jobPostService;
 
 
-    @GetMapping("JobPost/getAllPosts")
+    @GetMapping("/getAllPosts")
     public ResponseEntity<List<JobPost>> getAllPosts() {
         return ResponseEntity.ok(jobPostService.getAllPosts());
     }
 
-    @PostMapping("JobPost/insertPost")
+    @PostMapping("/insertPost")
     public ResponseEntity<JobPost> insertPost(@RequestBody JobPost jobPost) {   
         return ResponseEntity.ok(jobPostService.insertPost(jobPost));
     }
 
-    @DeleteMapping("JobPost/deletePost/{id}")
+    @DeleteMapping("/deletePost/{id}")
     public ResponseEntity<String> deletePost(@PathVariable Long id){
         jobPostService.deletePost(id);
         return ResponseEntity.ok("The post has been deleted");
     }
 
-    @DeleteMapping("JobPost/deleteAllPosts")
+    @DeleteMapping("/deleteAllPosts")
     public ResponseEntity<String> deleteAllPosts(){
        jobPostService.deleteAllPosts();
         return ResponseEntity.ok("All posts deleted");
     }
 
-    @GetMapping("JobPost/getPostsByCompanyId/{id}")
+    @GetMapping("/getPostsByCompanyId/{id}")
     public ResponseEntity<List<JobPost>> getPostsByCompanyId(@PathVariable Long id) {
         return ResponseEntity.ok(jobPostService.getPostsByCompanyId(id));
     }
     
 
-    @PutMapping("JobPost/updatePost/{id}")
+    @PutMapping("/updatePost/{id}")
     public ResponseEntity<JobPost> updatePost(@PathVariable Long id, @RequestBody JobPost jobPost) {
         return ResponseEntity.ok(jobPostService.updatePost(id, jobPost));
     }
