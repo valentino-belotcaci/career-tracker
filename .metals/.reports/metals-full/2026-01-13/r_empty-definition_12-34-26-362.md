@@ -1,3 +1,14 @@
+error id: file://<WORKSPACE>/src/main/java/VaLocaProject/Controllers/AccountController.java:_empty_/RestController#
+file://<WORKSPACE>/src/main/java/VaLocaProject/Controllers/AccountController.java
+empty definition using pc, found symbol in pc: _empty_/RestController#
+empty definition using semanticdb
+empty definition using fallback
+non-local guesses:
+
+offset: 666
+uri: file://<WORKSPACE>/src/main/java/VaLocaProject/Controllers/AccountController.java
+text:
+```scala
 package VaLocaProject.Controllers;
 
 import java.util.List;
@@ -15,7 +26,7 @@ import VaLocaProject.DTO.AccountDTO;
 import VaLocaProject.Models.Account;
 import VaLocaProject.Services.AccountService;
 
-@RestController
+@RestCon@@troller
 @RequestMapping("/Account")
 public class AccountController {
     
@@ -27,6 +38,7 @@ public class AccountController {
 
     @GetMapping("/getAllAccounts")
     public ResponseEntity<List<Account>> getAllAccounts(){
+
         return ResponseEntity.ok(accountService.getAllAccounts());
     }
 
@@ -80,3 +92,10 @@ public class AccountController {
     }
 
 }
+
+```
+
+
+#### Short summary: 
+
+empty definition using pc, found symbol in pc: _empty_/RestController#

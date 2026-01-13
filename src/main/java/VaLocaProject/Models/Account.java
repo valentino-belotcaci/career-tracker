@@ -45,4 +45,8 @@ public class Account {
         return password;
     }
 
+    public void setPassword(String password){
+        this.password = password;
+    }
+
 }

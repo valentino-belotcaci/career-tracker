@@ -1,9 +1,20 @@
+error id: file://<WORKSPACE>/src/main/java/VaLocaProject/Services/AccountService.java:org/springframework/security/crypto/password/PasswordEncoder#
+file://<WORKSPACE>/src/main/java/VaLocaProject/Services/AccountService.java
+empty definition using pc, found symbol in pc: org/springframework/security/crypto/password/PasswordEncoder#
+empty definition using semanticdb
+empty definition using fallback
+non-local guesses:
+
+offset: 172
+uri: file://<WORKSPACE>/src/main/java/VaLocaProject/Services/AccountService.java
+text:
+```scala
 package VaLocaProject.Services;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.password.@@PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import VaLocaProject.Models.Account;
@@ -25,20 +36,16 @@ public class AccountService {
     @Autowired
     UserRepository userRepository;
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
-
     public List<Account> getAllAccounts(){
         return accountRepository.findAll();
     }
 
     public Account insertAccount(Account account){
-        // Hash the plaintext password before saving
-        if (account.getPassword() != null) {
-            String hashed = passwordEncoder.encode(account.getPassword());
-            account.setPassword(hashed);
-        }
 
+        PasswordEncoder hashedPw = BCryptPasswordEncoder(account.password);
+
+        account.password = hashedPw;
+        
         Account saved = accountRepository.save(account);
 
 
@@ -74,8 +81,9 @@ public class AccountService {
         }
         
         // Check if the password matches 
-        if (account.getPassword() == null) return false;
-        return passwordEncoder.matches(password, account.getPassword());
+        // TODO: add password hashing
+        if (account.password == null) return false;
+        return account.getPassword().equals(password);
     }
 
     public void deleteAllAccounts(){
@@ -84,3 +92,10 @@ public class AccountService {
 
 
 }
+
+```
+
+
+#### Short summary: 
+
+empty definition using pc, found symbol in pc: org/springframework/security/crypto/password/PasswordEncoder#

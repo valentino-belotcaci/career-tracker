@@ -1,3 +1,14 @@
+error id: file://<WORKSPACE>/src/main/java/VaLocaProject/Services/AccountService.java:_empty_/Account#setPassword#
+file://<WORKSPACE>/src/main/java/VaLocaProject/Services/AccountService.java
+empty definition using pc, found symbol in pc: _empty_/Account#setPassword#
+empty definition using semanticdb
+empty definition using fallback
+non-local guesses:
+
+offset: 1102
+uri: file://<WORKSPACE>/src/main/java/VaLocaProject/Services/AccountService.java
+text:
+```scala
 package VaLocaProject.Services;
 
 import java.util.List;
@@ -36,7 +47,7 @@ public class AccountService {
         // Hash the plaintext password before saving
         if (account.getPassword() != null) {
             String hashed = passwordEncoder.encode(account.getPassword());
-            account.setPassword(hashed);
+            account.@@setPassword(hashed);
         }
 
         Account saved = accountRepository.save(account);
@@ -84,3 +95,10 @@ public class AccountService {
 
 
 }
+
+```
+
+
+#### Short summary: 
+
+empty definition using pc, found symbol in pc: _empty_/Account#setPassword#

@@ -1,3 +1,14 @@
+error id: file://<WORKSPACE>/src/main/java/VaLocaProject/Services/AccountService.java:_empty_/PasswordEncoder#matches#
+file://<WORKSPACE>/src/main/java/VaLocaProject/Services/AccountService.java
+empty definition using pc, found symbol in pc: _empty_/PasswordEncoder#matches#
+empty definition using semanticdb
+empty definition using fallback
+non-local guesses:
+
+offset: 2492
+uri: file://<WORKSPACE>/src/main/java/VaLocaProject/Services/AccountService.java
+text:
+```scala
 package VaLocaProject.Services;
 
 import java.util.List;
@@ -75,7 +86,7 @@ public class AccountService {
         
         // Check if the password matches 
         if (account.getPassword() == null) return false;
-        return passwordEncoder.matches(password, account.getPassword());
+        return passwordEncoder.@@matches(password, account.getPassword());
     }
 
     public void deleteAllAccounts(){
@@ -84,3 +95,10 @@ public class AccountService {
 
 
 }
+
+```
+
+
+#### Short summary: 
+
+empty definition using pc, found symbol in pc: _empty_/PasswordEncoder#matches#

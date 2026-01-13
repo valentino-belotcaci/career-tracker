@@ -1,16 +1,26 @@
+error id: file://<WORKSPACE>/src/main/java/VaLocaProject/Services/AccountService.java:VaLocaProject/Repositories/CompanyRepository#
+file://<WORKSPACE>/src/main/java/VaLocaProject/Services/AccountService.java
+empty definition using pc, found symbol in pc: VaLocaProject/Repositories/CompanyRepository#
+empty definition using semanticdb
+empty definition using fallback
+non-local guesses:
+
+offset: 371
+uri: file://<WORKSPACE>/src/main/java/VaLocaProject/Services/AccountService.java
+text:
+```scala
 package VaLocaProject.Services;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import VaLocaProject.Models.Account;
 import VaLocaProject.Models.Company;
 import VaLocaProject.Models.User;
 import VaLocaProject.Repositories.AccountRepository;
-import VaLocaProject.Repositories.CompanyRepository;
+import VaLocaProject.Repositories.CompanyR@@epository;
 import VaLocaProject.Repositories.UserRepository;
 
 @Service
@@ -25,23 +35,14 @@ public class AccountService {
     @Autowired
     UserRepository userRepository;
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
-
     public List<Account> getAllAccounts(){
         return accountRepository.findAll();
     }
 
     public Account insertAccount(Account account){
-        // Hash the plaintext password before saving
-        if (account.getPassword() != null) {
-            String hashed = passwordEncoder.encode(account.getPassword());
-            account.setPassword(hashed);
-        }
-
+        String pw = account.password;
+    
         Account saved = accountRepository.save(account);
-
-
 
         // After creating the Account, also create a blank Company or User linked via account_id
         if (saved != null) {
@@ -74,8 +75,9 @@ public class AccountService {
         }
         
         // Check if the password matches 
-        if (account.getPassword() == null) return false;
-        return passwordEncoder.matches(password, account.getPassword());
+        // TODO: add password hashing
+        if (account.password == null) return false;
+        return account.getPassword().equals(password);
     }
 
     public void deleteAllAccounts(){
@@ -84,3 +86,10 @@ public class AccountService {
 
 
 }
+
+```
+
+
+#### Short summary: 
+
+empty definition using pc, found symbol in pc: VaLocaProject/Repositories/CompanyRepository#

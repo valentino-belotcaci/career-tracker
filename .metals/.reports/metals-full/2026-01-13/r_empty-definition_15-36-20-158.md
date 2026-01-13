@@ -1,9 +1,19 @@
+error id: file://<WORKSPACE>/src/main/java/VaLocaProject/Services/AccountService.java:
+file://<WORKSPACE>/src/main/java/VaLocaProject/Services/AccountService.java
+empty definition using pc, found symbol in pc: 
+empty definition using semanticdb
+empty definition using fallback
+non-local guesses:
+
+offset: 817
+uri: file://<WORKSPACE>/src/main/java/VaLocaProject/Services/AccountService.java
+text:
+```scala
 package VaLocaProject.Services;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import VaLocaProject.Models.Account;
@@ -25,20 +35,13 @@ public class AccountService {
     @Autowired
     UserRepository userRepository;
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
-
     public List<Account> getAllAccounts(){
         return accountRepository.findAll();
     }
 
     public Account insertAccount(Account account){
-        // Hash the plaintext password before saving
-        if (account.getPassword() != null) {
-            String hashed = passwordEncoder.encode(account.getPassword());
-            account.setPassword(hashed);
-        }
 
+        BCryptPasswordEncoder@@
         Account saved = accountRepository.save(account);
 
 
@@ -74,8 +77,9 @@ public class AccountService {
         }
         
         // Check if the password matches 
-        if (account.getPassword() == null) return false;
-        return passwordEncoder.matches(password, account.getPassword());
+        // TODO: add password hashing
+        if (account.password == null) return false;
+        return account.getPassword().equals(password);
     }
 
     public void deleteAllAccounts(){
@@ -84,3 +88,10 @@ public class AccountService {
 
 
 }
+
+```
+
+
+#### Short summary: 
+
+empty definition using pc, found symbol in pc: 

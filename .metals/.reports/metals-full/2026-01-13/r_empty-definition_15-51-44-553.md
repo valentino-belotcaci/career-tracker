@@ -1,3 +1,14 @@
+error id: file://<WORKSPACE>/src/main/java/VaLocaProject/Services/AccountService.java:_empty_/Company#
+file://<WORKSPACE>/src/main/java/VaLocaProject/Services/AccountService.java
+empty definition using pc, found symbol in pc: _empty_/Company#
+empty definition using semanticdb
+empty definition using fallback
+non-local guesses:
+
+offset: 1288
+uri: file://<WORKSPACE>/src/main/java/VaLocaProject/Services/AccountService.java
+text:
+```scala
 package VaLocaProject.Services;
 
 import java.util.List;
@@ -33,11 +44,7 @@ public class AccountService {
     }
 
     public Account insertAccount(Account account){
-        // Hash the plaintext password before saving
-        if (account.getPassword() != null) {
-            String hashed = passwordEncoder.encode(account.getPassword());
-            account.setPassword(hashed);
-        }
+
 
         Account saved = accountRepository.save(account);
 
@@ -48,7 +55,7 @@ public class AccountService {
             String type = saved.type;
             if (type.equals("COMPANY")) {
                 // Company constructor order: company_id, name, email, description, account_id
-                Company c = new Company(null, "", saved.getEmail(), "", saved.getAccountId());
+                @@Company c = new Company(null, "", saved.getEmail(), "", saved.getAccountId());
                 companyRepository.save(c);
             } else if (type.equals("USER")) {
                 // User constructor order: user_id, name, email, description, account_id
@@ -84,3 +91,10 @@ public class AccountService {
 
 
 }
+
+```
+
+
+#### Short summary: 
+
+empty definition using pc, found symbol in pc: _empty_/Company#
