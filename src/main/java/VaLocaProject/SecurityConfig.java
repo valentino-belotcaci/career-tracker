@@ -15,6 +15,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+            //.cors()
             .csrf(csrf -> csrf.disable()) // disable for simple frontend fetches; enable with token flow in prod
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/**").permitAll() // allow onboarding page
