@@ -1,3 +1,14 @@
+error id: file://<WORKSPACE>/src/main/java/VaLocaProject/SecurityConfig.java:_empty_/AuthenticationConfiguration#getAuthenticationManager#
+file://<WORKSPACE>/src/main/java/VaLocaProject/SecurityConfig.java
+empty definition using pc, found symbol in pc: _empty_/AuthenticationConfiguration#getAuthenticationManager#
+empty definition using semanticdb
+empty definition using fallback
+non-local guesses:
+
+offset: 1935
+uri: file://<WORKSPACE>/src/main/java/VaLocaProject/SecurityConfig.java
+text:
+```scala
 
 package VaLocaProject;
 
@@ -15,7 +26,7 @@ public class SecurityConfig {
 
     
     @Bean
-    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             //.cors()
             .csrf(csrf -> csrf.disable()) // disable for simple frontend fetches; enable with token flow in prod
@@ -37,12 +48,18 @@ public class SecurityConfig {
     }
 
     @Bean
-    BCryptPasswordEncoder passwordEncoder() {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-    AuthenticationManager authenticationManager(AuthenticationConfiguration config) {
-        return config.getAuthenticationManager();
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) {
+        return authenticationConfiguration.@@getAuthenticationManager();
     }
 }
+```
+
+
+#### Short summary: 
+
+empty definition using pc, found symbol in pc: _empty_/AuthenticationConfiguration#getAuthenticationManager#

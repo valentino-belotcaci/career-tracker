@@ -3,6 +3,7 @@ package VaLocaProject.Services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +27,7 @@ public class AccountService {
     UserRepository userRepository;
 
     @Autowired
-    PasswordEncoder passwordEncoder;
+    BCryptPasswordEncoder passwordEncoder;
 
     public List<Account> getAllAccounts(){
         return accountRepository.findAll();
@@ -60,7 +61,7 @@ public class AccountService {
         return saved;
     }
 
-    // Small helper to expose account 
+    // Helper to get account 
     public Account getAccountByEmail(String email) {
         return accountRepository.findByEmail(email);
     }
@@ -72,7 +73,6 @@ public class AccountService {
         if (account == null) {
             return false;
         }
-
 
 
         // Check if the password matches 
