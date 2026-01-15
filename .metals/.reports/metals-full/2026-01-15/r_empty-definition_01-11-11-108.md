@@ -1,3 +1,14 @@
+error id: file://<WORKSPACE>/src/main/java/VaLocaProject/Services/AccountService.java:_empty_/JWTService#
+file://<WORKSPACE>/src/main/java/VaLocaProject/Services/AccountService.java
+empty definition using pc, found symbol in pc: _empty_/JWTService#
+empty definition using semanticdb
+empty definition using fallback
+non-local guesses:
+
+offset: 1180
+uri: file://<WORKSPACE>/src/main/java/VaLocaProject/Services/AccountService.java
+text:
+```scala
 package VaLocaProject.Services;
 
 import java.util.List;
@@ -37,7 +48,7 @@ public class AccountService {
     AuthenticationManager authManager;
 
     @Autowired
-    JWTService jwtService;
+    JWTServ@@ice jwtService;
 
     public List<Account> getAllAccounts(){
         return accountRepository.findAll();
@@ -97,7 +108,7 @@ public class AccountService {
         }
 
 
-        jwtService.generateToken();
+        generateToken();
         return passwordEncoder.matches(password, account.getPassword());
     }
 
@@ -107,3 +118,10 @@ public class AccountService {
 
 
 }
+
+```
+
+
+#### Short summary: 
+
+empty definition using pc, found symbol in pc: _empty_/JWTService#

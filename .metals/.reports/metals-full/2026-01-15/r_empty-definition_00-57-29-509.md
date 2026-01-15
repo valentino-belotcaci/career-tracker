@@ -1,3 +1,14 @@
+error id: file://<WORKSPACE>/src/main/java/VaLocaProject/SecurityConfig.java:_empty_/`<any>`#loginPage#loginProcessingUrl#
+file://<WORKSPACE>/src/main/java/VaLocaProject/SecurityConfig.java
+empty definition using pc, found symbol in pc: _empty_/`<any>`#loginPage#loginProcessingUrl#
+empty definition using semanticdb
+empty definition using fallback
+non-local guesses:
+
+offset: 1239
+uri: file://<WORKSPACE>/src/main/java/VaLocaProject/SecurityConfig.java
+text:
+```scala
 
 package VaLocaProject;
 
@@ -19,13 +30,13 @@ public class SecurityConfig {
         http
             //.cors()
             .csrf(csrf -> csrf.disable()) // disable for simple frontend fetches; enable with token flow in prod
-            .authorizeHttpRequests(request -> request 
+            .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/**").permitAll() // allow onboarding page
                 .anyRequest().authenticated() // all other pages need login
             )
             .formLogin(form -> form
                 .loginPage("/login.html") // optional: your custom login page
-                .loginProcessingUrl("/Account/authenticate")        // URL the form must POST to
+                .l@@oginProcessingUrl("/Account/authenticate")        // URL the form must POST to
                 .usernameParameter("email")       // default, change if form uses different name
                 .passwordParameter("password")
                 .defaultSuccessUrl("/indexUser.html", true)
@@ -36,13 +47,15 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Bean
-    BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 
     @Bean
     AuthenticationManager authenticationManager(AuthenticationConfiguration config) {
         return config.getAuthenticationManager();
     }
 }
+```
+
+
+#### Short summary: 
+
+empty definition using pc, found symbol in pc: _empty_/`<any>`#loginPage#loginProcessingUrl#

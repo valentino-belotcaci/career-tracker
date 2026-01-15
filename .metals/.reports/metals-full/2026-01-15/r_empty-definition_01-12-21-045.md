@@ -1,3 +1,14 @@
+error id: file://<WORKSPACE>/src/main/java/VaLocaProject/Services/AccountService.java:_empty_/Authentication#isAuthenticated#
+file://<WORKSPACE>/src/main/java/VaLocaProject/Services/AccountService.java
+empty definition using pc, found symbol in pc: _empty_/Authentication#isAuthenticated#
+empty definition using semanticdb
+empty definition using fallback
+non-local guesses:
+
+offset: 3185
+uri: file://<WORKSPACE>/src/main/java/VaLocaProject/Services/AccountService.java
+text:
+```scala
 package VaLocaProject.Services;
 
 import java.util.List;
@@ -92,7 +103,7 @@ public class AccountService {
         Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(account.getEmail(), account.getPassword() ));
         
         // Check if hte authentication actually succeded
-        if (!authentication.isAuthenticated()){
+        if (!authentication.isAuthen@@ticated()){
             return false;
         }
 
@@ -107,3 +118,10 @@ public class AccountService {
 
 
 }
+
+```
+
+
+#### Short summary: 
+
+empty definition using pc, found symbol in pc: _empty_/Authentication#isAuthenticated#

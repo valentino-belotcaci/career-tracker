@@ -1,10 +1,20 @@
+error id: file://<WORKSPACE>/src/main/java/VaLocaProject/Services/AccountService.java:_empty_/AuthenticationManager#authenticate#
+file://<WORKSPACE>/src/main/java/VaLocaProject/Services/AccountService.java
+empty definition using pc, found symbol in pc: _empty_/AuthenticationManager#authenticate#
+empty definition using semanticdb
+empty definition using fallback
+non-local guesses:
+
+offset: 2856
+uri: file://<WORKSPACE>/src/main/java/VaLocaProject/Services/AccountService.java
+text:
+```scala
 package VaLocaProject.Services;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -35,9 +45,6 @@ public class AccountService {
 
     @Autowired
     AuthenticationManager authManager;
-
-    @Autowired
-    JWTService jwtService;
 
     public List<Account> getAllAccounts(){
         return accountRepository.findAll();
@@ -89,15 +96,8 @@ public class AccountService {
         if (account.getPassword() == null) return false;
 
         // To manually set the authentication token 
-        Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(account.getEmail(), account.getPassword() ));
-        
-        // Check if hte authentication actually succeded
-        if (!authentication.isAuthenticated()){
-            return false;
-        }
+        Authentication authentication = authManager.aut@@henticate();
 
-
-        jwtService.generateToken();
         return passwordEncoder.matches(password, account.getPassword());
     }
 
@@ -107,3 +107,10 @@ public class AccountService {
 
 
 }
+
+```
+
+
+#### Short summary: 
+
+empty definition using pc, found symbol in pc: _empty_/AuthenticationManager#authenticate#

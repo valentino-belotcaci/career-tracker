@@ -1,3 +1,14 @@
+error id: file://<WORKSPACE>/src/main/java/VaLocaProject/Services/AccountService.java:_empty_/BCryptPasswordEncoder#matches#
+file://<WORKSPACE>/src/main/java/VaLocaProject/Services/AccountService.java
+empty definition using pc, found symbol in pc: _empty_/BCryptPasswordEncoder#matches#
+empty definition using semanticdb
+empty definition using fallback
+non-local guesses:
+
+offset: 3225
+uri: file://<WORKSPACE>/src/main/java/VaLocaProject/Services/AccountService.java
+text:
+```scala
 package VaLocaProject.Services;
 
 import java.util.List;
@@ -35,9 +46,6 @@ public class AccountService {
 
     @Autowired
     AuthenticationManager authManager;
-
-    @Autowired
-    JWTService jwtService;
 
     public List<Account> getAllAccounts(){
         return accountRepository.findAll();
@@ -97,8 +105,7 @@ public class AccountService {
         }
 
 
-        jwtService.generateToken();
-        return passwordEncoder.matches(password, account.getPassword());
+        return passwordEncoder.ma@@tches(password, account.getPassword());
     }
 
     public void deleteAllAccounts(){
@@ -107,3 +114,10 @@ public class AccountService {
 
 
 }
+
+```
+
+
+#### Short summary: 
+
+empty definition using pc, found symbol in pc: _empty_/BCryptPasswordEncoder#matches#
