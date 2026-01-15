@@ -13,7 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import VaLocaProject.Models.User;
 
 @Configuration
 public class SecurityConfig {
@@ -27,8 +26,7 @@ public class SecurityConfig {
             .cors(cors -> cors.disable())
             .csrf(csrf -> csrf.disable()) // disable for simple frontend fetches; enable with token flow in prod
             .authorizeHttpRequests(request -> request 
-                .requestMatchers("/", "/index.html", "/css/**", "/js/**", "/images/**").permitAll() // allow public resources
-                .requestMatchers("/registerAccount.html", "/login.html").permitAll() // allow onboarding endpoints
+                .requestMatchers("/registerAccount.html", "/login.html", "/authenticate", "/Account/authenticate").permitAll() // allow onboarding endpoints
                 .anyRequest().authenticated() // all other pages need login
             )
             .sessionManagement(session ->

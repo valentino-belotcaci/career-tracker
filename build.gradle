@@ -36,6 +36,9 @@ dependencies {
 	// Source: https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-impl
 	 runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
 
+	// Source: https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-jackson
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
+
 
 	compileOnly 'org.projectlombok:lombok:1.18.32'
 	annotationProcessor 'org.projectlombok:lombok:1.18.32'
