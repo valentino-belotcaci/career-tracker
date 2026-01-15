@@ -97,7 +97,7 @@ public class AccountService {
         }
 
 
-        jwtService.generateToken();
+        jwtService.generateToken(email);
         return passwordEncoder.matches(password, account.getPassword());
     }
 
