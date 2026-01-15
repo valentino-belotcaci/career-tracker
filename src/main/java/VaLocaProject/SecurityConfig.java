@@ -1,6 +1,7 @@
 
 package VaLocaProject;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,23 +11,29 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
 
 @Configuration
 public class SecurityConfig {
 
+    @Autowired
+    private JWTFilter jwtFilter;
     
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            //.cors()
+            .cors(cors -> cors.disable())
             .csrf(csrf -> csrf.disable()) // disable for simple frontend fetches; enable with token flow in prod
             .authorizeHttpRequests(request -> request 
-                .requestMatchers("/**").permitAll() // allow onboarding page
+                .requestMatchers("/registerAccount.html", "/login.html", "/authenticate", "/Account/authenticate").permitAll() // allow onboarding endpoints
                 .anyRequest().authenticated() // all other pages need login
             )
             .sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
+            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+            .formLogin(form -> form.disable())
             .logout(logout -> logout.permitAll());
 
         return http.build();
