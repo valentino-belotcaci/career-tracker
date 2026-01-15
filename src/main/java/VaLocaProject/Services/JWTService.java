@@ -53,4 +53,8 @@ public class JWTService {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
+
+    public String extractUsername(String token) {
+        return ""; // Placeholder implementation
+    }
 }
