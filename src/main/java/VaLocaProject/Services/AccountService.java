@@ -7,7 +7,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import VaLocaProject.Models.Account;
@@ -76,30 +75,36 @@ public class AccountService {
         return accountRepository.findByEmail(email);
     }
 
-    public Boolean authenticate(String email, String password){
-        // Search account instance based on the email
-        Account account = accountRepository.findByEmail(email);
+public Boolean authenticate(String email, String password){
+    // Search account instance based on the email
+    Account account = getAccountByEmail(email);
 
-        if (account == null) {
-            return false;
-        }
-
-
-        // Check if the password matches 
-        if (account.getPassword() == null) return false;
-
-        // To manually set the authentication token 
-        Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(account.getEmail(), account.getPassword() ));
-        
-        // Check if hte authentication actually succeded
-        if (!authentication.isAuthenticated()){
-            return false;
-        }
-
-
-        jwtService.generateToken(email);
-        return passwordEncoder.matches(password, account.getPassword());
+    if (account == null) {
+        return false;
     }
+
+    // Check if the password exists on record
+    if (account.getPassword() == null) return false;
+
+    // Authenticate using the raw credentials (email + plain password)
+    Authentication authentication;
+    try {
+        authentication = authManager.authenticate(
+            new UsernamePasswordAuthenticationToken(email, password)
+        );
+    } catch (Exception ex) {
+        return false;
+    }
+
+    // Check if the authentication actually succeeded
+    if (!authentication.isAuthenticated()){
+        return false;
+    }
+
+    // Generate JWT and return verification of the password against stored hash
+    jwtService.generateToken(email);
+    return passwordEncoder.matches(password, account.getPassword());
+}
 
     public void deleteAllAccounts(){
         accountRepository.deleteAll();
