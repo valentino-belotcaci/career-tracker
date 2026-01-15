@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -23,13 +24,8 @@ public class SecurityConfig {
                 .requestMatchers("/**").permitAll() // allow onboarding page
                 .anyRequest().authenticated() // all other pages need login
             )
-            .formLogin(form -> form
-                .loginPage("/login.html") // optional: your custom login page
-                .loginProcessingUrl("/Account/authenticate")        // URL the form must POST to
-                .usernameParameter("email")       // default, change if form uses different name
-                .passwordParameter("password")
-                .defaultSuccessUrl("/indexUser.html", true)
-                .permitAll()
+            .sessionManagement(session ->
+                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
             .logout(logout -> logout.permitAll());
 

@@ -1,6 +1,7 @@
 package VaLocaProject.Controllers;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -66,17 +67,17 @@ public class AccountController {
 
         return ResponseEntity.ok(accountDTO);
     }
-    
-
+        
     @PostMapping("/authenticate")
-    public ResponseEntity<Boolean> authenticateAccount(@RequestBody Account account) {
-        boolean isValid = accountService.authenticate(account.email, account.password);
+    public ResponseEntity<?> authenticateAccount(@RequestBody Account account) {
 
-        if (!isValid) {
-            return ResponseEntity.status(401).body(false);
+        String token = accountService.authenticate(account.email, account.password);
+
+        if (token == null) {
+            return ResponseEntity.status(401).body("Login failed");
         }
 
-        return ResponseEntity.ok(true);
+        return ResponseEntity.ok(Map.of("token", token));
     }
 
 }

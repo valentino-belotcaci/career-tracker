@@ -75,36 +75,31 @@ public class AccountService {
         return accountRepository.findByEmail(email);
     }
 
-public Boolean authenticate(String email, String password){
-    // Search account instance based on the email
-    Account account = getAccountByEmail(email);
+    public String authenticate(String email, String password) {
 
-    if (account == null) {
-        return false;
-    }
+        Account account = getAccountByEmail(email);
+        if (account == null || account.getPassword() == null) {
+            return null;
+        }
 
-    // Check if the password exists on record
-    if (account.getPassword() == null) return false;
+        // 1) Check password manually
+        if (!passwordEncoder.matches(password, account.getPassword())) {
+            return null;
+        }
 
-    // Authenticate using the raw credentials (email + plain password)
-    Authentication authentication;
-    try {
-        authentication = authManager.authenticate(
+        // 2) Authenticate with RAW password
+        Authentication authentication = authManager.authenticate(
             new UsernamePasswordAuthenticationToken(email, password)
         );
-    } catch (Exception ex) {
-        return false;
+
+        if (!authentication.isAuthenticated()) {
+            return null;
+        }
+
+        // 3) Generate JWT
+        return jwtService.generateToken(email);
     }
 
-    // Check if the authentication actually succeeded
-    if (!authentication.isAuthenticated()){
-        return false;
-    }
-
-    // Generate JWT and return verification of the password against stored hash
-    jwtService.generateToken(email);
-    return passwordEncoder.matches(password, account.getPassword());
-}
 
     public void deleteAllAccounts(){
         accountRepository.deleteAll();
