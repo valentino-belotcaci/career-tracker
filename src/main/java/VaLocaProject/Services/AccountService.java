@@ -15,6 +15,7 @@ import VaLocaProject.Models.User;
 import VaLocaProject.Repositories.AccountRepository;
 import VaLocaProject.Repositories.CompanyRepository;
 import VaLocaProject.Repositories.UserRepository;
+import VaLocaProject.Security.JWTService;
 
 @Service
 public class AccountService {

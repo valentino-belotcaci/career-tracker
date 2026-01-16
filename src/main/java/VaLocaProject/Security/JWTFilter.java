@@ -16,7 +16,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import VaLocaProject.Models.User;
 import VaLocaProject.Services.CustomUserDetailsService;
-import VaLocaProject.Services.JWTService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
