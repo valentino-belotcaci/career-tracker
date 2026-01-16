@@ -46,7 +46,7 @@ public class JWTFilter extends OncePerRequestFilter{
             // Logic to set authentication in the security context 
 
             // Load user details using username
-            UserDetails userDetails = context.getBean(CustomAccountDetailsService.class).loadUserByUsername(username); 
+            UserDetails userDetails = context.getBean(AccountDetailsService.class).loadUserByUsername(username); 
 
             if (jwtService.validateToken(token, userDetails)) {
                 // Set authentication in the security context
