@@ -26,7 +26,7 @@ public class SecurityConfig {
             .cors(cors -> cors.disable())
             .csrf(csrf -> csrf.disable()) // disable for simple frontend fetches; enable with token flow in prod
             .authorizeHttpRequests(request -> request 
-                .requestMatchers("/registerAccount.html", "/login.html", "/authenticate", "/Account/authenticate").permitAll() // allow onboarding endpoints
+                .requestMatchers("/index.html", "/register.html", "/login.html", "/", "/Account/authenticate", "/css/**").permitAll() // allow onboarding endpoints
                 .anyRequest().authenticated() // all other pages need login
             )
             .sessionManagement(session ->

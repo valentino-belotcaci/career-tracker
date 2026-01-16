@@ -1,8 +1,5 @@
 build/
 .gradle/
 
-gradle/
-!gradle/wrapper/gradle-wrapper.jar
-
 .vscode/
 .metals
