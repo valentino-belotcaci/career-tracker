@@ -57,7 +57,7 @@ public class JWTService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    // UNTIL HERE IS FOR TOKEN GENERATION
+    // ----- UNTIL HERE IS FOR TOKEN GENERATION -----
 
     public boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractUsername(token);

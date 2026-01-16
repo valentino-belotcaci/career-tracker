@@ -1,4 +1,4 @@
-package VaLocaProject.Services;
+package VaLocaProject.Security;
 
 import java.util.List;
 
@@ -14,7 +14,8 @@ import VaLocaProject.Models.Account;
 import VaLocaProject.Repositories.AccountRepository;
 
 @Service
-public class CustomUserDetailsService implements UserDetailsService {
+// This class is the Spring Security bridge between our Account data and Spring’s authentication system
+public class CustomAccountDetailsService implements UserDetailsService {
 
     @Autowired
     private AccountRepository accountRepository;

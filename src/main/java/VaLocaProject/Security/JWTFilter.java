@@ -15,19 +15,20 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import VaLocaProject.Models.User;
-import VaLocaProject.Services.CustomUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Component
+// First security filter applied when a Token-necessary request is received in the backend from the frontend
 public class JWTFilter extends OncePerRequestFilter{
 
     @Autowired
     private JWTService jwtService;
 
     @Autowired
+    // The context holds the beans. Spring interacts with the context to interact with the beans
     ApplicationContext context;
     
     @Override
@@ -39,15 +40,17 @@ public class JWTFilter extends OncePerRequestFilter{
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             token = authHeader.substring(7);
-            // Logic to extract username from token goes here
+            // Logic to extract username from token 
             username = jwtService.extractUsername(token);
         }
 
+        // SecurityContextHolder is the context that allows the authentication to "open" the resources for authorized-only
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            //securitycontextif its not null it means its not authenticated yet
-            // Logic to set authentication in the security context goes here
+            // If Securitycontext is not null it means its not authenticated yet
+            // Logic to set authentication in the security context 
 
-            UserDetails userDetails = context.getBean(CustomUserDetailsService.class).loadUserByUsername(username); // Load user details using username
+            // Load user details using username
+            UserDetails userDetails = context.getBean(CustomAccountDetailsService.class).loadUserByUsername(username); 
 
             if (jwtService.validateToken(token, userDetails)) {
                 // Set authentication in the security context
@@ -57,7 +60,7 @@ public class JWTFilter extends OncePerRequestFilter{
 
                 authToken.setDetails(
                     new WebAuthenticationDetailsSource().buildDetails(request));
-
+                
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
