@@ -66,16 +66,11 @@
             }
         }
 
-        // redirect to correct index page
-        if ((accountDto && accountDto.type) ? accountDto.type === 'COMPANY' : data.type === 'COMPANY') {
-            setTimeout(() => {
-                globalThis.location.href = '/indexCompany.html';
-            }, 500);
-        } else {
-            setTimeout(() => {
-                globalThis.location.href = '/indexUser.html';
-            }, 500);
-        }
+        // redirect 
+        setTimeout(() => {
+            globalThis.location.href = '/login.html';
+        }, 500);
+
     });
     </script>
 </main>
