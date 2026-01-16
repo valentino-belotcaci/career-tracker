@@ -25,17 +25,17 @@ public class JWTService {
     private String secretKey = "";
 
     public JWTService(){
+        // Defines the procedures to determine which algorithm use to gen the secret key and encode it 
         try {
             KeyGenerator keyGen = KeyGenerator.getInstance("HmacSHA256");
             SecretKey sk = keyGen.generateKey();
             secretKey = Base64.getEncoder().encodeToString(sk.getEncoded());
-        } catch (NoSuchAlgorithmException e) {
-            // TODO Auto-generated catch block
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
     
-    //Method that acutally generate the JWT token to be sent to the browser after login 
+    // Method that acutally generate the JWT token to be sent to the browser after login 
     public String generateToken(String email){
         Map<String, Object> claims = new HashMap<>();
 
@@ -57,10 +57,25 @@ public class JWTService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
+    // UNTIL HERE IS FOR TOKEN GENERATION
+
+    public boolean validateToken(String token, UserDetails userDetails) {
+        final String username = extractUsername(token);
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
+    private boolean isTokenExpired(String token) {
+        return extractExpiration(token).before(new Date());  }
+
+    private Date extractExpiration(String token) {
+        return extractClaim(token, Claims::getExpiration);
+    }
+
+    // Here we pass the Function instead of putting it here, so we can use the generic and this process can work for claims of everytype, not only strings
     private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
@@ -72,19 +87,5 @@ public class JWTService {
             .build()
             .parseSignedClaims(token)
             .getPayload();
-    }
-
-    public boolean validateToken(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
-    }
-
-    private boolean isTokenExpired(String token) {
-        // TODO Auto-generated method stub
-        return extractExpiration(token).before(new Date());  }
-
-    private Date extractExpiration(String token) {
-        // TODO Auto-generated method stub
-        return extractClaim(token, Claims::getExpiration);
     }
 }

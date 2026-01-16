@@ -87,10 +87,10 @@ public class AccountService {
         if (!passwordEncoder.matches(password, account.getPassword())) {
             return null;
         }
-
+            
         // 2) Authenticate with RAW password
         Authentication authentication = authManager.authenticate(
-            new UsernamePasswordAuthenticationToken(email, password)
+            new UsernamePasswordAuthenticationToken(email, account)
         );
 
         if (!authentication.isAuthenticated()) {

@@ -24,14 +24,16 @@ public class SecurityConfig {
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .cors(cors -> cors.disable())
-            .csrf(csrf -> csrf.disable()) // disable for simple frontend fetches; enable with token flow in prod
+            .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(request -> request 
                 .requestMatchers("/index.html", "/register.html", "/login.html", "/", "/Account/authenticate", "/Account/insertAccount", "/css/**", "/favicon.ico").permitAll() // allow onboarding endpoints
                 .anyRequest().authenticated() // all other pages need login
             )
+            // Define the sesionManagemant as STATELESS (STATEFULL as default)
             .sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
+            // To add the JWT filter as first filter, to not even touch the backend without it
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
             .formLogin(form -> form.disable())
             .logout(logout -> logout.permitAll());
