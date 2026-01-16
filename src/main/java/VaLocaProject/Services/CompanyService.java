@@ -1,13 +1,12 @@
 package VaLocaProject.Services;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
 
-import VaLocaProject.Models.Company;
-import VaLocaProject.Models.User;
-import VaLocaProject.Repositories.CompanyRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import VaLocaProject.Models.Company;
+import VaLocaProject.Repositories.CompanyRepository;
 
 @Service
 public class CompanyService {

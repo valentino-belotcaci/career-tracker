@@ -33,6 +33,7 @@ public class CustomAccountDetailsService implements UserDetailsService {
         return new User(
             account.getEmail(),
             account.getPassword(),
+            // Defines the role of Authority, the Authority object represent what a "role" can do
             List.of(new SimpleGrantedAuthority("ROLE_" + account.getType()))
         );
     }
