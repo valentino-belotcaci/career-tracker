@@ -64,15 +64,5 @@ public class JWTFilter extends OncePerRequestFilter{
         filterChain.doFilter(request, response);
     }
 
-    @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-        String path = request.getServletPath();
-        return path.equals("/Account/authenticate")
-            || path.equals("/Account/insertAccount")
-            || path.equals("/favicon.ico")
-            || path.startsWith("/css/")
-            || path.equals("/error");
-    }
-
 
 }

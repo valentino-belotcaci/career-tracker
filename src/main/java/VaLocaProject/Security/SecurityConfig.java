@@ -21,9 +21,10 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .cors(cors -> cors.disable())
+            .cors(cors -> cors.disable()) 
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(request -> request 
+            // ALLOW FOR ALL USERS
             .requestMatchers(
                 "/index.html",
                 "/register.html",
@@ -34,8 +35,9 @@ public class SecurityConfig {
                 "/css/**",
                 "/favicon.ico",
                 "/error"
-            ).permitAll() // allow onboarding endpoints
+            ).permitAll() 
 
+            // ALLOW ONLY FOR "USER"
             .requestMatchers(
                 "/indexUser.html",
                 "/displayJobApplication.html",
@@ -43,17 +45,23 @@ public class SecurityConfig {
                 "/profileUser.html"
             ).hasRole("USER")
 
+            // ALLOW ONLY FOR "COMPANY"
             .requestMatchers(
                 "/indexCompany.html",
                 "/profileCompany.html"
             ).hasRole("COMPANY")
 
+            // // ALLOW ONLY FOR "USER or COMPANY"
             .requestMatchers(
                 "/displayJobPost.html",
                 "/jobPostDetails.html"
             ).hasAnyRole("USER", "COMPANY")
 
-            .anyRequest().authenticated() // all other pages need login
+            .requestMatchers(
+                "/**"
+            ).hasRole("ADMIN")
+
+            .anyRequest().authenticated()
             )
             
             // Define the sesionManagemant as STATELESS (STATEFULL as default)
@@ -78,4 +86,6 @@ public class SecurityConfig {
     AuthenticationManager authenticationManager(AuthenticationConfiguration config) {
         return config.getAuthenticationManager();
     }
+
+
 }
