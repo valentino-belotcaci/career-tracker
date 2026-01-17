@@ -3,6 +3,9 @@ package VaLocaProject.Services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +32,9 @@ public class AccountService {
     // Injection of password encoder
     @Autowired
     BCryptPasswordEncoder passwordEncoder;
+
+    @Autowired
+    AuthenticationManager authManager;
 
     @Autowired
     JWTService jwtService;
@@ -76,13 +82,17 @@ public class AccountService {
         if (account == null || account.getPassword() == null) {
             return null;
         }
+            
+        // 1) Authenticate with RAW password
+        Authentication authentication = authManager.authenticate(
+            new UsernamePasswordAuthenticationToken(email, password)
+        );
 
-        // 1) Check password manually
-        if (!passwordEncoder.matches(password, account.getPassword())) {
+        if (!authentication.isAuthenticated()) {
             return null;
         }
-            
-        // 3) Generate JWT
+
+        // 2) Generate JWT
         return jwtService.generateToken(email);
     }
 
