@@ -39,6 +39,8 @@ public class SecurityConfig {
                 "/",
                 "/Account/authenticate",
                 "/Account/insertAccount",
+                // allow lookup used during login flow
+                "/Account/getAccountByEmail/**",
                 "/css/**",
                 "/favicon.ico",
                 "/error"
