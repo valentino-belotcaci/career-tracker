@@ -28,6 +28,7 @@ public class SecurityConfig {
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .cors(cors -> cors.configurationSource(corsConfigurationSource())) 
+            // Disable csrf token as we are using JWT stateless session managing
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(request -> request 
             // ALLOW FOR ALL USERS
