@@ -1,4 +1,3 @@
-
 package VaLocaProject.Security;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +25,9 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(request -> request 
                 .requestMatchers("/index.html", "/register.html", "/login.html", "/", "/Account/authenticate", "/Account/insertAccount", "/css/**", "/favicon.ico").permitAll() // allow onboarding endpoints
+                .requestMatchers("/**").hasRole("ADMIN")
+                .requestMatchers("/indexUser.html", "/displayJobPost.html", "/displayJobApplication.html", "/createJobApplication.html", "/jobPostDetails.html", "/profileUser.html").hasRole("USER")
+                .requestMatchers("/indexCompany.html", "/displayJobPost.html", "/jobPostDetails.html", "/profileCompany.html").hasRole("COMPANY")
                 .anyRequest().authenticated() // all other pages need login
             )
             // Define the sesionManagemant as STATELESS (STATEFULL as default)
@@ -46,7 +48,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    AuthenticationManager authenticatinManager(AuthenticationConfiguration config) {
+    AuthenticationManager authenticationManager(AuthenticationConfiguration config) {
         return config.getAuthenticationManager();
     }
 }
