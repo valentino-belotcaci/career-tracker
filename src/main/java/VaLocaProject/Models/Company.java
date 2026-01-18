@@ -15,12 +15,12 @@ public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "company_id")
-    public Long companyId;
-    public String name;
-    public String email;
-    public String description;
+    private Long companyId;
+    private String name;
+    private String email;
+    private String description;
     @Column(name = "account_id")
-    public Long accountId;
+    private Long accountId;
 
 
     public String getName(){
