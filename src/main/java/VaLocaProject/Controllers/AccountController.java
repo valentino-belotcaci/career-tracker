@@ -38,9 +38,9 @@ public class AccountController {
         Account saved = accountService.insertAccount(account);
 
         AccountDTO accountDTO = new AccountDTO(
-            saved.accountId,
-            saved.email ,
-            saved.type  
+            saved.getAccountId(),
+            saved.getEmail(),
+            saved.getType()
         );
 
         return ResponseEntity.ok(accountDTO);
@@ -62,9 +62,9 @@ public class AccountController {
         }
 
         AccountDTO accountDTO = new AccountDTO(
-            account.accountId,
-            account.email,
-            account.type
+            account.getAccountId(),
+            account.getEmail(),
+            account.getType()
         );
 
         return ResponseEntity.ok(accountDTO);
@@ -73,7 +73,7 @@ public class AccountController {
     @PostMapping("/authenticate")
     public ResponseEntity<?> authenticateAccount(@RequestBody Account account) {
 
-        String token = accountService.authenticate(account.email, account.password);
+        String token = accountService.authenticate(account.getEmail(), account.getPassword());
 
         if (token == null) {
             return ResponseEntity.status(401).body("Login failed");

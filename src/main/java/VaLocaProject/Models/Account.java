@@ -19,10 +19,10 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "account_id")
-    public Long accountId;
-    public String email;
-    public String password;
-    public String type;
+    private Long accountId;
+    private String email;
+    private String password;
+    private String type;
 
 
     public Long getAccountId(){

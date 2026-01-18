@@ -56,7 +56,7 @@ public class AccountService {
 
         // After creating the Account, also create a blank Company or User linked via account_id
         if (saved != null) {
-            String type = saved.type;
+            String type = saved.getType();
             if (type.equals("COMPANY")) {
                 // Company constructor order: company_id, name, email, description, account_id
                 Company c = new Company(null, "", saved.getEmail(), "", saved.getAccountId());
