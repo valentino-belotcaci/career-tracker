@@ -31,7 +31,7 @@ public class HttpToHttpsConfig {
         // and redirect them to port 8443 with https
         connector.setScheme("http");
         connector.setPort(8080);
-        connector.setSecure(false);
+        connector.setSecure(true);
         connector.setRedirectPort(8443);
 
         return connector;
