@@ -1,5 +1,7 @@
 build/
 .gradle/
 
+application.properties
+
 .vscode/
 .metals
