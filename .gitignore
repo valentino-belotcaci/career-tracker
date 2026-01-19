@@ -2,6 +2,7 @@ build/
 .gradle/
 
 application.properties
+keystore.p12
 
 .vscode/
 .metals
