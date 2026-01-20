@@ -76,7 +76,7 @@ public class JobPostService {
     }
 
 
-    public List<JobPost> getPostsById(Long id){
+    public List<JobPost> getPostsByCompanyId(Long id){
         // Checks if the company exists
         Company foundcompany = companyRepository.findById(id).orElse(null);
         

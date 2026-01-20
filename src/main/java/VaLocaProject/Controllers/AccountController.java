@@ -2,6 +2,7 @@ package VaLocaProject.Controllers;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import VaLocaProject.DTO.AccountDTO;
 import VaLocaProject.Models.Account;
 import VaLocaProject.Services.AccountService;
 
@@ -34,18 +34,20 @@ public class AccountController {
     }
 
     @PostMapping("/insertAccount")
-    public ResponseEntity<AccountDTO> insertAccount(@RequestBody Account account){
-        Account saved = accountService.insertAccount(account);
-        
-        
+    public ResponseEntity<Account> insertAccount(@RequestBody Map<String, String> body){
+        String email = body.get("email");
+        String password = body.get("password");
+        String type = body.get("type");
 
-        AccountDTO accountDTO = new AccountDTO(
-            saved.getAccountId(),
-            saved.getEmail(),
-            saved.getType()
-        );
+        if (email == null || password == null || type == null) {
+            return ResponseEntity.badRequest().build(); // return a ResponseEntity with no body with the header of badRequest
+        }
 
-        return ResponseEntity.ok(accountDTO);
+        Account saved = accountService.insertAccount(email, password, type);
+        if (saved == null) {
+            return ResponseEntity.status(500).build();
+        }
+        return ResponseEntity.ok(saved);
     }
 
 
@@ -56,20 +58,13 @@ public class AccountController {
     }
 
     @GetMapping("/getAccountByEmail/{email}")
-    public ResponseEntity<AccountDTO> getAccountByEmail(@PathVariable String email) {
-        // return 404 if account not found
-        Account account = accountService.getAccountByEmail(email);
-        if (account == null) {
+    public ResponseEntity<Account> getAccountByEmail(@PathVariable String email) {
+        Optional<Account> opt = accountService.getAccountByEmail(email);
+        if (opt.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-
-        AccountDTO accountDTO = new AccountDTO(
-            account.getAccountId(),
-            account.getEmail(),
-            account.getType()
-        );
-
-        return ResponseEntity.ok(accountDTO);
+        // If value is present, return the value
+        return ResponseEntity.ok(opt.get());
     }
         
     @PostMapping("/authenticate")

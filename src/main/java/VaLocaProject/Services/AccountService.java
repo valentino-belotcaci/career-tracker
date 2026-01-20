@@ -1,5 +1,9 @@
 package VaLocaProject.Services;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,6 +37,33 @@ public class AccountService {
 
     @Autowired
     JWTService jwtService;
+
+    public List<Account> getAllAccounts(){
+        List<Account> accounts = new ArrayList<>();
+        // addAll accepts Collection<? extends Account>
+        accounts.addAll(userRepository.findAll());
+        accounts.addAll(companyRepository.findAll());
+        return accounts;
+    }
+
+    public void deleteAllAccounts(){
+        userRepository.deleteAll();
+        companyRepository.deleteAll();
+    }
+
+    public Optional<Account> getAccountByEmail(String email){
+        User user = userRepository.findByEmail(email);
+        if (user != null) {
+            return Optional.of(user);
+        }
+
+        Company company = companyRepository.findByEmail(email);
+        if (company != null) {
+            return Optional.of(company);
+        }
+
+        return Optional.empty();
+    }
 
     // Logic for insertion of User and Company instances to the db
     public Account insertAccount(String email, String password, String type) {
