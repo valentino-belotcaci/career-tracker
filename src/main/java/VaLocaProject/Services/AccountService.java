@@ -45,7 +45,7 @@ public class AccountService {
 
     public Account insertAccount(Account account){
         // Hash the plaintext password before saving
-        if (account.getPassword() != null) {
+        if (account != null && account.getPassword() != null) {
             String hashed = passwordEncoder.encode(account.getPassword());
             account.setPassword(hashed);
         }

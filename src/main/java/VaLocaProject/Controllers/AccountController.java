@@ -36,6 +36,7 @@ public class AccountController {
     @PostMapping("/insertAccount")
     public ResponseEntity<AccountDTO> insertAccount(@RequestBody Account account){
         Account saved = accountService.insertAccount(account);
+        
 
         AccountDTO accountDTO = new AccountDTO(
             saved.getAccountId(),
