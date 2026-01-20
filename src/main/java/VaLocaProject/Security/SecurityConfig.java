@@ -66,9 +66,6 @@ public class SecurityConfig {
                 "/jobPostDetails.html"
             ).hasAnyRole("USER", "COMPANY")
 
-            .requestMatchers(
-                "/**"
-            ).hasRole("ADMIN")  
 
             // Allow the OPTIONS request for CORS policies to be sent without authentication
             .requestMatchers(HttpMethod.OPTIONS, "/**")

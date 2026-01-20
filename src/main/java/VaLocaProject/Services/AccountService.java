@@ -46,6 +46,15 @@ public class AccountService {
         return accounts;
     }
 
+    // Return concrete lists when callers need subclass types
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    public List<Company> getAllCompanies() {
+        return companyRepository.findAll();
+    }
+
     public void deleteAllAccounts(){
         userRepository.deleteAll();
         companyRepository.deleteAll();
