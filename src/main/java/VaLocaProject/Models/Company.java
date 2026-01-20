@@ -2,11 +2,9 @@ package VaLocaProject.Models;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import lombok.Data;
 
 @Entity // To define it as entity to springboot
 @Table(name = "companies") // To define which table it represents
-@Data // Generates getters, setters, toString(), equals(), hashCode()
 public class Company extends Account{
 
     private String name = "";
@@ -22,6 +20,38 @@ public class Company extends Account{
     // Constructor that initializes company fields
     public Company(String email, String password) {
         super(email, password);
+    }
+
+    public String getName(){
+        return name;
+    }
+
+    public void setName(String name){
+        this.name = name;
+    }
+
+    public String getCity(){
+        return city;
+    }
+
+    public void setCity(String city){
+        this.city = city;
+    }
+
+    public String getStreet(){
+        return street;
+    }
+
+    public void setStreet(String street){
+        this.street = street;
+    }
+
+    public String getNumber(){
+        return number;
+    }
+
+    public void setNumber(String number){
+        this.number = number;
     }
 
 }

@@ -1,10 +1,11 @@
 package VaLocaProject.Security;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import VaLocaProject.Models.Account;
 import VaLocaProject.Services.AccountService;
 
 @Component
@@ -16,12 +17,10 @@ public class DataInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         String adminEmail = "admin@1";
-        if (accountService.getAccountByEmail(adminEmail) == null) {
-            Account admin = new Account();
-            admin.setEmail(adminEmail);
-            admin.setPassword("adminPassword"); // will be hashed inside insertAccount
-            admin.setType("ADMIN");
-            accountService.insertAccount(admin);
+        Optional<?> existing = accountService.getAccountByEmail(adminEmail);
+        if (existing.isEmpty()) {
+            // create an admin
+            accountService.insertAccount(adminEmail, "adminPassword", "ADMIN");
             System.out.println("Created admin account: " + adminEmail);
         }
     }
