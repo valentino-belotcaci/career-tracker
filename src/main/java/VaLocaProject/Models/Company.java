@@ -1,69 +1,27 @@
 package VaLocaProject.Models;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
 
 @Entity // To define it as entity to springboot
 @Table(name = "companies") // To define which table it represents
 @Data // Generates getters, setters, toString(), equals(), hashCode()
-public class Company {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "company_id")
-    private Long companyId;
-    private String name;
-    private String email;
-    private String description;
-    @Column(name = "account_id")
-    private Long accountId;
+public class Company extends Account{
 
+    private String name = "";
+    private String city = "";
+    private String street = "";
+    private String number = "";
 
-    public String getName(){
-        return name;
+    // No-arg constructor for JPA
+    protected Company() {
+        super();
     }
 
-    public void setName(String name){
-        this.name = name;
-    }
-
-    public String getEmail(){
-        return email;
-    }
-
-    public void setEmail(String email){
-        this.email = email;
-    }
-
-    public String getDescription(){
-        return description;
-    }
-
-    public void setDescription(String description){
-        this.description = description;
-    }
-
-    public Long getCompanyId(){
-        return companyId;
-    }
-
-
-
-    // Explicit all-args constructor to avoid relying on Lombok during compilation
-    public Company(Long companyId, String name, String email, String description, Long accountId) {
-        this.companyId = companyId;
-        this.name = name;
-        this.email = email;
-        this.description = description;
-        this.accountId = accountId;
-    }
-
-    // Explicit no-args constructor
-    public Company() {
+    // Constructor that initializes company fields
+    public Company(String email, String password) {
+        super(email, password);
     }
 
 }

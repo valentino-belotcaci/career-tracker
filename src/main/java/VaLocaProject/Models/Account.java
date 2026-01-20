@@ -1,36 +1,36 @@
 package VaLocaProject.Models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.MappedSuperclass;
 
-@Entity // To define it as entity to springboot
-@Table(name = "accounts") // To define which table it represents
-@Data // Generates getters, setters, toString(), equals(), hashCode()
-@NoArgsConstructor
-@AllArgsConstructor // Creates specific constructors for all fields
+
+@MappedSuperclass
 public class Account {
+    // id mapping is inherited by subclasses (User, Company) but Account is not an entity/table itself
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "account_id")
-    private Long accountId;
+    private Long id;
     private String email;
     private String password;
-    private String type;
+    private String description = "";
 
+    // No-arg constructor for JPA
+    protected Account() {}
 
-    public Long getAccountId(){
-        return accountId;
+    // Constructor for subclasses to call. Don't accept id when it's auto-generated.
+    protected Account(String email, String password) {
+        this.email = email;
+        this.password = password;
     }
 
-    public void setAccountId(Long id){
-        this.accountId = id;
+    public Long getId(){
+        return id;
+    }
+
+    public void setId(Long id){
+        this.id = id;
     }
 
     public String getEmail(){
@@ -41,13 +41,6 @@ public class Account {
         this.email = email;
     }
 
-    public String getType(){
-        return type;
-    }
-
-    public void setType(String type){
-        this.type = type;
-    }
 
     public String getPassword(){
         return password;
@@ -57,4 +50,13 @@ public class Account {
         this.password = password;
     }
 
+    public String getDescription(){
+        return description;
+    }
+
+    public void setDescription(String description){
+        this.description = description;
+    }
+
+    
 }

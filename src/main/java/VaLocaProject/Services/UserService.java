@@ -1,12 +1,13 @@
 package VaLocaProject.Services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import VaLocaProject.Models.User;
 import VaLocaProject.Repositories.UserRepository;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 
 @Service
@@ -14,6 +15,10 @@ public class UserService{
 
     @Autowired
     UserRepository userRepository;
+
+    // encode passwords on update
+    @Autowired
+    BCryptPasswordEncoder passwordEncoder;
 
     public List<User> getAllUsers(){
         return userRepository.findAll();
@@ -37,12 +42,21 @@ public class UserService{
             foundUser.setEmail(user.getEmail());
         }
 
-        if (user.getName() != null) {
-            foundUser.setName(user.getName());
+        if (user.getFirstName() != null) {
+            foundUser.setFirstName(user.getFirstName());
+        }
+
+        if (user.getLastName() != null) {
+            foundUser.setLastName(user.getLastName());
         }
         
         if (user.getDescription() != null) {
             foundUser.setDescription(user.getDescription());
+        }
+
+        if (user.getPassword() != null) {
+            // encode password before saving
+            foundUser.setPassword(passwordEncoder.encode(user.getPassword()));
         }
         // Add other fields to update...
 
@@ -51,7 +65,7 @@ public class UserService{
     }
 
     public User getUserByAccountId(Long id){
-        return userRepository.findByAccountId(id);
+        return userRepository.findById(id).orElse(null);
     }
 
 

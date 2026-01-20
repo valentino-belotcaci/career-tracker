@@ -37,6 +37,7 @@ public class AccountController {
     public ResponseEntity<AccountDTO> insertAccount(@RequestBody Account account){
         Account saved = accountService.insertAccount(account);
         
+        
 
         AccountDTO accountDTO = new AccountDTO(
             saved.getAccountId(),

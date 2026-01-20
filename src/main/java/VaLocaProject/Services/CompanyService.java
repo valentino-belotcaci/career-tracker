@@ -27,8 +27,11 @@ public class CompanyService {
     }
 
     public Company updateCompany(Long id, Company company){
-        Company foundCompany = companyRepository.findById(id).orElseThrow(
-            () -> new RuntimeException("Company not found"));
+        // Return if else null to resolve Optional
+        Company foundCompany = companyRepository.findById(id).orElse(null);
+        if (foundCompany == null) {
+            throw new RuntimeException("Company not found");
+        }
 
         // Check if not null to not update some fields as null
         if (company.getEmail() != null) {
@@ -49,6 +52,7 @@ public class CompanyService {
     }
 
     public Company getCompanyByAccountId(Long id){
-        return companyRepository.findByAccountId(id);
+         // Return if else null to resolve Optional
+        return companyRepository.findById(id).orElse(null);
     }
 }

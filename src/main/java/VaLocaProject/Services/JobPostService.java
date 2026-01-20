@@ -76,10 +76,10 @@ public class JobPostService {
     }
 
 
-    public List<JobPost> getPostsByCompanyId(Long id){
+    public List<JobPost> getPostsById(Long id){
         // Checks if the company exists
-        Company foundcompany = companyRepository.findByAccountId(id);
+        Company foundcompany = companyRepository.findById(id).orElse(null);
         
-        return jobPostRepository.findByCompanyId(foundcompany.getCompanyId());
+        return jobPostRepository.findByCompanyId(foundcompany.getId());
     }
 }
