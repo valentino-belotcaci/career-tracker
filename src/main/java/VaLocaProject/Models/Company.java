@@ -1,11 +1,14 @@
 package VaLocaProject.Models;
 
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
 @Entity // To define it as entity to springboot
 @Table(name = "companies") // To define which table it represents
-public class Company extends Account{
+@AttributeOverride(name = "id", column = @Column(name = "id"))
+public class Company extends Account {
 
     private String name = "";
     private String city = "";
@@ -22,11 +25,11 @@ public class Company extends Account{
         super(email, password);
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 
-    public void setName(String name){
+    public void setName(String name) {
         this.name = name;
     }
 
