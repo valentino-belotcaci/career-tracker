@@ -1,112 +1,108 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Job Applications - CareerTracker</title>
-    <link rel="stylesheet" href="/css/style.css">
-  </head>
-  <body>
-    <header>
-      <a class="site-title" href="/indexUser.html">CareerTracker</a>
-    </header>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Job Applications - CareerTracker</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header>
+    <a class="site-title" href="/indexUser.html">CareerTracker</a>
+  </header>
 
-    <main class="wide-card">
-      <h2>Available Job Posts</h2>
-      <div style="margin-bottom:12px;">
-        <!-- Removed standalone apply button; each row is clickable to view details and apply -->
-      </div>
-      <p id="note">Loading…</p>
+  <main class="wide-card">
+    <h2>Available Job Posts</h2>
+    <p id="note">Loading…</p>
 
-      <table id="appsTable" style="width:100%; border-collapse: collapse; display:none;">
-        <thead>
-          <tr>
-            <!-- Hidden ID and Company ID columns -->
-            <th style="display:none; border:1px solid #ccc; padding:8px; text-align:left;">ID</th>
-            <th style="display:none; border:1px solid #ccc; padding:8px; text-align:left;">Company ID</th>
-            <th style="border:1px solid #ccc; padding:8px; text-align:left;">Name</th>
-            <th style="border:1px solid #ccc; padding:8px; text-align:left;">Description</th>
-            <th style="border:1px solid #ccc; padding:8px; text-align:left;">Duration</th>
-            <th style="border:1px solid #ccc; padding:8px; text-align:left;">Available</th>
-            <th style="border:1px solid #ccc; padding:8px; text-align:left;">Salary</th>
-          </tr>
-        </thead>
-        <tbody id="appsBody"></tbody>
-      </table>
+    <table id="appsTable" style="width:100%; border-collapse: collapse; display:none;">
+      <thead>
+        <tr>
+          <th style="display:none;">ID</th>
+          <th style="display:none;">Company ID</th>
+          <th style="border:1px solid #ccc; padding:8px;">Name</th>
+          <th style="border:1px solid #ccc; padding:8px;">Description</th>
+          <th style="border:1px solid #ccc; padding:8px;">Duration</th>
+          <th style="border:1px solid #ccc; padding:8px;">Available</th>
+          <th style="border:1px solid #ccc; padding:8px;">Salary</th>
+        </tr>
+      </thead>
+      <tbody id="appsBody"></tbody>
+    </table>
 
-      <p id="message"></p>
-    </main>
+    <p id="message"></p>
+  </main>
 
-    <footer>
-      <p>© 2026 CareerTracker</p>
-    </footer>
+  <footer>
+    <p>© 2026 CareerTracker</p>
+  </footer>
 
-    <script>
-      // authFetch helper - attach JWT automatically
-      function authFetch(url, opts = {}) {
-        opts = opts || {};
-        opts.headers = opts.headers || {};
-        const token = localStorage.getItem('jwt');
-        if (token) opts.headers = Object.assign({}, opts.headers, { 'Authorization': 'Bearer ' + token });
-        return fetch(url, opts);
-      }
+  <script>
+    // authFetch helper - attach JWT automatically
+    async function authFetch(url, opts = {}) {
+      const token = localStorage.getItem('jwt');
+      if (!token) throw new Error('Missing JWT; please log in.');
+      opts.headers = Object.assign({}, opts.headers || {}, {
+        'Authorization': 'Bearer ' + token.trim()
+      });
+      return fetch(url, opts);
+    }
 
-      async function loadAllPosts() {
-        const note = document.getElementById('note');
-        try {
-          const res = await fetch('/JobPost/getAllPosts');
-          if (!res.ok) {
-            if (res.status === 404) {
-              note.textContent = 'No job posts found.';
-              return;
-            }
-            throw new Error('Failed to load posts');
-          }
-          const posts = await res.json();
-          if (!posts || posts.length === 0) {
-            note.textContent = 'No job posts found.';
+    async function loadAllApplications() {
+      const note = document.getElementById('note');
+      const tbody = document.getElementById('appsBody');
+
+      try {
+        const res = await authFetch('/JobApplication/getAllApplications');
+        if (!res.ok) {
+          if (res.status === 404) {
+            note.textContent = 'No job applications found.';
             return;
           }
+          throw new Error(`Failed to load applications (${res.status})`);
+        }
 
-          const tbody = document.getElementById('appsBody');
-          tbody.innerHTML = '';
-          posts.forEach(p => {
-            const tr = document.createElement('tr');
-            // accept either camelCase or snake_case from the backend
-            const idVal = p.postId;
-            const compVal = p.companyId;
-            tr.innerHTML = `
-              <td style="display:none; border:1px solid #ccc; padding:8px;">${idVal}</td>
-              <td style="display:none; border:1px solid #ccc; padding:8px;">${compVal}</td>
-              <td style="border:1px solid #ccc; padding:8px;">${p.name || ''}</td>
-              <td style="border:1px solid #ccc; padding:8px;">${p.description || ''}</td>
-              <td style="border:1px solid #ccc; padding:8px;">${p.duration || ''}</td>
-              <td style="border:1px solid #ccc; padding:8px;">${p.available || ''}</td>
-              <td style="border:1px solid #ccc; padding:8px;">${p.salary || ''}</td>
-            `;
+        const posts = await res.json();
+        if (!posts || posts.length === 0) {
+          note.textContent = 'No job applications found.';
+          return;
+        }
 
-            // make the row clickable: open details page for the post
-            tr.style.cursor = 'pointer';
-            tr.addEventListener('click', () => {
-              const postId = idVal;
-              if (postId) {
-                // navigate to details page with query param
-                window.location.href = `/jobPostDetails.html?postId=${encodeURIComponent(postId)}`;
-              }
-            });
+        tbody.innerHTML = '';
+        posts.forEach(p => {
+          const tr = document.createElement('tr');
+          const idVal = p.postId || p.id;
+          const compVal = p.companyId || p.company_id;
 
-            tbody.appendChild(tr);
+          tr.innerHTML = `
+            <td style="display:none;">${idVal}</td>
+            <td style="display:none;">${compVal}</td>
+            <td style="border:1px solid #ccc; padding:8px;">${p.name || ''}</td>
+            <td style="border:1px solid #ccc; padding:8px;">${p.description || ''}</td>
+            <td style="border:1px solid #ccc; padding:8px;">${p.duration || ''}</td>
+            <td style="border:1px solid #ccc; padding:8px;">${p.available || ''}</td>
+            <td style="border:1px solid #ccc; padding:8px;">${p.salary || ''}</td>
+          `;
+
+          tr.style.cursor = 'pointer';
+          tr.addEventListener('click', () => {
+            if (idVal) {
+              window.location.href = `/jobPostDetails.html?postId=${encodeURIComponent(idVal)}`;
+            }
           });
 
-          note.style.display = 'none';
-          document.getElementById('appsTable').style.display = 'table';
-        } catch (err) {
-          console.error(err);
-          note.textContent = 'Error loading job posts.';
-        }
-      }
+          tbody.appendChild(tr);
+        });
 
-      loadAllPosts();
-    </script>
-  </body>
+        note.style.display = 'none';
+        document.getElementById('appsTable').style.display = 'table';
+      } catch (err) {
+        console.error(err);
+        note.textContent = 'Error loading job applications: ' + err.message;
+      }
+    }
+
+    loadAllApplications();
+  </script>
+</body>
 </html>

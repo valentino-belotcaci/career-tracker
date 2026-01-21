@@ -106,6 +106,12 @@ document.getElementById('loginForm').addEventListener('submit', async function (
     } else {
       localStorage.removeItem('loggedId');
     }
+
+    if (type != null) {
+      localStorage.setItem('type', type);
+    } else {
+      localStorage.removeItem('type');
+    }
     console.log(type)
     // redirect according to resolved type
     if (type === 'USER') {

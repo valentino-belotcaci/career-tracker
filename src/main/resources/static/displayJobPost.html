@@ -51,7 +51,7 @@
 
       async function loadCompanyAndPosts() {
         // accept either canonical or legacy key
-        const loggedAccountId = localStorage.getItem('loggenId') || localStorage.getItem('loggedId');
+        const loggedAccountId = localStorage.getItem('loggedId');
 
         const note = document.getElementById('note');
         if (!loggedAccountId) {
