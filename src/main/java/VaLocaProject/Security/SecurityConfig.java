@@ -48,7 +48,11 @@ public class SecurityConfig {
                 "/error",
                 "/Account/authenticate",
                 "/Account/insertAccount",
-                "/Account/getAccountByEmail/**"
+                "/Account/getAccountByEmail/**",
+                "/displayJobApplications.html",
+                "/createJobPost.html",
+                "/createJobApplication.html",
+                "/displayJobApplication.html"
             ).permitAll() 
 
             // Keep API endpoints protected by roles. For example, replace these with your API paths:
