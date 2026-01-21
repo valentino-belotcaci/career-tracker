@@ -1,152 +1,184 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Company Job Posts - CareerTracker</title>
-    <link rel="stylesheet" href="/css/style.css">
-  </head>
-  <body>
-    <header>
-      <a class="site-title" href="/indexCompany.html">CareerTracker</a>
-    </header>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Company Job Posts - CareerTracker</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header>
+    <!-- Dynamic home link -->
+    <a id="homeLink" class="site-title" href="#">CareerTracker</a>
+  </header>
 
-    <main class="wide-card">
-      <h2>Your Job Posts</h2>
-      <div style="margin-bottom:12px;">
-        <a href="/createJobPost.html"><button id="addPostBtn">Add job post</button></a>
-      </div>
-      <p id="note">Loading…</p>
+  <main class="wide-card">
+    <h2 id="pageTitle">Your Job Posts</h2>
+    <div style="margin-bottom:12px;">
+      <a href="/createJobPost.html"><button id="addPostBtn">Add job post</button></a>
+    </div>
+    <p id="note">Loading…</p>
 
-      <table id="postsTable" style="width:100%; border-collapse: collapse; display:none;">
-        <thead>
-          <tr>
-            <th style="border:1px solid #ccc; padding:8px; text-align:left;">ID</th>
-            <th style="border:1px solid #ccc; padding:8px; text-align:left;">Name</th>
-            <th style="border:1px solid #ccc; padding:8px; text-align:left;">Description</th>
-            <th style="border:1px solid #ccc; padding:8px; text-align:left;">Duration</th>
-            <th style="border:1px solid #ccc; padding:8px; text-align:left;">Available</th>
-            <th style="border:1px solid #ccc; padding:8px; text-align:left;">Salary</th>
-          </tr>
-        </thead>
-        <tbody id="postsBody"></tbody>
-      </table>
+    <table id="postsTable" style="width:100%; border-collapse: collapse; display:none;">
+      <thead>
+        <tr>
+          <th style="border:1px solid #ccc; padding:8px; text-align:left;">ID</th>
+          <th style="border:1px solid #ccc; padding:8px; text-align:left;">Name</th>
+          <th style="border:1px solid #ccc; padding:8px; text-align:left;">Description</th>
+          <th style="border:1px solid #ccc; padding:8px; text-align:left;">Duration</th>
+          <th style="border:1px solid #ccc; padding:8px; text-align:left;">Available</th>
+          <th style="border:1px solid #ccc; padding:8px; text-align:left;">Salary</th>
+        </tr>
+      </thead>
+      <tbody id="postsBody"></tbody>
+    </table>
 
-      <p id="message"></p>
-    </main>
+    <p id="message"></p>
+  </main>
 
-    <footer>
-      <p>© 2026 CareerTracker</p>
-    </footer>
+  <footer>
+    <p>© 2026 CareerTracker</p>
+  </footer>
 
-    <script>
-      // authFetch helper for all protected calls on this page
-      function authFetch(url, opts = {}) {
-        opts = opts || {};
-        opts.headers = opts.headers || {};
-        const token = localStorage.getItem('jwt');
-        if (token) opts.headers = Object.assign({}, opts.headers, { 'Authorization': 'Bearer ' + token });
-        return fetch(url, opts);
+  <script>
+    // authFetch helper: automatically attaches JWT
+    function authFetch(url, opts = {}) {
+      opts = opts || {};
+      opts.headers = opts.headers || {};
+      const token = localStorage.getItem('jwt');
+      if (token) opts.headers = Object.assign({}, opts.headers, { 'Authorization': 'Bearer ' + token });
+      return fetch(url, opts);
+    }
+
+    // Dynamically update home link based on account type
+    const type = localStorage.getItem('type'); // "USER" or "COMPANY"
+    const homeLink = document.getElementById('homeLink');
+    if (homeLink) {
+      if (type === 'USER') homeLink.href = '/indexUser.html';
+      else if (type === 'COMPANY') homeLink.href = '/indexCompany.html';
+      else homeLink.href = '/index.html'; // fallback
+    }
+
+    // Load posts depending on account type
+    async function loadPostsBasedOnType() {
+      const note = document.getElementById('note');
+      const tbody = document.getElementById('postsBody');
+      const pageTitle = document.getElementById('pageTitle');
+      const addBtn = document.getElementById('addPostBtn');
+
+      // Adjust UI for user vs company
+      if (type === "USER") {
+        if (pageTitle) pageTitle.textContent = 'All Job Posts';
+        if (addBtn && addBtn.parentElement) addBtn.parentElement.style.display = 'none';
+      } else {
+        if (pageTitle) pageTitle.textContent = 'Your Job Posts';
+        if (addBtn && addBtn.parentElement) addBtn.parentElement.style.display = '';
       }
 
-      async function loadCompanyAndPosts() {
-        // accept either canonical or legacy key
-        const loggedAccountId = localStorage.getItem('loggedId');
+      try {
+        let postsRes;
 
-        const note = document.getElementById('note');
-        if (!loggedAccountId) {
-          note.textContent = 'No logged account found. Please log in.';
-          return;
-        }
-
-        try {
-            // Get company by account id
-            const companyRes = await authFetch(`/Company/getCompanyByAccountId/${encodeURIComponent(loggedAccountId)}`);
-            if (companyRes.status === 404) {
-              note.textContent = 'No company profile found for this account.';
-              return;
-            }
-            if (!companyRes.ok) throw new Error('Failed to load company');
-            const company = await companyRes.json();
-
-            // If company endpoint returned null or empty, show message and stop
-            if (!company) {
-              note.textContent = 'No company profile found for this account.';
-              return;
-            }
-
-            // Backend expects the account id as the path parameter for this endpoint.
-            // Use the loggedAccountId that we already retrieved from localStorage.
-            const accountId = loggedAccountId;
-
-            // Ask server for posts by account id (backend will resolve the company)
-            const postsRes = await authFetch(`/JobPost/getPostsByCompanyId/${encodeURIComponent(accountId)}`);
-            if (!postsRes.ok) {
-              if (postsRes.status === 404) {
-                note.textContent = 'No job posts found for this company.';
-                return;
-              }
-              throw new Error('Failed to load posts');
-            }
-            const myPosts = await postsRes.json();
-
-          if (!myPosts || myPosts.length === 0) {
-            note.textContent = 'No job posts found for this company.';
+        if (type === "COMPANY" || !type) {
+          // COMPANY: fetch posts for the logged company
+          const loggedAccountId = localStorage.getItem('loggedId');
+          if (!loggedAccountId) {
+            note.textContent = 'No logged account found. Please log in.';
             return;
           }
 
-          // populate table
-          const tbody = document.getElementById('postsBody');
-          tbody.innerHTML = ''; // clear any previous rows
-          myPosts.forEach(p => {
-            const tr = document.createElement('tr');
-            const idVal = p.postId;
-            tr.innerHTML = `
-              <td style="border:1px solid #ccc; padding:8px;">${idVal}</td>
-              <td style="border:1px solid #ccc; padding:8px;">${p.name || ''}</td>
-              <td style="border:1px solid #ccc; padding:8px;">${p.description || ''}</td>
-              <td style="border:1px solid #ccc; padding:8px;">${p.duration || ''}</td>
-              <td style="border:1px solid #ccc; padding:8px;">${p.available || ''}</td>
-              <td style="border:1px solid #ccc; padding:8px;">${p.salary || ''}</td>
-            `;
+          // Get company by account id
+          const companyRes = await authFetch(`/Company/getCompanyByAccountId/${encodeURIComponent(loggedAccountId)}`);
+          if (companyRes.status === 404) {
+            note.textContent = 'No company profile found for this account.';
+            return;
+          }
+          if (!companyRes.ok) throw new Error('Failed to load company');
 
-            // Make rows clickable to open details (company view)
-            tr.style.cursor = 'pointer';
-            tr.addEventListener('click', () => {
-              const postId = idVal;
-              if (postId) {
-                window.location.href = `/jobPostDetails.html?postId=${encodeURIComponent(postId)}&companyView=true`;
-              }
-            });
+          const company = await companyRes.json();
+          if (!company) {
+            note.textContent = 'No company profile found for this account.';
+            return;
+          }
 
-            tbody.appendChild(tr);
+          // Request posts for this company
+          const accountId = loggedAccountId;
+          postsRes = await authFetch(`/JobPost/getPostsByCompanyId/${encodeURIComponent(accountId)}`);
+          if (!postsRes.ok) {
+            if (postsRes.status === 404) {
+              note.textContent = 'No job posts found for this company.';
+              return;
+            }
+            throw new Error('Failed to load posts');
+          }
+        } else { 
+          // USER: fetch all posts across companies
+          postsRes = await authFetch('/JobPost/getAllPosts');
+          if (!postsRes.ok) {
+            if (postsRes.status === 404) {
+              note.textContent = 'No job posts found.';
+              return;
+            }
+            throw new Error('Failed to load posts');
+          }
+        }
+
+        const myPosts = await postsRes.json();
+        if (!myPosts || myPosts.length === 0) {
+          note.textContent = type === 'COMPANY' ? 'No job posts found for this company.' : 'No job posts found.';
+          return;
+        }
+
+        // populate table
+        tbody.innerHTML = '';
+        myPosts.forEach(p => {
+          const tr = document.createElement('tr');
+          const idVal = p.postId || p.id;
+          tr.innerHTML = `
+            <td style="border:1px solid #ccc; padding:8px;">${idVal}</td>
+            <td style="border:1px solid #ccc; padding:8px;">${p.name || ''}</td>
+            <td style="border:1px solid #ccc; padding:8px;">${p.description || ''}</td>
+            <td style="border:1px solid #ccc; padding:8px;">${p.duration || ''}</td>
+            <td style="border:1px solid #ccc; padding:8px;">${p.available || ''}</td>
+            <td style="border:1px solid #ccc; padding:8px;">${p.salary || ''}</td>
+          `;
+
+          tr.style.cursor = 'pointer';
+          tr.addEventListener('click', () => {
+            if (!idVal) return;
+            if (type === 'COMPANY') {
+              window.location.href = `/jobPostDetails.html?postId=${encodeURIComponent(idVal)}&companyView=true`;
+            } else {
+              window.location.href = `/jobPostDetails.html?postId=${encodeURIComponent(idVal)}`;
+            }
           });
 
-          note.style.display = 'none';
-          document.getElementById('postsTable').style.display = 'table';
-        } catch (err) {
-          console.error(err);
-          note.textContent = 'Error loading job posts.';
-        }
+          tbody.appendChild(tr);
+        });
+
+        note.style.display = 'none';
+        document.getElementById('postsTable').style.display = 'table';
+      } catch (err) {
+        console.error(err);
+        note.textContent = 'Error loading job posts.';
       }
+    }
 
-      loadCompanyAndPosts();
-      // Keep track of last created post id to refresh when returning from create page
-      let seenCreatedPostId = localStorage.getItem('lastCreatedPostId') || '';
+    // initialize
+    loadPostsBasedOnType();
 
-      // Poll localStorage every 2.5s for changes (simple) and refresh if new post created
-      const pollInterval = setInterval(() => {
-        const curr = localStorage.getItem('lastCreatedPostId') || '';
-        if (curr && curr !== seenCreatedPostId) {
-          seenCreatedPostId = curr;
-          loadCompanyAndPosts();
-        }
-      }, 2500);
+    // Poll for newly created posts
+    let seenCreatedPostId = localStorage.getItem('lastCreatedPostId') || '';
+    const pollInterval = setInterval(() => {
+      const curr = localStorage.getItem('lastCreatedPostId') || '';
+      if (curr && curr !== seenCreatedPostId) {
+        seenCreatedPostId = curr;
+        loadPostsBasedOnType();
+      }
+    }, 2500);
 
-      // Also refresh when page becomes visible again
-      document.addEventListener('visibilitychange', () => {
-        if (document.visibilityState === 'visible') loadCompanyAndPosts();
-      });
-    </script>
-  </body>
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') loadPostsBasedOnType();
+    });
+  </script>
+</body>
 </html>

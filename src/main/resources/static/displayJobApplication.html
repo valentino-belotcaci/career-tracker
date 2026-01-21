@@ -15,6 +15,9 @@
     <h2>Available Job Posts</h2>
     <p id="note">Loading…</p>
 
+    <!-- added container for user controls (button will be injected here for users) -->
+    <div id="userControls" style="margin-bottom:12px;"></div>
+
     <table id="appsTable" style="width:100%; border-collapse: collapse; display:none;">
       <thead>
         <tr>
@@ -102,6 +105,29 @@
       }
     }
 
+    // show "Add Job Application" button only for users
+    function setupUserControls() {
+      const controls = document.getElementById('userControls');
+      if (!controls) return;
+
+      // Try common storage keys; adjust if your app uses a different key
+      const type = localStorage.getItem('type');
+      if (type === 'USER') {
+        const btn = document.createElement('button');
+        btn.id = 'addApplicationBtn';
+        btn.textContent = 'Add Job Application';
+        btn.style.padding = '8px 12px';
+        btn.style.cursor = 'pointer';
+        btn.addEventListener('click', () => {
+          // navigate to the page that lists all job posts (all companies)
+          window.location.href = '/displayJobPost.html';
+        });
+        controls.appendChild(btn);
+      }
+    }
+
+    // initialize UI
+    setupUserControls();
     loadAllApplications();
   </script>
 </body>
