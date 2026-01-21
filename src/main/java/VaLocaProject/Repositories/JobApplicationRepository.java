@@ -11,4 +11,5 @@ public interface JobApplicationRepository extends JpaRepository<JobApplication, 
 
     // Use camelCase so Spring Data can derive the query from entity property names
     JobApplication findByPostIdAndUserId(Long postId, Long userId);
+    List<JobApplication> findByUserId(Long userId);
 }

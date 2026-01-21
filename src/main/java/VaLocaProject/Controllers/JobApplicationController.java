@@ -49,6 +49,7 @@ public class JobApplicationController {
         return ResponseEntity.ok("All job applications deleted");
     }
 
+    // For companies
     @GetMapping("/getApplicationsByPostId/{id}")
     public ResponseEntity<List<JobApplication>> getApplicationsByPostId(@PathVariable Long id) {
         return ResponseEntity.ok(jobApplicationService.getApplicationsByPostId(id));
@@ -60,6 +61,11 @@ public class JobApplicationController {
         return ResponseEntity.ok(jobApplicationService.getApplicationByIds(post_id, user_id));
     }
     
-
+    // For users
+    @GetMapping("/getApplicationsByUserId/{id}")
+    public ResponseEntity<List<JobApplication>> getMethodName(@PathVariable Long id) {
+        return ResponseEntity.ok(jobApplicationService.getApplicationsByUserId(id));
+    }
     
+
 }

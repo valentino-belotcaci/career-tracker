@@ -44,4 +44,7 @@ public class JobApplicationService{
         return jobApplicationRepository.findByPostIdAndUserId(post_id, user_id);
     }
 
+    public List<JobApplication> getApplicationsByUserId(Long id){
+        return jobApplicationRepository.findByUserId(id);
+    }
 }

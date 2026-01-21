@@ -3,132 +3,142 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Job Applications - CareerTracker</title>
+  <title>My Job Applications - CareerTracker</title>
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-  <header>
-    <a class="site-title" href="/indexUser.html">CareerTracker</a>
-  </header>
+<header>
+  <a class="site-title" href="/indexUser.html">CareerTracker</a>
+</header>
 
-  <main class="wide-card">
-    <h2>Available Job Posts</h2>
-    <p id="note">Loading…</p>
+<main class="wide-card">
+  <h2>My Job Applications</h2>
+  <p id="note">Loading…</p>
 
-    <!-- added container for user controls (button will be injected here for users) -->
-    <div id="userControls" style="margin-bottom:12px;"></div>
+  <div id="userControls" style="margin-bottom:12px;"></div>
 
-    <table id="appsTable" style="width:100%; border-collapse: collapse; display:none;">
-      <thead>
-        <tr>
-          <th style="display:none;">ID</th>
-          <th style="display:none;">Company ID</th>
-          <th style="border:1px solid #ccc; padding:8px;">Name</th>
-          <th style="border:1px solid #ccc; padding:8px;">Description</th>
-          <th style="border:1px solid #ccc; padding:8px;">Duration</th>
-          <th style="border:1px solid #ccc; padding:8px;">Available</th>
-          <th style="border:1px solid #ccc; padding:8px;">Salary</th>
-        </tr>
-      </thead>
-      <tbody id="appsBody"></tbody>
-    </table>
+  <table id="appsTable" style="width:100%; border-collapse: collapse; display:none;">
+    <thead>
+      <tr>
+        <th style="display:none;">Post ID</th>
+        <th style="border:1px solid #ccc; padding:8px;">Name</th>
+        <th style="border:1px solid #ccc; padding:8px;">Description</th>
+        <th style="border:1px solid #ccc; padding:8px;">Duration</th>
+        <th style="border:1px solid #ccc; padding:8px;">Salary</th>
+        <th style="border:1px solid #ccc; padding:8px;">Status</th>
+        <th style="border:1px solid #ccc; padding:8px;">Applied At</th>
+      </tr>
+    </thead>
+    <tbody id="appsBody"></tbody>
+  </table>
 
-    <p id="message"></p>
-  </main>
+  <p id="message"></p>
+</main>
 
-  <footer>
-    <p>© 2026 CareerTracker</p>
-  </footer>
+<footer>
+  <p>© 2026 CareerTracker</p>
+</footer>
 
-  <script>
-    // authFetch helper - attach JWT automatically
-    async function authFetch(url, opts = {}) {
-      const token = localStorage.getItem('jwt');
-      if (!token) throw new Error('Missing JWT; please log in.');
-      opts.headers = Object.assign({}, opts.headers || {}, {
-        'Authorization': 'Bearer ' + token.trim()
-      });
-      return fetch(url, opts);
+<script>
+  /* =======================
+     Auth fetch (JWT)
+     ======================= */
+  async function authFetch(url, opts = {}) {
+    const token = localStorage.getItem('jwt');
+    if (!token) throw new Error('Missing JWT; please log in.');
+
+    opts.headers = Object.assign({}, opts.headers || {}, {
+      'Authorization': 'Bearer ' + token.trim()
+    });
+
+    return fetch(url, opts);
+  }
+
+  /* =======================
+     Load applications by USER ID
+     ======================= */
+  async function loadMyApplications() {
+    const note = document.getElementById('note');
+    const tbody = document.getElementById('appsBody');
+
+    const userId = localStorage.getItem('loggedId');
+    if (!userId) {
+      note.textContent = 'No logged user found. Please log in.';
+      return;
     }
 
-    async function loadAllApplications() {
-      const note = document.getElementById('note');
-      const tbody = document.getElementById('appsBody');
+    try {
+      const res = await authFetch(
+        `/JobApplication/getApplicationsByUserId/${encodeURIComponent(userId)}`
+      );
 
-      try {
-        const res = await authFetch('/JobApplication/getAllApplications');
-        if (!res.ok) {
-          if (res.status === 404) {
-            note.textContent = 'No job applications found.';
-            return;
+      if (res.status === 404) {
+        note.textContent = 'You have not submitted any applications yet.';
+        return;
+      }
+
+      if (!res.ok) {
+        throw new Error(`Failed to load applications (${res.status})`);
+      }
+
+      const applications = await res.json();
+      if (!applications || applications.length === 0) {
+        note.textContent = 'You have not submitted any applications yet.';
+        return;
+      }
+
+      tbody.innerHTML = '';
+      applications.forEach(a => {
+        const tr = document.createElement('tr');
+        const postId = a.postId || a.post_id;
+
+        tr.innerHTML = `
+          <td style="display:none;">${postId}</td>
+          <td style="border:1px solid #ccc; padding:8px;">${a.postName || a.name || ''}</td>
+          <td style="border:1px solid #ccc; padding:8px;">${a.postDescription || a.description || ''}</td>
+          <td style="border:1px solid #ccc; padding:8px;">${a.duration || ''}</td>
+          <td style="border:1px solid #ccc; padding:8px;">${a.salary || ''}</td>
+          <td style="border:1px solid #ccc; padding:8px;">${a.status || ''}</td>
+          <td style="border:1px solid #ccc; padding:8px;">${a.createdAt || a.created_at || ''}</td>
+        `;
+
+        tr.style.cursor = 'pointer';
+        tr.addEventListener('click', () => {
+          if (postId) {
+            window.location.href =
+              `/jobPostDetails.html?postId=${encodeURIComponent(postId)}`;
           }
-          throw new Error(`Failed to load applications (${res.status})`);
-        }
-
-        const posts = await res.json();
-        if (!posts || posts.length === 0) {
-          note.textContent = 'No job applications found.';
-          return;
-        }
-
-        tbody.innerHTML = '';
-        posts.forEach(p => {
-          const tr = document.createElement('tr');
-          const idVal = p.postId || p.id;
-          const compVal = p.companyId || p.company_id;
-
-          tr.innerHTML = `
-            <td style="display:none;">${idVal}</td>
-            <td style="display:none;">${compVal}</td>
-            <td style="border:1px solid #ccc; padding:8px;">${p.name || ''}</td>
-            <td style="border:1px solid #ccc; padding:8px;">${p.description || ''}</td>
-            <td style="border:1px solid #ccc; padding:8px;">${p.duration || ''}</td>
-            <td style="border:1px solid #ccc; padding:8px;">${p.available || ''}</td>
-            <td style="border:1px solid #ccc; padding:8px;">${p.salary || ''}</td>
-          `;
-
-          tr.style.cursor = 'pointer';
-          tr.addEventListener('click', () => {
-            if (idVal) {
-              window.location.href = `/jobPostDetails.html?postId=${encodeURIComponent(idVal)}`;
-            }
-          });
-
-          tbody.appendChild(tr);
         });
 
-        note.style.display = 'none';
-        document.getElementById('appsTable').style.display = 'table';
-      } catch (err) {
-        console.error(err);
-        note.textContent = 'Error loading job applications: ' + err.message;
-      }
+        tbody.appendChild(tr);
+      });
+
+      note.style.display = 'none';
+      document.getElementById('appsTable').style.display = 'table';
+
+    } catch (err) {
+      console.error(err);
+      note.textContent = 'Error loading your applications.';
     }
+  }
 
-    // show "Add Job Application" button only for users
-    function setupUserControls() {
-      const controls = document.getElementById('userControls');
-      if (!controls) return;
+  /* =======================
+     User controls
+     ======================= */
+  function setupUserControls() {
+    const controls = document.getElementById('userControls');
+    const type = localStorage.getItem('type');
 
-      // Try common storage keys; adjust if your app uses a different key
-      const type = localStorage.getItem('type');
-      if (type === 'USER') {
-        const btn = document.createElement('button');
-        btn.id = 'addApplicationBtn';
-        btn.textContent = 'Add Job Application';
-        btn.style.padding = '8px 12px';
-        btn.style.cursor = 'pointer';
-        btn.addEventListener('click', () => {
-          // navigate to the page that lists all job posts (all companies)
-          window.location.href = '/displayJobPost.html';
-        });
-        controls.appendChild(btn);
-      }
+    if (type === 'USER') {
+      const btn = document.createElement('button');
+      btn.textContent = 'Find Job Posts';
+      btn.onclick = () => window.location.href = '/displayJobPost.html';
+      controls.appendChild(btn);
     }
+  }
 
-    // initialize UI
-    setupUserControls();
-    loadAllApplications();
-  </script>
+  setupUserControls();
+  loadMyApplications();
+</script>
 </body>
 </html>
