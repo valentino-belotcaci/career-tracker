@@ -13,8 +13,11 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id") // align JPA mapping with your DB column
     private Long id;
+    @Column(name = "email", nullable = false)
     private String email;
+    @Column(name = "password", nullable = false)
     private String password;
+    @Column(name = "description", nullable = true)
     private String description = "";
 
     // No-arg constructor for JPA
@@ -59,5 +62,11 @@ public class Account {
         this.description = description;
     }
 
-    
+    // runtime-derived account type so controllers / frontend can decide redirects
+    // returns "USER" if this instance is a User, "COMPANY" if Company, otherwise "UNKNOWN"
+    public String getType() {
+        if (this instanceof User) return "USER";
+        if (this instanceof Company) return "COMPANY";
+        return "UNKNOWN";
+    }
 }

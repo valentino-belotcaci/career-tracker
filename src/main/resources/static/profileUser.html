@@ -52,15 +52,15 @@
 
     <script>
       async function loadProfile() {
-        const loggedAccountId = localStorage.getItem('loggedAccountId');
+        const loggedId = localStorage.getItem('loggedId');
         const note = document.getElementById('note');
-        if (!loggedAccountId) {
+        if (!loggedId) {
           note.textContent = 'No logged account found. Please log in.';
           return;
         }
 
         try {
-          const res = await fetch(`/User/getUserByAccountId/${encodeURIComponent(loggedAccountId)}`);
+          const res = await fetch(`/User/getUserByAccountId/${encodeURIComponent(loggedId)}`);
           if (res.status === 404) {
             note.textContent = 'No user profile found for this account.';
             return;
@@ -112,15 +112,15 @@
 
           // If missing, fetch user by account id to obtain it
           if (!id) {
-            const loggedAccountId = localStorage.getItem('loggedAccountId');
-            if (!loggedAccountId) {
+            const loggedId = localStorage.getItem('loggedId');
+            if (!loggedId) {
               msg.style.color = 'red';
               msg.textContent = 'No logged account found. Please log in.';
               saveBtn.disabled = false;
               return;
             }
 
-            const res = await fetch(`/User/getUserByAccountId/${encodeURIComponent(loggedAccountId)}`);
+            const res = await fetch(`/User/getUserByAccountId/${encodeURIComponent(loggedId)}`);
             if (res.status === 404) {
               msg.style.color = 'red';
               msg.textContent = 'No user profile found for this account.';

@@ -10,10 +10,18 @@ import jakarta.persistence.Table;
 @AttributeOverride(name = "id", column = @Column(name = "id"))
 public class Company extends Account {
 
-    private String name = "";
-    private String city = "";
-    private String street = "";
-    private String number = "";
+    // Use nullable columns and avoid default empty strings so DB receives NULL when value is not provided
+    @Column(name = "name", nullable = true)
+    private String name;
+
+    @Column(name = "city", nullable = true)
+    private String city;
+
+    @Column(name = "street", nullable = true)
+    private String street;
+
+    @Column(name = "number", nullable = true)
+    private String number;
 
     // No-arg constructor for JPA
     protected Company() {

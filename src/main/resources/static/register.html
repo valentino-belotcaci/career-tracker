@@ -55,12 +55,13 @@
         msg.textContent = 'Account created';
 
         // read returned AccountDTO and store session info
-        const accountDto = await res.json();
-        if (accountDto) {
+        const account = await res.json();
+        if (account) {
             try {
                 // store minimal client session info
-                localStorage.setItem('loggedAccountId', String(accountDto.accountId));
-                localStorage.setItem('loggedEmail', accountDto.email || data.email);
+                localStorage.setItem('loggedId', String(account.id));
+                localStorage.setItem('loggedEmail', account.email);
+
             } catch (err) {
                 console.error('Failed to write localStorage', err);
             }

@@ -8,9 +8,9 @@ import jakarta.persistence.Table;
 @Table(name = "users") // To define which table it represents
 public class User extends Account{
 
-    @Column(name = "first_name")
+    @Column(name = "first_name", nullable=true)
     private String firstName = "";
-    @Column(name = "last_name")
+    @Column(name = "last_name", nullable=true)
     private String lastName = "";
 
     // Explicit no-args constructor

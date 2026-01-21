@@ -69,7 +69,9 @@ document.getElementById('loginForm').addEventListener('submit', async function (
     }
 
     const data = await res.json();
-    const token = data.token || data.accessToken || data.jwt || data.access_token;
+    console.log('authenticate response:', data); // debug
+
+    const token = data.token;
     if (!token) {
       msg.textContent = 'Login failed: no token received';
       return;
@@ -78,27 +80,53 @@ document.getElementById('loginForm').addEventListener('submit', async function (
     // store token for later API calls
     localStorage.setItem('jwt', token);
 
-    // Use the GET /Account/getAccountByEmail/{email} endpoint
-    const acctRes = await fetchAccountByEmail(email, token);
+    // remove legacy keys
+    localStorage.removeItem('loggedId');
 
-    if (!acctRes.ok) {
-      const text = await acctRes.text();
-      msg.textContent = 'Account lookup failed: ' + (text || acctRes.statusText || acctRes.status);
-      console.error('getAccountByEmail failed:', acctRes.status, text);
-      // stay on login so user can retry instead of redirecting
-      return;
+    // Prefer type/id from authenticate response when provided
+    let type = data.type ? String(data.type).toUpperCase() : null;
+    let id = data.id || data.accountId || null;
+
+    // If we don't have type or id from authenticate response, fetch account by email
+    if (!type || !id) {
+      const acctRes = await fetchAccountByEmail(email, token);
+
+      if (!acctRes.ok) {
+        const text = await acctRes.text();
+        msg.textContent = 'Account lookup failed: ' + (text || acctRes.statusText || acctRes.status);
+        console.error('getAccountByEmail failed:', acctRes.status, text);
+        return;
+      }
+
+      const acctData = await acctRes.json();
+      console.log('account lookup response:', acctData); // debug
+      const account = acctData.account || acctData;
+
+      // assign type and id from fetched account
+      if (!type && account && account.type) {
+        type = String(account.type).toUpperCase();
+      }
+      if (!id && account) {
+        id = account.id || account.accountId || null;
+      }
     }
 
-    const acctData = await acctRes.json();
-    const account = acctData.account || acctData;
-    const type = account && account.type ? String(account.type).toUpperCase() : null;
+    console.log('resolved type/id:', { type, id }); // debug
 
+    // store the logged-in account id under the canonical key "loggenId"
+    if (id != null) {
+      localStorage.setItem('loggenId', String(id));
+    } else {
+      localStorage.removeItem('loggenId');
+    }
+
+    // final redirect based on resolved type
     if (type === 'USER') {
       window.location.href = '/indexUser.html';
     } else if (type === 'COMPANY') {
       window.location.href = '/indexCompany.html';
     } else {
-      // fallback if type missing or unknown
+      console.warn('Unknown account type, redirecting to root', type);
       window.location.href = '/';
     }
 

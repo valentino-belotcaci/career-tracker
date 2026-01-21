@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import VaLocaProject.Models.Account;
+import VaLocaProject.Models.Company;
+import VaLocaProject.Models.User;
 import VaLocaProject.Services.AccountService;
 
 @RestController
@@ -76,7 +78,14 @@ public class AccountController {
             return ResponseEntity.status(401).body("Login failed");
         }
 
-        return ResponseEntity.ok(Map.of("token", token));
+        String type;
+        // determine account type so frontend can redirect to correct page
+        if (account instanceof User) type = "USER";
+        // BUG: CAN"T MATCH USER OR COMPANY
+        else if (account instanceof Company) type = "COMPANY";
+        else type = "UNKOWN";
+
+        return ResponseEntity.ok(Map.of("token", token, "type", type));
     }
 
 }
