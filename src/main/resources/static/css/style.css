@@ -219,6 +219,14 @@ footer {
     width: 100%; /* fill the shrink-wrapped container */
 }
 
+/* show/hide edit vs view blocks */
+.view-only { display: block; }
+.edit-only { display: none; }
+
+/* when body has .editing, show edit-only and hide view-only */
+body.editing .edit-only { display: block !important; }
+body.editing .view-only { display: none !important; }
+
 /* RESPONSIVE */
 @media (max-width: 600px) {
     main {
