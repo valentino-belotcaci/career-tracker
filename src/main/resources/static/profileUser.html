@@ -17,7 +17,8 @@
       <p id="note">Loading your profile…</p>
 
       <div id="viewMode" style="display:none;">
-        <p><strong>Name:</strong> <span id="viewName"></span></p>
+        <p><strong>First name:</strong> <span id="viewFirstName"></span></p>
+        <p><strong>Last name:</strong> <span id="viewLastName"></span></p>
         <p><strong>Email:</strong> <span id="viewEmail"></span></p>
         <p><strong>Description:</strong> <span id="viewDescription"></span></p>
         <div>
@@ -28,8 +29,11 @@
       <form id="editMode" style="display:none;">
         <input type="hidden" id="userId">
 
-        <label for="name">Name</label>
-        <input id="name" type="text">
+        <label for="firstName">First name</label>
+        <input id="firstName" type="text">
+
+        <label for="lastName">Last name</label>
+        <input id="lastName" type="text">
 
         <label for="email">Email</label>
         <input id="email" type="email">
@@ -51,132 +55,163 @@
     </footer>
 
     <script>
-      async function loadProfile() {
-        const loggedId = localStorage.getItem('loggedId');
-        const note = document.getElementById('note');
+(function () {
+  // authFetch bootstrap
+  const token = localStorage.getItem('jwt');
+  const loggedId = localStorage.getItem('loggenId');
+
+  if (!token) {
+    console.warn('Missing JWT, redirecting to login');
+    window.location.href = '/login.html';
+    return;
+  }
+
+  function authFetch(url, opts = {}) {
+    opts = opts || {};
+    opts.headers = opts.headers || {};
+    const tokenLocal = localStorage.getItem('jwt');
+    if (tokenLocal) {
+      opts.headers = Object.assign({}, opts.headers, { 'Authorization': 'Bearer ' + tokenLocal });
+    }
+    return fetch(url, opts);
+  }
+
+  // Load profile using authFetch and canonical id
+  async function loadProfile() {
+    const note = document.getElementById('note');
+
+    if (!loggedId) {
+      note.textContent = 'No logged account found. Please log in.';
+      return;
+    }
+
+    try {
+      const res = await authFetch(`/User/getUserByAccountId/${encodeURIComponent(loggedId)}`);
+      if (res.status === 404) {
+        note.textContent = 'No user profile found for this account.';
+        return;
+      }
+      if (!res.ok) throw new Error('Failed to load user');
+
+      const user = await res.json();
+
+      // populate id
+      document.getElementById('userId').value = user.id || user.userId || '';
+      // populate separate first/last name; fall back to splitting user.name if first/last absent
+      const first = user.firstName || (user.name ? user.name.split(' ')[0] : '') || '';
+      const last = user.lastName || (user.name ? user.name.split(' ').slice(1).join(' ') : '') || '';
+      document.getElementById('firstName').value = first;
+      document.getElementById('lastName').value = last;
+      document.getElementById('email').value = user.email || '';
+      document.getElementById('description').value = user.description || '';
+
+      document.getElementById('viewFirstName').textContent = first;
+      document.getElementById('viewLastName').textContent = last;
+      document.getElementById('viewEmail').textContent = user.email || '';
+      document.getElementById('viewDescription').textContent = user.description || '';
+
+      note.style.display = 'none';
+      document.getElementById('viewMode').style.display = 'block';
+    } catch (err) {
+      console.error(err);
+      note.textContent = 'Error loading profile.';
+    }
+  }
+
+  // Edit button toggles to edit mode
+  document.getElementById('editBtn').addEventListener('click', function(){
+    document.getElementById('viewMode').style.display = 'none';
+    document.getElementById('editMode').style.display = 'block';
+  });
+
+  // Cancel reverts to view mode
+  document.getElementById('cancelBtn').addEventListener('click', function(){
+    document.getElementById('editMode').style.display = 'none';
+    document.getElementById('viewMode').style.display = 'block';
+  });
+
+  document.getElementById('editMode').addEventListener('submit', async function(e){
+    e.preventDefault();
+
+    const msg = document.getElementById('message');
+    const saveBtn = e.target.querySelector('button[type="submit"]');
+    saveBtn.disabled = true;
+
+    try {
+      // Try to get id from hidden input
+      let id = document.getElementById('userId').value;
+
+      // If missing, fetch user by account id to obtain it
+      if (!id) {
+        const loggedId = localStorage.getItem('loggenId');
         if (!loggedId) {
-          note.textContent = 'No logged account found. Please log in.';
+          msg.style.color = 'red';
+          msg.textContent = 'No logged account found. Please log in.';
+          saveBtn.disabled = false;
           return;
         }
 
-        try {
-          const res = await fetch(`/User/getUserByAccountId/${encodeURIComponent(loggedId)}`);
-          if (res.status === 404) {
-            note.textContent = 'No user profile found for this account.';
-            return;
-          }
-          if (!res.ok) throw new Error('Failed to load user');
-
-          const user = await res.json();
-
-          // populate view and edit fields
-          document.getElementById('userId').value = user.userId || '';
-          document.getElementById('name').value = user.name || '';
-          document.getElementById('email').value = user.email || '';
-          document.getElementById('description').value = user.description || '';
-
-          document.getElementById('viewName').textContent = user.name || '';
-          document.getElementById('viewEmail').textContent = user.email || '';
-          document.getElementById('viewDescription').textContent = user.description || '';
-
-          note.style.display = 'none';
-          document.getElementById('viewMode').style.display = 'block';
-        } catch (err) {
-          console.error(err);
-          note.textContent = 'Error loading profile.';
+        const res = await authFetch(`/User/getUserByAccountId/${encodeURIComponent(loggedId)}`);
+        if (res.status === 404) {
+          msg.style.color = 'red';
+          msg.textContent = 'No user profile found for this account.';
+          saveBtn.disabled = false;
+          return;
         }
+        if (!res.ok) {
+          throw new Error('Failed to fetch user id');
+        }
+        const user = await res.json();
+        id = user.id || user.userId || '';
+        document.getElementById('userId').value = id || '';
       }
 
-      // Edit button toggles to edit mode
-      document.getElementById('editBtn').addEventListener('click', function(){
-        document.getElementById('viewMode').style.display = 'none';
-        document.getElementById('editMode').style.display = 'block';
+      // prepare payload with separate firstName / lastName
+      const payload = {
+        firstName: document.getElementById('firstName').value,
+        lastName: document.getElementById('lastName').value,
+        email: document.getElementById('email').value,
+        description: document.getElementById('description').value
+      };
+
+      const res = await authFetch(`/User/updateUser/${encodeURIComponent(id)}`, {
+        method: 'PUT',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(payload)
       });
-
-      // Cancel reverts to view mode
-      document.getElementById('cancelBtn').addEventListener('click', function(){
-        document.getElementById('editMode').style.display = 'none';
-        document.getElementById('viewMode').style.display = 'block';
-      });
-
-      document.getElementById('editMode').addEventListener('submit', async function(e){
-        e.preventDefault();
-
-        const msg = document.getElementById('message');
-        const saveBtn = e.target.querySelector('button[type="submit"]');
-        saveBtn.disabled = true;
-
-        try {
-          // Try to get id from hidden input
-          let id = document.getElementById('userId').value;
-
-          // If missing, fetch user by account id to obtain it
-          if (!id) {
-            const loggedId = localStorage.getItem('loggedId');
-            if (!loggedId) {
-              msg.style.color = 'red';
-              msg.textContent = 'No logged account found. Please log in.';
-              saveBtn.disabled = false;
-              return;
-            }
-
-            const res = await fetch(`/User/getUserByAccountId/${encodeURIComponent(loggedId)}`);
-            if (res.status === 404) {
-              msg.style.color = 'red';
-              msg.textContent = 'No user profile found for this account.';
-              saveBtn.disabled = false;
-              return;
-            }
-            if (!res.ok) {
-              throw new Error('Failed to fetch user id');
-            }
-            const user = await res.json();
-            id = user.userId;
-            document.getElementById('userId').value = id || '';
-          }
-
-          const payload = {
-            name: document.getElementById('name').value,
-            email: document.getElementById('email').value,
-            description: document.getElementById('description').value
-          };
-
-          const res = await fetch(`/User/updateUser/${encodeURIComponent(id)}`, {
-            method: 'PUT',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(payload)
-          });
-          if (!res.ok) {
-            let bodyText = '';
-            try { bodyText = JSON.stringify(await res.json()); } catch(_) {
-              try { bodyText = await res.text(); } catch(_) { bodyText = '<no body>'; }
-            }
-            console.error('Update user failed', res.status, bodyText);
-            msg.style.color = 'red';
-            msg.textContent = `Failed to save changes (${res.status}): ${bodyText}`;
-            saveBtn.disabled = false;
-            return;
-          }
-
-          // update view mode values
-          document.getElementById('viewName').textContent = payload.name || '';
-          document.getElementById('viewEmail').textContent = payload.email || '';
-          document.getElementById('viewDescription').textContent = payload.description || '';
-
-          msg.style.color = 'green';
-          msg.textContent = 'Saved successfully.';
-          document.getElementById('editMode').style.display = 'none';
-          document.getElementById('viewMode').style.display = 'block';
-          saveBtn.disabled = false;
-        } catch (err) {
-          console.error('Error saving user', err);
-          msg.style.color = 'red';
-          msg.textContent = `Error saving changes: ${err && err.message ? err.message : err}`;
-          saveBtn.disabled = false;
+      if (!res.ok) {
+        let bodyText = '';
+        try { bodyText = JSON.stringify(await res.json()); } catch(_) {
+          try { bodyText = await res.text(); } catch(_) { bodyText = '<no body>'; }
         }
-      });
+        console.error('Update user failed', res.status, bodyText);
+        msg.style.color = 'red';
+        msg.textContent = `Failed to save changes (${res.status}): ${bodyText}`;
+        saveBtn.disabled = false;
+        return;
+      }
 
-      loadProfile();
-    </script>
+      // update view mode values (show first and last separately)
+      document.getElementById('viewFirstName').textContent = payload.firstName || '';
+      document.getElementById('viewLastName').textContent = payload.lastName || '';
+      document.getElementById('viewEmail').textContent = payload.email || '';
+      document.getElementById('viewDescription').textContent = payload.description || '';
+
+      msg.style.color = 'green';
+      msg.textContent = 'Saved successfully.';
+      document.getElementById('editMode').style.display = 'none';
+      document.getElementById('viewMode').style.display = 'block';
+      saveBtn.disabled = false;
+    } catch (err) {
+      console.error('Error saving user', err);
+      msg.style.color = 'red';
+      msg.textContent = `Error saving changes: ${err && err.message ? err.message : err}`;
+      saveBtn.disabled = false;
+    }
+  });
+
+  loadProfile();
+})();
+</script>
   </body>
 </html>

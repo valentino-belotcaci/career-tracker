@@ -45,8 +45,17 @@
     </footer>
 
     <script>
-      // Use loggedEmail to fetch company and obtain the company id
-      document.addEventListener('DOMContentLoaded', () => {
+      // authFetch helper for protected endpoints
+function authFetch(url, opts = {}) {
+  opts = opts || {};
+  opts.headers = opts.headers || {};
+  const token = localStorage.getItem('jwt');
+  if (token) opts.headers = Object.assign({}, opts.headers, { 'Authorization': 'Bearer ' + token });
+  return fetch(url, opts);
+}
+
+// Use loggedEmail to fetch company and obtain the company id
+document.addEventListener('DOMContentLoaded', () => {
   const loggedAccountId = localStorage.getItem('loggedAccountId');
         const message = document.getElementById('message');
         const companyIdInput = document.getElementById('companyId');
@@ -82,7 +91,7 @@
               };
 
               try {
-                const res = await fetch('/JobPost/insertPost', {
+                const res = await authFetch('/JobPost/create', {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify(payload)

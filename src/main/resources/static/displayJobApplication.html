@@ -42,6 +42,15 @@
     </footer>
 
     <script>
+      // authFetch helper - attach JWT automatically
+      function authFetch(url, opts = {}) {
+        opts = opts || {};
+        opts.headers = opts.headers || {};
+        const token = localStorage.getItem('jwt');
+        if (token) opts.headers = Object.assign({}, opts.headers, { 'Authorization': 'Bearer ' + token });
+        return fetch(url, opts);
+      }
+
       async function loadAllPosts() {
         const note = document.getElementById('note');
         try {

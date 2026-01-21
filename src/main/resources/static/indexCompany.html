@@ -14,16 +14,16 @@
 	<h2>Company Dashboard</h2>
 	<p>Welcome, company. Use the navigation to manage your company profile.</p>
 
-	<div style="margin-top:1rem;">
-		<a href="/profileCompany.html"><button>View profile</button></a>
+	<div class="spaced">
+		<a href="/profileCompany.html"><button class="btn">View profile</button></a>
 	</div>
 
-	<div style="margin-top:1rem;">
-		<button id="logoutBtn">Logout</button>
+	<div class="spaced">
+		<button id="logoutBtn" class="btn btn-secondary">Logout</button>
 	</div>
 
-	<div style="margin-top:1rem;">
-		<a href="/displayJobPost.html"><button>Job Posts</button></a>
+	<div class="spaced">
+		<a href="/displayJobPost.html"><button class="btn">Job Posts</button></a>
 	</div>
 
 	<script>
@@ -46,9 +46,9 @@
     return;
   }
 
-  window.jwt = token;
-
+  // expose authFetch globally for other UI scripts on this page
   window.authFetch = function (url, opts = {}) {
+    opts = opts || {};
     opts.headers = opts.headers || {};
     opts.headers = Object.assign({}, opts.headers, {
       'Authorization': 'Bearer ' + token

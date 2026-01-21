@@ -40,6 +40,15 @@
     </footer>
 
     <script>
+      // authFetch helper for all protected calls on this page
+      function authFetch(url, opts = {}) {
+        opts = opts || {};
+        opts.headers = opts.headers || {};
+        const token = localStorage.getItem('jwt');
+        if (token) opts.headers = Object.assign({}, opts.headers, { 'Authorization': 'Bearer ' + token });
+        return fetch(url, opts);
+      }
+
       async function loadCompanyAndPosts() {
         const loggedAccountId = localStorage.getItem('loggedAccountId');
         const note = document.getElementById('note');
@@ -50,7 +59,7 @@
 
         try {
             // Get company by account id
-            const companyRes = await fetch(`/Company/getCompanyByAccountId/${encodeURIComponent(loggedAccountId)}`);
+            const companyRes = await authFetch(`/Company/getCompanyByAccountId/${encodeURIComponent(loggedAccountId)}`);
             if (companyRes.status === 404) {
               note.textContent = 'No company profile found for this account.';
               return;
@@ -69,7 +78,7 @@
             const accountId = loggedAccountId;
 
             // Ask server for posts by account id (backend will resolve the company)
-            const postsRes = await fetch(`/JobPost/getPostsByCompanyId/${encodeURIComponent(accountId)}`);
+            const postsRes = await authFetch(`/JobPost/getPostsByCompanyId/${encodeURIComponent(accountId)}`);
             if (!postsRes.ok) {
               if (postsRes.status === 404) {
                 note.textContent = 'No job posts found for this company.';
