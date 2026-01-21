@@ -102,9 +102,9 @@ document.getElementById('loginForm').addEventListener('submit', async function (
 
     // store logged-in id under canonical key
     if (id != null) {
-      localStorage.setItem('loggenId', String(id));
+      localStorage.setItem('loggedId', String(id));
     } else {
-      localStorage.removeItem('loggenId');
+      localStorage.removeItem('loggedId');
     }
     console.log(type)
     // redirect according to resolved type
