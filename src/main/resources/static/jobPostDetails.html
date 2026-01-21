@@ -1,331 +1,245 @@
-    <!doctype html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Job Post Details - CareerTracker</title>
-    <link rel="stylesheet" href="/css/style.css">
-  </head>
-  <body>
-    <header>
-      <a id="homeLink" class="site-title" href="/indexUser.html">CareerTracker</a>
-    </header>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Job Post Details - CareerTracker</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<header>
+  <a id="homeLink" class="site-title" href="#">CareerTracker</a>
+</header>
 
-    <main class="wide-card">
-      <h2 id="title">Job Post</h2>
-      <div id="details">
-  <p style="display:none;"><strong>ID:</strong> <span id="postId"></span></p>
-  <p style="display:none;"><strong>Company ID:</strong> <span id="companyId"></span></p>
-        <p><strong>Name:</strong> <span id="name"></span></p>
-        <p><strong>Description:</strong> <span id="description"></span></p>
-        <p><strong>Duration:</strong> <span id="duration"></span></p>
-        <p><strong>Available:</strong> <span id="available"></span></p>
-        <p><strong>Salary:</strong> <span id="salary"></span></p>
-        <p><strong>Created at:</strong> <span id="createdAt"></span></p>
-      </div>
+<main class="wide-card">
+  <h2 id="title">Job Post</h2>
+  <div id="details">
+    <p style="display:none;"><strong>ID:</strong> <span id="postId"></span></p>
+    <p style="display:none;"><strong>Company ID:</strong> <span id="companyId"></span></p>
+    <p><strong>Name:</strong> <span id="name"></span></p>
+    <p><strong>Description:</strong> <span id="description"></span></p>
+    <p><strong>Duration:</strong> <span id="duration"></span></p>
+    <p><strong>Available:</strong> <span id="available"></span></p>
+    <p><strong>Salary:</strong> <span id="salary"></span></p>
+    <p><strong>Created at:</strong> <span id="createdAt"></span></p>
+  </div>
 
-      <div style="margin-top:18px;">
-        <!-- Hidden and disabled by default to avoid flicker while JS checks server state -->
-        <button id="applyBtn" style="display:none;" disabled>Submit Application</button>
-        <button id="backBtn" type="button" style="margin-left:8px;">Back</button>
-        <p id="message" style="margin-top:12px;"></p>
-      </div>
-      <section id="applicationsSection" style="margin-top:20px; display:none;">
-        <h3>Applications for this post</h3>
-        <p id="appsNote">Loading…</p>
-        <table id="appsTable" style="width:100%; border-collapse: collapse; display:none;">
-          <thead>
-            <tr>
-              <th style="border:1px solid #ccc; padding:8px; text-align:left;">Application ID</th>
-              <th style="border:1px solid #ccc; padding:8px; text-align:left;">User ID</th>
-              <th style="border:1px solid #ccc; padding:8px; text-align:left;">Status</th>
-              <th style="border:1px solid #ccc; padding:8px; text-align:left;">Created At</th>
-            </tr>
-          </thead>
-          <tbody id="appsBody"></tbody>
-        </table>
-      </section>
-    </main>
+  <div style="margin-top:18px;">
+    <button id="applyBtn" style="display:none;" disabled>Submit Application</button>
+    <button id="backBtn" type="button" style="margin-left:8px;">Back</button>
+    <p id="message" style="margin-top:12px;"></p>
+  </div>
 
-    <footer>
-      <p>© 2026 CareerTracker</p>
-    </footer>
+  <section id="applicationsSection" style="margin-top:20px; display:none;">
+    <h3>Applications for this post</h3>
+    <p id="appsNote">Loading…</p>
+    <table id="appsTable" style="width:100%; border-collapse: collapse; display:none;">
+      <thead>
+        <tr>
+          <th style="border:1px solid #ccc; padding:8px; text-align:left;">Application ID</th>
+          <th style="border:1px solid #ccc; padding:8px; text-align:left;">User ID</th>
+          <th style="border:1px solid #ccc; padding:8px; text-align:left;">Status</th>
+          <th style="border:1px solid #ccc; padding:8px; text-align:left;">Created At</th>
+        </tr>
+      </thead>
+      <tbody id="appsBody"></tbody>
+    </table>
+  </section>
+</main>
 
-    <script>
-      function getQueryParam(name) {
-        const params = new URLSearchParams(window.location.search);
-        return params.get(name);
+<footer>
+  <p>© 2026 CareerTracker</p>
+</footer>
+
+<script>
+  function getQueryParam(name) {
+    const params = new URLSearchParams(window.location.search);
+    return params.get(name);
+  }
+
+  // Auth fetch helper: automatically attach JWT
+  function authFetch(url, opts = {}) {
+    opts = opts || {};
+    opts.headers = opts.headers || {};
+    const token = localStorage.getItem('jwt');
+    if (!token) return Promise.reject(new Error('Missing JWT; please log in.'));
+    opts.headers = Object.assign({}, opts.headers, { 'Authorization': 'Bearer ' + token });
+    return fetch(url, opts);
+  }
+
+  async function fetchSinglePostById(postId) {
+    const res = await authFetch('/JobPost/getAllPosts');
+    if (!res.ok) throw new Error('Failed to fetch posts');
+    const posts = await res.json();
+    return posts.find(p => String(p.postId || p.post_id || p.id) === String(postId));
+  }
+
+  async function loadDetails() {
+    const postId = getQueryParam('postId');
+    const msgEl = document.getElementById('message');
+    if (!postId) {
+      msgEl.textContent = 'No post selected.';
+      return;
+    }
+
+    try {
+      const post = await fetchSinglePostById(postId);
+      if (!post) {
+        msgEl.textContent = 'Post not found.';
+        return;
       }
 
-      async function fetchPost(postId) {
-        const res = await fetch(`/JobPost/getPostByCompany/${encodeURIComponent(postId)}`);
-        // Note: getPostByCompany currently returns a list for a company; try fetching single post endpoint if available
-        if (!res.ok) throw new Error('Failed to fetch post');
-        return res.json();
-      }
+      document.getElementById('postId').textContent = post.postId || post.post_id || post.id || '';
+      document.getElementById('companyId').textContent = post.companyId || post.company_id || '';
+      document.getElementById('name').textContent = post.name || '';
+      document.getElementById('description').textContent = post.description || '';
+      document.getElementById('duration').textContent = post.duration || '';
+      document.getElementById('available').textContent = post.available || '';
+      document.getElementById('salary').textContent = post.salary || '';
+      document.getElementById('createdAt').textContent = post.createdAt || post.created_at || '';
 
-      async function fetchSinglePostById(postId) {
-        // The backend currently might not have a getPostById endpoint. Try a generic getAllPosts and find the id.
-        const res = await fetch('/JobPost/getAllPosts');
-        if (!res.ok) throw new Error('Failed to fetch posts');
-        const posts = await res.json();
-        return posts.find(p => String(p.postId || p.post_id || p.id) === String(postId));
-      }
+      const companyView = getQueryParam('companyView') === 'true';
+      const applyBtn = document.getElementById('applyBtn');
+      const homeLink = document.getElementById('homeLink');
 
-      async function loadDetails() {
-        const postId = getQueryParam('postId');
-        if (!postId) {
-          document.getElementById('message').textContent = 'No post selected.';
-          return;
-        }
+      // Update home link dynamically
+      const type = localStorage.getItem('type');
+      if (type === 'USER') homeLink.href = '/indexUser.html';
+      else if (type === 'COMPANY') homeLink.href = '/indexCompany.html';
+      else homeLink.href = '/index.html';
 
-        try {
-          // Prefer a direct single-post endpoint if present; otherwise fall back to getAllPosts
-          let post = null;
-          try {
-            post = await fetchSinglePostById(postId);
-          } catch (e) {
-            console.warn('Single post fetch failed, falling back', e);
-          }
-
-          if (!post) {
-            document.getElementById('message').textContent = 'Post not found.';
-            return;
-          }
-
-          document.getElementById('postId').textContent = post.postId || post.post_id || post.id || '';
-          document.getElementById('companyId').textContent = post.companyId || post.company_id || '';
-          document.getElementById('name').textContent = post.name || '';
-          document.getElementById('description').textContent = post.description || '';
-          document.getElementById('duration').textContent = post.duration || '';
-          document.getElementById('available').textContent = post.available || '';
-          document.getElementById('salary').textContent = post.salary || '';
-          document.getElementById('createdAt').textContent = post.createdAt || post.created_at || '';
-
-          // If companyView query param is present, load applications for this post
-          const companyView = getQueryParam('companyView') === 'true';
-          const applyBtn = document.getElementById('applyBtn');
-          // Update header/home link when in company view so "Back" or header returns to company index
-          const homeLink = document.getElementById('homeLink');
-          if (companyView && homeLink) {
-            homeLink.href = '/indexCompany.html';
-          }
-          if (companyView) {
-            // hide apply button for company users
-            applyBtn.style.display = 'none';
-            applyBtn.disabled = true;
-            loadApplicationsForPost(postId);
-          } else {
-            // For normal users, check if they already applied and show/enable the button only when appropriate
-            const loggedAccountId = localStorage.getItem('loggedAccountId');
-            const loggedEmail = localStorage.getItem('loggedEmail');
-            // prefer accountId lookup; if missing, fall back to email lookup (new users sometimes only have email stored)
-            if (!loggedAccountId && !loggedEmail) {
-              // not logged in -> keep hidden
-              applyBtn.style.display = 'none';
-              applyBtn.disabled = true;
-            } else {
-              try {
-                let user = null;
-                if (loggedAccountId) {
-                  const userRes = await fetch(`/User/getUserByAccountId/${encodeURIComponent(loggedAccountId)}`);
-                  if (userRes.ok) user = await userRes.json();
-                }
-                // fallback to email lookup when account lookup not available or failed
-                if (!user && loggedEmail) {
-                  try {
-                    const ue = await fetch(`/User/getUserByEmail/${encodeURIComponent(loggedEmail)}`);
-                    if (ue.ok) user = await ue.json();
-                  } catch (ee) {
-                    // ignore email lookup failure, will treat as not logged
-                  }
-                }
-
-                if (!user) {
-                  // Could not find a user record. If we have an email in localStorage, allow optimistic apply (submit will re-resolve).
-                  if (loggedEmail) {
-                    applyBtn.style.display = '';
-                    applyBtn.disabled = false;
-                  } else {
-                    applyBtn.style.display = 'none';
-                    applyBtn.disabled = true;
-                  }
-                } else {
-                  // tolerate both snake_case and camelCase shapes
-                  const userId = user.userId || user.user_id || user.id || user.accountId || user.account_id;
-                  if (userId) {
-                    const exists = await checkExistingApplication(postId, userId);
-                    if (exists) {
-                      applyBtn.style.display = 'none';
-                      applyBtn.disabled = true;
-                    } else {
-                      // show and enable the button if the user hasn't applied yet
-                      applyBtn.style.display = '';
-                      applyBtn.disabled = false;
-                    }
-                  } else {
-                    // user record without id? keep hidden to be safe
-                    applyBtn.style.display = 'none';
-                    applyBtn.disabled = true;
-                  }
-                }
-              } catch (e) {
-                console.warn('Could not check existing application', e);
-                applyBtn.style.display = 'none';
-                applyBtn.disabled = true;
-              }
-            }
-          }
-
-        } catch (err) {
-          console.error(err);
-          document.getElementById('message').textContent = 'Error loading post details.';
-        }
-      }
-
-      async function submitApplication() {
-        const postId = document.getElementById('postId').textContent;
-        const msgEl = document.getElementById('message');
-        msgEl.textContent = '';
-        if (!postId) {
-          msgEl.textContent = 'No post selected.';
-          return;
-        }
-
-        // Require at least an email in localStorage to attempt apply
-        const loggedEmail = localStorage.getItem('loggedEmail');
-        if (!loggedEmail) {
-          msgEl.textContent = 'You must be logged in to apply.';
-          return;
-        }
-
-        const applyBtn = document.getElementById('applyBtn');
+      if (companyView) {
+        applyBtn.style.display = 'none';
         applyBtn.disabled = true;
-
-        try {
-          // Resolve user by accountId first, then by email
-          let user = null;
-          const loggedAccountId = localStorage.getItem('loggedAccountId');
-          if (loggedAccountId) {
-            const ur = await fetch(`/User/getUserByAccountId/${encodeURIComponent(loggedAccountId)}`);
-            if (ur.ok) user = await ur.json();
-          }
-          if (!user && loggedEmail) {
-            const ue = await fetch(`/User/getUserByEmail/${encodeURIComponent(loggedEmail)}`);
-            if (ue.ok) user = await ue.json();
-          }
-
-          if (!user) {
-            msgEl.textContent = 'Could not find your user record. Please complete your profile.';
-            applyBtn.disabled = false;
-            return;
-          }
-
-          const userId = user.userId || user.user_id || user.id || user.accountId || user.account_id;
-          if (!userId) {
-            msgEl.textContent = 'Could not determine your user id.';
-            applyBtn.disabled = false;
-            return;
-          }
-
-          const payload = {
-            postId: Number(postId),
-            userId: Number(userId),
-            status: 'SUBMITTED'
-          };
-
-          const res = await fetch('/JobApplication/insertApplication', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-          });
-
-          if (res.status === 409) {
-            msgEl.textContent = 'You have already submitted an application for this post.';
+        loadApplicationsForPost(postId);
+      } else {
+        // Show apply button for user if not applied
+        const loggedAccountId = localStorage.getItem('loggedId');
+        if (!loggedAccountId) {
+          applyBtn.style.display = 'none';
+          applyBtn.disabled = true;
+        } else {
+          const userRes = await authFetch(`/User/getUserByAccountId/${encodeURIComponent(loggedAccountId)}`);
+          const user = userRes.ok ? await userRes.json() : null;
+          const userId = user?.userId || user?.user_id || user?.id || user?.accountId;
+          if (userId) {
+            const alreadyApplied = await checkExistingApplication(postId, userId);
+            if (!alreadyApplied) {
+              applyBtn.style.display = '';
+              applyBtn.disabled = false;
+            }
+          } else {
             applyBtn.style.display = 'none';
             applyBtn.disabled = true;
-            if (getQueryParam('companyView') === 'true') loadApplicationsForPost(postId);
-            return;
           }
-
-          if (!res.ok) {
-            let bodyText = '';
-            try { bodyText = JSON.stringify(await res.json()); } catch (e) {
-              try { bodyText = await res.text(); } catch (ee) { bodyText = '<no body>'; }
-            }
-            msgEl.textContent = `Failed to submit application (${res.status}): ${bodyText}`;
-            console.error('Submit failed', res.status, bodyText);
-            applyBtn.disabled = false;
-            return;
-          }
-
-          const created = await res.json();
-          msgEl.textContent = 'Application submitted successfully.';
-          const exists = await checkExistingApplication(postId, payload.userId);
-          if (exists) { applyBtn.style.display = 'none'; applyBtn.disabled = true; }
-          if (getQueryParam('companyView') === 'true') loadApplicationsForPost(postId);
-
-        } catch (err) {
-          console.error('Submit exception', err);
-          msgEl.textContent = err && err.message ? `Error: ${err.message}` : 'Error submitting application.';
-          applyBtn.disabled = false;
         }
       }
+    } catch (err) {
+      console.error(err);
+      msgEl.textContent = 'Error loading post details.';
+    }
+  }
 
-      document.getElementById('applyBtn').addEventListener('click', submitApplication);
-  document.getElementById('backBtn').addEventListener('click', function(){ history.back(); });
+  async function submitApplication() {
+    const postId = document.getElementById('postId').textContent;
+    const msgEl = document.getElementById('message');
+    msgEl.textContent = '';
+    const applyBtn = document.getElementById('applyBtn');
+    applyBtn.disabled = true;
 
-      async function loadApplicationsForPost(postId) {
-        const appsNote = document.getElementById('appsNote');
-        const appsBody = document.getElementById('appsBody');
-        try {
-          const res = await fetch(`/JobApplication/getApplicationsByPostId/${encodeURIComponent(postId)}`);
-          if (!res.ok) {
-            appsNote.textContent = 'No applications found.';
-            return;
-          }
-          const apps = await res.json();
-          if (!apps || apps.length === 0) {
-            appsNote.textContent = 'No applications found for this post.';
-            return;
-          }
-          appsBody.innerHTML = '';
-          apps.forEach(a => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-              <td style="border:1px solid #ccc; padding:8px;">${a.applicationId || a.application_id || ''}</td>
-              <td style="border:1px solid #ccc; padding:8px;">${a.userId || a.user_id || ''}</td>
-              <td style="border:1px solid #ccc; padding:8px;">${a.status || ''}</td>
-              <td style="border:1px solid #ccc; padding:8px;">${a.createdAt || a.created_at || ''}</td>
-            `;
-            appsBody.appendChild(tr);
-          });
-          appsNote.style.display = 'none';
-          document.getElementById('appsTable').style.display = 'table';
-          document.getElementById('applicationsSection').style.display = 'block';
-        } catch (err) {
-          console.error(err);
-          appsNote.textContent = 'Error loading applications.';
-        }
+    const loggedAccountId = localStorage.getItem('loggedId');
+    if (!loggedAccountId) {
+      msgEl.textContent = 'You must be logged in to apply.';
+      applyBtn.disabled = false;
+      return;
+    }
+
+    try {
+      const userRes = await authFetch(`/User/getUserByAccountId/${encodeURIComponent(loggedAccountId)}`);
+      if (!userRes.ok) throw new Error('Failed to fetch user info');
+      const user = await userRes.json();
+      const userId = user?.userId || user?.user_id || user?.id || user?.accountId;
+      if (!userId) throw new Error('Could not determine your user id');
+
+      const payload = { postId: Number(postId), userId: Number(userId), status: 'SUBMITTED' };
+
+      const res = await authFetch('/JobApplication/insertJobApplication', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (res.status === 409) {
+        msgEl.textContent = 'You have already submitted an application for this post.';
+        applyBtn.style.display = 'none';
+        applyBtn.disabled = true;
+        return;
       }
 
-      async function checkExistingApplication(postId, userId) {
-        if (!postId || !userId) return false;
-        try {
-          const url = `/JobApplication/getApplicationByIds?post_id=${encodeURIComponent(postId)}&user_id=${encodeURIComponent(userId)}`;
-          const res = await fetch(url);
-          if (!res.ok) return false;
-          const body = await res.json();
-          if (!body) return false;
-          if (Array.isArray(body)) return body.length > 0;
-          return Object.keys(body).length > 0;
-        } catch (e) {
-          console.warn('checkExistingApplication failed', e);
-          return false;
-        }
-      }
+      if (!res.ok) throw new Error(`Failed to submit application (${res.status})`);
 
-      loadDetails();
-    </script>
-  </body>
+      msgEl.textContent = 'Application submitted successfully.';
+      applyBtn.style.display = 'none';
+      applyBtn.disabled = true;
+    } catch (err) {
+      console.error(err);
+      msgEl.textContent = `Error submitting application: ${err.message}`;
+      applyBtn.disabled = false;
+    }
+  }
+
+  async function loadApplicationsForPost(postId) {
+    const appsNote = document.getElementById('appsNote');
+    const appsBody = document.getElementById('appsBody');
+    try {
+      const res = await authFetch(`/JobApplication/getApplicationsByPostId/${encodeURIComponent(postId)}`);
+      if (!res.ok) {
+        appsNote.textContent = 'No applications found.';
+        return;
+      }
+      const apps = await res.json();
+      if (!apps || apps.length === 0) {
+        appsNote.textContent = 'No applications found for this post.';
+        return;
+      }
+      appsBody.innerHTML = '';
+      apps.forEach(a => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="border:1px solid #ccc; padding:8px;">${a.applicationId || a.application_id || ''}</td>
+          <td style="border:1px solid #ccc; padding:8px;">${a.userId || a.user_id || ''}</td>
+          <td style="border:1px solid #ccc; padding:8px;">${a.status || ''}</td>
+          <td style="border:1px solid #ccc; padding:8px;">${a.createdAt || a.created_at || ''}</td>
+        `;
+        appsBody.appendChild(tr);
+      });
+      appsNote.style.display = 'none';
+      document.getElementById('appsTable').style.display = 'table';
+      document.getElementById('applicationsSection').style.display = 'block';
+    } catch (err) {
+      console.error(err);
+      appsNote.textContent = 'Error loading applications.';
+    }
+  }
+
+  async function checkExistingApplication(postId, userId) {
+    if (!postId || !userId) return false;
+    try {
+      const res = await authFetch(`/JobApplication/getApplicationByIds?post_id=${encodeURIComponent(postId)}&user_id=${encodeURIComponent(userId)}`);
+      if (!res.ok) return false;
+      const body = await res.json();
+      return Array.isArray(body) ? body.length > 0 : Object.keys(body).length > 0;
+    } catch (e) {
+      console.warn('checkExistingApplication failed', e);
+      return false;
+    }
+  }
+
+  document.getElementById('applyBtn').addEventListener('click', submitApplication);
+  document.getElementById('backBtn').addEventListener('click', () => history.back());
+
+  // Load post details on page load
+  loadDetails();
+</script>
+</body>
 </html>
