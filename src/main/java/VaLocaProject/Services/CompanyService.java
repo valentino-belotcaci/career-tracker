@@ -55,4 +55,8 @@ public class CompanyService {
          // Return if else null to resolve Optional
         return companyRepository.findById(id).orElse(null);
     }
+
+    public Company getCompanyByEmail(String email){
+        return companyRepository.findByEmail(email);
+    };
 }

@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import VaLocaProject.Models.Account;
-import VaLocaProject.Models.Company;
-import VaLocaProject.Models.User;
 import VaLocaProject.Services.AccountService;
 
 @RestController
@@ -70,22 +68,38 @@ public class AccountController {
     }
         
     @PostMapping("/authenticate")
-    public ResponseEntity<?> authenticateAccount(@RequestBody Account account) {
+    public ResponseEntity<?> authenticateAccount(@RequestBody Map<String, String> body) {
+        String email = body.get("email");
+        String password = body.get("password");
 
-        String token = accountService.authenticate(account.getEmail(), account.getPassword());
 
-        if (token == null) {
-            return ResponseEntity.status(401).body("Login failed");
+        if (email == null || password == null) {
+            return ResponseEntity.badRequest().body(Map.of("error", "email and password required"));
         }
 
-        String type;
-        // determine account type so frontend can redirect to correct page
-        if (account instanceof User) type = "USER";
-        // BUG: CAN"T MATCH USER OR COMPANY
-        else if (account instanceof Company) type = "COMPANY";
-        else type = "UNKOWN";
+        String token = accountService.authenticate(email, password);
+        if (token == null) {
+            return ResponseEntity.status(401).body(Map.of("error", "Login failed"));
+        }
 
-        return ResponseEntity.ok(Map.of("token", token, "type", type));
+        Optional<Account> accountOpt = accountService.getAccountByEmail(email);
+        // extract type and id safely from Optional
+        // map: takes a function with its type, returns a OPTIONAL result of the object present
+        // so we add .orElse to define the other case (if not present)
+        String type = accountOpt.map(Account::getType).orElse("UNKNOWN");
+        Long id = accountOpt.map(Account::getId).orElse(null);
+
+        /* Intuitive version of above
+        if (accountOpt.isPresent()) {
+            Account found = accountOpt.get();
+            type = found.getType();
+            id = found.getId();
+        } */
+
+        return ResponseEntity.ok(Map.of("token", token, "type", type, "id", id));
     }
 
+
+
 }
+
