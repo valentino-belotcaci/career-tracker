@@ -50,7 +50,9 @@
       }
 
       async function loadCompanyAndPosts() {
-        const loggedAccountId = localStorage.getItem('loggedAccountId');
+        // accept either canonical or legacy key
+        const loggedAccountId = localStorage.getItem('loggenId') || localStorage.getItem('loggedId');
+
         const note = document.getElementById('note');
         if (!loggedAccountId) {
           note.textContent = 'No logged account found. Please log in.';

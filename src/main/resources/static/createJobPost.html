@@ -46,17 +46,17 @@
 
     <script>
       // authFetch helper for protected endpoints
-function authFetch(url, opts = {}) {
-  opts = opts || {};
-  opts.headers = opts.headers || {};
-  const token = localStorage.getItem('jwt');
-  if (token) opts.headers = Object.assign({}, opts.headers, { 'Authorization': 'Bearer ' + token });
-  return fetch(url, opts);
-}
+      function authFetch(url, opts = {}) {
+        opts = opts || {};
+        opts.headers = opts.headers || {};
+        const token = localStorage.getItem('jwt');
+        if (token) opts.headers = Object.assign({}, opts.headers, { 'Authorization': 'Bearer ' + token });
+        return fetch(url, opts);
+      }
 
-// Use loggedEmail to fetch company and obtain the company id
-document.addEventListener('DOMContentLoaded', () => {
-  const loggedAccountId = localStorage.getItem('loggedAccountId');
+      // Use logged account id (accept both canonical and legacy keys) to fetch company and obtain the company id
+      document.addEventListener('DOMContentLoaded', () => {
+  const loggedAccountId = localStorage.getItem('loggenId') || localStorage.getItem('loggedId');
         const message = document.getElementById('message');
         const companyIdInput = document.getElementById('companyId');
 
@@ -66,8 +66,8 @@ document.addEventListener('DOMContentLoaded', () => {
           return;
         }
 
-        // Fetch company by account id to get the company id
-        fetch(`/Company/getCompanyByAccountId/${encodeURIComponent(loggedAccountId)}`)
+        // Fetch company by account id to get the company id (use authFetch so JWT is attached)
+        authFetch(`/Company/getCompanyByAccountId/${encodeURIComponent(loggedAccountId)}`)
           .then(res => {
             if (res.status === 404) throw new Error('No company profile for this account');
             if (!res.ok) throw new Error('Could not fetch company');
