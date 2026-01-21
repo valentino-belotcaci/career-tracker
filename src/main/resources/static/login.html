@@ -106,7 +106,7 @@ document.getElementById('loginForm').addEventListener('submit', async function (
     } else {
       localStorage.removeItem('loggenId');
     }
-
+    console.log(type)
     // redirect according to resolved type
     if (type === 'USER') {
       window.location.href = '/indexUser.html';

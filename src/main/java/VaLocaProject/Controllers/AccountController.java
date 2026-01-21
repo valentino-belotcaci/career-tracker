@@ -86,10 +86,11 @@ public class AccountController {
         // extract type and id safely from Optional
         // map: takes a function with its type, returns a OPTIONAL result of the object present
         // so we add .orElse to define the other case (if not present)
+        // Could be improved using bind()
         String type = accountOpt.map(Account::getType).orElse("UNKNOWN");
         Long id = accountOpt.map(Account::getId).orElse(null);
 
-        /* Intuitive version of above
+        /* Intuitive and less secure version of above
         if (accountOpt.isPresent()) {
             Account found = accountOpt.get();
             type = found.getType();

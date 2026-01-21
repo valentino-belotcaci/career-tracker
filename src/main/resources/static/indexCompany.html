@@ -37,5 +37,29 @@
 <footer>
 	<p>© 2026 CareerTracker</p>
 </footer>
+<script>
+(function () {
+  const token = localStorage.getItem('jwt');
+  if (!token) {
+    console.warn('No JWT found, redirecting to login');
+    window.location.href = '/login.html';
+    return;
+  }
+
+  window.jwt = token;
+
+  window.authFetch = function (url, opts = {}) {
+    opts.headers = opts.headers || {};
+    opts.headers = Object.assign({}, opts.headers, {
+      'Authorization': 'Bearer ' + token
+    });
+    return fetch(url, opts);
+  };
+
+  // Example usage:
+  // authFetch('/Company/profile/' + localStorage.getItem('loggenId'))
+  //   .then(r => r.json()).then(console.log).catch(console.error);
+})();
+</script>
 </body>
 </html>

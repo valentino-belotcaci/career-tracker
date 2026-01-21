@@ -31,46 +31,33 @@ public class SecurityConfig {
             // Disable csrf token as we are using JWT stateless session managing
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(request -> request 
-            // ALLOW FOR ALL USERS
+            // static pages and public resources - allow the browser to GET the HTML (client will attach JWT for API calls)
             .requestMatchers(
                 "/index.html",
                 "/register.html",
                 "/login.html",
                 "/",
-                "/Account/authenticate",
-                "/Account/insertAccount",
-                // allow lookup used during login flow
-                "/Account/getAccountByEmail/**",
+                "/indexUser.html",
+                "/indexCompany.html",
+                "/profileUser.html",
+                "/profileCompany.html",
+                "/displayJobPost.html",
+                "/jobPostDetails.html",
                 "/css/**",
                 "/favicon.ico",
-                "/error"
+                "/error",
+                "/Account/authenticate",
+                "/Account/insertAccount",
+                "/Account/getAccountByEmail/**"
             ).permitAll() 
 
-            // ALLOW ONLY FOR "USER"
-            .requestMatchers(
-                "/indexUser.html",
-                "/displayJobApplication.html",
-                "/createJobApplication.html",
-                "/profileUser.html"
-            ).hasRole("USER")
-
-            // ALLOW ONLY FOR "COMPANY"
-            .requestMatchers(
-                "/indexCompany.html",
-                "/profileCompany.html"
-            ).hasRole("COMPANY")
-
-            // // ALLOW ONLY FOR "USER or COMPANY"
-            .requestMatchers(
-                "/displayJobPost.html",
-                "/jobPostDetails.html"
-            ).hasAnyRole("USER", "COMPANY")
-
-
-            // Allow the OPTIONS request for CORS policies to be sent without authentication
-            .requestMatchers(HttpMethod.OPTIONS, "/**")
-            .permitAll()
-
+            // Keep API endpoints protected by roles. For example, replace these with your API paths:
+            // .requestMatchers("/api/users/**").hasRole("USER")
+            // .requestMatchers("/api/companies/**").hasRole("COMPANY")
+            // ...existing API protection rules...
+            
+            // Allow OPTIONS for CORS preflight
+            .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
             .anyRequest().authenticated()
             )
             
