@@ -22,8 +22,8 @@
 
   <p id="note">Loading company profile…</p>
 
-  <!-- VIEW MODE -->
-  <div id="viewMode" style="display:none;">
+  <!-- VIEW MODE: use .hidden instead of inline style -->
+  <div id="viewMode" class="hidden">
     <p><strong>Name:</strong> <span id="viewName"></span></p>
     <p><strong>Email:</strong> <span id="viewEmail"></span></p>
     <p><strong>Description:</strong> <span id="viewDescription"></span></p>
@@ -33,8 +33,8 @@
     </div>
   </div>
 
-  <!-- EDIT MODE -->
-  <form id="editMode" style="display:none;">
+  <!-- EDIT MODE: use .hidden instead of inline style -->
+  <form id="editMode" class="hidden">
     <input type="hidden" id="companyId">
 
     <label for="name">Company name</label>
@@ -110,8 +110,9 @@
       document.getElementById('viewEmail').textContent = company.email || '';
       document.getElementById('viewDescription').textContent = company.description || '';
 
-      note.style.display = 'none';
-      viewMode.style.display = 'block';
+      // toggle visibility via classes
+      note.classList.add('hidden');
+      viewMode.classList.remove('hidden');
     } catch (err) {
       console.error(err);
       note.textContent = 'Error loading company profile.';
@@ -120,13 +121,13 @@
 
   // ===== UI EVENTS =====
   document.getElementById('editBtn').addEventListener('click', () => {
-    viewMode.style.display = 'none';
-    editMode.style.display = 'block';
+    viewMode.classList.add('hidden');
+    editMode.classList.remove('hidden');
   });
 
   document.getElementById('cancelBtn').addEventListener('click', () => {
-    editMode.style.display = 'none';
-    viewMode.style.display = 'block';
+    editMode.classList.add('hidden');
+    viewMode.classList.remove('hidden');
   });
 
   // ===== SAVE COMPANY =====
@@ -164,8 +165,9 @@
       message.style.color = 'green';
       message.textContent = 'Profile updated successfully';
 
-      editMode.style.display = 'none';
-      viewMode.style.display = 'block';
+      // toggle visibility via classes
+      editMode.classList.add('hidden');
+      viewMode.classList.remove('hidden');
     } catch (err) {
       console.error(err);
       message.style.color = 'red';

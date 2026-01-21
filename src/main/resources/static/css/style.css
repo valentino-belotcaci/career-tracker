@@ -227,6 +227,160 @@ footer {
 body.editing .edit-only { display: block !important; }
 body.editing .view-only { display: none !important; }
 
+/* Job applications table */
+.apps-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.apps-table th,
+.apps-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}
+
+/* Hide ID column visually (keeps it in DOM) */
+.apps-table .col-id {
+  display: none;
+}
+
+/* Utility hidden class for initial state */
+.hidden {
+  display: none !important;
+}
+
+/* Small spacing for the user controls area */
+.user-controls {
+  margin-bottom: 12px;
+}
+
+/* Make rows show pointer when clickable */
+.apps-table tbody tr {
+  cursor: pointer;
+}
+
+/* Job posts table (used by displayJobPost.html) */
+.posts-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.posts-table th,
+.posts-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}
+
+/* Hide ID column visually if needed (keeps it in DOM) */
+.posts-table .col-id {
+  display: none;
+}
+
+/* Small spacing for the add-post area */
+.add-post-container {
+  margin-bottom: 12px;
+}
+
+/* Make rows show pointer when clickable */
+.posts-table tbody tr {
+  cursor: pointer;
+}
+
+/* Index user actions area (replaces inline margin-bottom) */
+.index-user-actions {
+  margin-bottom: 12px;
+}
+
+/* Generic table style to replace inline table styles across pages */
+.standard-table,
+.job-details-table,
+.company-details-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.standard-table th,
+.standard-table td,
+.job-details-table th,
+.job-details-table td,
+.company-details-table th,
+.company-details-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}
+
+/* Job details specific layout */
+.job-details-container {
+  margin-bottom: 12px;
+}
+
+.job-action-row {
+  margin-top: 12px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* Company profile card tweaks */
+.profile-company-card {
+  /* reuse wide-card spacing; add optional extra padding */
+  padding: 3rem;
+}
+
+.company-header {
+  margin-bottom: 12px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.profile-actions {
+  margin-bottom: 12px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* Ensure table rows that were clickable still show pointer */
+.standard-table tbody tr,
+.job-details-table tbody tr,
+.company-details-table tbody tr {
+  cursor: pointer;
+}
+
+/* Job post details layout helpers */
+.action-row {
+  margin-top: 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* small utility spacing classes */
+.ml-8 { margin-left: 8px; }
+.mt-12 { margin-top: 12px; }
+
+/* Applications section and table */
+.applications-section {
+  margin-top: 20px;
+}
+
+.applications-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.applications-table th,
+.applications-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}
+
 /* RESPONSIVE */
 @media (max-width: 600px) {
     main {

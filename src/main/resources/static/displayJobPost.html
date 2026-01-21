@@ -13,21 +13,24 @@
   </header>
 
   <main class="wide-card">
+    <!-- give the title an id so JS can update it for users -->
     <h2 id="pageTitle">Your Job Posts</h2>
-    <div style="margin-bottom:12px;">
+    <!-- removed inline style, use CSS class -->
+    <div class="add-post-container">
       <a href="/createJobPost.html"><button id="addPostBtn">Add job post</button></a>
     </div>
     <p id="note">Loading…</p>
 
-    <table id="postsTable" style="width:100%; border-collapse: collapse; display:none;">
+    <!-- use class and .hidden to control initial visibility via CSS -->
+    <table id="postsTable" class="posts-table hidden">
       <thead>
         <tr>
-          <th style="border:1px solid #ccc; padding:8px; text-align:left;">ID</th>
-          <th style="border:1px solid #ccc; padding:8px; text-align:left;">Name</th>
-          <th style="border:1px solid #ccc; padding:8px; text-align:left;">Description</th>
-          <th style="border:1px solid #ccc; padding:8px; text-align:left;">Duration</th>
-          <th style="border:1px solid #ccc; padding:8px; text-align:left;">Available</th>
-          <th style="border:1px solid #ccc; padding:8px; text-align:left;">Salary</th>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Duration</th>
+          <th>Available</th>
+          <th>Salary</th>
         </tr>
       </thead>
       <tbody id="postsBody"></tbody>
@@ -65,6 +68,7 @@
       const tbody = document.getElementById('postsBody');
       const pageTitle = document.getElementById('pageTitle');
       const addBtn = document.getElementById('addPostBtn');
+      const postsTable = document.getElementById('postsTable');
 
       // Adjust UI for user vs company
       if (type === "USER") {
@@ -134,12 +138,12 @@
           const tr = document.createElement('tr');
           const idVal = p.postId || p.id;
           tr.innerHTML = `
-            <td style="border:1px solid #ccc; padding:8px;">${idVal}</td>
-            <td style="border:1px solid #ccc; padding:8px;">${p.name || ''}</td>
-            <td style="border:1px solid #ccc; padding:8px;">${p.description || ''}</td>
-            <td style="border:1px solid #ccc; padding:8px;">${p.duration || ''}</td>
-            <td style="border:1px solid #ccc; padding:8px;">${p.available || ''}</td>
-            <td style="border:1px solid #ccc; padding:8px;">${p.salary || ''}</td>
+            <td>${idVal}</td>
+            <td>${p.name || ''}</td>
+            <td>${p.description || ''}</td>
+            <td>${p.duration || ''}</td>
+            <td>${p.available || ''}</td>
+            <td>${p.salary || ''}</td>
           `;
 
           tr.style.cursor = 'pointer';
@@ -155,8 +159,9 @@
           tbody.appendChild(tr);
         });
 
-        note.style.display = 'none';
-        document.getElementById('postsTable').style.display = 'table';
+        // toggle visibility via CSS class
+        note.classList.add('hidden');
+        postsTable.classList.remove('hidden');
       } catch (err) {
         console.error(err);
         note.textContent = 'Error loading job posts.';

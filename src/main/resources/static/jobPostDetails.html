@@ -14,8 +14,8 @@
 <main class="wide-card">
   <h2 id="title">Job Post</h2>
   <div id="details">
-    <p style="display:none;"><strong>ID:</strong> <span id="postId"></span></p>
-    <p style="display:none;"><strong>Company ID:</strong> <span id="companyId"></span></p>
+    <p class="hidden"><strong>ID:</strong> <span id="postId"></span></p>
+    <p class="hidden"><strong>Company ID:</strong> <span id="companyId"></span></p>
     <p><strong>Name:</strong> <span id="name"></span></p>
     <p><strong>Description:</strong> <span id="description"></span></p>
     <p><strong>Duration:</strong> <span id="duration"></span></p>
@@ -24,22 +24,22 @@
     <p><strong>Created at:</strong> <span id="createdAt"></span></p>
   </div>
 
-  <div style="margin-top:18px;">
-    <button id="applyBtn" style="display:none;" disabled>Submit Application</button>
-    <button id="backBtn" type="button" style="margin-left:8px;">Back</button>
-    <p id="message" style="margin-top:12px;"></p>
+  <div class="action-row">
+    <button id="applyBtn" class="hidden" disabled>Submit Application</button>
+    <button id="backBtn" type="button" class="ml-8">Back</button>
+    <p id="message" class="mt-12"></p>
   </div>
 
-  <section id="applicationsSection" style="margin-top:20px; display:none;">
+  <section id="applicationsSection" class="applications-section hidden">
     <h3>Applications for this post</h3>
     <p id="appsNote">Loading…</p>
-    <table id="appsTable" style="width:100%; border-collapse: collapse; display:none;">
+    <table id="appsTable" class="applications-table hidden">
       <thead>
         <tr>
-          <th style="border:1px solid #ccc; padding:8px; text-align:left;">Application ID</th>
-          <th style="border:1px solid #ccc; padding:8px; text-align:left;">User ID</th>
-          <th style="border:1px solid #ccc; padding:8px; text-align:left;">Status</th>
-          <th style="border:1px solid #ccc; padding:8px; text-align:left;">Created At</th>
+          <th>Application ID</th>
+          <th>User ID</th>
+          <th>Status</th>
+          <th>Created At</th>
         </tr>
       </thead>
       <tbody id="appsBody"></tbody>
@@ -109,14 +109,14 @@
       else homeLink.href = '/index.html';
 
       if (companyView) {
-        applyBtn.style.display = 'none';
+        applyBtn.classList.add('hidden');
         applyBtn.disabled = true;
         loadApplicationsForPost(postId);
       } else {
         // Show apply button for user if not applied
         const loggedAccountId = localStorage.getItem('loggedId');
         if (!loggedAccountId) {
-          applyBtn.style.display = 'none';
+          applyBtn.classList.add('hidden');
           applyBtn.disabled = true;
         } else {
           const userRes = await authFetch(`/User/getUserByAccountId/${encodeURIComponent(loggedAccountId)}`);
@@ -125,11 +125,11 @@
           if (userId) {
             const alreadyApplied = await checkExistingApplication(postId, userId);
             if (!alreadyApplied) {
-              applyBtn.style.display = '';
+              applyBtn.classList.remove('hidden');
               applyBtn.disabled = false;
             }
           } else {
-            applyBtn.style.display = 'none';
+            applyBtn.classList.add('hidden');
             applyBtn.disabled = true;
           }
         }
@@ -171,7 +171,7 @@
 
       if (res.status === 409) {
         msgEl.textContent = 'You have already submitted an application for this post.';
-        applyBtn.style.display = 'none';
+        applyBtn.classList.add('hidden');
         applyBtn.disabled = true;
         return;
       }
@@ -179,7 +179,7 @@
       if (!res.ok) throw new Error(`Failed to submit application (${res.status})`);
 
       msgEl.textContent = 'Application submitted successfully.';
-      applyBtn.style.display = 'none';
+      applyBtn.classList.add('hidden');
       applyBtn.disabled = true;
     } catch (err) {
       console.error(err);
@@ -206,16 +206,16 @@
       apps.forEach(a => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td style="border:1px solid #ccc; padding:8px;">${a.applicationId || a.application_id || ''}</td>
-          <td style="border:1px solid #ccc; padding:8px;">${a.userId || a.user_id || ''}</td>
-          <td style="border:1px solid #ccc; padding:8px;">${a.status || ''}</td>
-          <td style="border:1px solid #ccc; padding:8px;">${a.createdAt || a.created_at || ''}</td>
+          <td>${a.applicationId || a.application_id || ''}</td>
+          <td>${a.userId || a.user_id || ''}</td>
+          <td>${a.status || ''}</td>
+          <td>${a.createdAt || a.created_at || ''}</td>
         `;
         appsBody.appendChild(tr);
       });
-      appsNote.style.display = 'none';
-      document.getElementById('appsTable').style.display = 'table';
-      document.getElementById('applicationsSection').style.display = 'block';
+      appsNote.classList.add('hidden');
+      document.getElementById('appsTable').classList.remove('hidden');
+      document.getElementById('applicationsSection').classList.remove('hidden');
     } catch (err) {
       console.error(err);
       appsNote.textContent = 'Error loading applications.';
