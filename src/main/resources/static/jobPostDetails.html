@@ -104,8 +104,8 @@
 
       // Update home link dynamically
       const type = localStorage.getItem('type');
-      if (type === 'USER') homeLink.href = '/indexUser.html';
-      else if (type === 'COMPANY') homeLink.href = '/indexCompany.html';
+      if (type === "USER") homeLink.href = '/indexUser.html';
+      else if (type === "COMPANY") homeLink.href = '/indexCompany.html';
       else homeLink.href = '/index.html';
 
       if (companyView) {
@@ -163,7 +163,7 @@
 
       const payload = { postId: Number(postId), userId: Number(userId), status: 'SUBMITTED' };
 
-      const res = await authFetch('/JobApplication/insertJobApplication', {
+      const res = await authFetch('/JobApplication/insertApplication', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
