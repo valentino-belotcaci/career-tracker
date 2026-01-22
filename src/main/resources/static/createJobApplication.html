@@ -45,7 +45,7 @@
 
   async function authFetch(url, opts = {}) {
     opts = opts || {};
-    opts.credentials = 'include'; // send cookies automatically
+    opts.credentials = 'include'; // send HttpOnly cookies automatically
     opts.headers = opts.headers || {};
     return fetch(url, opts);
   }
@@ -64,8 +64,8 @@
   let accountType = localStorage.getItem("type");
 
   if (!userId || !accountType) {
-    // fallback: get from backend cookie authentication
     try {
+      // fallback to backend
       const resId = await authFetch("/Account/getLoggedAccountId");
       if (resId.ok) {
         const data = await resId.json();
@@ -138,6 +138,11 @@
       message.textContent = `Application submitted successfully! (ID: ${created.applicationId || created.id})`;
       submitBtn.disabled = true;
       document.getElementById("userDescription").disabled = true;
+
+      // ===== REDIRECT AFTER DELAY =====
+      setTimeout(() => {
+        window.location.href = "/displayJobApplication.html";
+      }, 500); //  delay
 
     } catch (err) {
       console.error(err);
