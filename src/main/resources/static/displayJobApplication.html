@@ -44,24 +44,19 @@
 
 <script>
   /* =======================
-     Auth fetch (JWT)
+     Auth fetch (JWT via HttpOnly cookie)
      ======================= */
   function authFetch(url, opts = {}) {
-    const token = localStorage.getItem('jwt');
-    if (!token) throw new Error('Missing JWT');
-
-    opts.headers = {
-      ...(opts.headers || {}),
-      'Authorization': 'Bearer ' + token.trim()
-    };
-
+    opts = opts || {};
+    opts.credentials = 'include'; // send cookies automatically
+    opts.headers = opts.headers || {};
     return fetch(url, opts);
   }
 
   /* =======================
      Dynamic home link
      ======================= */
-  const type = localStorage.getItem('type');
+  const type = localStorage.getItem('type'); // still use type from localStorage
   const homeLink = document.getElementById('homeLink');
   if (homeLink) {
     if (type === 'USER') homeLink.href = '/indexUser.html';
@@ -87,6 +82,11 @@
       const res = await authFetch(
         `/JobApplication/getApplicationsByUserId/${encodeURIComponent(userId)}`
       );
+
+      if (res.status === 403) {
+        note.textContent = 'Access denied. Please log in again.';
+        return;
+      }
 
       if (res.status === 404) {
         note.textContent = 'You have not submitted any applications yet.';

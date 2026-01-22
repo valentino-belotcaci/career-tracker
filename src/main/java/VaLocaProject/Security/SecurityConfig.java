@@ -53,7 +53,11 @@
                     "/createJobPost.html",
                     "/createJobApplication.html",
                     "/displayJobApplication.html",
-                    "/User/getUserByAccountId/**"
+                    "/User/getUserByAccountId/**",
+                    "/JobApplication/getApplicationsByUserId/**",
+                    "/JobPost/getAllPosts",
+                    "/JobApplication/getApplicationByIds"
+                    
                 ).permitAll() 
 
                 // Keep API endpoints protected by roles. For example, replace these with your API paths:

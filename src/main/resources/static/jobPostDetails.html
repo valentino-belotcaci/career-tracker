@@ -56,7 +56,7 @@
 <script>
 /* ================= HOME LINK ================= */
 (function setHomeLink() {
-  const type = localStorage.getItem("type");
+  const type = localStorage.getItem("type"); // UI type still in localStorage
   const homeLink = document.getElementById("homeLink");
   if (type === "USER") homeLink.href = "/indexUser.html";
   else if (type === "COMPANY") homeLink.href = "/indexCompany.html";
@@ -68,10 +68,11 @@ function getQueryParam(name) {
   return new URLSearchParams(window.location.search).get(name);
 }
 
+// Use cookies only, no JWT from localStorage
 function authFetch(url, options = {}) {
-  const token = localStorage.getItem("jwt");
-  if (!token) throw new Error("Not authenticated");
-  options.headers = { ...(options.headers || {}), Authorization: "Bearer " + token };
+  options = options || {};
+  options.credentials = 'include'; // send cookies automatically
+  options.headers = options.headers || {};
   return fetch(url, options);
 }
 
@@ -117,11 +118,10 @@ async function loadPostDetails() {
 /* ================= VIEW LOGIC ================= */
 async function configureView(postId) {
   const type = localStorage.getItem("type");
-  const loggedId = localStorage.getItem("loggedId");
+  const loggedId = localStorage.getItem("loggedId"); // still for UI
   const applyBtn = document.getElementById("applyBtn");
 
   if (type === "COMPANY") {
-    // COMPANY: show applications for this post
     await loadApplicationsForPost(postId);
     return;
   }

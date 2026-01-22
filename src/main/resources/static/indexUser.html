@@ -33,7 +33,7 @@
 (function() {
   // ===== LOGGED-IN CHECK =====
   // Only need loggedId in localStorage for user identification
-  const loggedId = localStorage.getItem('loggenId') || localStorage.getItem('loggedId');
+  const loggedId = localStorage.getItem('loggedId');
   if (!loggedId) {
     console.warn('No logged account id found, redirecting to login');
     window.location.href = '/login.html';
@@ -64,8 +64,5 @@
   });
 })();
 </script>
-</body>
-</html>
-</script>
-</body>
+
 </html>

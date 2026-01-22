@@ -13,15 +13,12 @@
   </header>
 
   <main class="wide-card">
-    <!-- give the title an id so JS can update it for users -->
     <h2 id="pageTitle">Your Job Posts</h2>
-    <!-- removed inline style, use CSS class -->
     <div class="add-post-container">
       <a href="/createJobPost.html"><button id="addPostBtn">Add job post</button></a>
     </div>
     <p id="note">Loading…</p>
 
-    <!-- use class and .hidden to control initial visibility via CSS -->
     <table id="postsTable" class="posts-table hidden">
       <thead>
         <tr>
@@ -44,25 +41,24 @@
   </footer>
 
   <script>
-    // authFetch helper: automatically attaches JWT
+    // ===== authFetch using HttpOnly cookie =====
     function authFetch(url, opts = {}) {
       opts = opts || {};
+      opts.credentials = 'include'; // send cookies automatically
       opts.headers = opts.headers || {};
-      const token = localStorage.getItem('jwt');
-      if (token) opts.headers = Object.assign({}, opts.headers, { 'Authorization': 'Bearer ' + token });
       return fetch(url, opts);
     }
 
-    // Dynamically update home link based on account type
-    const type = localStorage.getItem('type'); // "USER" or "COMPANY"
+    // ===== Home link dynamically based on type =====
+    const type = localStorage.getItem('type'); // account type still in localStorage
     const homeLink = document.getElementById('homeLink');
     if (homeLink) {
       if (type === 'USER') homeLink.href = '/indexUser.html';
       else if (type === 'COMPANY') homeLink.href = '/indexCompany.html';
-      else homeLink.href = '/index.html'; // fallback
+      else homeLink.href = '/index.html';
     }
 
-    // Load posts depending on account type
+    // ===== Load posts =====
     async function loadPostsBasedOnType() {
       const note = document.getElementById('note');
       const tbody = document.getElementById('postsBody');
@@ -70,7 +66,6 @@
       const addBtn = document.getElementById('addPostBtn');
       const postsTable = document.getElementById('postsTable');
 
-      // Adjust UI for user vs company
       if (type === "USER") {
         if (pageTitle) pageTitle.textContent = 'All Job Posts';
         if (addBtn && addBtn.parentElement) addBtn.parentElement.style.display = 'none';
@@ -82,8 +77,7 @@
       try {
         let postsRes;
 
-        if (type === "COMPANY" || !type) {
-          // COMPANY: fetch posts for the logged company
+        if (type === "COMPANY") {
           const loggedAccountId = localStorage.getItem('loggedId');
           if (!loggedAccountId) {
             note.textContent = 'No logged account found. Please log in.';
@@ -92,11 +86,13 @@
 
           // Get company by account id
           const companyRes = await authFetch(`/Company/getCompanyByAccountId/${encodeURIComponent(loggedAccountId)}`);
-          if (companyRes.status === 404) {
-            note.textContent = 'No company profile found for this account.';
-            return;
+          if (!companyRes.ok) {
+            if (companyRes.status === 404) {
+              note.textContent = 'No company profile found for this account.';
+              return;
+            }
+            throw new Error('Failed to load company');
           }
-          if (!companyRes.ok) throw new Error('Failed to load company');
 
           const company = await companyRes.json();
           if (!company) {
@@ -105,36 +101,29 @@
           }
 
           // Request posts for this company
-          const accountId = loggedAccountId;
-          postsRes = await authFetch(`/JobPost/getPostsByCompanyId/${encodeURIComponent(accountId)}`);
-          if (!postsRes.ok) {
-            if (postsRes.status === 404) {
-              note.textContent = 'No job posts found for this company.';
-              return;
-            }
-            throw new Error('Failed to load posts');
-          }
-        } else { 
-          // USER: fetch all posts across companies
+          const companyId = company.id || company.companyId;
+          postsRes = await authFetch(`/JobPost/getPostsByCompanyId/${encodeURIComponent(companyId)}`);
+        } else {
+          // USER: fetch all posts
           postsRes = await authFetch('/JobPost/getAllPosts');
-          if (!postsRes.ok) {
-            if (postsRes.status === 404) {
-              note.textContent = 'No job posts found.';
-              return;
-            }
-            throw new Error('Failed to load posts');
-          }
         }
 
-        const myPosts = await postsRes.json();
-        if (!myPosts || myPosts.length === 0) {
-          note.textContent = type === 'COMPANY' ? 'No job posts found for this company.' : 'No job posts found.';
+        if (!postsRes.ok) {
+          if (postsRes.status === 404) {
+            note.textContent = 'No job posts found.';
+            return;
+          }
+          throw new Error('Failed to load posts');
+        }
+
+        const posts = await postsRes.json();
+        if (!posts || posts.length === 0) {
+          note.textContent = 'No job posts found.';
           return;
         }
 
-        // populate table
         tbody.innerHTML = '';
-        myPosts.forEach(p => {
+        posts.forEach(p => {
           const tr = document.createElement('tr');
           const idVal = p.postId || p.id;
           tr.innerHTML = `
@@ -145,21 +134,14 @@
             <td>${p.available || ''}</td>
             <td>${p.salary || ''}</td>
           `;
-
           tr.style.cursor = 'pointer';
           tr.addEventListener('click', () => {
             if (!idVal) return;
-            if (type === 'COMPANY') {
-              window.location.href = `/jobPostDetails.html?postId=${encodeURIComponent(idVal)}&companyView=true`;
-            } else {
-              window.location.href = `/jobPostDetails.html?postId=${encodeURIComponent(idVal)}`;
-            }
+            window.location.href = `/jobPostDetails.html?postId=${encodeURIComponent(idVal)}`;
           });
-
           tbody.appendChild(tr);
         });
 
-        // toggle visibility via CSS class
         note.classList.add('hidden');
         postsTable.classList.remove('hidden');
       } catch (err) {
@@ -168,14 +150,9 @@
       }
     }
 
-    // initialize
+    // Initialize
     loadPostsBasedOnType();
-
-    // Poll for newly created posts
-    const pollInterval = setInterval(() => {
-        loadPostsBasedOnType();
-    }, 2500);
-
+    const pollInterval = setInterval(loadPostsBasedOnType, 2500);
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'visible') loadPostsBasedOnType();
     });
