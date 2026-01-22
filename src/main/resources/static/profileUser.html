@@ -59,7 +59,7 @@
   // ===== AUTH BOOTSTRAP =====
   // With HttpOnly cookies, we do NOT read the JWT in JS anymore.
   // We rely on the server sending it as a cookie and fetch with credentials.
-  const loggedId = localStorage.getItem('loggenId') || localStorage.getItem('loggedId');
+  const loggedId =  localStorage.getItem('loggedId');
 
   if (!loggedId) {
     console.warn('No logged account id found, redirecting to login');
