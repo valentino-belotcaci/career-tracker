@@ -58,7 +58,10 @@ public class AccountService {
         companyService.deleteAllCompanies();
     }
 
+
     public Optional<Account> getAccountByEmail(String email){
+
+
         User user = userService.getUserByEmail(email);
         if (user != null) {
             return Optional.of(user);

@@ -84,7 +84,9 @@ public class JobPostService {
     }
 
     public JobPost getPostByPostId(Long id) {
+
         JobPost foundPost = jobPostRepository.findById(id).orElse(null);
+
         return foundPost;
     }
 }
