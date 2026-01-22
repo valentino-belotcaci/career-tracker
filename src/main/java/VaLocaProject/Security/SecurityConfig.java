@@ -36,7 +36,6 @@
                     "/index.html",
                     "/register.html",
                     "/login.html",
-                    "/indexUser.html",
                     "/indexCompany.html",
                     "/profileUser.html",
                     "/profileCompany.html",
@@ -70,7 +69,10 @@
                     "/JobApplication/getApplicationsByPostId/**"
                     
                 ).permitAll() 
-
+                .requestMatchers(
+                    "/User/getAllUsers",
+                    "/indexUser.html"
+                ).hasRole("USER")
                 // Keep API endpoints protected by roles. For example, replace these with your API paths:
                 // .requestMatchers("/api/users/**").hasRole("USER")
                 // .requestMatchers("/api/companies/**").hasRole("COMPANY")
