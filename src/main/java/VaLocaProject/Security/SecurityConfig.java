@@ -1,4 +1,4 @@
-    package VaLocaProject.Security;
+package VaLocaProject.Security;
 
     import java.util.Arrays;
 
@@ -64,12 +64,15 @@
 
                     "/JobApplication/getApplicationsByUserId/**",
                     "/JobApplication/getApplicationByIds",
-                    "/JobApplication/getApplicationsByPostId/**"
+                    "/JobApplication/getApplicationsByPostId/**",
+
+                    // Allow clients to create job applications while debugging auth issues
+                    "/JobApplication/insertApplication/**",
+
+                    "/User/**"
                     
                 ).permitAll() 
-                .requestMatchers(
-                    "/User/**"
-                ).hasRole("USER")
+
                 // Keep API endpoints protected by roles. For example, replace these with your API paths:
                 // .requestMatchers("/api/users/**").hasRole("USER")
                 // .requestMatchers("/api/companies/**").hasRole("COMPANY")
