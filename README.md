@@ -11,7 +11,7 @@ export $(cat .env | xargs)
 
 brew install redis
 brew services start redis
-
+redis-cli
 
 ##  Features
 

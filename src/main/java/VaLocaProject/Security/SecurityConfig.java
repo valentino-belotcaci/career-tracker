@@ -55,6 +55,7 @@
                     "/User/getUserByAccountId/**",
                     "/JobApplication/getApplicationsByUserId/**",
                     "/JobPost/getAllPosts",
+                    "/JobPost/insertPost/**",
                     "/JobApplication/getApplicationByIds",
                     "/User/updateUser/**",
                     "/Company/updateCompany/**",
