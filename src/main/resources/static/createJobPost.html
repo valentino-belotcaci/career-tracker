@@ -104,7 +104,6 @@
             if (!postRes.ok) throw new Error('Failed to create job post');
 
             const created = await postRes.json();
-            localStorage.setItem('lastCreatedPostId', created.postId || created.id || '');
             window.location.href = '/displayJobPost.html';
           } catch (err) {
             console.error(err);

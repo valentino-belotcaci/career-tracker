@@ -172,13 +172,8 @@
     loadPostsBasedOnType();
 
     // Poll for newly created posts
-    let seenCreatedPostId = localStorage.getItem('lastCreatedPostId') || '';
     const pollInterval = setInterval(() => {
-      const curr = localStorage.getItem('lastCreatedPostId') || '';
-      if (curr && curr !== seenCreatedPostId) {
-        seenCreatedPostId = curr;
         loadPostsBasedOnType();
-      }
     }, 2500);
 
     document.addEventListener('visibilitychange', () => {

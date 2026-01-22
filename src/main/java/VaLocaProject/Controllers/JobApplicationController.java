@@ -58,8 +58,17 @@ public class JobApplicationController {
     // Parameters could be changed to 2 @PathVariable by "getApplicationsByIds/JobPost/{post_id}/User/{user_id}"
     @GetMapping("/getApplicationByIds")
     public ResponseEntity<JobApplication> getApplicationByIds(@RequestParam Long post_id, @RequestParam Long user_id) {
-        return ResponseEntity.ok(jobApplicationService.getApplicationByIds(post_id, user_id));
+
+        Optional<JobApplication> jobApplication =
+                jobApplicationService.getApplicationByIds(post_id, user_id);
+
+        if (jobApplication.isEmpty()) {
+            return ResponseEntity.notFound().build(); 
+        }
+
+        return ResponseEntity.ok(jobApplication.get());
     }
+
     
     // For users
     @GetMapping("/getApplicationsByUserId/{id}")

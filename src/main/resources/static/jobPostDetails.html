@@ -101,10 +101,11 @@ async function loadPostDetails() {
 
   try {
     const res = await authFetch("/JobPost/getAllPosts");
-    const posts = await res.json();
+    if (!res.ok) throw new Error("Failed to load posts");
 
+    const posts = await res.json();
     const post = posts.find(p =>
-      String(p.postId || p.post_id || p.id) === String(postId)
+      String(p.id || p.postId || p.post_id) === String(postId)
     );
 
     if (!post) {
@@ -112,16 +113,17 @@ async function loadPostDetails() {
       return;
     }
 
-    document.getElementById("postId").textContent = post.postId || post.id;
+    document.getElementById("postId").textContent = post.id || post.postId;
     document.getElementById("companyId").textContent = post.companyId || post.company_id;
     document.getElementById("name").textContent = post.name || "";
     document.getElementById("description").textContent = post.description || "";
     document.getElementById("duration").textContent = post.duration || "";
     document.getElementById("available").textContent = post.available || "";
     document.getElementById("salary").textContent = post.salary || "";
-    document.getElementById("createdAt").textContent = post.createdAt || post.created_at || "";
+    document.getElementById("createdAt").textContent =
+      post.createdAt || post.created_at || "";
 
-    configureView(postId);
+    await configureView(postId);
 
   } catch (err) {
     console.error(err);
@@ -152,24 +154,25 @@ async function configureView(postId) {
   }
 }
 
-/* ================= APPLICATION CHECK ================= */
+/* ================= CHECK APPLICATION ================= */
 
 async function checkExistingApplication(postId, userId) {
-  try {
-    const res = await authFetch(
-      `/JobApplication/getApplicationByIds?post_id=${postId}&user_id=${userId}`
-    );
+  const res = await authFetch(
+    `/JobApplication/getApplicationByIds?post_id=${postId}&user_id=${userId}`
+  );
 
-    // 200 → application exists
-    return res.status === 200;
-
-  } catch (err) {
-    // 404 → application does NOT exist
-    return false;
+  if (res.status === 200) {
+    return true;   // application exists
   }
+
+  if (res.status === 404) {
+    return false;  // application does NOT exist
+  }
+
+  throw new Error("Unexpected response: " + res.status);
 }
 
-/* ================= APPLICATIONS (COMPANY) ================= */
+/* ================= COMPANY VIEW ================= */
 
 async function loadApplicationsForPost(postId) {
   const appsNote = document.getElementById("appsNote");
@@ -177,8 +180,9 @@ async function loadApplicationsForPost(postId) {
 
   try {
     const res = await authFetch(`/JobApplication/getApplicationsByPostId/${postId}`);
-    const apps = await res.json();
+    if (!res.ok) throw new Error();
 
+    const apps = await res.json();
     if (!apps || apps.length === 0) {
       appsNote.textContent = "No applications found.";
       return;
@@ -188,7 +192,7 @@ async function loadApplicationsForPost(postId) {
     apps.forEach(a => {
       const tr = document.createElement("tr");
       tr.innerHTML = `
-        <td>${a.applicationId || a.id}</td>
+        <td>${a.id || a.applicationId}</td>
         <td>${a.userId || a.user_id}</td>
         <td>${a.status}</td>
         <td>${a.createdAt || a.created_at}</td>
@@ -210,7 +214,8 @@ async function loadApplicationsForPost(postId) {
 
 document.getElementById("applyBtn").addEventListener("click", () => {
   const postId = document.getElementById("postId").textContent;
-  window.location.href = `/jobApplication.html?postId=${postId}`;
+  // Redirect to the create application page with the postId
+  window.location.href = `/createJobApplication.html?postId=${encodeURIComponent(postId)}`;
 });
 
 document.getElementById("backBtn").addEventListener("click", () => history.back());

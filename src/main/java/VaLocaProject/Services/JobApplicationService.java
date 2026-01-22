@@ -19,18 +19,26 @@ public class JobApplicationService{
         return jobApplicationRepository.findAll();
     }
 
-    public Optional<JobApplication> insertApplication(JobApplication jobApplication){
-        JobApplication foundApplication = getApplicationByIds(jobApplication.getPostId(), jobApplication.getUserId());
-        // If the user already submitted an application for this post, return empty to indicate no new creation
-        if (foundApplication != null) {
+    public Optional<JobApplication> insertApplication(JobApplication jobApplication) {
+        // Check if an application already exists
+        Optional<JobApplication> foundApplication = getApplicationByIds(
+                jobApplication.getPostId(), jobApplication.getUserId()
+        );
+
+        // If the user already submitted an application for this post, return empty
+        if (foundApplication.isPresent()) {
             return Optional.empty();
         }
 
-        // Create the timestamp of the job application
+        // Set the creation timestamp
         jobApplication.setCreatedAt(new java.sql.Date(System.currentTimeMillis()));
+
+        // Save the new application
         JobApplication saved = jobApplicationRepository.save(jobApplication);
+
         return Optional.ofNullable(saved);
     }
+
 
     public void deleteAllApplications(){
         jobApplicationRepository.deleteAll();
@@ -40,8 +48,11 @@ public class JobApplicationService{
         return jobApplicationRepository.findByPostId(postId);
     }
 
-    public JobApplication getApplicationByIds(Long post_id, Long user_id){
-        return jobApplicationRepository.findByPostIdAndUserId(post_id, user_id);
+    public Optional<JobApplication> getApplicationByIds(Long post_id, Long user_id){
+        JobApplication jobApplication = jobApplicationRepository.findByPostIdAndUserId(post_id, user_id);
+        if (jobApplication != null) return Optional.of(jobApplication);
+        return Optional.empty();
+
     }
 
     public List<JobApplication> getApplicationsByUserId(Long id){
