@@ -13,6 +13,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -24,45 +25,46 @@ public class JWTFilter extends OncePerRequestFilter{
     private JWTService jwtService;
 
     @Autowired
-    // The context holds the beans. Spring interacts with the context to interact with the beans
     ApplicationContext context;
     
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        String authHeader = request.getHeader("Authorization");
+
         String token = null;
         String username = null;
-        
 
+        // Check Authorization header first
+        String authHeader = request.getHeader("Authorization");
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             token = authHeader.substring(7);
-            // Logic to extract username from token 
+        }
+
+        // If no header, check cookies for JWT
+        if (token == null && request.getCookies() != null) {
+            for (Cookie c : request.getCookies()) {
+                if ("jwt".equals(c.getName())) {
+                    token = c.getValue();
+                    break;
+                }
+            }
+        }
+
+        if (token != null) {
             username = jwtService.extractUsername(token);
         }
 
-        // SecurityContextHolder is the context that allows the authentication to "open" the resources for authorized-only
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            // If Securitycontext is not null it means its not authenticated yet
-            // Logic to set authentication in the security context 
-
-            // Load user details using username
-            UserDetails userDetails = context.getBean(AccountDetailsService.class).loadUserByUsername(username); 
+            UserDetails userDetails = context.getBean(AccountDetailsService.class).loadUserByUsername(username);
 
             if (jwtService.validateToken(token, userDetails)) {
-                // Set authentication in the security context
-                UsernamePasswordAuthenticationToken authToken = 
-                    new UsernamePasswordAuthenticationToken(
-                        userDetails, null, userDetails.getAuthorities());  
-
-                authToken.setDetails(
-                    new WebAuthenticationDetailsSource().buildDetails(request));
-                
+                UsernamePasswordAuthenticationToken authToken =
+                    new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
+
         filterChain.doFilter(request, response);
     }
-
-
 }

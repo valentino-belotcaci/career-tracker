@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import VaLocaProject.Models.Account;
 import VaLocaProject.Services.AccountService;
-import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 @CrossOrigin
@@ -117,18 +116,21 @@ public class AccountController {
                 .body(Map.of("type", type, "id", id));
     }
 
+    // FIX : Needs to be added in the frotnend for correct logout, we can add more things here
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(HttpServletResponse response) {
-    ResponseCookie cookie = ResponseCookie.from("JWT", "")
-            .httpOnly(true)
-            .secure(true)
-            .path("/")
-            .maxAge(0) // delete cookie
-            .sameSite("Strict")
-            .build();
-    response.setHeader(HttpHeaders.SET_COOKIE, cookie.toString());
-    return ResponseEntity.ok(Map.of("message", "Logged out"));
-}
+    public ResponseEntity<Map<String, String>> logout() {
+        ResponseCookie cookie = ResponseCookie.from("token", "")
+                .httpOnly(true)
+                .secure(true)   // keep consistent with authenticate cookie settings
+                .path("/")
+                .maxAge(0)      // expires immediately
+                .sameSite("Strict")
+                .build();
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .body(Map.of("message", "Logged out"));
+    }
 
 
 }

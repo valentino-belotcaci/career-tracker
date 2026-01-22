@@ -9,6 +9,7 @@
 <body>
 <header>
 	<a class="site-title" href="/indexCompany.html">CareerTracker</a>
+	<button id="logoutBtn" class="btn" style="float:right">Logout</button>
 </header>
 <main class="wide-card">
 	<h2>Company Dashboard</h2>
@@ -19,19 +20,30 @@
 	</div>
 
 	<div class="spaced">
-		<button id="logoutBtn" class="btn btn-secondary">Logout</button>
-	</div>
-
-	<div class="spaced">
+		<div class="spaced">
 		<a href="/displayJobPost.html"><button class="btn">Job Posts</button></a>
 	</div>
 
 	<script>
-	document.getElementById('logoutBtn').addEventListener('click', function(){
-		// Clear all localStorage entries to fully sign out the client
-		localStorage.clear();
-		globalThis.location.href = '/index.html';
-	});
+	document.getElementById('logoutBtn').addEventListener('click', async function () {
+      try {
+        // Call backend to clear cookie
+        const res = await fetch('/Account/logout', {
+          method: 'POST',
+          credentials: 'include'
+        });
+        // Clear any client-side stored auth state
+        try { localStorage.removeItem('jwt'); } catch(e){}
+        try { localStorage.removeItem('loggedId'); } catch(e){}
+        try { localStorage.removeItem('type'); } catch(e){}
+        // Redirect to login regardless of backend response
+        window.location.href = '/login.html';
+      } catch (err) {
+        // best-effort: clear client state and redirect
+        try { localStorage.removeItem('jwt'); } catch(e){}
+        window.location.href = '/login.html';
+      }
+    });
 	</script>
 </main>
 <footer>
