@@ -6,7 +6,12 @@ Career Tracker is a full-stack web app that helps users organize and monitor the
 
 ./gradlew bootRun
 ./gradlew clean build
+
 export $(cat .env | xargs)
+
+brew install redis
+brew services start redis
+
 
 ##  Features
 
