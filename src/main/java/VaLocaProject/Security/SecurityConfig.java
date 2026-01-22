@@ -57,7 +57,9 @@
                     "/JobApplication/getApplicationsByUserId/**",
                     "/JobPost/getAllPosts",
                     "/JobApplication/getApplicationByIds",
-                    "/User/updateUser/**"
+                    "/User/updateUser/**",
+                    "/updateCompany/**",
+                    "/Company/getCompanyById/**"
                     
                 ).permitAll() 
 
