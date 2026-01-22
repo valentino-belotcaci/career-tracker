@@ -270,6 +270,11 @@ footer {
   display: none !important;
 }
 
+/* Float utility class */
+.float-right {
+  float: right;
+}
+
 /* RESPONSIVE */
 @media (max-width: 600px) {
     main {
