@@ -80,7 +80,7 @@
   async function loadCompany() {
     
     try {
-      const res = await authFetch('/Company/getCompanyById/' + encodeURIComponent(companyId));
+      const res = await authFetch('/Company/getCompanyByAccountId/' + encodeURIComponent(companyId));
       if (res.status === 401 || res.status === 403) {
         window.location.href = '/login.html';
         return;
@@ -93,7 +93,6 @@
       if (!res.ok) throw new Error('Failed to load company');
 
       const company = await res.json();
-      const companyId = company.id || company.companyId || '';
 
       document.getElementById('companyId').value = companyId;
       document.getElementById('name').value = company.name || '';
