@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import VaLocaProject.Models.Account;
 import VaLocaProject.Services.AccountService;
+import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 @CrossOrigin
@@ -116,6 +117,18 @@ public class AccountController {
                 .body(Map.of("type", type, "id", id));
     }
 
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletResponse response) {
+    ResponseCookie cookie = ResponseCookie.from("JWT", "")
+            .httpOnly(true)
+            .secure(true)
+            .path("/")
+            .maxAge(0) // delete cookie
+            .sameSite("Strict")
+            .build();
+    response.setHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+    return ResponseEntity.ok(Map.of("message", "Logged out"));
+}
 
 
 }

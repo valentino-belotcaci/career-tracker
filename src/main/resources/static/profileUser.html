@@ -57,22 +57,21 @@
     <script>
 (function () {
   // ===== AUTH BOOTSTRAP =====
-  const token = localStorage.getItem('jwt');
-  // accept either canonical or legacy key
+  // With HttpOnly cookies, we do NOT read the JWT in JS anymore.
+  // We rely on the server sending it as a cookie and fetch with credentials.
   const loggedId = localStorage.getItem('loggenId') || localStorage.getItem('loggedId');
 
-  // require token; if missing redirect to login
-  if (!token) {
-    console.warn('Missing JWT, redirecting to login');
+  if (!loggedId) {
+    console.warn('No logged account id found, redirecting to login');
     window.location.href = '/login.html';
     return;
   }
 
-  // authFetch helper (adds Authorization header)
+  // authFetch helper: automatically sends cookies
   window.authFetch = function (url, opts = {}) {
     opts = opts || {};
+    opts.credentials = 'include'; // send cookies automatically
     opts.headers = opts.headers || {};
-    opts.headers = Object.assign({}, opts.headers, { 'Authorization': 'Bearer ' + token });
     return fetch(url, opts);
   };
 
@@ -84,7 +83,7 @@
   // ===== LOAD PROFILE =====
   async function loadProfile() {
     if (!loggedId) {
-      note.textContent = 'No logged account id found (loggenId or loggedId). Please log in.';
+      note.textContent = 'No logged account id found. Please log in.';
       return;
     }
 
@@ -118,17 +117,15 @@
     }
   }
 
-  // ===== UI BINDINGS (guard element presence) =====
+  // ===== UI BINDINGS =====
   const editBtn = document.getElementById('editBtn');
   if (editBtn) {
     editBtn.addEventListener('click', () => {
-      // populate edit fields from current view spans when entering edit mode
       document.getElementById('firstName').value = document.getElementById('viewFirstName').textContent || '';
       document.getElementById('lastName').value = document.getElementById('viewLastName').textContent || '';
       document.getElementById('email').value = document.getElementById('viewEmail').textContent || '';
       document.getElementById('description').value = document.getElementById('viewDescription').textContent || '';
 
-      // switch to edit mode
       document.body.classList.add('editing');
       viewMode.classList.add('hidden');
       editMode.classList.remove('hidden');
@@ -138,7 +135,6 @@
   const cancelBtn = document.getElementById('cancelBtn');
   if (cancelBtn) {
     cancelBtn.addEventListener('click', () => {
-      // discard edits and return to view mode
       document.body.classList.remove('editing');
       editMode.classList.add('hidden');
       viewMode.classList.remove('hidden');
@@ -154,18 +150,9 @@
       if (saveBtn) saveBtn.disabled = true;
 
       try {
-        // Ensure we have an id
         let id = document.getElementById('userId').value;
         if (!id) {
-          const accountKey = loggedId || localStorage.getItem('loggenId') || localStorage.getItem('loggedId');
-          if (!accountKey) {
-            message.style.color = 'red';
-            message.textContent = 'No logged account found. Please log in.';
-            if (saveBtn) saveBtn.disabled = false;
-            return;
-          }
-
-          const r = await authFetch(`/User/getUserByAccountId/${encodeURIComponent(accountKey)}`);
+          const r = await authFetch(`/User/getUserByAccountId/${encodeURIComponent(loggedId)}`);
           if (r.status === 404) {
             message.style.color = 'red';
             message.textContent = 'No user profile found for this account.';
@@ -207,7 +194,6 @@
 
         message.style.color = 'green';
         message.textContent = 'Saved successfully.';
-        // switch back to view mode
         document.body.classList.remove('editing');
         editMode.classList.add('hidden');
         viewMode.classList.remove('hidden');

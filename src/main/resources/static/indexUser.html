@@ -25,46 +25,44 @@
 	<div class="spaced">
 		<button id="logoutBtn">Logout</button>
 	</div>
-
-	<script>
-	document.getElementById('logoutBtn').addEventListener('click', function(){
-		// Clear all localStorage entries to fully sign out the client
-		localStorage.clear();
-		globalThis.location.href = '/index.html';
-	});
-	</script>
 </main>
 <footer>
 	<p>© 2026 CareerTracker</p>
 </footer>
-<script>
-(function () {
-  // Read token saved at login
-  const token = localStorage.getItem('jwt');
 
-  // If no token, send user back to login
-  if (!token) {
-    console.warn('No JWT found, redirecting to login');
+<script>
+(function() {
+  // ===== LOGGED-IN CHECK =====
+  // Only need loggedId in localStorage for user identification
+  const loggedId = localStorage.getItem('loggenId') || localStorage.getItem('loggedId');
+  if (!loggedId) {
+    console.warn('No logged account id found, redirecting to login');
     window.location.href = '/login.html';
     return;
   }
 
-  // Expose token for debugging if needed
-  window.jwt = token;
-
-  // Helper to call protected endpoints with Authorization header
-  window.authFetch = function (url, opts = {}) {
-    opts.headers = opts.headers || {};
-    // preserve existing headers and add Authorization
-    opts.headers = Object.assign({}, opts.headers, {
-      'Authorization': 'Bearer ' + token
-    });
+  // ===== HELPER FOR AUTHENTICATED REQUESTS =====
+  window.authFetch = function(url, opts = {}) {
+    opts = opts || {};
+    opts.credentials = 'include'; // automatically send HttpOnly cookie
     return fetch(url, opts);
   };
 
-  // Example usage:
-  // authFetch('/User/getProfile/' + localStorage.getItem('loggenId'))
-  //   .then(r => r.json()).then(console.log).catch(console.error);
+  // ===== LOGOUT =====
+  document.getElementById('logoutBtn').addEventListener('click', async function() {
+    try {
+      // Call server logout endpoint to clear HttpOnly cookie
+      await authFetch('/Account/logout', { method: 'POST' });
+    } catch (_) {
+      console.warn('Logout request failed; still clearing client data');
+    }
+    // Clear localStorage entries (keep loggedId optional)
+    localStorage.removeItem('loggedId');
+    localStorage.removeItem('loggenId');
+
+    // redirect to home page
+    window.location.href = '/index.html';
+  });
 })();
 </script>
 </body>
