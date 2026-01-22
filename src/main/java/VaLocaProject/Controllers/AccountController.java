@@ -1,9 +1,12 @@
 package VaLocaProject.Controllers;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -66,12 +69,10 @@ public class AccountController {
         // If value is present, return the value
         return ResponseEntity.ok(opt.get());
     }
-        
-    @PostMapping("/authenticate")
+        @PostMapping("/authenticate")
     public ResponseEntity<?> authenticateAccount(@RequestBody Map<String, String> body) {
         String email = body.get("email");
         String password = body.get("password");
-
 
         if (email == null || password == null) {
             return ResponseEntity.badRequest().body(Map.of("error", "email and password required"));
@@ -97,7 +98,21 @@ public class AccountController {
             id = found.getId();
         } */
 
-        return ResponseEntity.ok(Map.of("token", token, "type", type, "id", id));
+
+
+        // set JWT in HttpOnly cookie
+        ResponseCookie cookie = ResponseCookie.from("token", token)
+                .httpOnly(true)        // JS cannot read this cookie
+                .secure(true)         // set true in production with HTTPS
+                .path("/")             // cookie sent to all endpoints
+                .maxAge(Duration.ofMinutes(15)) // token expiration
+                .sameSite("Strict")    // CSRF protection
+                .build();
+
+        // Return cookie in header + type/id in JSON body
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .body(Map.of("type", type, "id", id));
     }
 
 
