@@ -77,9 +77,8 @@ public class UserService{
         // try read from redis first
         try {
             Object cached = redisService.get(key);
-            if (cached instanceof User) {
-                return (User) cached;
-            }
+            if (cached instanceof User user)  return user;
+            
         } catch (Exception ignored) {}
 
         // fallback to DB
