@@ -14,8 +14,6 @@ import org.springframework.stereotype.Service;
 import VaLocaProject.Models.Account;
 import VaLocaProject.Models.Company;
 import VaLocaProject.Models.User;
-import VaLocaProject.Repositories.CompanyRepository;
-import VaLocaProject.Repositories.UserRepository;
 import VaLocaProject.Security.JWTService;
 
 @Service
@@ -23,10 +21,10 @@ public class AccountService {
     
 
     @Autowired
-    CompanyRepository companyRepository;
+    CompanyService companyService;
 
     @Autowired
-    UserRepository userRepository;
+    UserService userService;
 
     // Injection of password encoder
     @Autowired
@@ -41,32 +39,32 @@ public class AccountService {
     public List<Account> getAllAccounts(){
         List<Account> accounts = new ArrayList<>();
         // addAll accepts Collection<? extends Account>
-        accounts.addAll(userRepository.findAll());
-        accounts.addAll(companyRepository.findAll());
+        accounts.addAll(userService.getAllUsers());
+        accounts.addAll(companyService.getAllCompanies());
         return accounts;
     }
 
     // Return concrete lists when callers need subclass types
     public List<User> getAllUsers() {
-        return userRepository.findAll();
+        return userService.getAllUsers();
     }
 
     public List<Company> getAllCompanies() {
-        return companyRepository.findAll();
+        return companyService.getAllCompanies();
     }
 
     public void deleteAllAccounts(){
-        userRepository.deleteAll();
-        companyRepository.deleteAll();
+        userService.deleteAllUsers();
+        companyService.deleteAllCompanies();
     }
 
     public Optional<Account> getAccountByEmail(String email){
-        User user = userRepository.findByEmail(email);
+        User user = userService.getUserByEmail(email);
         if (user != null) {
             return Optional.of(user);
         }
 
-        Company company = companyRepository.findByEmail(email);
+        Company company = companyService.getCompanyByEmail(email);
         if (company != null) {
             return Optional.of(company);
         }
@@ -80,10 +78,10 @@ public class AccountService {
 
         if ("USER".equalsIgnoreCase(type)) {
             User newUser = new User(email, encoded);
-            return userRepository.save(newUser);
+            return userService.insertUser(newUser);
         } else {
             Company newCompany = new Company(email, encoded);
-            return companyRepository.save(newCompany);
+            return companyService.insertCompany(newCompany);
         }
     }
 
@@ -91,10 +89,10 @@ public class AccountService {
 
 
     public String authenticate(String email, String password) {
-        User user = userRepository.findByEmail(email);
+        User user = userService.getUserByEmail(email);
        
         if (user == null) {
-            Company company = companyRepository.findByEmail(email);
+            Company company = companyService.getCompanyByEmail(email);
 
             if (company == null) {
                 return null;

@@ -13,7 +13,7 @@ public class RedisService {
     private RedisTemplate<String, Object> redisTemplate;
 
     // Save value with optional TTL
-    public void save(String key, Object value, Duration ttl) {
+    public void set(String key, Object value, Duration ttl) {
         redisTemplate.opsForValue().set(key, value, ttl);
     }
 
