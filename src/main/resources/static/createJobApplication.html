@@ -94,11 +94,14 @@
       const payload = {
         postId: Number(postId),
         userId: Number(userId),
-        userDescription: document.getElementById("userDescription").value
+        userDescription: document.getElementById("userDescription").value,
+        status: "SUBMITTED",
+        createdAt: new Date().toISOString(),
+
         // 'status' and 'createdAt' will be set server-side automatically
       };
 
-      const res = await authFetch("/JobApplication/insert", {
+      const res = await authFetch("/JobApplication/insertApplication", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
