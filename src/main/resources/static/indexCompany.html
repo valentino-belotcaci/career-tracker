@@ -11,6 +11,7 @@
 	<a class="site-title" href="/indexCompany.html">CareerTracker</a>
 	<button id="logoutBtn" class="btn" style="float:right">Logout</button>
 </header>
+
 <main class="wide-card">
 	<h2>Company Dashboard</h2>
 	<p>Welcome, company. Use the navigation to manage your company profile.</p>
@@ -20,58 +21,56 @@
 	</div>
 
 	<div class="spaced">
-		<div class="spaced">
 		<a href="/displayJobPost.html"><button class="btn">Job Posts</button></a>
 	</div>
-
-	<script>
-	document.getElementById('logoutBtn').addEventListener('click', async function () {
-      try {
-        // Call backend to clear cookie
-        const res = await fetch('/Account/logout', {
-          method: 'POST',
-          credentials: 'include'
-        });
-        // Clear any client-side stored auth state
-        try { localStorage.removeItem('jwt'); } catch(e){}
-        try { localStorage.removeItem('loggedId'); } catch(e){}
-        try { localStorage.removeItem('type'); } catch(e){}
-        // Redirect to login regardless of backend response
-        window.location.href = '/login.html';
-      } catch (err) {
-        // best-effort: clear client state and redirect
-        try { localStorage.removeItem('jwt'); } catch(e){}
-        window.location.href = '/login.html';
-      }
-    });
-	</script>
 </main>
+
 <footer>
 	<p>© 2026 CareerTracker</p>
 </footer>
+
 <script>
-(function () {
-  const token = localStorage.getItem('jwt');
-  if (!token) {
-    console.warn('No JWT found, redirecting to login');
-    window.location.href = '/login.html';
-    return;
-  }
-
-  // expose authFetch globally for other UI scripts on this page
-  window.authFetch = function (url, opts = {}) {
-    opts = opts || {};
-    opts.headers = opts.headers || {};
-    opts.headers = Object.assign({}, opts.headers, {
-      'Authorization': 'Bearer ' + token
+/* ================= LOGOUT ================= */
+document.getElementById('logoutBtn').addEventListener('click', async function () {
+  try {
+    // Call backend logout endpoint to clear HttpOnly cookie
+    await fetch('/Account/logout', {
+      method: 'POST',
+      credentials: 'include' // send cookies
     });
-    return fetch(url, opts);
-  };
+  } catch (err) {
+    console.warn('Logout request failed, still redirecting.');
+  } finally {
+    // Clear any client-side state just in case
+    localStorage.removeItem('loggedId');
+    localStorage.removeItem('type');
+    window.location.href = '/login.html';
+  }
+});
 
-  // Example usage:
-  // authFetch('/Company/profile/' + localStorage.getItem('loggenId'))
-  //   .then(r => r.json()).then(console.log).catch(console.error);
-})();
+/* ================= AUTH FETCH HELPER ================= */
+// all fetch requests automatically include cookies
+window.authFetch = function(url, opts = {}) {
+  opts = opts || {};
+  opts.credentials = 'include'; // important: send HttpOnly cookies
+  opts.headers = opts.headers || {};
+  return fetch(url, opts);
+};
+
+/* ================= CHECK AUTH ================= */
+/*
+(async function checkAuth() {
+  try {
+    const res = await authFetch('/Account/'); // optional endpoint to verify login
+    if (res.status === 401 || res.status === 403) {
+      window.location.href = '/login.html';
+    }
+  } catch (err) {
+    console.warn('Auth check failed, redirecting to login');
+    window.location.href = '/login.html';
+  }
+} 
+)();*/
 </script>
 </body>
 </html>
