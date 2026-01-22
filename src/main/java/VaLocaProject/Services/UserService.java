@@ -77,6 +77,7 @@ public class UserService{
         // try read from redis first
         try {
             Object cached = redisService.get(key);
+            // If cached is of type User, put it in variable "user" and return it
             if (cached instanceof User user)  return user;
             
         } catch (Exception ignored) {}
@@ -95,7 +96,25 @@ public class UserService{
     }
 
     public User getUserByEmail(String email){
-        return userRepository.findByEmail(email);
+        String key = "user:" + email;
+
+        try {
+            Object cached = redisService.get(key);
+            // If cached is of type User, put it in variable "user" and return it
+            if (cached instanceof User user) return user;
+        } catch (Exception e) {
+        }
+
+        User user = userRepository.findByEmail(email);
+
+        if (user != null){
+            try {
+                redisService.save(key, user, USER_CACHE_TTL);
+            } catch (Exception e) {
+            }
+        }
+
+        return user;
     };
 
 }
