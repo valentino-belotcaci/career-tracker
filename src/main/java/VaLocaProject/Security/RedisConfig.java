@@ -8,6 +8,8 @@ import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSeriali
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 
+// A bean class, so its scaned by Spring at startup
+// Every bean method becomes part of the context
 @Configuration
 public class RedisConfig {
 
@@ -16,16 +18,18 @@ public class RedisConfig {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(factory);
 
+        // Creates a serializer as redis only understands strings and byte arrays
+        // So we set that by default JAVA objects are serialised in JSON(byte array)
         RedisSerializer<Object> jsonSerializer = new GenericJackson2JsonRedisSerializer();
 
         // keep String serializer for keys
         template.setKeySerializer(new StringRedisSerializer());
         template.setHashKeySerializer(new StringRedisSerializer());
 
-        // use a single default serializer for values (replaces deprecated specific setters)
+        // use a single default serializer for values 
         template.setDefaultSerializer(jsonSerializer);
 
-        // let Spring call lifecycle methods — no explicit afterPropertiesSet()
+
         return template;
     }
 }
