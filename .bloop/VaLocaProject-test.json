@@ -1,20 +1,22 @@
 {
     "version": "1.4.0",
     "project": {
-        "name": "VaLocaProject",
+        "name": "VaLocaProject-test",
         "directory": "/Users/luca/Documents/SideQuests/career-tracker/career-tracker",
         "workspaceDir": "/Users/luca/Documents/SideQuests/career-tracker/career-tracker",
         "sources": [
-            "/Users/luca/Documents/SideQuests/career-tracker/career-tracker/src/main/java"
+            "/Users/luca/Documents/SideQuests/career-tracker/career-tracker/src/test/java"
         ],
         "dependencies": [
-            
+            "VaLocaProject"
         ],
         "classpath": [
-            "/Users/luca/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.42/8365263844ebb62398e0dc33057ba10ba472d3b8/lombok-1.18.42.jar",
+            "/Users/luca/Documents/SideQuests/career-tracker/career-tracker/.bloop/VaLocaProject/build/classes",
+            "/Users/luca/Documents/SideQuests/career-tracker/career-tracker/src/main/resources",
             "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-data-jpa/4.0.2/9a0d38da3839a394509639490e6b9a359bfafdd6/spring-boot-starter-data-jpa-4.0.2.jar",
             "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-security/4.0.2/a97d41ff391b6f55cba01d88234a61769f18e245/spring-boot-starter-security-4.0.2.jar",
             "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-data-redis/4.0.2/20f98c2c5ee7bcf1e4ad0bad6e8055902ab6d2f4/spring-boot-starter-data-redis-4.0.2.jar",
+            "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-test/4.0.2/7db044eeb1b61de514df1d129ab56e23cae4c08f/spring-boot-starter-test-4.0.2.jar",
             "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-web/4.0.2/f4d2d262fd44b65469a1eb1e16717fb7680b16d9/spring-boot-starter-web-4.0.2.jar",
             "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-jackson/4.0.2/9e75c7cb0b8ea189acb51cd2d2f25a165746b82b/spring-boot-starter-jackson-4.0.2.jar",
             "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-tomcat/4.0.2/fbe3d2c53b91570c1570e3a6150df6373aa2aa93/spring-boot-starter-tomcat-4.0.2.jar",
@@ -27,6 +29,7 @@
             "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.security/spring-security-crypto/7.0.2/8cec3433f111e21d6349a9788a1efcf547b8db03/spring-security-crypto-7.0.2.jar",
             "/Users/luca/.gradle/caches/modules-2/files-2.1/io.jsonwebtoken/jjwt-api/0.12.6/478886a888f6add04937baf0361144504a024967/jjwt-api-0.12.6.jar",
             "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.session/spring-session-data-redis/4.0.1/7b60f0cbf58c463a3aa17f7085d00914f64ad836/spring-session-data-redis-4.0.1.jar",
+            "/Users/luca/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.42/8365263844ebb62398e0dc33057ba10ba472d3b8/lombok-1.18.42.jar",
             "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-logging/4.0.2/96f2e505eb788327b3b170bf965427eecb0717f/spring-boot-starter-logging-4.0.2.jar",
             "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-autoconfigure/4.0.2/ce065b8656d0d5cdf845f1d03244f7199af806e8/spring-boot-autoconfigure-4.0.2.jar",
             "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-tomcat-runtime/4.0.2/1721a88cfff65f7589b8078fa83722da787112a0/spring-boot-starter-tomcat-runtime-4.0.2.jar",
@@ -42,6 +45,8 @@
             "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-data-redis/4.0.2/f8df60a02921b052e99bcd538d3fb1db8bf19e28/spring-boot-data-redis-4.0.2.jar",
             "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.data/spring-data-redis/4.0.2/66852b713b0ce3dfc007b0bea0da58aee1e2bc19/spring-data-redis-4.0.2.jar",
             "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework/spring-webmvc/7.0.3/8ceb3c7d21b317e87be72c0ba61fcab46b992b29/spring-webmvc-7.0.3.jar",
+            "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-test-autoconfigure/4.0.2/5d54635e17fe634f17684bec118a9d22325e6111/spring-boot-test-autoconfigure-4.0.2.jar",
+            "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-test/4.0.2/bd0fea465cd9763ab0dc78cd622a581e1e24c038/spring-boot-test-4.0.2.jar",
             "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-jackson/4.0.2/549b2611516613132380ba746326cf2222474c77/spring-boot-jackson-4.0.2.jar",
             "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-servlet/4.0.2/5cc904d6830095195c1d72b9425c670f45c9aaad/spring-boot-servlet-4.0.2.jar",
             "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-data-commons/4.0.2/6d3335e2fe45e4b97eb4f43440643e109e3b5cf9/spring-boot-data-commons-4.0.2.jar",
@@ -56,12 +61,21 @@
             "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework/spring-context/7.0.3/cea94cbc6244f0b4632cb4bb7608a1e4fab8afea/spring-context-7.0.3.jar",
             "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework/spring-aop/7.0.3/b5eb117b9e8a84075a3db6e7e52ef2bc7b54163f/spring-aop-7.0.3.jar",
             "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.session/spring-session-core/4.0.1/639fdb55aba43d64195e6be1c3dd497b5b3d2e1/spring-session-core-4.0.1.jar",
-            "/Users/luca/.gradle/caches/modules-2/files-2.1/ch.qos.logback/logback-classic/1.5.25/20c4bbe98fb58f50ee1ca6befd7e7731f13a19d3/logback-classic-1.5.25.jar",
-            "/Users/luca/.gradle/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-to-slf4j/2.25.3/30adfb40cca243ec88cf7ec1fddb411ab55faa4f/log4j-to-slf4j-2.25.3.jar",
-            "/Users/luca/.gradle/caches/modules-2/files-2.1/org.slf4j/jul-to-slf4j/2.0.17/524cb6ccc2b68a57604750e1ab8b13b5a786a6aa/jul-to-slf4j-2.0.17.jar",
+            "/Users/luca/.gradle/caches/modules-2/files-2.1/com.jayway.jsonpath/json-path/2.10.0/e1a0b2e6db75401181c9c1c64c6d155ca5c6d608/json-path-2.10.0.jar",
+            "/Users/luca/.gradle/caches/modules-2/files-2.1/jakarta.xml.bind/jakarta.xml.bind-api/4.0.4/d6d2327f3817d9a33a3b6b8f2e15a96bc2e7afdc/jakarta.xml.bind-api-4.0.4.jar",
+            "/Users/luca/.gradle/caches/modules-2/files-2.1/net.minidev/json-smart/2.6.0/5f858a43a325a8673da6869ab2bc787a1bcb2244/json-smart-2.6.0.jar",
+            "/Users/luca/.gradle/caches/modules-2/files-2.1/org.assertj/assertj-core/3.27.6/8f34ccd6808899ad1d0aac6a770b73191f2f2a53/assertj-core-3.27.6.jar",
+            "/Users/luca/.gradle/caches/modules-2/files-2.1/org.awaitility/awaitility/4.3.0/f0c0bc1e404e500bab3f498b922eaedeae1c0207/awaitility-4.3.0.jar",
+            "/Users/luca/.gradle/caches/modules-2/files-2.1/org.hamcrest/hamcrest/3.0/8fd9b78a8e6a6510a078a9e30e9e86a6035cfaf7/hamcrest-3.0.jar",
+            "/Users/luca/.gradle/caches/modules-2/files-2.1/org.junit.jupiter/junit-jupiter-params/6.0.2/960b882fd207c962066024b251699f2ca269dfac/junit-jupiter-params-6.0.2.jar",
+            "/Users/luca/.gradle/caches/modules-2/files-2.1/org.junit.jupiter/junit-jupiter-api/6.0.2/dc0f97bba32fe8c18c53b7435f16c497650725ba/junit-jupiter-api-6.0.2.jar",
+            "/Users/luca/.gradle/caches/modules-2/files-2.1/org.junit.platform/junit-platform-commons/6.0.2/8362b066c5ffd81ce59154f988e3a91f4a5578af/junit-platform-commons-6.0.2.jar",
+            "/Users/luca/.gradle/caches/modules-2/files-2.1/org.junit.jupiter/junit-jupiter/6.0.2/4178f527c0925fd5f5bc4995d226535f0a05abde/junit-jupiter-6.0.2.jar",
+            "/Users/luca/.gradle/caches/modules-2/files-2.1/org.mockito/mockito-junit-jupiter/5.20.0/58ed6603af5f8f53886d49be00264a3fdd1278d5/mockito-junit-jupiter-5.20.0.jar",
+            "/Users/luca/.gradle/caches/modules-2/files-2.1/org.mockito/mockito-core/5.20.0/a32f446f38acf636363c5693db6498047731b9e0/mockito-core-5.20.0.jar",
+            "/Users/luca/.gradle/caches/modules-2/files-2.1/org.skyscreamer/jsonassert/1.5.3/aaa43e0823d2a0e106e8754d6a9c4ab24e05e9bc/jsonassert-1.5.3.jar",
+            "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework/spring-test/7.0.3/1dca5b5694c352f0fc11a5f33a568e1017d06119/spring-test-7.0.3.jar",
             "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework/spring-web/7.0.3/3bcdb4075e17a56b148f69fe0d83a4c0662d9258/spring-web-7.0.3.jar",
-            "/Users/luca/.gradle/caches/modules-2/files-2.1/com.zaxxer/HikariCP/7.0.2/c2b43c946b86a14a96342379e22b004c56c6166d/HikariCP-7.0.2.jar",
-            "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework/spring-aspects/7.0.3/f457f2a458f24ce92abc8f9874e975e301c995e/spring-aspects-7.0.3.jar",
             "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework/spring-orm/7.0.3/e082a6e2548b3dbd918d4d8ee67572a330087aa1/spring-orm-7.0.3.jar",
             "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework/spring-jdbc/7.0.3/2027c81e12ec380ece0148b7afb59ce11b6762a6/spring-jdbc-7.0.3.jar",
             "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework/spring-tx/7.0.3/20da860c4c795f5c9f5dd1f3b2dbc4518cd724a6/spring-tx-7.0.3.jar",
@@ -70,16 +84,27 @@
             "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework/spring-beans/7.0.3/b3b43093088fe139d78643bcfe8ee9374a0dd892/spring-beans-7.0.3.jar",
             "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework/spring-expression/7.0.3/3fbdf8dc6a84d1f2c43c48c97e8220f29fab19d6/spring-expression-7.0.3.jar",
             "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework/spring-core/7.0.3/2072a89e347c63567a83349eb5908131ce6ea601/spring-core-7.0.3.jar",
+            "/Users/luca/.gradle/caches/modules-2/files-2.1/org.xmlunit/xmlunit-core/2.10.4/eff1eddcdb52fdeaa7e28ca68301db49361d8bec/xmlunit-core-2.10.4.jar",
+            "/Users/luca/.gradle/caches/modules-2/files-2.1/ch.qos.logback/logback-classic/1.5.25/20c4bbe98fb58f50ee1ca6befd7e7731f13a19d3/logback-classic-1.5.25.jar",
+            "/Users/luca/.gradle/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-to-slf4j/2.25.3/30adfb40cca243ec88cf7ec1fddb411ab55faa4f/log4j-to-slf4j-2.25.3.jar",
+            "/Users/luca/.gradle/caches/modules-2/files-2.1/org.slf4j/jul-to-slf4j/2.0.17/524cb6ccc2b68a57604750e1ab8b13b5a786a6aa/jul-to-slf4j-2.0.17.jar",
+            "/Users/luca/.gradle/caches/modules-2/files-2.1/com.zaxxer/HikariCP/7.0.2/c2b43c946b86a14a96342379e22b004c56c6166d/HikariCP-7.0.2.jar",
+            "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework/spring-aspects/7.0.3/f457f2a458f24ce92abc8f9874e975e301c995e/spring-aspects-7.0.3.jar",
             "/Users/luca/.gradle/caches/modules-2/files-2.1/io.lettuce/lettuce-core/6.8.2.RELEASE/a9dfbcd214fa6914220013de76da2657d47f8aa5/lettuce-core-6.8.2.RELEASE.jar",
             "/Users/luca/.gradle/caches/modules-2/files-2.1/commons-logging/commons-logging/1.3.5/a3fcc5d3c29b2b03433aa2d2f2d2c1b1638924a1/commons-logging-1.3.5.jar",
             "/Users/luca/.gradle/caches/modules-2/files-2.1/redis.clients.authentication/redis-authx-core/0.1.1-beta2/4037345ff29fb22c737bab2ed116a34262718ae5/redis-authx-core-0.1.1-beta2.jar",
             "/Users/luca/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/2.0.17/d9e58ac9c7779ba3bf8142aff6c830617a7fe60f/slf4j-api-2.0.17.jar",
-            "/Users/luca/.gradle/caches/modules-2/files-2.1/ch.qos.logback/logback-core/1.5.25/137f4ae0af7acaa0f9600a2ca18ddc9f3a0b899b/logback-core-1.5.25.jar",
+            "/Users/luca/.gradle/caches/modules-2/files-2.1/jakarta.activation/jakarta.activation-api/2.1.4/9e5c2a0d75dde71a0bedc4dbdbe47b78a5dc50f8/jakarta.activation-api-2.1.4.jar",
+            "/Users/luca/.gradle/caches/modules-2/files-2.1/net.minidev/accessors-smart/2.6.0/2d96f1d9b6ab7f13261aa81b15703574185747a0/accessors-smart-2.6.0.jar",
+            "/Users/luca/.gradle/caches/modules-2/files-2.1/net.bytebuddy/byte-buddy/1.17.8/af5735f63d00ca47a9375fae5c7471a36331c6ed/byte-buddy-1.17.8.jar",
+            "/Users/luca/.gradle/caches/modules-2/files-2.1/net.bytebuddy/byte-buddy-agent/1.17.8/f09415827a71be7ed621c7bd02550678f28bc81c/byte-buddy-agent-1.17.8.jar",
+            "/Users/luca/.gradle/caches/modules-2/files-2.1/com.vaadin.external.google/android-json/0.0.20131108.vaadin1/fa26d351fe62a6a17f5cda1287c1c6110dec413f/android-json-0.0.20131108.vaadin1.jar",
             "/Users/luca/.gradle/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-api/2.25.3/fb385330d89c2d61058ef649403f214633569205/log4j-api-2.25.3.jar",
             "/Users/luca/.gradle/caches/modules-2/files-2.1/io.micrometer/micrometer-observation/1.16.2/c076389e612fe3702628527c21a13743acafddfc/micrometer-observation-1.16.2.jar",
             "/Users/luca/.gradle/caches/modules-2/files-2.1/io.projectreactor/reactor-core/3.8.2/874cfa3a39b93eb74e21f13ce9dba537ccc49726/reactor-core-3.8.2.jar",
             "/Users/luca/.gradle/caches/modules-2/files-2.1/io.micrometer/micrometer-commons/1.16.2/58670637cb6e0c5fc855950fed827149779da226/micrometer-commons-1.16.2.jar",
             "/Users/luca/.gradle/caches/modules-2/files-2.1/org.jspecify/jspecify/1.0.0/7425a601c1c7ec76645a78d22b8c6a627edee507/jspecify-1.0.0.jar",
+            "/Users/luca/.gradle/caches/modules-2/files-2.1/ch.qos.logback/logback-core/1.5.25/137f4ae0af7acaa0f9600a2ca18ddc9f3a0b899b/logback-core-1.5.25.jar",
             "/Users/luca/.gradle/caches/modules-2/files-2.1/biz.aQute.bnd/biz.aQute.bnd.annotation/7.1.0/2f2be18c936d08cf46ea6cfa0043f34afdf38705/biz.aQute.bnd.annotation-7.1.0.jar",
             "/Users/luca/.gradle/caches/modules-2/files-2.1/com.google.errorprone/error_prone_annotations/2.38.0/fc0ae991433e8590ba51cd558421478318a74c8c/error_prone_annotations-2.38.0.jar",
             "/Users/luca/.gradle/caches/modules-2/files-2.1/org.osgi/org.osgi.annotation.bundle/2.0.0/f5c2cd6e670c3c5d440d3003efd5ef2ead5c68eb/org.osgi.annotation.bundle-2.0.0.jar",
@@ -101,6 +126,9 @@
             "/Users/luca/.gradle/caches/modules-2/files-2.1/io.netty/netty-resolver/4.2.9.Final/faccff808e9166f1d689e054059b172cffc738ab/netty-resolver-4.2.9.Final.jar",
             "/Users/luca/.gradle/caches/modules-2/files-2.1/io.netty/netty-buffer/4.2.9.Final/d419abb1b035e1ab4dae22766c3ebf37343cc82b/netty-buffer-4.2.9.Final.jar",
             "/Users/luca/.gradle/caches/modules-2/files-2.1/io.netty/netty-common/4.2.9.Final/4429addd1a59cb52dde76102f61b3f696fd3b9c/netty-common-4.2.9.Final.jar",
+            "/Users/luca/.gradle/caches/modules-2/files-2.1/org.ow2.asm/asm/9.7.1/f0ed132a49244b042cd0e15702ab9f2ce3cc8436/asm-9.7.1.jar",
+            "/Users/luca/.gradle/caches/modules-2/files-2.1/org.opentest4j/opentest4j/1.3.0/152ea56b3a72f655d4fd677fc0ef2596c3dd5e6e/opentest4j-1.3.0.jar",
+            "/Users/luca/.gradle/caches/modules-2/files-2.1/org.apiguardian/apiguardian-api/1.1.2/a231e0d844d2721b0fa1b238006d15c6ded6842a/apiguardian-api-1.1.2.jar",
             "/Users/luca/.gradle/caches/modules-2/files-2.1/org.osgi/org.osgi.resource/1.0.0/343c88949132984b3f2d4175a72c40b77dc65619/org.osgi.resource-1.0.0.jar",
             "/Users/luca/.gradle/caches/modules-2/files-2.1/org.osgi/org.osgi.service.serviceloader/1.0.0/3728ff37909c6a3c1870b3e851342d9f2bd3cc63/org.osgi.service.serviceloader-1.0.0.jar",
             "/Users/luca/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-annotations/2.20/6a5e7291ea3f2b590a7ce400adb7b3aea4d7e12c/jackson-annotations-2.20.jar",
@@ -108,10 +136,10 @@
             "/Users/luca/.gradle/caches/modules-2/files-2.1/jakarta.transaction/jakarta.transaction-api/2.0.1/51a520e3fae406abb84e2e1148e6746ce3f80a1a/jakarta.transaction-api-2.0.1.jar",
             "/Users/luca/.gradle/caches/modules-2/files-2.1/org.reactivestreams/reactive-streams/1.0.4/3864a1320d97d7b045f729a326e1e077661f31b7/reactive-streams-1.0.4.jar"
         ],
-        "out": "/Users/luca/Documents/SideQuests/career-tracker/career-tracker/.bloop/VaLocaProject/build",
-        "classesDir": "/Users/luca/Documents/SideQuests/career-tracker/career-tracker/.bloop/VaLocaProject/build/classes",
+        "out": "/Users/luca/Documents/SideQuests/career-tracker/career-tracker/.bloop/VaLocaProject-test/build",
+        "classesDir": "/Users/luca/Documents/SideQuests/career-tracker/career-tracker/.bloop/VaLocaProject-test/build/classes",
         "resources": [
-            "/Users/luca/Documents/SideQuests/career-tracker/career-tracker/src/main/resources"
+            "/Users/luca/Documents/SideQuests/career-tracker/career-tracker/src/test/resources"
         ],
         "java": {
             "options": [
@@ -122,17 +150,72 @@
                 "-encoding",
                 "UTF-8",
                 "-h",
-                "/Users/luca/Documents/SideQuests/career-tracker/career-tracker/build/generated/sources/headers/java/main",
+                "/Users/luca/Documents/SideQuests/career-tracker/career-tracker/build/generated/sources/headers/java/test",
                 "-g",
                 "-sourcepath",
                 "",
                 "-processorpath",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.42/8365263844ebb62398e0dc33057ba10ba472d3b8/lombok-1.18.42.jar",
                 "-s",
-                "/Users/luca/Documents/SideQuests/career-tracker/career-tracker/build/generated/sources/annotationProcessor/java/main",
+                "/Users/luca/Documents/SideQuests/career-tracker/career-tracker/build/generated/sources/annotationProcessor/java/test",
                 "-XDuseUnsharedTable=true",
                 "-parameters"
             ]
+        },
+        "test": {
+            "frameworks": [
+                {
+                    "names": [
+                        "com.novocode.junit.JUnitFramework"
+                    ]
+                },
+                {
+                    "names": [
+                        "org.scalatest.tools.Framework",
+                        "org.scalatest.tools.ScalaTestFramework"
+                    ]
+                },
+                {
+                    "names": [
+                        "org.scalacheck.ScalaCheckFramework"
+                    ]
+                },
+                {
+                    "names": [
+                        "org.specs.runner.SpecsFramework",
+                        "org.specs2.runner.Specs2Framework",
+                        "org.specs2.runner.SpecsFramework"
+                    ]
+                },
+                {
+                    "names": [
+                        "utest.runner.Framework"
+                    ]
+                },
+                {
+                    "names": [
+                        "munit.Framework"
+                    ]
+                }
+            ],
+            "options": {
+                "excludes": [
+                    
+                ],
+                "arguments": [
+                    {
+                        "args": [
+                            "-v",
+                            "-a"
+                        ],
+                        "framework": {
+                            "names": [
+                                "com.novocode.junit.JUnitFramework"
+                            ]
+                        }
+                    }
+                ]
+            }
         },
         "platform": {
             "name": "jvm",
@@ -146,9 +229,12 @@
                 
             ],
             "classpath": [
+                "/Users/luca/Documents/SideQuests/career-tracker/career-tracker/.bloop/VaLocaProject/build/classes",
+                "/Users/luca/Documents/SideQuests/career-tracker/career-tracker/src/main/resources",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-data-jpa/4.0.2/9a0d38da3839a394509639490e6b9a359bfafdd6/spring-boot-starter-data-jpa-4.0.2.jar",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-security/4.0.2/a97d41ff391b6f55cba01d88234a61769f18e245/spring-boot-starter-security-4.0.2.jar",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-data-redis/4.0.2/20f98c2c5ee7bcf1e4ad0bad6e8055902ab6d2f4/spring-boot-starter-data-redis-4.0.2.jar",
+                "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-test/4.0.2/7db044eeb1b61de514df1d129ab56e23cae4c08f/spring-boot-starter-test-4.0.2.jar",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-web/4.0.2/f4d2d262fd44b65469a1eb1e16717fb7680b16d9/spring-boot-starter-web-4.0.2.jar",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-jackson/4.0.2/9e75c7cb0b8ea189acb51cd2d2f25a165746b82b/spring-boot-starter-jackson-4.0.2.jar",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-tomcat/4.0.2/fbe3d2c53b91570c1570e3a6150df6373aa2aa93/spring-boot-starter-tomcat-4.0.2.jar",
@@ -164,6 +250,14 @@
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/io.jsonwebtoken/jjwt-api/0.12.6/478886a888f6add04937baf0361144504a024967/jjwt-api-0.12.6.jar",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.session/spring-session-data-redis/4.0.1/7b60f0cbf58c463a3aa17f7085d00914f64ad836/spring-session-data-redis-4.0.1.jar",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/org.postgresql/postgresql/42.7.9/2b748cd83a1ba3d6ef62dc64e075d1760f9a6d31/postgresql-42.7.9.jar",
+                "/Users/luca/.gradle/caches/modules-2/files-2.1/org.junit.jupiter/junit-jupiter/6.0.2/4178f527c0925fd5f5bc4995d226535f0a05abde/junit-jupiter-6.0.2.jar",
+                "/Users/luca/.gradle/caches/modules-2/files-2.1/org.junit.jupiter/junit-jupiter-engine/6.0.2/d2beca8e9e15c7f11898ce6f368450f95f2d3d94/junit-jupiter-engine-6.0.2.jar",
+                "/Users/luca/.gradle/caches/modules-2/files-2.1/org.junit.platform/junit-platform-engine/6.0.2/d652eea045999c54c5edc4fbf04e4612f9bf1421/junit-platform-engine-6.0.2.jar",
+                "/Users/luca/.gradle/caches/modules-2/files-2.1/org.mockito/mockito-junit-jupiter/5.20.0/58ed6603af5f8f53886d49be00264a3fdd1278d5/mockito-junit-jupiter-5.20.0.jar",
+                "/Users/luca/.gradle/caches/modules-2/files-2.1/org.junit.jupiter/junit-jupiter-params/6.0.2/960b882fd207c962066024b251699f2ca269dfac/junit-jupiter-params-6.0.2.jar",
+                "/Users/luca/.gradle/caches/modules-2/files-2.1/org.junit.jupiter/junit-jupiter-api/6.0.2/dc0f97bba32fe8c18c53b7435f16c497650725ba/junit-jupiter-api-6.0.2.jar",
+                "/Users/luca/.gradle/caches/modules-2/files-2.1/org.junit.platform/junit-platform-commons/6.0.2/8362b066c5ffd81ce59154f988e3a91f4a5578af/junit-platform-commons-6.0.2.jar",
+                "/Users/luca/.gradle/caches/modules-2/files-2.1/org.junit.platform/junit-platform-launcher/6.0.2/5e3a4f00d15162299a901bb3b1c1c328d580f046/junit-platform-launcher-6.0.2.jar",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-logging/4.0.2/96f2e505eb788327b3b170bf965427eecb0717f/spring-boot-starter-logging-4.0.2.jar",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-autoconfigure/4.0.2/ce065b8656d0d5cdf845f1d03244f7199af806e8/spring-boot-autoconfigure-4.0.2.jar",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-tomcat-runtime/4.0.2/1721a88cfff65f7589b8078fa83722da787112a0/spring-boot-starter-tomcat-runtime-4.0.2.jar",
@@ -180,6 +274,8 @@
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-data-redis/4.0.2/f8df60a02921b052e99bcd538d3fb1db8bf19e28/spring-boot-data-redis-4.0.2.jar",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.data/spring-data-redis/4.0.2/66852b713b0ce3dfc007b0bea0da58aee1e2bc19/spring-data-redis-4.0.2.jar",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework/spring-webmvc/7.0.3/8ceb3c7d21b317e87be72c0ba61fcab46b992b29/spring-webmvc-7.0.3.jar",
+                "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-test-autoconfigure/4.0.2/5d54635e17fe634f17684bec118a9d22325e6111/spring-boot-test-autoconfigure-4.0.2.jar",
+                "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-test/4.0.2/bd0fea465cd9763ab0dc78cd622a581e1e24c038/spring-boot-test-4.0.2.jar",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-jackson/4.0.2/549b2611516613132380ba746326cf2222474c77/spring-boot-jackson-4.0.2.jar",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-servlet/4.0.2/5cc904d6830095195c1d72b9425c670f45c9aaad/spring-boot-servlet-4.0.2.jar",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-data-commons/4.0.2/6d3335e2fe45e4b97eb4f43440643e109e3b5cf9/spring-boot-data-commons-4.0.2.jar",
@@ -197,20 +293,33 @@
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-core/2.20.2/615d3bd6d47b569e93d2ad45423f93ca9b002d73/jackson-core-2.20.2.jar",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-databind/2.20.2/257229ed4142d1b01a46b71105fd016e9cf7063e/jackson-databind-2.20.2.jar",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/org.checkerframework/checker-qual/3.52.0/9c17f496846ab1fca8975c6a50ceac0b3bbe63f0/checker-qual-3.52.0.jar",
-                "/Users/luca/.gradle/caches/modules-2/files-2.1/ch.qos.logback/logback-classic/1.5.25/20c4bbe98fb58f50ee1ca6befd7e7731f13a19d3/logback-classic-1.5.25.jar",
-                "/Users/luca/.gradle/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-to-slf4j/2.25.3/30adfb40cca243ec88cf7ec1fddb411ab55faa4f/log4j-to-slf4j-2.25.3.jar",
-                "/Users/luca/.gradle/caches/modules-2/files-2.1/org.slf4j/jul-to-slf4j/2.0.17/524cb6ccc2b68a57604750e1ab8b13b5a786a6aa/jul-to-slf4j-2.0.17.jar",
+                "/Users/luca/.gradle/caches/modules-2/files-2.1/com.jayway.jsonpath/json-path/2.10.0/e1a0b2e6db75401181c9c1c64c6d155ca5c6d608/json-path-2.10.0.jar",
+                "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework/spring-oxm/7.0.3/cfa530d3c63345ce90be9619978398e382fbbc27/spring-oxm-7.0.3.jar",
+                "/Users/luca/.gradle/caches/modules-2/files-2.1/org.hibernate.orm/hibernate-core/7.2.1.Final/f51fc8e618bce4aeab0e848e84e6fa4e22a2cb64/hibernate-core-7.2.1.Final.jar",
+                "/Users/luca/.gradle/caches/modules-2/files-2.1/org.glassfish.jaxb/jaxb-runtime/4.0.6/fb95ebb62564657b2fedfe165b859789ef3a8711/jaxb-runtime-4.0.6.jar",
+                "/Users/luca/.gradle/caches/modules-2/files-2.1/org.glassfish.jaxb/jaxb-core/4.0.6/8e61282303777fc98a00cc3affd0560d68748a75/jaxb-core-4.0.6.jar",
+                "/Users/luca/.gradle/caches/modules-2/files-2.1/jakarta.xml.bind/jakarta.xml.bind-api/4.0.4/d6d2327f3817d9a33a3b6b8f2e15a96bc2e7afdc/jakarta.xml.bind-api-4.0.4.jar",
+                "/Users/luca/.gradle/caches/modules-2/files-2.1/net.minidev/json-smart/2.6.0/5f858a43a325a8673da6869ab2bc787a1bcb2244/json-smart-2.6.0.jar",
+                "/Users/luca/.gradle/caches/modules-2/files-2.1/org.assertj/assertj-core/3.27.6/8f34ccd6808899ad1d0aac6a770b73191f2f2a53/assertj-core-3.27.6.jar",
+                "/Users/luca/.gradle/caches/modules-2/files-2.1/org.awaitility/awaitility/4.3.0/f0c0bc1e404e500bab3f498b922eaedeae1c0207/awaitility-4.3.0.jar",
+                "/Users/luca/.gradle/caches/modules-2/files-2.1/org.hamcrest/hamcrest/3.0/8fd9b78a8e6a6510a078a9e30e9e86a6035cfaf7/hamcrest-3.0.jar",
+                "/Users/luca/.gradle/caches/modules-2/files-2.1/org.mockito/mockito-core/5.20.0/a32f446f38acf636363c5693db6498047731b9e0/mockito-core-5.20.0.jar",
+                "/Users/luca/.gradle/caches/modules-2/files-2.1/org.skyscreamer/jsonassert/1.5.3/aaa43e0823d2a0e106e8754d6a9c4ab24e05e9bc/jsonassert-1.5.3.jar",
+                "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework/spring-test/7.0.3/1dca5b5694c352f0fc11a5f33a568e1017d06119/spring-test-7.0.3.jar",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework/spring-web/7.0.3/3bcdb4075e17a56b148f69fe0d83a4c0662d9258/spring-web-7.0.3.jar",
-                "/Users/luca/.gradle/caches/modules-2/files-2.1/com.zaxxer/HikariCP/7.0.2/c2b43c946b86a14a96342379e22b004c56c6166d/HikariCP-7.0.2.jar",
-                "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework/spring-aspects/7.0.3/f457f2a458f24ce92abc8f9874e975e301c995e/spring-aspects-7.0.3.jar",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework/spring-orm/7.0.3/e082a6e2548b3dbd918d4d8ee67572a330087aa1/spring-orm-7.0.3.jar",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework/spring-jdbc/7.0.3/2027c81e12ec380ece0148b7afb59ce11b6762a6/spring-jdbc-7.0.3.jar",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework/spring-tx/7.0.3/20da860c4c795f5c9f5dd1f3b2dbc4518cd724a6/spring-tx-7.0.3.jar",
-                "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework/spring-oxm/7.0.3/cfa530d3c63345ce90be9619978398e382fbbc27/spring-oxm-7.0.3.jar",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.data/spring-data-commons/4.0.2/833a27ea75a6b41786f7dc959fea24c00bfc46fd/spring-data-commons-4.0.2.jar",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework/spring-beans/7.0.3/b3b43093088fe139d78643bcfe8ee9374a0dd892/spring-beans-7.0.3.jar",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework/spring-expression/7.0.3/3fbdf8dc6a84d1f2c43c48c97e8220f29fab19d6/spring-expression-7.0.3.jar",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework/spring-core/7.0.3/2072a89e347c63567a83349eb5908131ce6ea601/spring-core-7.0.3.jar",
+                "/Users/luca/.gradle/caches/modules-2/files-2.1/org.xmlunit/xmlunit-core/2.10.4/eff1eddcdb52fdeaa7e28ca68301db49361d8bec/xmlunit-core-2.10.4.jar",
+                "/Users/luca/.gradle/caches/modules-2/files-2.1/ch.qos.logback/logback-classic/1.5.25/20c4bbe98fb58f50ee1ca6befd7e7731f13a19d3/logback-classic-1.5.25.jar",
+                "/Users/luca/.gradle/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-to-slf4j/2.25.3/30adfb40cca243ec88cf7ec1fddb411ab55faa4f/log4j-to-slf4j-2.25.3.jar",
+                "/Users/luca/.gradle/caches/modules-2/files-2.1/org.slf4j/jul-to-slf4j/2.0.17/524cb6ccc2b68a57604750e1ab8b13b5a786a6aa/jul-to-slf4j-2.0.17.jar",
+                "/Users/luca/.gradle/caches/modules-2/files-2.1/com.zaxxer/HikariCP/7.0.2/c2b43c946b86a14a96342379e22b004c56c6166d/HikariCP-7.0.2.jar",
+                "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework/spring-aspects/7.0.3/f457f2a458f24ce92abc8f9874e975e301c995e/spring-aspects-7.0.3.jar",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/io.lettuce/lettuce-core/6.8.2.RELEASE/a9dfbcd214fa6914220013de76da2657d47f8aa5/lettuce-core-6.8.2.RELEASE.jar",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/commons-logging/commons-logging/1.3.5/a3fcc5d3c29b2b03433aa2d2f2d2c1b1638924a1/commons-logging-1.3.5.jar",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/redis.clients.authentication/redis-authx-core/0.1.1-beta2/4037345ff29fb22c737bab2ed116a34262718ae5/redis-authx-core-0.1.1-beta2.jar",
@@ -218,18 +327,25 @@
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/tools.jackson.core/jackson-core/3.0.4/c5be0f5814e161030c29fc48b92c27331729ab7f/jackson-core-3.0.4.jar",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/tools.jackson.core/jackson-databind/3.0.4/b5f818b0b9c79d344aede4b87064cc0e323f9ef2/jackson-databind-3.0.4.jar",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-annotations/2.20/6a5e7291ea3f2b590a7ce400adb7b3aea4d7e12c/jackson-annotations-2.20.jar",
+                "/Users/luca/.gradle/caches/modules-2/files-2.1/org.eclipse.angus/angus-activation/2.0.3/7f80607ea5014fef0b1779e6c33d63a88a45a563/angus-activation-2.0.3.jar",
+                "/Users/luca/.gradle/caches/modules-2/files-2.1/jakarta.activation/jakarta.activation-api/2.1.4/9e5c2a0d75dde71a0bedc4dbdbe47b78a5dc50f8/jakarta.activation-api-2.1.4.jar",
+                "/Users/luca/.gradle/caches/modules-2/files-2.1/net.minidev/accessors-smart/2.6.0/2d96f1d9b6ab7f13261aa81b15703574185747a0/accessors-smart-2.6.0.jar",
+                "/Users/luca/.gradle/caches/modules-2/files-2.1/net.bytebuddy/byte-buddy/1.17.8/af5735f63d00ca47a9375fae5c7471a36331c6ed/byte-buddy-1.17.8.jar",
+                "/Users/luca/.gradle/caches/modules-2/files-2.1/net.bytebuddy/byte-buddy-agent/1.17.8/f09415827a71be7ed621c7bd02550678f28bc81c/byte-buddy-agent-1.17.8.jar",
+                "/Users/luca/.gradle/caches/modules-2/files-2.1/org.objenesis/objenesis/3.3/1049c09f1de4331e8193e579448d0916d75b7631/objenesis-3.3.jar",
+                "/Users/luca/.gradle/caches/modules-2/files-2.1/com.vaadin.external.google/android-json/0.0.20131108.vaadin1/fa26d351fe62a6a17f5cda1287c1c6110dec413f/android-json-0.0.20131108.vaadin1.jar",
+                "/Users/luca/.gradle/caches/modules-2/files-2.1/io.micrometer/micrometer-observation/1.16.2/c076389e612fe3702628527c21a13743acafddfc/micrometer-observation-1.16.2.jar",
+                "/Users/luca/.gradle/caches/modules-2/files-2.1/io.projectreactor/reactor-core/3.8.2/874cfa3a39b93eb74e21f13ce9dba537ccc49726/reactor-core-3.8.2.jar",
+                "/Users/luca/.gradle/caches/modules-2/files-2.1/io.micrometer/micrometer-commons/1.16.2/58670637cb6e0c5fc855950fed827149779da226/micrometer-commons-1.16.2.jar",
+                "/Users/luca/.gradle/caches/modules-2/files-2.1/org.jspecify/jspecify/1.0.0/7425a601c1c7ec76645a78d22b8c6a627edee507/jspecify-1.0.0.jar",
+                "/Users/luca/.gradle/caches/modules-2/files-2.1/org.opentest4j/opentest4j/1.3.0/152ea56b3a72f655d4fd677fc0ef2596c3dd5e6e/opentest4j-1.3.0.jar",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/ch.qos.logback/logback-core/1.5.25/137f4ae0af7acaa0f9600a2ca18ddc9f3a0b899b/logback-core-1.5.25.jar",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-api/2.25.3/fb385330d89c2d61058ef649403f214633569205/log4j-api-2.25.3.jar",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/org.apache.tomcat.embed/tomcat-embed-websocket/11.0.15/4c0eced7d97fe8404c722d5ff02757a05a6d5033/tomcat-embed-websocket-11.0.15.jar",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/org.apache.tomcat.embed/tomcat-embed-core/11.0.15/aa20506537e3efa61afd6b57d79f9da6a55f37ae/tomcat-embed-core-11.0.15.jar",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/org.apache.tomcat.embed/tomcat-embed-el/11.0.15/f20bc5f17baa18abeca76a640ad774d6f80a265b/tomcat-embed-el-11.0.15.jar",
-                "/Users/luca/.gradle/caches/modules-2/files-2.1/io.micrometer/micrometer-observation/1.16.2/c076389e612fe3702628527c21a13743acafddfc/micrometer-observation-1.16.2.jar",
-                "/Users/luca/.gradle/caches/modules-2/files-2.1/org.hibernate.orm/hibernate-core/7.2.1.Final/f51fc8e618bce4aeab0e848e84e6fa4e22a2cb64/hibernate-core-7.2.1.Final.jar",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/org.antlr/antlr4-runtime/4.13.2/fc3db6d844df652a3d5db31c87fa12757f13691d/antlr4-runtime-4.13.2.jar",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/org.aspectj/aspectjweaver/1.9.25.1/a713c790da4d794c7dfb542b550d4e44898d5e23/aspectjweaver-1.9.25.1.jar",
-                "/Users/luca/.gradle/caches/modules-2/files-2.1/io.projectreactor/reactor-core/3.8.2/874cfa3a39b93eb74e21f13ce9dba537ccc49726/reactor-core-3.8.2.jar",
-                "/Users/luca/.gradle/caches/modules-2/files-2.1/io.micrometer/micrometer-commons/1.16.2/58670637cb6e0c5fc855950fed827149779da226/micrometer-commons-1.16.2.jar",
-                "/Users/luca/.gradle/caches/modules-2/files-2.1/org.jspecify/jspecify/1.0.0/7425a601c1c7ec76645a78d22b8c6a627edee507/jspecify-1.0.0.jar",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/io.netty/netty-resolver-dns/4.2.9.Final/565e7ff1266db445b6b1621b2f68015bf20b5406/netty-resolver-dns-4.2.9.Final.jar",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/io.netty/netty-handler/4.2.9.Final/f79da6a81f4390ed067301235e29705a7f774c5b/netty-handler-4.2.9.Final.jar",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/io.netty/netty-transport-native-unix-common/4.2.9.Final/ff416b5aaac1fbfe625ee92deb08664e938aa00/netty-transport-native-unix-common-4.2.9.Final.jar",
@@ -239,19 +355,14 @@
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/io.netty/netty-resolver/4.2.9.Final/faccff808e9166f1d689e054059b172cffc738ab/netty-resolver-4.2.9.Final.jar",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/io.netty/netty-buffer/4.2.9.Final/d419abb1b035e1ab4dae22766c3ebf37343cc82b/netty-buffer-4.2.9.Final.jar",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/io.netty/netty-common/4.2.9.Final/4429addd1a59cb52dde76102f61b3f696fd3b9c/netty-common-4.2.9.Final.jar",
-                "/Users/luca/.gradle/caches/modules-2/files-2.1/org.glassfish.jaxb/jaxb-runtime/4.0.6/fb95ebb62564657b2fedfe165b859789ef3a8711/jaxb-runtime-4.0.6.jar",
-                "/Users/luca/.gradle/caches/modules-2/files-2.1/org.glassfish.jaxb/jaxb-core/4.0.6/8e61282303777fc98a00cc3affd0560d68748a75/jaxb-core-4.0.6.jar",
-                "/Users/luca/.gradle/caches/modules-2/files-2.1/jakarta.xml.bind/jakarta.xml.bind-api/4.0.4/d6d2327f3817d9a33a3b6b8f2e15a96bc2e7afdc/jakarta.xml.bind-api-4.0.4.jar",
+                "/Users/luca/.gradle/caches/modules-2/files-2.1/org.ow2.asm/asm/9.7.1/f0ed132a49244b042cd0e15702ab9f2ce3cc8436/asm-9.7.1.jar",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/jakarta.persistence/jakarta.persistence-api/3.2.0/bb75a113f3fa191c2c7ee7b206d8e674251b3129/jakarta.persistence-api-3.2.0.jar",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/jakarta.transaction/jakarta.transaction-api/2.0.1/51a520e3fae406abb84e2e1148e6746ce3f80a1a/jakarta.transaction-api-2.0.1.jar",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/org.hibernate.models/hibernate-models/1.0.1/3158c5f9309494b905de62c72f6f02d108aea651/hibernate-models-1.0.1.jar",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/org.jboss.logging/jboss-logging/3.6.1.Final/886afbb445b4016a37c8960a7aef6ebd769ce7e5/jboss-logging-3.6.1.Final.jar",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/com.fasterxml/classmate/1.7.3/f61c7e7b81e9249b0f6a05914eff9d54fb09f4a0/classmate-1.7.3.jar",
-                "/Users/luca/.gradle/caches/modules-2/files-2.1/net.bytebuddy/byte-buddy/1.17.8/af5735f63d00ca47a9375fae5c7471a36331c6ed/byte-buddy-1.17.8.jar",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/jakarta.inject/jakarta.inject-api/2.0.1/4c28afe1991a941d7702fe1362c365f0a8641d1e/jakarta.inject-api-2.0.1.jar",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/org.reactivestreams/reactive-streams/1.0.4/3864a1320d97d7b045f729a326e1e077661f31b7/reactive-streams-1.0.4.jar",
-                "/Users/luca/.gradle/caches/modules-2/files-2.1/org.eclipse.angus/angus-activation/2.0.3/7f80607ea5014fef0b1779e6c33d63a88a45a563/angus-activation-2.0.3.jar",
-                "/Users/luca/.gradle/caches/modules-2/files-2.1/jakarta.activation/jakarta.activation-api/2.1.4/9e5c2a0d75dde71a0bedc4dbdbe47b78a5dc50f8/jakarta.activation-api-2.1.4.jar",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/org.glassfish.jaxb/txw2/4.0.6/4f4cd53b5ff9a2c5aa1211f15ed2569c57dfb044/txw2-4.0.6.jar",
                 "/Users/luca/.gradle/caches/modules-2/files-2.1/com.sun.istack/istack-commons-runtime/4.1.2/18ec117c85f3ba0ac65409136afa8e42bc74e739/istack-commons-runtime-4.1.2.jar"
             ]
@@ -339,18 +450,18 @@
                     ]
                 },
                 {
-                    "organization": "org.osgi",
-                    "name": "org.osgi.annotation.versioning",
-                    "version": "1.1.2",
+                    "organization": "org.junit.jupiter",
+                    "name": "junit-jupiter-params",
+                    "version": "6.0.2",
                     "artifacts": [
                         {
-                            "name": "org.osgi.annotation.versioning",
-                            "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/org.osgi/org.osgi.annotation.versioning/1.1.2/dc3cd4ec96c0b3c5459fe00694bd73a816ecf93e/org.osgi.annotation.versioning-1.1.2.jar"
+                            "name": "junit-jupiter-params",
+                            "classifier": "sources",
+                            "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/org.junit.jupiter/junit-jupiter-params/6.0.2/35ed7e38169e88e750d295b91ae465d18233b829/junit-jupiter-params-6.0.2-sources.jar"
                         },
                         {
-                            "name": "org.osgi.annotation.versioning",
-                            "classifier": "sources",
-                            "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/org.osgi/org.osgi.annotation.versioning/1.1.2/e6df443d6fbda19c147f7b82171007de8d62471b/org.osgi.annotation.versioning-1.1.2-sources.jar"
+                            "name": "junit-jupiter-params",
+                            "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/org.junit.jupiter/junit-jupiter-params/6.0.2/960b882fd207c962066024b251699f2ca269dfac/junit-jupiter-params-6.0.2.jar"
                         }
                     ]
                 },
@@ -371,18 +482,18 @@
                     ]
                 },
                 {
-                    "organization": "org.junit.jupiter",
-                    "name": "junit-jupiter-params",
-                    "version": "6.0.2",
+                    "organization": "org.osgi",
+                    "name": "org.osgi.annotation.versioning",
+                    "version": "1.1.2",
                     "artifacts": [
                         {
-                            "name": "junit-jupiter-params",
-                            "classifier": "sources",
-                            "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/org.junit.jupiter/junit-jupiter-params/6.0.2/35ed7e38169e88e750d295b91ae465d18233b829/junit-jupiter-params-6.0.2-sources.jar"
+                            "name": "org.osgi.annotation.versioning",
+                            "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/org.osgi/org.osgi.annotation.versioning/1.1.2/dc3cd4ec96c0b3c5459fe00694bd73a816ecf93e/org.osgi.annotation.versioning-1.1.2.jar"
                         },
                         {
-                            "name": "junit-jupiter-params",
-                            "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/org.junit.jupiter/junit-jupiter-params/6.0.2/960b882fd207c962066024b251699f2ca269dfac/junit-jupiter-params-6.0.2.jar"
+                            "name": "org.osgi.annotation.versioning",
+                            "classifier": "sources",
+                            "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/org.osgi/org.osgi.annotation.versioning/1.1.2/e6df443d6fbda19c147f7b82171007de8d62471b/org.osgi.annotation.versioning-1.1.2-sources.jar"
                         }
                     ]
                 },
@@ -403,22 +514,6 @@
                     ]
                 },
                 {
-                    "organization": "io.netty",
-                    "name": "netty-resolver-dns",
-                    "version": "4.2.9.Final",
-                    "artifacts": [
-                        {
-                            "name": "netty-resolver-dns",
-                            "classifier": "sources",
-                            "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/io.netty/netty-resolver-dns/4.2.9.Final/8e89bd62160bf3975ff405781f7d4b7536c0bc35/netty-resolver-dns-4.2.9.Final-sources.jar"
-                        },
-                        {
-                            "name": "netty-resolver-dns",
-                            "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/io.netty/netty-resolver-dns/4.2.9.Final/565e7ff1266db445b6b1621b2f68015bf20b5406/netty-resolver-dns-4.2.9.Final.jar"
-                        }
-                    ]
-                },
-                {
                     "organization": "org.antlr",
                     "name": "antlr4-runtime",
                     "version": "4.13.2",
@@ -431,6 +526,22 @@
                         {
                             "name": "antlr4-runtime",
                             "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/org.antlr/antlr4-runtime/4.13.2/fc3db6d844df652a3d5db31c87fa12757f13691d/antlr4-runtime-4.13.2.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "io.netty",
+                    "name": "netty-resolver-dns",
+                    "version": "4.2.9.Final",
+                    "artifacts": [
+                        {
+                            "name": "netty-resolver-dns",
+                            "classifier": "sources",
+                            "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/io.netty/netty-resolver-dns/4.2.9.Final/8e89bd62160bf3975ff405781f7d4b7536c0bc35/netty-resolver-dns-4.2.9.Final-sources.jar"
+                        },
+                        {
+                            "name": "netty-resolver-dns",
+                            "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/io.netty/netty-resolver-dns/4.2.9.Final/565e7ff1266db445b6b1621b2f68015bf20b5406/netty-resolver-dns-4.2.9.Final.jar"
                         }
                     ]
                 },
@@ -627,22 +738,6 @@
                     ]
                 },
                 {
-                    "organization": "org.junit.jupiter",
-                    "name": "junit-jupiter-api",
-                    "version": "6.0.2",
-                    "artifacts": [
-                        {
-                            "name": "junit-jupiter-api",
-                            "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/org.junit.jupiter/junit-jupiter-api/6.0.2/dc0f97bba32fe8c18c53b7435f16c497650725ba/junit-jupiter-api-6.0.2.jar"
-                        },
-                        {
-                            "name": "junit-jupiter-api",
-                            "classifier": "sources",
-                            "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/org.junit.jupiter/junit-jupiter-api/6.0.2/9c8e6bf28295f34c3699d664fa9f100fa9473468/junit-jupiter-api-6.0.2-sources.jar"
-                        }
-                    ]
-                },
-                {
                     "organization": "org.springframework.boot",
                     "name": "spring-boot-starter-tomcat-runtime",
                     "version": "4.0.2",
@@ -655,6 +750,22 @@
                         {
                             "name": "spring-boot-starter-tomcat-runtime",
                             "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-tomcat-runtime/4.0.2/1721a88cfff65f7589b8078fa83722da787112a0/spring-boot-starter-tomcat-runtime-4.0.2.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "org.junit.jupiter",
+                    "name": "junit-jupiter-api",
+                    "version": "6.0.2",
+                    "artifacts": [
+                        {
+                            "name": "junit-jupiter-api",
+                            "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/org.junit.jupiter/junit-jupiter-api/6.0.2/dc0f97bba32fe8c18c53b7435f16c497650725ba/junit-jupiter-api-6.0.2.jar"
+                        },
+                        {
+                            "name": "junit-jupiter-api",
+                            "classifier": "sources",
+                            "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/org.junit.jupiter/junit-jupiter-api/6.0.2/9c8e6bf28295f34c3699d664fa9f100fa9473468/junit-jupiter-api-6.0.2-sources.jar"
                         }
                     ]
                 },
@@ -675,34 +786,18 @@
                     ]
                 },
                 {
-                    "organization": "ch.qos.logback",
-                    "name": "logback-classic",
-                    "version": "1.5.25",
+                    "organization": "org.springframework.boot",
+                    "name": "spring-boot-webmvc",
+                    "version": "4.0.2",
                     "artifacts": [
                         {
-                            "name": "logback-classic",
-                            "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/ch.qos.logback/logback-classic/1.5.25/20c4bbe98fb58f50ee1ca6befd7e7731f13a19d3/logback-classic-1.5.25.jar"
+                            "name": "spring-boot-webmvc",
+                            "classifier": "sources",
+                            "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-webmvc/4.0.2/d1ceb616831f6c8d86b6b7b9bd7b44ee9ed574c7/spring-boot-webmvc-4.0.2-sources.jar"
                         },
                         {
-                            "name": "logback-classic",
-                            "classifier": "sources",
-                            "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/ch.qos.logback/logback-classic/1.5.25/a32d7c26febccdb3fd020899bd7775dfca8fa88f/logback-classic-1.5.25-sources.jar"
-                        }
-                    ]
-                },
-                {
-                    "organization": "org.springframework.security",
-                    "name": "spring-security-crypto",
-                    "version": "7.0.2",
-                    "artifacts": [
-                        {
-                            "name": "spring-security-crypto",
-                            "classifier": "sources",
-                            "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.security/spring-security-crypto/7.0.2/424a21c6b8a819f55f3e753cd3f04159f6e1fc2f/spring-security-crypto-7.0.2-sources.jar"
-                        },
-                        {
-                            "name": "spring-security-crypto",
-                            "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.security/spring-security-crypto/7.0.2/8cec3433f111e21d6349a9788a1efcf547b8db03/spring-security-crypto-7.0.2.jar"
+                            "name": "spring-boot-webmvc",
+                            "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-webmvc/4.0.2/38e00eed171a003cd00ca1f55a453e0cc8c5529e/spring-boot-webmvc-4.0.2.jar"
                         }
                     ]
                 },
@@ -739,18 +834,34 @@
                     ]
                 },
                 {
-                    "organization": "org.springframework.boot",
-                    "name": "spring-boot-webmvc",
-                    "version": "4.0.2",
+                    "organization": "org.springframework.security",
+                    "name": "spring-security-crypto",
+                    "version": "7.0.2",
                     "artifacts": [
                         {
-                            "name": "spring-boot-webmvc",
+                            "name": "spring-security-crypto",
                             "classifier": "sources",
-                            "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-webmvc/4.0.2/d1ceb616831f6c8d86b6b7b9bd7b44ee9ed574c7/spring-boot-webmvc-4.0.2-sources.jar"
+                            "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.security/spring-security-crypto/7.0.2/424a21c6b8a819f55f3e753cd3f04159f6e1fc2f/spring-security-crypto-7.0.2-sources.jar"
                         },
                         {
-                            "name": "spring-boot-webmvc",
-                            "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-webmvc/4.0.2/38e00eed171a003cd00ca1f55a453e0cc8c5529e/spring-boot-webmvc-4.0.2.jar"
+                            "name": "spring-security-crypto",
+                            "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.security/spring-security-crypto/7.0.2/8cec3433f111e21d6349a9788a1efcf547b8db03/spring-security-crypto-7.0.2.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "ch.qos.logback",
+                    "name": "logback-classic",
+                    "version": "1.5.25",
+                    "artifacts": [
+                        {
+                            "name": "logback-classic",
+                            "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/ch.qos.logback/logback-classic/1.5.25/20c4bbe98fb58f50ee1ca6befd7e7731f13a19d3/logback-classic-1.5.25.jar"
+                        },
+                        {
+                            "name": "logback-classic",
+                            "classifier": "sources",
+                            "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/ch.qos.logback/logback-classic/1.5.25/a32d7c26febccdb3fd020899bd7775dfca8fa88f/logback-classic-1.5.25-sources.jar"
                         }
                     ]
                 },
@@ -803,22 +914,6 @@
                     ]
                 },
                 {
-                    "organization": "jakarta.inject",
-                    "name": "jakarta.inject-api",
-                    "version": "2.0.1",
-                    "artifacts": [
-                        {
-                            "name": "jakarta.inject-api",
-                            "classifier": "sources",
-                            "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/jakarta.inject/jakarta.inject-api/2.0.1/569d6c5f18d6ff83c82152d1870cf0faf830c594/jakarta.inject-api-2.0.1-sources.jar"
-                        },
-                        {
-                            "name": "jakarta.inject-api",
-                            "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/jakarta.inject/jakarta.inject-api/2.0.1/4c28afe1991a941d7702fe1362c365f0a8641d1e/jakarta.inject-api-2.0.1.jar"
-                        }
-                    ]
-                },
-                {
                     "organization": "tools.jackson.core",
                     "name": "jackson-databind",
                     "version": "3.0.4",
@@ -831,6 +926,22 @@
                         {
                             "name": "jackson-databind",
                             "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/tools.jackson.core/jackson-databind/3.0.4/b5f818b0b9c79d344aede4b87064cc0e323f9ef2/jackson-databind-3.0.4.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "jakarta.inject",
+                    "name": "jakarta.inject-api",
+                    "version": "2.0.1",
+                    "artifacts": [
+                        {
+                            "name": "jakarta.inject-api",
+                            "classifier": "sources",
+                            "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/jakarta.inject/jakarta.inject-api/2.0.1/569d6c5f18d6ff83c82152d1870cf0faf830c594/jakarta.inject-api-2.0.1-sources.jar"
+                        },
+                        {
+                            "name": "jakarta.inject-api",
+                            "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/jakarta.inject/jakarta.inject-api/2.0.1/4c28afe1991a941d7702fe1362c365f0a8641d1e/jakarta.inject-api-2.0.1.jar"
                         }
                     ]
                 },
@@ -1411,22 +1522,6 @@
                     ]
                 },
                 {
-                    "organization": "org.springframework.boot",
-                    "name": "spring-boot-netty",
-                    "version": "4.0.2",
-                    "artifacts": [
-                        {
-                            "name": "spring-boot-netty",
-                            "classifier": "sources",
-                            "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-netty/4.0.2/e561c49105ee54fc55cea790cb4afbb8c447e5a/spring-boot-netty-4.0.2-sources.jar"
-                        },
-                        {
-                            "name": "spring-boot-netty",
-                            "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-netty/4.0.2/f13227fa50bb61406830eb5baf22c95cc5813256/spring-boot-netty-4.0.2.jar"
-                        }
-                    ]
-                },
-                {
                     "organization": "org.springframework",
                     "name": "spring-context",
                     "version": "7.0.3",
@@ -1439,6 +1534,22 @@
                         {
                             "name": "spring-context",
                             "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework/spring-context/7.0.3/cea94cbc6244f0b4632cb4bb7608a1e4fab8afea/spring-context-7.0.3.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "org.springframework.boot",
+                    "name": "spring-boot-netty",
+                    "version": "4.0.2",
+                    "artifacts": [
+                        {
+                            "name": "spring-boot-netty",
+                            "classifier": "sources",
+                            "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-netty/4.0.2/e561c49105ee54fc55cea790cb4afbb8c447e5a/spring-boot-netty-4.0.2-sources.jar"
+                        },
+                        {
+                            "name": "spring-boot-netty",
+                            "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-netty/4.0.2/f13227fa50bb61406830eb5baf22c95cc5813256/spring-boot-netty-4.0.2.jar"
                         }
                     ]
                 },
@@ -1779,22 +1890,6 @@
                     ]
                 },
                 {
-                    "organization": "org.reactivestreams",
-                    "name": "reactive-streams",
-                    "version": "1.0.4",
-                    "artifacts": [
-                        {
-                            "name": "reactive-streams",
-                            "classifier": "sources",
-                            "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/org.reactivestreams/reactive-streams/1.0.4/d3cddd3497e618c6d3810ef439f13666f889abe4/reactive-streams-1.0.4-sources.jar"
-                        },
-                        {
-                            "name": "reactive-streams",
-                            "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/org.reactivestreams/reactive-streams/1.0.4/3864a1320d97d7b045f729a326e1e077661f31b7/reactive-streams-1.0.4.jar"
-                        }
-                    ]
-                },
-                {
                     "organization": "com.zaxxer",
                     "name": "HikariCP",
                     "version": "7.0.2",
@@ -1807,6 +1902,22 @@
                         {
                             "name": "HikariCP",
                             "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/com.zaxxer/HikariCP/7.0.2/c2b43c946b86a14a96342379e22b004c56c6166d/HikariCP-7.0.2.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "org.reactivestreams",
+                    "name": "reactive-streams",
+                    "version": "1.0.4",
+                    "artifacts": [
+                        {
+                            "name": "reactive-streams",
+                            "classifier": "sources",
+                            "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/org.reactivestreams/reactive-streams/1.0.4/d3cddd3497e618c6d3810ef439f13666f889abe4/reactive-streams-1.0.4-sources.jar"
+                        },
+                        {
+                            "name": "reactive-streams",
+                            "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/org.reactivestreams/reactive-streams/1.0.4/3864a1320d97d7b045f729a326e1e077661f31b7/reactive-streams-1.0.4.jar"
                         }
                     ]
                 },
@@ -2179,22 +2290,6 @@
                     ]
                 },
                 {
-                    "organization": "org.springframework.boot",
-                    "name": "spring-boot-starter-jdbc",
-                    "version": "4.0.2",
-                    "artifacts": [
-                        {
-                            "name": "spring-boot-starter-jdbc",
-                            "classifier": "sources",
-                            "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-jdbc/4.0.2/efd302be4a4649886d65264cb919b124ade91d8f/spring-boot-starter-jdbc-4.0.2-sources.jar"
-                        },
-                        {
-                            "name": "spring-boot-starter-jdbc",
-                            "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-jdbc/4.0.2/efd302be4a4649886d65264cb919b124ade91d8f/spring-boot-starter-jdbc-4.0.2.jar"
-                        }
-                    ]
-                },
-                {
                     "organization": "org.springframework.data",
                     "name": "spring-data-jpa",
                     "version": "4.0.2",
@@ -2223,6 +2318,22 @@
                         {
                             "name": "xmlunit-core",
                             "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/org.xmlunit/xmlunit-core/2.10.4/eff1eddcdb52fdeaa7e28ca68301db49361d8bec/xmlunit-core-2.10.4.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "org.springframework.boot",
+                    "name": "spring-boot-starter-jdbc",
+                    "version": "4.0.2",
+                    "artifacts": [
+                        {
+                            "name": "spring-boot-starter-jdbc",
+                            "classifier": "sources",
+                            "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-jdbc/4.0.2/efd302be4a4649886d65264cb919b124ade91d8f/spring-boot-starter-jdbc-4.0.2-sources.jar"
+                        },
+                        {
+                            "name": "spring-boot-starter-jdbc",
+                            "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-jdbc/4.0.2/efd302be4a4649886d65264cb919b124ade91d8f/spring-boot-starter-jdbc-4.0.2.jar"
                         }
                     ]
                 },
@@ -2291,22 +2402,6 @@
                     ]
                 },
                 {
-                    "organization": "biz.aQute.bnd",
-                    "name": "biz.aQute.bnd.annotation",
-                    "version": "7.1.0",
-                    "artifacts": [
-                        {
-                            "name": "biz.aQute.bnd.annotation",
-                            "classifier": "sources",
-                            "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/biz.aQute.bnd/biz.aQute.bnd.annotation/7.1.0/b8a7ac832557135627337fbef68c0fb6b2a306f9/biz.aQute.bnd.annotation-7.1.0-sources.jar"
-                        },
-                        {
-                            "name": "biz.aQute.bnd.annotation",
-                            "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/biz.aQute.bnd/biz.aQute.bnd.annotation/7.1.0/2f2be18c936d08cf46ea6cfa0043f34afdf38705/biz.aQute.bnd.annotation-7.1.0.jar"
-                        }
-                    ]
-                },
-                {
                     "organization": "org.springframework.boot",
                     "name": "spring-boot-persistence",
                     "version": "4.0.2",
@@ -2319,6 +2414,22 @@
                             "name": "spring-boot-persistence",
                             "classifier": "sources",
                             "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-persistence/4.0.2/9f363ab5839b4b2ad92b5f1db2786b26b440c0f4/spring-boot-persistence-4.0.2-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "biz.aQute.bnd",
+                    "name": "biz.aQute.bnd.annotation",
+                    "version": "7.1.0",
+                    "artifacts": [
+                        {
+                            "name": "biz.aQute.bnd.annotation",
+                            "classifier": "sources",
+                            "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/biz.aQute.bnd/biz.aQute.bnd.annotation/7.1.0/b8a7ac832557135627337fbef68c0fb6b2a306f9/biz.aQute.bnd.annotation-7.1.0-sources.jar"
+                        },
+                        {
+                            "name": "biz.aQute.bnd.annotation",
+                            "path": "/Users/luca/.gradle/caches/modules-2/files-2.1/biz.aQute.bnd/biz.aQute.bnd.annotation/7.1.0/2f2be18c936d08cf46ea6cfa0043f34afdf38705/biz.aQute.bnd.annotation-7.1.0.jar"
                         }
                     ]
                 },
@@ -2533,7 +2644,7 @@
             ]
         },
         "tags": [
-            "library"
+            "test"
         ]
     }
 }
