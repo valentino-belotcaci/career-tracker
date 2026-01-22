@@ -23,9 +23,9 @@
 		<a href="/displayJobPost.html"><button class="btn">Job Posts</button></a>
 	</div>
 
-  <div class="spaced">
-    	<button id="logoutBtn" class="btn">Logout</button>
-  </div>
+	<div class="spaced">
+		<button id="logoutBtn" class="btn">Logout</button>
+	</div>
 </main>
 
 <footer>
@@ -35,45 +35,30 @@
 <script>
 /* ================= LOGOUT ================= */
 document.getElementById('logoutBtn').addEventListener('click', async function () {
-  try {
-    // Call backend logout endpoint to clear HttpOnly cookie
-    await fetch('/Account/logout', {
-      method: 'POST',
-      credentials: 'include' // send cookies
-    });
-  } catch (err) {
-    console.warn('Logout request failed, still redirecting.');
-  } finally {
-    // Clear any client-side state just in case
-    localStorage.removeItem('loggedId');
-    localStorage.removeItem('type');
-    window.location.href = '/login.html';
-  }
+	try {
+		// Call backend logout endpoint to clear HttpOnly cookie
+		await fetch('/Account/logout', {
+			method: 'POST',
+			credentials: 'include' // important to send cookies
+		});
+	} catch (err) {
+		console.warn('Logout request failed, still clearing local state.');
+	} finally {
+		// Clear client-side state
+		localStorage.removeItem('loggedId');
+		localStorage.removeItem('type');
+		window.location.href = '/login.html'; // redirect to login
+	}
 });
 
 /* ================= AUTH FETCH HELPER ================= */
-// all fetch requests automatically include cookies
+// All fetch requests automatically include cookies
 window.authFetch = function(url, opts = {}) {
-  opts = opts || {};
-  opts.credentials = 'include'; // important: send HttpOnly cookies
-  opts.headers = opts.headers || {};
-  return fetch(url, opts);
+	opts = opts || {};
+	opts.credentials = 'include'; // send HttpOnly cookies
+	opts.headers = opts.headers || {};
+	return fetch(url, opts);
 };
-
-/* ================= CHECK AUTH ================= */
-/*
-(async function checkAuth() {
-  try {
-    const res = await authFetch('/Account/'); // optional endpoint to verify login
-    if (res.status === 401 || res.status === 403) {
-      window.location.href = '/login.html';
-    }
-  } catch (err) {
-    console.warn('Auth check failed, redirecting to login');
-    window.location.href = '/login.html';
-  }
-} 
-)();*/
 </script>
 </body>
 </html>

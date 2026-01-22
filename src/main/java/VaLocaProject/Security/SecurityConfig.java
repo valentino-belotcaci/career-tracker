@@ -50,6 +50,7 @@ package VaLocaProject.Security;
                     "/css/**",
                     "/favicon.ico",
                     "/error",
+                    "/Account/logout",
 
                     "/Account/authenticate",
                     "/Account/insertAccount",
