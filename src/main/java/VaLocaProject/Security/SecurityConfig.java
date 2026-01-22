@@ -45,6 +45,7 @@ package VaLocaProject.Security;
                     "/createJobApplication.html",
                     "/displayJobApplication.html",
                     "/createJobPost.html",
+                    "/JobApplicationDetails.html",
 
                     "/",
                     "/css/**",
@@ -64,6 +65,8 @@ package VaLocaProject.Security;
                     "/JobPost/insertPost/**",
 
                     "/JobApplication/getApplicationsByUserId/**",
+                    // allow the various "get application by id" endpoints used by the details page
+                    "/JobApplication/getApplicationById/**",
                     "/JobApplication/getApplicationByIds",
                     "/JobApplication/getApplicationsByPostId/**",
 
