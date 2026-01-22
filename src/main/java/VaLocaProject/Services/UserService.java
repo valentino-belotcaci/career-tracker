@@ -88,7 +88,7 @@ public class UserService{
         // cache the DB result if found
         if (user != null) {
             try {
-                redisService.set(key, user, USER_CACHE_TTL);
+                redisService.save(key, user, USER_CACHE_TTL);
             } catch (Exception ignored) {}
         }
 
