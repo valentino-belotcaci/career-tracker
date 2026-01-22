@@ -33,7 +33,8 @@
                 .authorizeHttpRequests(request -> request 
                 // static pages and public resources - allow the browser to GET the HTML (client will attach JWT for API calls)
                 .requestMatchers(
-                    "/index.html",
+                    "/index.html",                    
+                    "/indexUser.html",
                     "/register.html",
                     "/login.html",
                     "/indexCompany.html",
@@ -53,10 +54,7 @@
                     "/Account/authenticate",
                     "/Account/insertAccount",
                     "/Account/getAccountByEmail/**",
-
-                    "/User/getUserByAccountId/**",
-                    "/User/updateUser/**",
-                                        
+ 
                     "/Company/getCompanyByAccountId/**",
                     "/Company/updateCompany/**",
 
@@ -70,8 +68,7 @@
                     
                 ).permitAll() 
                 .requestMatchers(
-                    "/User/getAllUsers",
-                    "/indexUser.html"
+                    "/User/**"
                 ).hasRole("USER")
                 // Keep API endpoints protected by roles. For example, replace these with your API paths:
                 // .requestMatchers("/api/users/**").hasRole("USER")
