@@ -69,7 +69,8 @@ public class AccountController {
         // If value is present, return the value
         return ResponseEntity.ok(opt.get());
     }
-        @PostMapping("/authenticate")
+
+    @PostMapping("/authenticate")
     public ResponseEntity<?> authenticateAccount(@RequestBody Map<String, String> body) {
         String email = body.get("email");
         String password = body.get("password");
