@@ -36,7 +36,6 @@
                     "/index.html",
                     "/register.html",
                     "/login.html",
-                    "/",
                     "/indexUser.html",
                     "/indexCompany.html",
                     "/profileUser.html",
@@ -46,21 +45,28 @@
                     "/createJobApplication.html",
                     "/displayJobApplication.html",
                     "/createJobPost.html",
+
+                    "/",
                     "/css/**",
                     "/favicon.ico",
                     "/error",
+
                     "/Account/authenticate",
                     "/Account/insertAccount",
                     "/Account/getAccountByEmail/**",
+
                     "/User/getUserByAccountId/**",
-                    "/JobApplication/getApplicationsByUserId/**",
+                    "/User/updateUser/**",
+                                        
+                    "/Company/getCompanyByAccountId/**",
+                    "/Company/updateCompany/**",
+
+                    "/JobPost/getPostsByCompanyId/**",
                     "/JobPost/getAllPosts",
                     "/JobPost/insertPost/**",
+
+                    "/JobApplication/getApplicationsByUserId/**",
                     "/JobApplication/getApplicationByIds",
-                    "/User/updateUser/**",
-                    "/Company/updateCompany/**",
-                    "/Company/getCompanyByAccountId/**",
-                    "/JobPost/getPostsByCompanyId/**",
                     "/JobApplication/getApplicationsByPostId/**"
                     
                 ).permitAll() 
