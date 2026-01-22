@@ -52,7 +52,6 @@ public class JobApplicationService{
         JobApplication jobApplication = jobApplicationRepository.findByPostIdAndUserId(post_id, user_id);
         if (jobApplication != null) return Optional.of(jobApplication);
         return Optional.empty();
-
     }
 
     public List<JobApplication> getApplicationsByUserId(Long id){

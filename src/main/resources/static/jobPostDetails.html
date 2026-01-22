@@ -35,7 +35,6 @@
   <section id="applicationsSection" class="applications-section hidden">
     <h3>Applications for this post</h3>
     <p id="appsNote">Loading…</p>
-
     <table id="appsTable" class="applications-table hidden">
       <thead>
         <tr>
@@ -56,22 +55,15 @@
 
 <script>
 /* ================= HOME LINK ================= */
-
 (function setHomeLink() {
   const type = localStorage.getItem("type");
   const homeLink = document.getElementById("homeLink");
-
-  if (type === "USER") {
-    homeLink.href = "/indexUser.html";
-  } else if (type === "COMPANY") {
-    homeLink.href = "/indexCompany.html";
-  } else {
-    homeLink.href = "/index.html";
-  }
+  if (type === "USER") homeLink.href = "/indexUser.html";
+  else if (type === "COMPANY") homeLink.href = "/indexCompany.html";
+  else homeLink.href = "/index.html";
 })();
 
 /* ================= HELPERS ================= */
-
 function getQueryParam(name) {
   return new URLSearchParams(window.location.search).get(name);
 }
@@ -79,17 +71,11 @@ function getQueryParam(name) {
 function authFetch(url, options = {}) {
   const token = localStorage.getItem("jwt");
   if (!token) throw new Error("Not authenticated");
-
-  options.headers = {
-    ...(options.headers || {}),
-    Authorization: "Bearer " + token
-  };
-
+  options.headers = { ...(options.headers || {}), Authorization: "Bearer " + token };
   return fetch(url, options);
 }
 
 /* ================= LOAD POST ================= */
-
 async function loadPostDetails() {
   const postId = getQueryParam("postId");
   const msg = document.getElementById("message");
@@ -104,9 +90,7 @@ async function loadPostDetails() {
     if (!res.ok) throw new Error("Failed to load posts");
 
     const posts = await res.json();
-    const post = posts.find(p =>
-      String(p.id || p.postId || p.post_id) === String(postId)
-    );
+    const post = posts.find(p => String(p.id || p.postId || p.post_id) === String(postId));
 
     if (!post) {
       msg.textContent = "Post not found.";
@@ -120,8 +104,7 @@ async function loadPostDetails() {
     document.getElementById("duration").textContent = post.duration || "";
     document.getElementById("available").textContent = post.available || "";
     document.getElementById("salary").textContent = post.salary || "";
-    document.getElementById("createdAt").textContent =
-      post.createdAt || post.created_at || "";
+    document.getElementById("createdAt").textContent = post.createdAt || post.created_at || "";
 
     await configureView(postId);
 
@@ -132,59 +115,69 @@ async function loadPostDetails() {
 }
 
 /* ================= VIEW LOGIC ================= */
-
 async function configureView(postId) {
   const type = localStorage.getItem("type");
   const loggedId = localStorage.getItem("loggedId");
   const applyBtn = document.getElementById("applyBtn");
 
   if (type === "COMPANY") {
-    loadApplicationsForPost(postId);
+    // COMPANY: show applications for this post
+    await loadApplicationsForPost(postId);
     return;
   }
 
   if (type === "USER" && loggedId) {
     applyBtn.classList.remove("hidden");
 
-    const exists = await checkExistingApplication(postId, loggedId);
-    if (exists) {
-      applyBtn.textContent = "Already applied";
-      applyBtn.disabled = true;
+    try {
+      const exists = await checkExistingApplication(postId, loggedId);
+      if (exists) {
+        applyBtn.textContent = "Already applied";
+        applyBtn.disabled = true;
+      }
+    } catch (err) {
+      console.error("Error checking application:", err);
     }
   }
 }
 
 /* ================= CHECK APPLICATION ================= */
-
 async function checkExistingApplication(postId, userId) {
-  const res = await authFetch(
-    `/JobApplication/getApplicationByIds?post_id=${postId}&user_id=${userId}`
-  );
-
-  if (res.status === 200) {
-    return true;   // application exists
+  try {
+    const res = await authFetch(`/JobApplication/getApplicationByIds?post_id=${postId}&user_id=${userId}`);
+    if (res.status === 200) return true;
+    if (res.status === 404) return false;
+    throw new Error("Unexpected response: " + res.status);
+  } catch (err) {
+    console.error(err);
+    return false;
   }
-
-  if (res.status === 404) {
-    return false;  // application does NOT exist
-  }
-
-  throw new Error("Unexpected response: " + res.status);
 }
 
 /* ================= COMPANY VIEW ================= */
-
 async function loadApplicationsForPost(postId) {
   const appsNote = document.getElementById("appsNote");
   const appsBody = document.getElementById("appsBody");
+  const appsSection = document.getElementById("applicationsSection");
+  const appsTable = document.getElementById("appsTable");
 
   try {
     const res = await authFetch(`/JobApplication/getApplicationsByPostId/${postId}`);
-    if (!res.ok) throw new Error();
+
+    if (res.status === 404) {
+      appsNote.textContent = "No applications found for this post.";
+      appsSection.classList.remove("hidden");
+      appsTable.classList.add("hidden");
+      return;
+    }
+
+    if (!res.ok) throw new Error("Failed to load applications");
 
     const apps = await res.json();
     if (!apps || apps.length === 0) {
-      appsNote.textContent = "No applications found.";
+      appsNote.textContent = "No applications found for this post.";
+      appsSection.classList.remove("hidden");
+      appsTable.classList.add("hidden");
       return;
     }
 
@@ -192,7 +185,7 @@ async function loadApplicationsForPost(postId) {
     apps.forEach(a => {
       const tr = document.createElement("tr");
       tr.innerHTML = `
-        <td>${a.id || a.applicationId}</td>
+        <td>${a.applicationId || a.id}</td>
         <td>${a.userId || a.user_id}</td>
         <td>${a.status}</td>
         <td>${a.createdAt || a.created_at}</td>
@@ -201,20 +194,20 @@ async function loadApplicationsForPost(postId) {
     });
 
     appsNote.classList.add("hidden");
-    document.getElementById("appsTable").classList.remove("hidden");
-    document.getElementById("applicationsSection").classList.remove("hidden");
+    appsTable.classList.remove("hidden");
+    appsSection.classList.remove("hidden");
 
   } catch (err) {
     console.error(err);
     appsNote.textContent = "Error loading applications.";
+    appsSection.classList.remove("hidden");
+    appsTable.classList.add("hidden");
   }
 }
 
 /* ================= BUTTONS ================= */
-
 document.getElementById("applyBtn").addEventListener("click", () => {
   const postId = document.getElementById("postId").textContent;
-  // Redirect to the create application page with the postId
   window.location.href = `/createJobApplication.html?postId=${encodeURIComponent(postId)}`;
 });
 
