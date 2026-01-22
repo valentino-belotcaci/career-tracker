@@ -5,6 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Job Post Details - CareerTracker</title>
   <link rel="stylesheet" href="/css/style.css">
+  <style>
+    /* Make application rows clickable */
+    #appsTable tbody tr {
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    #appsTable tbody tr:hover {
+      background-color: #f0f0f0;
+    }
+  </style>
 </head>
 
 <body>
@@ -56,7 +66,7 @@
 <script>
 /* ================= HOME LINK ================= */
 (function setHomeLink() {
-  const type = localStorage.getItem("type"); // UI type still in localStorage
+  const type = localStorage.getItem("type");
   const homeLink = document.getElementById("homeLink");
   if (type === "USER") homeLink.href = "/indexUser.html";
   else if (type === "COMPANY") homeLink.href = "/indexCompany.html";
@@ -68,15 +78,14 @@ function getQueryParam(name) {
   return new URLSearchParams(window.location.search).get(name);
 }
 
-// Use cookies only, no JWT from localStorage
 function authFetch(url, options = {}) {
   options = options || {};
-  options.credentials = 'include'; // send cookies automatically
+  options.credentials = 'include';
   options.headers = options.headers || {};
   return fetch(url, options);
 }
 
-/* ================= LOAD POST ================= */
+/* ================= LOAD POST DETAILS ================= */
 async function loadPostDetails() {
   const postId = getQueryParam("postId");
   const msg = document.getElementById("message");
@@ -115,10 +124,10 @@ async function loadPostDetails() {
   }
 }
 
-/* ================= VIEW LOGIC ================= */
+/* ================= VIEW CONFIGURATION ================= */
 async function configureView(postId) {
   const type = localStorage.getItem("type");
-  const loggedId = localStorage.getItem("loggedId"); // still for UI
+  const loggedId = localStorage.getItem("loggedId");
   const applyBtn = document.getElementById("applyBtn");
 
   if (type === "COMPANY") {
@@ -128,7 +137,6 @@ async function configureView(postId) {
 
   if (type === "USER" && loggedId) {
     applyBtn.classList.remove("hidden");
-
     try {
       const exists = await checkExistingApplication(postId, loggedId);
       if (exists) {
@@ -141,7 +149,7 @@ async function configureView(postId) {
   }
 }
 
-/* ================= CHECK APPLICATION ================= */
+/* ================= CHECK IF USER APPLIED ================= */
 async function checkExistingApplication(postId, userId) {
   try {
     const res = await authFetch(`/JobApplication/getApplicationByIds?post_id=${postId}&user_id=${userId}`);
@@ -154,7 +162,7 @@ async function checkExistingApplication(postId, userId) {
   }
 }
 
-/* ================= COMPANY VIEW ================= */
+/* ================= COMPANY VIEW: APPLICATIONS ================= */
 async function loadApplicationsForPost(postId) {
   const appsNote = document.getElementById("appsNote");
   const appsBody = document.getElementById("appsBody");
@@ -170,7 +178,6 @@ async function loadApplicationsForPost(postId) {
       appsTable.classList.add("hidden");
       return;
     }
-
     if (!res.ok) throw new Error("Failed to load applications");
 
     const apps = await res.json();
@@ -190,6 +197,16 @@ async function loadApplicationsForPost(postId) {
         <td>${a.status}</td>
         <td>${a.createdAt || a.created_at}</td>
       `;
+
+      // Clickable: go to JobApplicationDetails
+      const appId = a.applicationId || a.id;
+      if (appId) {
+        tr.addEventListener("click", () => {
+          window.location.href = `/JobApplicationDetails.html?applicationId=${encodeURIComponent(appId)}`;
+        });
+        tr.style.cursor = 'pointer';
+      }
+
       appsBody.appendChild(tr);
     });
 
@@ -213,6 +230,7 @@ document.getElementById("applyBtn").addEventListener("click", () => {
 
 document.getElementById("backBtn").addEventListener("click", () => history.back());
 
+/* ================= RUN ================= */
 loadPostDetails();
 </script>
 </body>
