@@ -13,19 +13,16 @@
 
 <main class="wide-card">
   <h2>Create Job Application</h2>
-  <p id="note">Fill in the information for your application below.</p>
+  <p id="note">Add your description for this job application.</p>
 
   <form id="applicationForm" class="edit-only">
     <!-- hidden fields for backend -->
     <input type="hidden" id="postId" name="postId">
     <input type="hidden" id="userId" name="userId">
 
-    <!-- editable fields for application info -->
-    <label for="status">Status</label>
-    <input type="text" id="status" name="status" placeholder="e.g., Pending" required>
-
-    <label for="coverLetter">Cover Letter</label>
-    <textarea id="coverLetter" name="coverLetter" placeholder="Write your cover letter here..." rows="5"></textarea>
+    <!-- only user input field -->
+    <label for="userDescription">Description</label>
+    <textarea id="userDescription" name="userDescription" placeholder="Write your description..." rows="5" required></textarea>
 
     <div class="button-row">
       <button type="submit" class="btn">Submit</button>
@@ -66,7 +63,7 @@
   const message = document.getElementById("message");
   const cancelBtn = document.getElementById("cancelBtn");
 
-  // Get postId from query param
+  // Get postId from query param and userId from localStorage
   const postId = getQueryParam("postId");
   const userId = localStorage.getItem("loggedId");
 
@@ -97,8 +94,8 @@
       const payload = {
         postId: Number(postId),
         userId: Number(userId),
-        status: document.getElementById("status").value,
-        // Include additional fields if needed
+        userDescription: document.getElementById("userDescription").value
+        // 'status' and 'createdAt' will be set server-side automatically
       };
 
       const res = await authFetch("/JobApplication/insert", {
@@ -107,15 +104,20 @@
         body: JSON.stringify(payload)
       });
 
-      if (!res.ok) throw new Error("Failed to create application");
+      if (!res.ok) {
+        if (res.status === 409) {
+          throw new Error("You have already applied to this job.");
+        }
+        throw new Error("Failed to create application.");
+      }
 
       const created = await res.json();
       message.style.color = "green";
-      message.textContent = `Application submitted! (ID: ${created.applicationId || created.id})`;
+      message.textContent = `Application submitted successfully! (ID: ${created.applicationId || created.id})`;
 
       // disable form to avoid double submission
       submitBtn.disabled = true;
-      form.querySelectorAll("input, textarea").forEach(el => el.disabled = true);
+      document.getElementById("userDescription").disabled = true;
 
     } catch (err) {
       console.error(err);
@@ -124,7 +126,6 @@
       submitBtn.disabled = false;
     }
   });
-
 })();
 </script>
 </body>

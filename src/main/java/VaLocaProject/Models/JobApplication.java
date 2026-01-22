@@ -28,7 +28,10 @@ public class JobApplication {
     @Column(name = "user_id")
     private Long userId;
     private String status;
+    @Column(name = "created_at")
     private Date createdAt;
+    @Column(name = "user_description")
+    private String userDescription;
 
 
     public Date getCreatedAt() {
@@ -54,5 +57,13 @@ public class JobApplication {
 
     public void getUsertId(Long id) {
         userId = id;
+    }
+
+    public String getUserDescription() {
+        return userDescription;
+    }
+
+    public void setUsertDescription(String userDescription) {
+        this.userDescription = userDescription;
     }
 }
