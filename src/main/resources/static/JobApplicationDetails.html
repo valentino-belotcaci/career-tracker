@@ -32,7 +32,6 @@
   <table id="appsTable" class="posts-table hidden">
     <thead>
       <tr>
-        <th>Post ID</th>
         <th>Name</th>
         <th>Description</th>
         <th>Duration</th>
@@ -46,8 +45,6 @@
 
   <!-- Single application view -->
   <div id="singleAppDetails" class="hidden">
-    <p><strong>Application ID:</strong> <span id="applicationId"></span></p>
-    <p><strong>Post ID:</strong> <span id="postId"></span></p>
     <p><strong>Job Name:</strong> <span id="jobName"></span></p>
     <p><strong>Description:</strong> <span id="description"></span></p>
     <p><strong>Duration:</strong> <span id="duration"></span></p>
@@ -82,18 +79,6 @@ function authFetch(url, opts = {}) {
   return fetch(url, opts);
 }
 
-/* ===== User controls ===== */
-function setupUserControls() {
-  const controls = document.getElementById('userControls');
-  const type = localStorage.getItem('type');
-  if (type === 'USER') {
-    const btn = document.createElement('button');
-    btn.textContent = 'Find Job Posts';
-    btn.onclick = () => window.location.href = '/displayJobPost.html';
-    controls.appendChild(btn);
-  }
-}
-setupUserControls();
 
 /* ===== Helpers ===== */
 function getQueryParam(name) {
@@ -144,19 +129,17 @@ async function loadAllApplications() {
     tbody.innerHTML = '';
     applications.forEach(app => {
       const post = app.jobPost || {};
-      const postId = post.id ?? '';
       const appId = app.applicationId ?? app.id;
 
       const tr = document.createElement('tr');
       tr.innerHTML = `
-        <td>${postId}</td>
-        <td>${post.name ?? ''}</td>
-        <td>${post.description ?? ''}</td>
-        <td>${post.duration ?? ''}</td>
-        <td>${post.salary ?? ''}</td>
-        <td>${app.status ?? ''}</td>
-        <td>${app.createdAt ?? ''}</td>
-      `;
+         <td>${post.name ?? ''}</td>
+         <td>${post.description ?? ''}</td>
+         <td>${post.duration ?? ''}</td>
+         <td>${post.salary ?? ''}</td>
+         <td>${app.status ?? ''}</td>
+         <td>${app.createdAt ?? ''}</td>
+       `;
       tr.addEventListener('click', () => {
         window.location.href = `/JobApplicationDetails.html?applicationId=${encodeURIComponent(appId)}`;
       });
@@ -192,8 +175,6 @@ async function loadSingleApplication(applicationId) {
     const app = await res.json();
     const post = app.jobPost || {};
 
-    document.getElementById("applicationId").textContent = app.id || app.applicationId;
-    document.getElementById("postId").textContent = post.id || '';
     document.getElementById("jobName").textContent = post.name || '';
     document.getElementById("description").textContent = post.description || '';
     document.getElementById("duration").textContent = post.duration || '';
@@ -217,6 +198,13 @@ document.getElementById('backBtn').addEventListener('click', () => history.back(
 /* ===== Run ===== */
 loadApplications();
 
+// Optional: auto-refresh only when viewing the list
+if (!getQueryParam('applicationId')) {
+  setInterval(loadApplications, 5000);
+}
+</script>
+</body>
+</html>
 // Optional: auto-refresh only when viewing the list
 if (!getQueryParam('applicationId')) {
   setInterval(loadApplications, 5000);

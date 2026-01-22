@@ -72,9 +72,21 @@ public class JobApplicationController {
     
     // For users
     @GetMapping("/getApplicationsByUserId/{id}")
-    public ResponseEntity<List<JobApplication>> getMethodName(@PathVariable Long id) {
+    public ResponseEntity<List<JobApplication>> getApplicationByUserId(@PathVariable Long id) {
         return ResponseEntity.ok(jobApplicationService.getApplicationsByUserId(id));
     }
+
+    @GetMapping("/getApplicationById/{id}")
+    public ResponseEntity<JobApplication> getApplicationById(@PathVariable Long id) {
+        Optional<JobApplication> jobApplication = jobApplicationService.getApplicationById(id);
+
+        if (jobApplication.isPresent()){
+            return ResponseEntity.ok(jobApplication.get());
+        }
+
+        return ResponseEntity.notFound().build(); 
+    }
+    
     
 
 }
