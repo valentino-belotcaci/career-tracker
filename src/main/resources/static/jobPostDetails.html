@@ -55,169 +55,167 @@
 </footer>
 
 <script>
-  /* ================= HOME LINK ================= */
+/* ================= HOME LINK ================= */
 
-  (function setHomeLink() {
-    const type = localStorage.getItem("type");
-    const homeLink = document.getElementById("homeLink");
+(function setHomeLink() {
+  const type = localStorage.getItem("type");
+  const homeLink = document.getElementById("homeLink");
 
-    if (type === "USER") {
-      homeLink.href = "/indexUser.html";
-    } else if (type === "COMPANY") {
-      homeLink.href = "/indexCompany.html";
-    } else {
-      homeLink.href = "/index.html";
-    }
-  })();
+  if (type === "USER") {
+    homeLink.href = "/indexUser.html";
+  } else if (type === "COMPANY") {
+    homeLink.href = "/indexCompany.html";
+  } else {
+    homeLink.href = "/index.html";
+  }
+})();
 
-  /* ================= HELPERS ================= */
+/* ================= HELPERS ================= */
 
-  function getQueryParam(name) {
-    return new URLSearchParams(window.location.search).get(name);
+function getQueryParam(name) {
+  return new URLSearchParams(window.location.search).get(name);
+}
+
+function authFetch(url, options = {}) {
+  const token = localStorage.getItem("jwt");
+  if (!token) throw new Error("Not authenticated");
+
+  options.headers = {
+    ...(options.headers || {}),
+    Authorization: "Bearer " + token
+  };
+
+  return fetch(url, options);
+}
+
+/* ================= LOAD POST ================= */
+
+async function loadPostDetails() {
+  const postId = getQueryParam("postId");
+  const msg = document.getElementById("message");
+
+  if (!postId) {
+    msg.textContent = "No post selected.";
+    return;
   }
 
-  function authFetch(url, options = {}) {
-    const token = localStorage.getItem("jwt");
-    if (!token) throw new Error("Not authenticated");
+  try {
+    const res = await authFetch("/JobPost/getAllPosts");
+    const posts = await res.json();
 
-    options.headers = {
-      ...(options.headers || {}),
-      Authorization: "Bearer " + token
-    };
+    const post = posts.find(p =>
+      String(p.postId || p.post_id || p.id) === String(postId)
+    );
 
-    return fetch(url, options);
-  }
-
-  /* ================= LOAD POST ================= */
-
-  async function loadPostDetails() {
-    const postId = getQueryParam("postId");
-    const msg = document.getElementById("message");
-
-    if (!postId) {
-      msg.textContent = "No post selected.";
+    if (!post) {
+      msg.textContent = "Post not found.";
       return;
     }
 
-    try {
-      const res = await authFetch("/JobPost/getAllPosts");
-      if (!res.ok) throw new Error("Failed to fetch posts");
+    document.getElementById("postId").textContent = post.postId || post.id;
+    document.getElementById("companyId").textContent = post.companyId || post.company_id;
+    document.getElementById("name").textContent = post.name || "";
+    document.getElementById("description").textContent = post.description || "";
+    document.getElementById("duration").textContent = post.duration || "";
+    document.getElementById("available").textContent = post.available || "";
+    document.getElementById("salary").textContent = post.salary || "";
+    document.getElementById("createdAt").textContent = post.createdAt || post.created_at || "";
 
-      const posts = await res.json();
-      const post = posts.find(p =>
-        String(p.postId || p.post_id || p.id) === String(postId)
-      );
+    configureView(postId);
 
-      if (!post) {
-        msg.textContent = "Post not found.";
-        return;
-      }
+  } catch (err) {
+    console.error(err);
+    msg.textContent = "Error loading post details.";
+  }
+}
 
-      document.getElementById("postId").textContent = post.postId || post.id || "";
-      document.getElementById("companyId").textContent =
-        post.companyId || post.company_id || "";
-      document.getElementById("name").textContent = post.name || "";
-      document.getElementById("description").textContent = post.description || "";
-      document.getElementById("duration").textContent = post.duration || "";
-      document.getElementById("available").textContent = post.available || "";
-      document.getElementById("salary").textContent = post.salary || "";
-      document.getElementById("createdAt").textContent =
-        post.createdAt || post.created_at || "";
+/* ================= VIEW LOGIC ================= */
 
-      configureView(postId);
+async function configureView(postId) {
+  const type = localStorage.getItem("type");
+  const loggedId = localStorage.getItem("loggedId");
+  const applyBtn = document.getElementById("applyBtn");
 
-    } catch (err) {
-      console.error(err);
-      msg.textContent = "Error loading post details.";
-    }
+  if (type === "COMPANY") {
+    loadApplicationsForPost(postId);
+    return;
   }
 
-  /* ================= VIEW LOGIC ================= */
+  if (type === "USER" && loggedId) {
+    applyBtn.classList.remove("hidden");
 
-  async function configureView(postId) {
-    const type = localStorage.getItem("type");
-    const loggedId = localStorage.getItem("loggedId");
-    const applyBtn = document.getElementById("applyBtn");
+    const exists = await checkExistingApplication(postId, loggedId);
+    if (exists) {
+      applyBtn.textContent = "Already applied";
+      applyBtn.disabled = true;
+    }
+  }
+}
 
-    if (type === "COMPANY") {
-      loadApplicationsForPost(postId);
+/* ================= APPLICATION CHECK ================= */
+
+async function checkExistingApplication(postId, userId) {
+  try {
+    const res = await authFetch(
+      `/JobApplication/getApplicationByIds?post_id=${postId}&user_id=${userId}`
+    );
+
+    // 200 → application exists
+    return res.status === 200;
+
+  } catch (err) {
+    // 404 → application does NOT exist
+    return false;
+  }
+}
+
+/* ================= APPLICATIONS (COMPANY) ================= */
+
+async function loadApplicationsForPost(postId) {
+  const appsNote = document.getElementById("appsNote");
+  const appsBody = document.getElementById("appsBody");
+
+  try {
+    const res = await authFetch(`/JobApplication/getApplicationsByPostId/${postId}`);
+    const apps = await res.json();
+
+    if (!apps || apps.length === 0) {
+      appsNote.textContent = "No applications found.";
       return;
     }
 
-    if (type === "USER" && loggedId) {
-      applyBtn.classList.remove("hidden");
+    appsBody.innerHTML = "";
+    apps.forEach(a => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${a.applicationId || a.id}</td>
+        <td>${a.userId || a.user_id}</td>
+        <td>${a.status}</td>
+        <td>${a.createdAt || a.created_at}</td>
+      `;
+      appsBody.appendChild(tr);
+    });
 
-      const alreadyApplied = await checkExistingApplication(postId, loggedId);
-      if (alreadyApplied) {
-        applyBtn.textContent = "Already applied";
-        applyBtn.disabled = true;
-      }
-    }
+    appsNote.classList.add("hidden");
+    document.getElementById("appsTable").classList.remove("hidden");
+    document.getElementById("applicationsSection").classList.remove("hidden");
+
+  } catch (err) {
+    console.error(err);
+    appsNote.textContent = "Error loading applications.";
   }
+}
 
-  /* ================= APPLICATIONS ================= */
+/* ================= BUTTONS ================= */
 
-  async function loadApplicationsForPost(postId) {
-    const appsNote = document.getElementById("appsNote");
-    const appsBody = document.getElementById("appsBody");
+document.getElementById("applyBtn").addEventListener("click", () => {
+  const postId = document.getElementById("postId").textContent;
+  window.location.href = `/jobApplication.html?postId=${postId}`;
+});
 
-    try {
-      const res = await authFetch(`/JobApplication/getApplicationsByPostId/${postId}`);
-      if (!res.ok) {
-        appsNote.textContent = "No applications found.";
-        return;
-      }
+document.getElementById("backBtn").addEventListener("click", () => history.back());
 
-      const apps = await res.json();
-      if (!apps || apps.length === 0) {
-        appsNote.textContent = "No applications found.";
-        return;
-      }
-
-      appsBody.innerHTML = "";
-      apps.forEach(a => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${a.applicationId || a.id || ""}</td>
-          <td>${a.userId || a.user_id || ""}</td>
-          <td>${a.status || ""}</td>
-          <td>${a.createdAt || a.created_at || ""}</td>
-        `;
-        appsBody.appendChild(tr);
-      });
-
-      appsNote.classList.add("hidden");
-      document.getElementById("appsTable").classList.remove("hidden");
-      document.getElementById("applicationsSection").classList.remove("hidden");
-
-    } catch (err) {
-      console.error(err);
-      appsNote.textContent = "Error loading applications.";
-    }
-  }
-
-  async function checkExistingApplication(postId, userId) {
-    try {
-      const res = await authFetch(
-        `/JobApplication/getApplicationByIds?post_id=${postId}&user_id=${userId}`
-      );
-      return res.ok;
-    } catch {
-      return false;
-    }
-  }
-
-  /* ================= BUTTONS ================= */
-
-  document.getElementById("applyBtn").addEventListener("click", () => {
-    const postId = document.getElementById("postId").textContent;
-    window.location.href =
-      `/jobApplication.html?postId=${encodeURIComponent(postId)}`;
-  });
-
-  document.getElementById("backBtn").addEventListener("click", () => history.back());
-
-  loadPostDetails();
+loadPostDetails();
 </script>
 </body>
 </html>
