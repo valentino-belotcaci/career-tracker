@@ -1,0 +1,55 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '4.0.1'
+	id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'VakuumTubo'
+version = '0.0.1-SNAPSHOT'
+description = 'A careerTracker of some sort'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter'
+	// This import is necessary for the RestController Annotation
+	implementation 'org.springframework.boot:spring-boot-starter-web' 
+	// Spring Data JPA for repository support
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+	// password hashing / security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.security:spring-security-crypto'
+
+	//JWT 
+	// Source: https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api
+	implementation 'io.jsonwebtoken:jjwt-api:0.12.6'	
+
+	// Source: https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-impl
+	 runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
+
+	// Source: https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-jackson
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
+
+
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	testCompileOnly 'org.projectlombok:lombok' // To use it also at compile time instead of default runtime
+	testAnnotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	runtimeOnly 'org.postgresql:postgresql' // PostgreSQL driver 
+
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
