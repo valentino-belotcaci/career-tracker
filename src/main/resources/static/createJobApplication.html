@@ -1,88 +1,131 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Create Job Application - CareerTracker</title>
-    <link rel="stylesheet" href="/css/style.css">
-  </head>
-  <body>
-    <header>
-      <a class="site-title" href="/indexUser.html">CareerTracker</a>
-    </header>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Create Job Application - CareerTracker</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<header>
+  <a id="homeLink" class="site-title" href="#">CareerTracker</a>
+</header>
 
-    <main class="wide-card">
-      <h2>Apply to Job</h2>
-      <p id="note">Select a job post and submit your application.</p>
+<main class="wide-card">
+  <h2>Create Job Application</h2>
+  <p id="note">Fill in the information for your application below.</p>
 
-      <form id="applyForm">
-        <label for="postId">Post ID</label><br />
-        <input id="postId" name="postId" type="number" required /><br />
+  <form id="applicationForm" class="edit-only">
+    <!-- hidden fields for backend -->
+    <input type="hidden" id="postId" name="postId">
+    <input type="hidden" id="userId" name="userId">
 
-        <p id="message"></p>
-        <button type="submit">Apply</button>
-        <a href="/displayJobApplication.html"><button type="button">Cancel</button></a>
-      </form>
+    <!-- editable fields for application info -->
+    <label for="status">Status</label>
+    <input type="text" id="status" name="status" placeholder="e.g., Pending" required>
 
-    </main>
+    <label for="coverLetter">Cover Letter</label>
+    <textarea id="coverLetter" name="coverLetter" placeholder="Write your cover letter here..." rows="5"></textarea>
 
-    <footer>
-      <p>© 2026 CareerTracker</p>
-    </footer>
+    <div class="button-row">
+      <button type="submit" class="btn">Submit</button>
+      <button type="button" id="cancelBtn" class="btn btn-secondary">Cancel</button>
+    </div>
+  </form>
 
-    <script>
-      // authFetch helper so create requests include JWT
-      function authFetch(url, opts = {}) {
-        opts = opts || {};
-        opts.headers = opts.headers || {};
-        const token = localStorage.getItem('jwt');
-        if (token) opts.headers = Object.assign({}, opts.headers, { 'Authorization': 'Bearer ' + token });
-        return fetch(url, opts);
-      }
+  <p id="message"></p>
+</main>
 
-      document.getElementById('applyForm').addEventListener('submit', async function(e){
-        e.preventDefault();
-        const loggedEmail = localStorage.getItem('loggedEmail');
-        const msg = document.getElementById('message');
-        if (!loggedEmail) {
-          msg.textContent = 'Please log in first.';
-          return;
-        }
+<footer>
+  <p>© 2026 CareerTracker</p>
+</footer>
 
-        try {
-          // get user id from email
-          const userRes = await fetch(`/User/getUserByEmail/${encodeURIComponent(loggedEmail)}`);
-          if (!userRes.ok) throw new Error('Cannot fetch user');
-          const user = await userRes.json();
-          const userId = user.user_id || user.id || user.account_id;
-          if (!userId) throw new Error('User id not found');
+<script>
+(function () {
+  // ===== HOME LINK =====
+  const type = localStorage.getItem("type");
+  const homeLink = document.getElementById("homeLink");
+  if (type === "USER") homeLink.href = "/indexUser.html";
+  else if (type === "COMPANY") homeLink.href = "/indexCompany.html";
+  else homeLink.href = "/index.html";
 
-          const payload = {
-            postId: Number.parseInt(document.getElementById('postId').value),
-            userId: Number.parseInt(userId)
-          };
+  // ===== HELPERS =====
+  function getQueryParam(name) {
+    return new URLSearchParams(window.location.search).get(name);
+  }
 
-          // When submitting the new application, use:
-          // authFetch('/JobApplication/create', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload) })
-          const res = await fetch('/JobApplication/insert', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(payload)
-          });
-          if (!res.ok) throw new Error('Apply failed');
-          msg.style.color = 'green';
-          msg.textContent = 'Application submitted.';
-          // store created id (handle snake_case or camelCase)
-          const created = await res.json();
-          localStorage.setItem('lastCreatedApplication', created.applicationId || created.application_id || created.id || '');
-          // disable submit to avoid duplicate clicks and keep the user on the same page
-          e.target.querySelector('button[type="submit"]').disabled = true;
-        } catch (err) {
-          console.error(err);
-          msg.style.color = 'red';
-          msg.textContent = 'Failed to submit application.';
-        }
+  function authFetch(url, opts = {}) {
+    const token = localStorage.getItem("jwt");
+    if (!token) throw new Error("Not authenticated");
+    opts.headers = { ...(opts.headers || {}), Authorization: "Bearer " + token };
+    return fetch(url, opts);
+  }
+
+  // ===== INITIALIZE =====
+  const form = document.getElementById("applicationForm");
+  const message = document.getElementById("message");
+  const cancelBtn = document.getElementById("cancelBtn");
+
+  // Get postId from query param
+  const postId = getQueryParam("postId");
+  const userId = localStorage.getItem("loggedId");
+
+  if (!postId || !userId) {
+    message.style.color = "red";
+    message.textContent = "Cannot create application: missing post or user ID.";
+    form.querySelector("button[type='submit']").disabled = true;
+    return;
+  }
+
+  // Set hidden inputs
+  document.getElementById("postId").value = postId;
+  document.getElementById("userId").value = userId;
+
+  // ===== CANCEL BUTTON =====
+  cancelBtn.addEventListener("click", () => {
+    window.history.back();
+  });
+
+  // ===== FORM SUBMISSION =====
+  form.addEventListener("submit", async function (e) {
+    e.preventDefault();
+    message.textContent = "";
+    const submitBtn = form.querySelector("button[type='submit']");
+    submitBtn.disabled = true;
+
+    try {
+      const payload = {
+        postId: Number(postId),
+        userId: Number(userId),
+        status: document.getElementById("status").value,
+        // Include additional fields if needed
+      };
+
+      const res = await authFetch("/JobApplication/insert", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
       });
-    </script>
-  </body>
+
+      if (!res.ok) throw new Error("Failed to create application");
+
+      const created = await res.json();
+      message.style.color = "green";
+      message.textContent = `Application submitted! (ID: ${created.applicationId || created.id})`;
+
+      // disable form to avoid double submission
+      submitBtn.disabled = true;
+      form.querySelectorAll("input, textarea").forEach(el => el.disabled = true);
+
+    } catch (err) {
+      console.error(err);
+      message.style.color = "red";
+      message.textContent = err.message || "Error submitting application.";
+      submitBtn.disabled = false;
+    }
+  });
+
+})();
+</script>
+</body>
 </html>
