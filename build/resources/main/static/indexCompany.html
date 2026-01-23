@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<link rel="stylesheet" href="/css/style.css">
+	<title>Company Dashboard</title>
+</head>
+<body>
+<header>
+	<a class="site-title" href="/indexCompany.html">CareerTracker</a>
+</header>
+
+<main class="wide-card">
+	<h2>Company Dashboard</h2>
+	<p>Welcome, company. Use the navigation to manage your company profile.</p>
+
+	<div class="spaced">
+		<a href="/profileCompany.html"><button class="btn">View profile</button></a>
+	</div>
+
+	<div class="spaced">
+		<a href="/displayJobPost.html"><button class="btn">Job Posts</button></a>
+	</div>
+
+	<div class="spaced">
+		<button id="logoutBtn" class="btn">Logout</button>
+	</div>
+</main>
+
+<footer>
+	<p>© 2026 CareerTracker</p>
+</footer>
+
+<script>
+/* ================= LOGOUT ================= */
+document.getElementById('logoutBtn').addEventListener('click', async function () {
+	try {
+		// Call backend logout endpoint to clear HttpOnly cookie
+		await fetch('/Account/logout', {
+			method: 'POST',
+			credentials: 'include' // important to send cookies
+		});
+	} catch (err) {
+		console.warn('Logout request failed, still clearing local state.');
+	} finally {
+		// Clear client-side state
+		localStorage.removeItem('loggedId');
+		localStorage.removeItem('type');
+		window.location.href = '/login.html'; // redirect to login
+	}
+});
+
+/* ================= AUTH FETCH HELPER ================= */
+// All fetch requests automatically include cookies
+window.authFetch = function(url, opts = {}) {
+	opts = opts || {};
+	opts.credentials = 'include'; // send HttpOnly cookies
+	opts.headers = opts.headers || {};
+	return fetch(url, opts);
+};
+</script>
+</body>
+</html>

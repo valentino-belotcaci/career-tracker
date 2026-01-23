@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Create Job Application - CareerTracker</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<header>
+  <a id="homeLink" class="site-title" href="#">CareerTracker</a>
+</header>
+
+<main class="wide-card">
+  <h2>Create Job Application</h2>
+  <p id="note">Add your description for this job application.</p>
+
+  <form id="applicationForm" class="edit-only">
+    <!-- hidden fields for backend -->
+    <input type="hidden" id="postId" name="postId">
+    <input type="hidden" id="userId" name="userId">
+
+    <label for="userDescription">Description</label>
+    <textarea id="userDescription" name="userDescription" placeholder="Write your description..." rows="5" required></textarea>
+
+    <div class="button-row">
+      <button type="submit" class="btn">Submit</button>
+      <button type="button" id="cancelBtn" class="btn btn-secondary">Cancel</button>
+    </div>
+  </form>
+
+  <p id="message"></p>
+</main>
+
+<footer>
+  <p>© 2026 CareerTracker</p>
+</footer>
+
+<script>
+(async function () {
+  // ===== HELPERS =====
+  function getQueryParam(name) {
+    return new URLSearchParams(window.location.search).get(name);
+  }
+
+  async function authFetch(url, opts = {}) {
+    opts = opts || {};
+    opts.credentials = 'include'; // send HttpOnly cookies automatically
+    opts.headers = opts.headers || {};
+    return fetch(url, opts);
+  }
+
+  // ===== ELEMENTS =====
+  const form = document.getElementById("applicationForm");
+  const message = document.getElementById("message");
+  const cancelBtn = document.getElementById("cancelBtn");
+  const postId = getQueryParam("postId");
+
+  // ===== CANCEL BUTTON =====
+  cancelBtn.addEventListener("click", () => window.history.back());
+
+  // ===== GET USER INFO =====
+  let userId = localStorage.getItem("loggedId");
+  let accountType = localStorage.getItem("type");
+
+  if (!userId || !accountType) {
+    try {
+      // fallback to backend
+      const resId = await authFetch("/Account/getLoggedAccountId");
+      if (resId.ok) {
+        const data = await resId.json();
+        userId = data.accountId;
+        localStorage.setItem("loggedId", userId);
+      }
+
+      const resType = await authFetch("/Account/getAccountType");
+      if (resType.ok) {
+        const data = await resType.json();
+        accountType = data.type;
+        localStorage.setItem("type", accountType);
+      }
+
+    } catch (err) {
+      console.error(err);
+      message.style.color = "red";
+      message.textContent = "You must be logged in to create an application.";
+      form.querySelector("button[type='submit']").disabled = true;
+      return;
+    }
+  }
+
+  // ===== INITIALIZE FORM =====
+  if (!postId || !userId) {
+    message.style.color = "red";
+    message.textContent = "Missing post or user ID.";
+    form.querySelector("button[type='submit']").disabled = true;
+    return;
+  }
+
+  document.getElementById("postId").value = postId;
+  document.getElementById("userId").value = userId;
+
+  // ===== SET HOME LINK =====
+  const homeLink = document.getElementById("homeLink");
+  if (accountType === "USER") homeLink.href = "/indexUser.html";
+  else if (accountType === "COMPANY") homeLink.href = "/indexCompany.html";
+  else homeLink.href = "/index.html";
+
+  // ===== FORM SUBMISSION =====
+  form.addEventListener("submit", async function (e) {
+    e.preventDefault();
+    message.textContent = "";
+    const submitBtn = form.querySelector("button[type='submit']");
+    submitBtn.disabled = true;
+
+    try {
+      const payload = {
+        postId: Number(postId),
+        userId: Number(userId),
+        userDescription: document.getElementById("userDescription").value,
+        status: "SUBMITTED",
+        createdAt: new Date().toISOString() // optional, backend can set
+      };
+
+      const res = await authFetch("/JobApplication/insertApplication", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      if (!res.ok) {
+        if (res.status === 409) throw new Error("You have already applied to this job.");
+        throw new Error("Failed to create application.");
+      }
+
+      const created = await res.json();
+      message.style.color = "green";
+      message.textContent = `Application submitted successfully! (ID: ${created.applicationId || created.id})`;
+      submitBtn.disabled = true;
+      document.getElementById("userDescription").disabled = true;
+
+      // ===== REDIRECT AFTER DELAY =====
+      setTimeout(() => {
+        window.location.href = "/displayJobApplication.html";
+      }, 500); //  delay
+
+    } catch (err) {
+      console.error(err);
+      message.style.color = "red";
+      message.textContent = err.message || "Error submitting application.";
+      submitBtn.disabled = false;
+    }
+  });
+})();
+</script>
+</body>
+</html>

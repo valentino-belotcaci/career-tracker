@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Job Post Details - CareerTracker</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    /* Make application rows clickable */
+    #appsTable tbody tr {
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    #appsTable tbody tr:hover {
+      background-color: #f0f0f0;
+    }
+  </style>
+</head>
+
+<body>
+<header>
+  <a id="homeLink" class="site-title" href="#">CareerTracker</a>
+</header>
+
+<main class="wide-card">
+  <h2>Job Post</h2>
+
+  <div id="details">
+    <p class="hidden"><strong>ID:</strong> <span id="postId"></span></p>
+    <p class="hidden"><strong>Company ID:</strong> <span id="companyId"></span></p>
+    <p><strong>Name:</strong> <span id="name"></span></p>
+    <p><strong>Description:</strong> <span id="description"></span></p>
+    <p><strong>Duration:</strong> <span id="duration"></span></p>
+    <p><strong>Available:</strong> <span id="available"></span></p>
+    <p><strong>Salary:</strong> <span id="salary"></span></p>
+    <p><strong>Created at:</strong> <span id="createdAt"></span></p>
+  </div>
+
+  <div class="action-row">
+    <button id="applyBtn" class="hidden">Create Application</button>
+    <button id="backBtn" type="button" class="ml-8">Back</button>
+    <p id="message" class="mt-12"></p>
+  </div>
+
+  <section id="applicationsSection" class="applications-section hidden">
+    <h3>Applications for this post</h3>
+    <p id="appsNote">Loading…</p>
+    <table id="appsTable" class="applications-table hidden">
+      <thead>
+        <tr>
+          <th>Application ID</th>
+          <th>User ID</th>
+          <th>Status</th>
+          <th>Created At</th>
+        </tr>
+      </thead>
+      <tbody id="appsBody"></tbody>
+    </table>
+  </section>
+</main>
+
+<footer>
+  <p>© 2026 CareerTracker</p>
+</footer>
+
+<script>
+/* ================= HOME LINK ================= */
+(function setHomeLink() {
+  const type = localStorage.getItem("type");
+  const homeLink = document.getElementById("homeLink");
+  if (type === "USER") homeLink.href = "/indexUser.html";
+  else if (type === "COMPANY") homeLink.href = "/indexCompany.html";
+  else homeLink.href = "/index.html";
+})();
+
+/* ================= HELPERS ================= */
+function getQueryParam(name) {
+  return new URLSearchParams(window.location.search).get(name);
+}
+
+function authFetch(url, options = {}) {
+  options = options || {};
+  options.credentials = 'include';
+  options.headers = options.headers || {};
+  return fetch(url, options);
+}
+
+/* ================= LOAD POST DETAILS ================= */
+async function loadPostDetails() {
+  const postId = getQueryParam("postId");
+  const msg = document.getElementById("message");
+
+  if (!postId) {
+    msg.textContent = "No post selected.";
+    return;
+  }
+
+  try {
+    const res = await authFetch("/JobPost/getAllPosts");
+    if (!res.ok) throw new Error("Failed to load posts");
+
+    const posts = await res.json();
+    const post = posts.find(p => String(p.id || p.postId || p.post_id) === String(postId));
+
+    if (!post) {
+      msg.textContent = "Post not found.";
+      return;
+    }
+
+    document.getElementById("postId").textContent = post.id || post.postId;
+    document.getElementById("companyId").textContent = post.companyId || post.company_id;
+    document.getElementById("name").textContent = post.name || "";
+    document.getElementById("description").textContent = post.description || "";
+    document.getElementById("duration").textContent = post.duration || "";
+    document.getElementById("available").textContent = post.available || "";
+    document.getElementById("salary").textContent = post.salary || "";
+    document.getElementById("createdAt").textContent = post.createdAt || post.created_at || "";
+
+    await configureView(postId);
+
+  } catch (err) {
+    console.error(err);
+    msg.textContent = "Error loading post details.";
+  }
+}
+
+/* ================= VIEW CONFIGURATION ================= */
+async function configureView(postId) {
+  const type = localStorage.getItem("type");
+  const loggedId = localStorage.getItem("loggedId");
+  const applyBtn = document.getElementById("applyBtn");
+
+  if (type === "COMPANY") {
+    await loadApplicationsForPost(postId);
+    return;
+  }
+
+  if (type === "USER" && loggedId) {
+    applyBtn.classList.remove("hidden");
+    try {
+      const exists = await checkExistingApplication(postId, loggedId);
+      if (exists) {
+        applyBtn.textContent = "Already applied";
+        applyBtn.disabled = true;
+      }
+    } catch (err) {
+      console.error("Error checking application:", err);
+    }
+  }
+}
+
+/* ================= CHECK IF USER APPLIED ================= */
+async function checkExistingApplication(postId, userId) {
+  try {
+    const res = await authFetch(`/JobApplication/getApplicationByIds?post_id=${postId}&user_id=${userId}`);
+    if (res.status === 200) return true;
+    if (res.status === 404) return false;
+    throw new Error("Unexpected response: " + res.status);
+  } catch (err) {
+    console.error(err);
+    return false;
+  }
+}
+
+/* ================= COMPANY VIEW: APPLICATIONS ================= */
+async function loadApplicationsForPost(postId) {
+  const appsNote = document.getElementById("appsNote");
+  const appsBody = document.getElementById("appsBody");
+  const appsSection = document.getElementById("applicationsSection");
+  const appsTable = document.getElementById("appsTable");
+
+  try {
+    const res = await authFetch(`/JobApplication/getApplicationsByPostId/${postId}`);
+
+    if (res.status === 404) {
+      appsNote.textContent = "No applications found for this post.";
+      appsSection.classList.remove("hidden");
+      appsTable.classList.add("hidden");
+      return;
+    }
+    if (!res.ok) throw new Error("Failed to load applications");
+
+    const apps = await res.json();
+    if (!apps || apps.length === 0) {
+      appsNote.textContent = "No applications found for this post.";
+      appsSection.classList.remove("hidden");
+      appsTable.classList.add("hidden");
+      return;
+    }
+
+    appsBody.innerHTML = "";
+    apps.forEach(a => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${a.applicationId || a.id}</td>
+        <td>${a.userId || a.user_id}</td>
+        <td>${a.status}</td>
+        <td>${a.createdAt || a.created_at}</td>
+      `;
+
+      // Clickable: go to JobApplicationDetails
+      const appId = a.applicationId || a.id;
+      if (appId) {
+        tr.addEventListener("click", () => {
+          window.location.href = `/JobApplicationDetails.html?applicationId=${encodeURIComponent(appId)}`;
+        });
+        tr.style.cursor = 'pointer';
+      }
+
+      appsBody.appendChild(tr);
+    });
+
+    appsNote.classList.add("hidden");
+    appsTable.classList.remove("hidden");
+    appsSection.classList.remove("hidden");
+
+  } catch (err) {
+    console.error(err);
+    appsNote.textContent = "Error loading applications.";
+    appsSection.classList.remove("hidden");
+    appsTable.classList.add("hidden");
+  }
+}
+
+/* ================= BUTTONS ================= */
+document.getElementById("applyBtn").addEventListener("click", () => {
+  const postId = document.getElementById("postId").textContent;
+  window.location.href = `/createJobApplication.html?postId=${encodeURIComponent(postId)}`;
+});
+
+document.getElementById("backBtn").addEventListener("click", () => history.back());
+
+/* ================= RUN ================= */
+loadPostDetails();
+</script>
+</body>
+</html>
