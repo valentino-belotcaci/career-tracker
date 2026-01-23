@@ -6,7 +6,16 @@ Career Tracker is a full-stack web app that helps users organize and monitor the
 
 ./gradlew bootRun
 ./gradlew clean build
-export $(cat .env | xargs)
+linux: export $(cat .env | xargs)
+windows:
+Get-Content .env | ForEach-Object {
+    if ($_ -and $_ -notmatch '^#') {
+        $name, $value = $_ -split '=', 2
+        Set-Item -Path "Env:$name" -Value $value
+    }
+}
+
+
 
 ##  Features
 

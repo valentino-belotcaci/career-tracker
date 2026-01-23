@@ -1,10 +1,13 @@
-build/
-.gradle/
+# Gradle
+backend/build/
+backend/.gradle/
 
+# Spring Boot / Java
+backend/keystore.p12
 
-keystore.p12
-
+# IDEs
 .vscode/
-.metals
+.metals/
 
-.env
+# Environment variables
+backend/.env
