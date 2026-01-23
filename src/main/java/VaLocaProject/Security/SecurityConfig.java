@@ -75,6 +75,7 @@ package VaLocaProject.Security;
                     "/User/**"
                     
                 ).permitAll() 
+                // FIX: roles don't actally work now
                 .requestMatchers(
                     "/User/**"
                 ).hasRole("USER")
