@@ -12,7 +12,6 @@ package VaLocaProject.Security;
     import org.springframework.security.config.http.SessionCreationPolicy;
     import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
     import org.springframework.security.web.SecurityFilterChain;
-    import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
     import org.springframework.web.cors.CorsConfiguration;
     import org.springframework.web.cors.CorsConfigurationSource;
     import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -76,11 +75,10 @@ package VaLocaProject.Security;
                     "/User/**"
                     
                 ).permitAll() 
+                .requestMatchers(
+                    "/User/**"
+                ).hasRole("USER")
 
-                // Keep API endpoints protected by roles. For example, replace these with your API paths:
-                // .requestMatchers("/api/users/**").hasRole("USER")
-                // .requestMatchers("/api/companies/**").hasRole("COMPANY")
-                // ...existing API protection rules...
                 
                 // Allow OPTIONS for CORS preflight
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
@@ -92,7 +90,6 @@ package VaLocaProject.Security;
                     session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 // To add the JWT filter as first filter, to not even touch the backend without it
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .formLogin(form -> form.disable())
                 .logout(logout -> logout.permitAll());
 
