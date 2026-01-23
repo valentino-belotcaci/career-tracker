@@ -4,25 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Company Profile - CareerTracker</title>
-
-  <!-- CSS (Spring Boot static path) -->
   <link rel="stylesheet" href="/css/style.css">
 </head>
-<body>
 
-<!-- ===== HEADER ===== -->
+
 <header>
   <a class="site-title" href="/indexCompany.html">CareerTracker</a>
 </header>
 
-<!-- ===== MAIN CONTENT ===== -->
 <main class="wide-card">
-
   <h2>Company Profile</h2>
 
   <p id="note">Loading company profile…</p>
 
-  <!-- VIEW MODE: use .hidden instead of inline style -->
   <div id="viewMode" class="hidden">
     <p><strong>Name:</strong> <span id="viewName"></span></p>
     <p><strong>Email:</strong> <span id="viewEmail"></span></p>
@@ -33,7 +27,6 @@
     </div>
   </div>
 
-  <!-- EDIT MODE: use .hidden instead of inline style -->
   <form id="editMode" class="hidden">
     <input type="hidden" id="companyId">
 
@@ -46,51 +39,52 @@
     <label for="description">Description</label>
     <textarea id="description"></textarea>
 
-    <button type="submit" class="btn">Save</button>
-    <button type="button" id="cancelBtn" class="btn btn-secondary spaced">Cancel</button>
+    <div class="button-row">
+      <button type="submit" class="btn">Save</button>
+      <button type="button" id="cancelBtn" class="btn btn-secondary">Cancel</button>
+    </div>
 
     <p id="message"></p>
   </form>
-
 </main>
 
-<!-- ===== FOOTER ===== -->
 <footer>
   <p>© 2026 CareerTracker</p>
 </footer>
 
-<!-- ===== SCRIPT (BOTTOM, SAFE) ===== -->
 <script>
 (function () {
-  // ===== AUTH BOOTSTRAP =====
-  const token = localStorage.getItem('jwt');
-  const loggedId = localStorage.getItem('loggedId');
 
-  if (!token || !loggedId) {
-    console.warn('Missing auth info, redirecting to login');
+  const companyId = localStorage.getItem('loggedId'); // <-- this is your company/account id
+  if (!companyId) {
+    console.warn('No company ID found in localStorage, redirecting to login');
     window.location.href = '/login.html';
     return;
   }
-
-  // Authenticated fetch helper
+  // ===== AUTHENTICATED FETCH USING COOKIES =====
   window.authFetch = function (url, opts = {}) {
-    opts.headers = Object.assign({}, opts.headers || {}, {
-      'Authorization': 'Bearer ' + token
-    });
+    opts = opts || {};
+    opts.credentials = 'include'; // send HttpOnly cookie automatically
+    opts.headers = opts.headers || {};
     return fetch(url, opts);
   };
+
+
 
   const note = document.getElementById('note');
   const viewMode = document.getElementById('viewMode');
   const editMode = document.getElementById('editMode');
   const message = document.getElementById('message');
 
-  // ===== LOAD COMPANY =====
+  // ===== LOAD COMPANY PROFILE =====
   async function loadCompany() {
+    
     try {
-      const res = await authFetch(
-        `/Company/getCompanyByAccountId/${encodeURIComponent(loggedId)}`
-      );
+      const res = await authFetch('/Company/getCompanyByAccountId/' + encodeURIComponent(companyId));
+      if (res.status === 401 || res.status === 403) {
+        window.location.href = '/login.html';
+        return;
+      }
 
       if (res.status === 404) {
         note.textContent = 'No company profile found.';
@@ -99,7 +93,6 @@
       if (!res.ok) throw new Error('Failed to load company');
 
       const company = await res.json();
-      const companyId = company.id || company.companyId || '';
 
       document.getElementById('companyId').value = companyId;
       document.getElementById('name').value = company.name || '';
@@ -110,17 +103,21 @@
       document.getElementById('viewEmail').textContent = company.email || '';
       document.getElementById('viewDescription').textContent = company.description || '';
 
-      // toggle visibility via classes
       note.classList.add('hidden');
       viewMode.classList.remove('hidden');
+      editMode.classList.add('hidden');
     } catch (err) {
       console.error(err);
       note.textContent = 'Error loading company profile.';
     }
   }
 
-  // ===== UI EVENTS =====
+  // ===== UI BINDINGS =====
   document.getElementById('editBtn').addEventListener('click', () => {
+    document.getElementById('name').value = document.getElementById('viewName').textContent || '';
+    document.getElementById('email').value = document.getElementById('viewEmail').textContent || '';
+    document.getElementById('description').value = document.getElementById('viewDescription').textContent || '';
+
     viewMode.classList.add('hidden');
     editMode.classList.remove('hidden');
   });
@@ -128,50 +125,50 @@
   document.getElementById('cancelBtn').addEventListener('click', () => {
     editMode.classList.add('hidden');
     viewMode.classList.remove('hidden');
+    message.textContent = '';
   });
 
   // ===== SAVE COMPANY =====
   editMode.addEventListener('submit', async function (e) {
     e.preventDefault();
     message.textContent = '';
-
-    const payload = {
-      name: document.getElementById('name').value,
-      email: document.getElementById('email').value,
-      description: document.getElementById('description').value
-    };
+    const saveBtn = editMode.querySelector('button[type="submit"]');
+    if (saveBtn) saveBtn.disabled = true;
 
     try {
       const companyId = document.getElementById('companyId').value;
+      const payload = {
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        description: document.getElementById('description').value
+      };
 
-      const res = await authFetch(
-        `/Company/updateCompany/${encodeURIComponent(companyId)}`,
-        {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        }
-      );
+      const res = await authFetch(`/Company/updateCompany/${encodeURIComponent(companyId)}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
 
       if (!res.ok) {
-        const text = await res.text();
-        throw new Error(text || 'Update failed');
+        const text = await res.text().catch(() => '<no response>');
+        throw new Error(text || `Failed to save changes (${res.status})`);
       }
 
+      // update view
       document.getElementById('viewName').textContent = payload.name;
       document.getElementById('viewEmail').textContent = payload.email;
       document.getElementById('viewDescription').textContent = payload.description;
 
       message.style.color = 'green';
-      message.textContent = 'Profile updated successfully';
-
-      // toggle visibility via classes
+      message.textContent = 'Saved successfully.';
       editMode.classList.add('hidden');
       viewMode.classList.remove('hidden');
     } catch (err) {
-      console.error(err);
+      console.error('Error saving company', err);
       message.style.color = 'red';
       message.textContent = err.message || 'Error saving changes';
+    } finally {
+      if (saveBtn) saveBtn.disabled = false;
     }
   });
 
@@ -179,5 +176,5 @@
 })();
 </script>
 
-</body>
+
 </html>

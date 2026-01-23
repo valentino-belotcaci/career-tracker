@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Job Application Details - CareerTracker</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    #appsTable tbody tr {
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    #appsTable tbody tr:hover {
+      background-color: #f0f0f0;
+    }
+  </style>
+</head>
+
+<body>
+<header>
+  <a id="homeLink" class="site-title" href="#">CareerTracker</a>
+</header>
+
+<main class="wide-card">
+  <h2 id="pageTitle">My Job Applications</h2>
+
+  <div class="user-controls" id="userControls"></div>
+
+  <p id="note">Loading…</p>
+
+  <!-- Table for multiple applications -->
+  <table id="appsTable" class="posts-table hidden">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Duration</th>
+        <th>Salary</th>
+        <th>Status</th>
+        <th>Applied At</th>
+      </tr>
+    </thead>
+    <tbody id="appsBody"></tbody>
+  </table>
+
+  <!-- Single application view -->
+  <div id="singleAppDetails" class="hidden">
+    <p><strong>Job Name:</strong> <span id="jobName"></span></p>
+    <p><strong>Description:</strong> <span id="description"></span></p>
+    <p><strong>Duration:</strong> <span id="duration"></span></p>
+    <p><strong>Salary:</strong> <span id="salary"></span></p>
+    <p><strong>Status:</strong> <span id="status"></span></p>
+    <p><strong>Applied At:</strong> <span id="appliedAt"></span></p>
+    <p><strong>Company:</strong> <span id="companyName"></span></p>
+    <button id="backBtn">Back</button>
+  </div>
+
+  <p id="message"></p>
+</main>
+
+<footer>
+  <p>© 2026 CareerTracker</p>
+</footer>
+
+<script>
+/* ===== Home link ===== */
+(function setHomeLink() {
+  const type = localStorage.getItem("type");
+  const homeLink = document.getElementById("homeLink");
+  homeLink.href = type === "USER" ? "/indexUser.html"
+                 : type === "COMPANY" ? "/indexCompany.html"
+                 : "/index.html";
+})();
+
+/* ===== Auth fetch helper (cookies) ===== */
+function authFetch(url, opts = {}) {
+  opts.credentials = 'include';
+  opts.headers = opts.headers || {};
+  return fetch(url, opts);
+}
+
+
+/* ===== Helpers ===== */
+function getQueryParam(name) {
+  return new URLSearchParams(window.location.search).get(name);
+}
+
+/* ===== Load either all applications or single application ===== */
+async function loadApplications() {
+  const applicationId = getQueryParam('applicationId');
+  if (applicationId) {
+    return loadSingleApplication(applicationId);
+  } else {
+    return loadAllApplications();
+  }
+}
+
+/* ===== Load all applications for the logged user ===== */
+async function loadAllApplications() {
+  const note = document.getElementById('note');
+  const tbody = document.getElementById('appsBody');
+  const table = document.getElementById('appsTable');
+
+  const userId = localStorage.getItem('loggedId');
+  if (!userId) {
+    note.textContent = 'No logged user found.';
+    return;
+  }
+
+  try {
+    const res = await authFetch(`/JobApplication/getApplicationsByUserId/${encodeURIComponent(userId)}`);
+
+    if (res.status === 403) {
+      note.textContent = 'Access denied. Please log in again.';
+      return;
+    }
+    if (res.status === 404) {
+      note.textContent = 'You have not submitted any applications yet.';
+      return;
+    }
+    if (!res.ok) throw new Error('Failed to load applications');
+
+    const applications = await res.json();
+    if (!applications || applications.length === 0) {
+      note.textContent = 'You have not submitted any applications yet.';
+      return;
+    }
+
+    tbody.innerHTML = '';
+    applications.forEach(app => {
+      const post = app.jobPost || {};
+      const appId = app.applicationId ?? app.id;
+
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+         <td>${post.name ?? ''}</td>
+         <td>${post.description ?? ''}</td>
+         <td>${post.duration ?? ''}</td>
+         <td>${post.salary ?? ''}</td>
+         <td>${app.status ?? ''}</td>
+         <td>${app.createdAt ?? ''}</td>
+       `;
+      tr.addEventListener('click', () => {
+        window.location.href = `/JobApplicationDetails.html?applicationId=${encodeURIComponent(appId)}`;
+      });
+      tbody.appendChild(tr);
+    });
+
+    note.classList.add('hidden');
+    table.classList.remove('hidden');
+  } catch (err) {
+    console.error(err);
+    note.textContent = 'Error loading applications.';
+  }
+}
+
+/* ===== Load a single application ===== */
+async function loadSingleApplication(applicationId) {
+  const note = document.getElementById('note');
+  const single = document.getElementById('singleAppDetails');
+  const table = document.getElementById('appsTable');
+
+  try {
+    const res = await authFetch(`/JobApplication/getApplicationById/${encodeURIComponent(applicationId)}`);
+    if (res.status === 403) {
+      note.textContent = 'Access denied. Please log in.';
+      return;
+    }
+    if (res.status === 404) {
+      note.textContent = 'Application not found.';
+      return;
+    }
+    if (!res.ok) throw new Error('Failed to load application');
+
+    const app = await res.json();
+    const post = app.jobPost || {};
+
+    document.getElementById("jobName").textContent = post.name || '';
+    document.getElementById("description").textContent = post.description || '';
+    document.getElementById("duration").textContent = post.duration || '';
+    document.getElementById("salary").textContent = post.salary || '';
+    document.getElementById("status").textContent = app.status || '';
+    document.getElementById("appliedAt").textContent = app.createdAt || '';
+    document.getElementById("companyName").textContent = post.company?.name || '';
+
+    table.classList.add('hidden');
+    note.classList.add('hidden');
+    single.classList.remove('hidden');
+  } catch (err) {
+    console.error(err);
+    note.textContent = 'Error loading application details.';
+  }
+}
+
+/* ===== Buttons ===== */
+document.getElementById('backBtn').addEventListener('click', () => history.back());
+
+/* ===== Run ===== */
+loadApplications();
+
+// Optional: auto-refresh only when viewing the list
+if (!getQueryParam('applicationId')) {
+  setInterval(loadApplications, 5000);
+}
+</script>
+
+</html>

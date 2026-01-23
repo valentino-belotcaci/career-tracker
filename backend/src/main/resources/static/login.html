@@ -33,13 +33,12 @@
 </footer>
 
 <script>
-async function fetchAccountByEmail(email, token) {
+async function fetchAccountByEmail(email) {
   try {
+    // JWT will be sent automatically via HttpOnly cookie
     const res = await fetch('/Account/getAccountByEmail/' + encodeURIComponent(email), {
       method: 'GET',
-      headers: {
-        'Authorization': 'Bearer ' + token
-      }
+      credentials: 'include' // send cookies automatically
     });
     return res;
   } catch (err) {
@@ -56,10 +55,11 @@ document.getElementById('loginForm').addEventListener('submit', async function (
   msg.textContent = '';
 
   try {
-    // POST email/password as simple JSON map (matches updated controller)
+    // POST email/password as simple JSON map
     const res = await fetch('/Account/authenticate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      credentials: 'include', // server sets JWT in HttpOnly cookie
       body: JSON.stringify({ email, password })
     });
 
@@ -72,22 +72,13 @@ document.getElementById('loginForm').addEventListener('submit', async function (
     const data = await res.json();
     console.log('authenticate response', data);
 
-    const token = data.token;
-    if (!token) {
-      msg.textContent = 'Login failed: no token received';
-      return;
-    }
-
-    // persist token
-    localStorage.setItem('jwt', token);
-
     // try to get type/id from authenticate response
     let type = data.type ? String(data.type).toUpperCase() : null;
     let id = (data.id !== undefined && data.id !== null) ? data.id : null;
 
-    // fallback: if type/id missing, query getAccountByEmail with the token
+    // fallback: if type/id missing, query getAccountByEmail
     if (!type || id == null) {
-      const acctRes = await fetchAccountByEmail(email, token);
+      const acctRes = await fetchAccountByEmail(email);
       if (!acctRes.ok) {
         const text = await acctRes.text();
         msg.textContent = 'Account lookup failed: ' + (text || acctRes.statusText || acctRes.status);
@@ -100,18 +91,13 @@ document.getElementById('loginForm').addEventListener('submit', async function (
       if (id == null && account) id = account.id || account.accountId || null;
     }
 
-    // store logged-in id under canonical key
-    if (id != null) {
-      localStorage.setItem('loggedId', String(id));
-    } else {
-      localStorage.removeItem('loggedId');
-    }
+    // store logged-in id/type in localStorage if you still want
+    if (id != null) localStorage.setItem('loggedId', String(id));
+    else localStorage.removeItem('loggedId');
 
-    if (type != null) {
-      localStorage.setItem('type', type);
-    } else {
-      localStorage.removeItem('type');
-    }
+    if (type != null) localStorage.setItem('type', type);
+    else localStorage.removeItem('type');
+
     console.log(type)
     // redirect according to resolved type
     if (type === 'USER') {
@@ -130,6 +116,5 @@ document.getElementById('loginForm').addEventListener('submit', async function (
 });
 </script>
 
-
-
+</body>
 </html>

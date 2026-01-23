@@ -1,5 +1,6 @@
 package VaLocaProject.Services;
 
+import java.time.Duration;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import VaLocaProject.Models.User;
 import VaLocaProject.Repositories.UserRepository;
+import VaLocaProject.Security.RedisService;
 
 
 @Service
@@ -16,9 +18,14 @@ public class UserService{
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    RedisService redisService;
+
     // encode passwords on update
     @Autowired
     BCryptPasswordEncoder passwordEncoder;
+
+    private static final Duration USER_CACHE_TTL = Duration.ofHours(1); // Defines lifetime of cache
 
     public List<User> getAllUsers(){
         return userRepository.findAll();
@@ -65,11 +72,49 @@ public class UserService{
     }
 
     public User getUserByAccountId(Long id){
-        return userRepository.findById(id).orElse(null);
+        String key = "user:" + id;
+
+        // try read from redis first
+        try {
+            Object cached = redisService.get(key);
+            // If cached is of type User, put it in variable "user" and return it
+            if (cached instanceof User user)  return user;
+            
+        } catch (Exception ignored) {}
+
+        // fallback to DB
+        User user = userRepository.findById(id).orElse(null);
+
+        // cache the DB result if found
+        if (user != null) {
+            try {
+                redisService.save(key, user, USER_CACHE_TTL);
+            } catch (Exception ignored) {}
+        }
+
+        return user;
     }
 
     public User getUserByEmail(String email){
-        return userRepository.findByEmail(email);
+        String key = "user:" + email;
+
+        try {
+            Object cached = redisService.get(key);
+            // If cached is of type User, put it in variable "user" and return it
+            if (cached instanceof User user) return user;
+        } catch (Exception e) {
+        }
+
+        User user = userRepository.findByEmail(email);
+
+        if (user != null){
+            try {
+                redisService.save(key, user, USER_CACHE_TTL);
+            } catch (Exception e) {
+            }
+        }
+
+        return user;
     };
 
 }

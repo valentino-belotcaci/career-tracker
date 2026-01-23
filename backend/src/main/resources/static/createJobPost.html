@@ -44,44 +44,52 @@
   </footer>
 
   <script>
-    // Auth fetch helper: attach JWT
+    // ===== Auth fetch helper =====
+    // This automatically sends cookies including HttpOnly JWT
     async function authFetch(url, opts = {}) {
-      const token = localStorage.getItem('jwt');
-      if (!token) throw new Error('Missing JWT; please log in.');
-      opts.headers = Object.assign({}, opts.headers || {}, {
-        'Authorization': 'Bearer ' + token.trim()
-      });
+      opts = opts || {};
+      opts.credentials = 'include'; // attach cookies automatically
+      opts.headers = opts.headers || {};
       return fetch(url, opts);
     }
 
     document.addEventListener('DOMContentLoaded', async () => {
-      const loggedId = localStorage.getItem('loggedId');
       const message = document.getElementById('message');
       const companyIdInput = document.getElementById('companyId');
       const form = document.getElementById('createForm');
 
-      // Check login & user type
+      // ===== Get loggedId from localStorage (only for identifying account) =====
+      const loggedId = localStorage.getItem('loggedId');
       if (!loggedId) {
         message.textContent = 'No logged account found. Please log in.';
         form.querySelector('button[type="submit"]').disabled = true;
+        setTimeout(() => window.location.href = '/login.html', 1500);
         return;
       }
 
-
-
       try {
-        // Get company id using JWT
+        // ===== Fetch company using account ID =====
         const res = await authFetch(`/Company/getCompanyByAccountId/${encodeURIComponent(loggedId)}`);
-        if (res.status === 404) throw new Error('No company profile found for this account');
-        if (!res.ok) throw new Error('Failed to fetch company');
+
+        if (res.status === 401 || res.status === 403) {
+          message.textContent = 'You are not logged in. Redirecting to login…';
+          setTimeout(() => window.location.href = '/login.html', 1500);
+          return;
+        }
+
+        if (res.status === 404) {
+          message.textContent = 'No company profile found for this account.';
+          form.querySelector('button[type="submit"]').disabled = true;
+          return;
+        }
 
         const company = await res.json();
-        const companyId = company.company_id || company.companyId || company.id ;
+        const companyId = company.company_id || company.companyId || company.id;
         if (!companyId) throw new Error('Company ID not found');
 
         companyIdInput.value = Number(companyId);
 
-        // Submit form handler
+        // ===== Submit form handler =====
         form.addEventListener('submit', async (e) => {
           e.preventDefault();
 
@@ -95,6 +103,7 @@
           };
 
           try {
+            // POST request sends cookie automatically via authFetch
             const postRes = await authFetch('/JobPost/insertPost', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
@@ -103,7 +112,6 @@
 
             if (!postRes.ok) throw new Error('Failed to create job post');
 
-            const created = await postRes.json();
             window.location.href = '/displayJobPost.html';
           } catch (err) {
             console.error(err);
@@ -113,7 +121,7 @@
 
       } catch (err) {
         console.error(err);
-        message.textContent = err.message;
+        message.textContent = 'Error: ' + err.message;
         form.querySelector('button[type="submit"]').disabled = true;
       }
     });

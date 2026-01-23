@@ -5,6 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>My Job Applications - CareerTracker</title>
   <link rel="stylesheet" href="/css/style.css">
+  <style>
+    #appsTable tbody tr {
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    #appsTable tbody tr:hover {
+      background-color: #f0f0f0;
+    }
+  </style>
 </head>
 <body>
 
@@ -19,7 +28,7 @@
 
   <p id="note">Loading…</p>
 
-  <!-- SAME TABLE STYLE AS displayJobPost.html -->
+  <!-- Table for applications -->
   <table id="appsTable" class="posts-table hidden">
     <thead>
       <tr>
@@ -43,115 +52,114 @@
 </footer>
 
 <script>
-  /* =======================
-     Auth fetch (JWT)
-     ======================= */
-  function authFetch(url, opts = {}) {
-    const token = localStorage.getItem('jwt');
-    if (!token) throw new Error('Missing JWT');
+/* =====================
+   Auth fetch helper (send cookies)
+===================== */
+function authFetch(url, opts = {}) {
+  opts.credentials = 'include'; // send cookies automatically
+  opts.headers = opts.headers || {};
+  return fetch(url, opts);
+}
 
-    opts.headers = {
-      ...(opts.headers || {}),
-      'Authorization': 'Bearer ' + token.trim()
-    };
+/* =====================
+   Dynamic home link
+===================== */
+const type = localStorage.getItem('type');
+const homeLink = document.getElementById('homeLink');
+if (homeLink) {
+  homeLink.href = type === 'USER' ? '/indexUser.html'
+                 : type === 'COMPANY' ? '/indexCompany.html'
+                 : '/index.html';
+}
 
-    return fetch(url, opts);
+/* =====================
+   User controls
+===================== */
+function setupUserControls() {
+  const controls = document.getElementById('userControls');
+  if (type === 'USER') {
+    const btn = document.createElement('button');
+    btn.textContent = 'Find Job Posts';
+    btn.onclick = () => window.location.href = '/displayJobPost.html';
+    controls.appendChild(btn);
+  }
+}
+setupUserControls();
+
+/* =====================
+   Load all applications for logged-in user
+===================== */
+async function loadMyApplications() {
+  const note = document.getElementById('note');
+  const tbody = document.getElementById('appsBody');
+  const table = document.getElementById('appsTable');
+
+  const userId = localStorage.getItem('loggedId');
+  if (!userId) {
+    note.textContent = 'No logged user found.';
+    return;
   }
 
-  /* =======================
-     Dynamic home link
-     ======================= */
-  const type = localStorage.getItem('type');
-  const homeLink = document.getElementById('homeLink');
-  if (homeLink) {
-    if (type === 'USER') homeLink.href = '/indexUser.html';
-    else if (type === 'COMPANY') homeLink.href = '/indexCompany.html';
-    else homeLink.href = '/index.html';
-  }
+  try {
+    const res = await authFetch(`/JobApplication/getApplicationsByUserId/${encodeURIComponent(userId)}`);
 
-  /* =======================
-     Load applications
-     ======================= */
-  async function loadMyApplications() {
-    const note = document.getElementById('note');
-    const tbody = document.getElementById('appsBody');
-    const table = document.getElementById('appsTable');
+    if (res.status === 403) {
+      note.textContent = 'Access denied. Please log in again.';
+      return;
+    }
+    if (res.status === 404) {
+      note.textContent = 'You have not submitted any applications yet.';
+      return;
+    }
+    if (!res.ok) throw new Error('Failed to load applications');
 
-    const userId = localStorage.getItem('loggedId');
-    if (!userId) {
-      note.textContent = 'No logged user found.';
+    const applications = await res.json();
+    if (!applications || applications.length === 0) {
+      note.textContent = 'You have not submitted any applications yet.';
       return;
     }
 
-    try {
-      const res = await authFetch(
-        `/JobApplication/getApplicationsByUserId/${encodeURIComponent(userId)}`
-      );
+    tbody.innerHTML = '';
 
-      if (res.status === 404) {
-        note.textContent = 'You have not submitted any applications yet.';
-        return;
-      }
+    applications.forEach(app => {
+      const post = app.jobPost || {};
+      const postId = post.id ?? '';
+      const appId = app.applicationId ?? app.id;
 
-      if (!res.ok) throw new Error('Failed to load');
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${postId}</td>
+        <td>${post.name ?? ''}</td>
+        <td>${post.description ?? ''}</td>
+        <td>${post.duration ?? ''}</td>
+        <td>${post.salary ?? ''}</td>
+        <td>${app.status ?? ''}</td>
+        <td>${app.createdAt ?? ''}</td>
+      `;
 
-      const applications = await res.json();
-      if (!applications || applications.length === 0) {
-        note.textContent = 'You have not submitted any applications yet.';
-        return;
-      }
-
-      tbody.innerHTML = '';
-
-      applications.forEach(app => {
-        const post = app.jobPost || {};
-        const postId = post.id;
-
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${postId ?? ''}</td>
-          <td>${post.name ?? ''}</td>
-          <td>${post.description ?? ''}</td>
-          <td>${post.duration ?? ''}</td>
-          <td>${post.salary ?? ''}</td>
-          <td>${app.status ?? ''}</td>
-          <td>${app.createdAt ?? ''}</td>
-        `;
-
-        tr.addEventListener('click', () => {
-          if (postId) {
-            window.location.href =
-              `/jobPostDetails.html?postId=${encodeURIComponent(postId)}`;
-          }
-        });
-
-        tbody.appendChild(tr);
+      // Redirect to single application details page
+      tr.addEventListener('click', () => {
+        if (appId) {
+          window.location.href = `/JobApplicationDetails.html?applicationId=${encodeURIComponent(appId)}`;
+        }
       });
 
-      note.classList.add('hidden');
-      table.classList.remove('hidden');
+      tbody.appendChild(tr);
+    });
 
-    } catch (err) {
-      console.error(err);
-      note.textContent = 'Error loading applications.';
-    }
+    note.classList.add('hidden');
+    table.classList.remove('hidden');
+
+  } catch (err) {
+    console.error(err);
+    note.textContent = 'Error loading applications.';
   }
+}
 
-  /* =======================
-     User controls
-     ======================= */
-  function setupUserControls() {
-    const controls = document.getElementById('userControls');
-    if (type === 'USER') {
-      const btn = document.createElement('button');
-      btn.textContent = 'Find Job Posts';
-      btn.onclick = () => window.location.href = '/displayJobPost.html';
-      controls.appendChild(btn);
-    }
-  }
-
-  setupUserControls();
-  loadMyApplications();
+/* =====================
+   Run
+===================== */
+loadMyApplications();
 </script>
 
 </body>

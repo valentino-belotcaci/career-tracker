@@ -39,6 +39,10 @@ public class JobApplicationService{
         return Optional.ofNullable(saved);
     }
 
+    public Optional<JobApplication> getApplicationById(Long id){
+        return jobApplicationRepository.findById(id);
+    }
+
 
     public void deleteAllApplications(){
         jobApplicationRepository.deleteAll();
