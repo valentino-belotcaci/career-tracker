@@ -75,12 +75,12 @@ public class AccountController {
         String password = body.get("password");
 
         if (email == null || password == null) {
-            return ResponseEntity.badRequest().body(Map.of("error", "email and password required"));
+            return ResponseEntity.badRequest().body("Error: with email and password required");
         }
 
-        String token = accountService.authenticate(email, password);
+        Optional<String> token = accountService.authenticate(email, password);
         if (token == null) {
-            return ResponseEntity.status(401).body(Map.of("error", "Login failed"));
+            return ResponseEntity.status(401).body(" Error:Login failed");
         }
 
         Optional<Account> accountOpt = accountService.getAccountByEmail(email);
@@ -88,8 +88,8 @@ public class AccountController {
         // map: takes a function with its type, returns a OPTIONAL result of the object present
         // so we add .orElse to define the other case (if not present)
         // Could be improved using bind()
-        String type = accountOpt.map(Account::getType).orElse("UNKNOWN");
-        Long id = accountOpt.map(Account::getId).orElse(null);
+        Optional<String> type = accountOpt.map(Account::getType);
+        Optional<Long> id = accountOpt.map(Account::getId);
 
         /* Intuitive and less secure version of above
         if (accountOpt.isPresent()) {
@@ -99,9 +99,9 @@ public class AccountController {
         } */
 
 
-
+        if (token.isEmpty()) return ResponseEntity.notFound().build();
         // set JWT in HttpOnly cookie
-        ResponseCookie cookie = ResponseCookie.from("token", token)
+        ResponseCookie cookie = ResponseCookie.from("token", token.get())
                 .httpOnly(true)        // JS cannot read this cookie
                 .secure(true)         // set true in production with HTTPS
                 .path("/")             // cookie sent to all endpoints
