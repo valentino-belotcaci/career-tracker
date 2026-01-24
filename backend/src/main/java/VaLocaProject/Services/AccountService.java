@@ -65,9 +65,9 @@ public class AccountService {
                 // Checks if it exists, it casts it to account
                 .map(u -> (Account) u)
                 // Or: if value present return that, if not return a new optional from the given supplier
-                .or(() -> Optional.ofNullable(companyService.getCompanyByEmail(email))
+                .or(() -> companyService.getCompanyByEmail(email))
                 // if instead company present, cast it and return it
-                .map(c -> (Account) c));
+                .map(c -> (Account) c);
 
         /* More intuitive beginner version
         User user = userService.getUserByEmail(email);
