@@ -60,8 +60,16 @@ public class AccountService {
 
 
     public Optional<Account> getAccountByEmail(String email){
+        // create a optional of the return value of the repo function(either null or user)
+        return Optional.ofNullable(userService.getUserByEmail(email))
+                // Checks if it exists, it casts it to account
+                .map(u -> (Account) u)
+                // Or: if value present return that, if not return a new optional from the given supplier
+                .or(() -> Optional.ofNullable(companyService.getCompanyByEmail(email))
+                // if instead company present, cast it and return it
+                .map(c -> (Account) c));
 
-
+        /* More intuitive beginner version
         User user = userService.getUserByEmail(email);
         if (user != null) {
             return Optional.of(user);
@@ -73,6 +81,7 @@ public class AccountService {
         }
 
         return Optional.empty();
+        */
     }
 
     // Logic for insertion of User and Company instances to the db

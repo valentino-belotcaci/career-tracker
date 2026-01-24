@@ -65,7 +65,7 @@ public class AccountController {
         return accountService.getAccountByEmail(email)
                 // map checks if the value actually exists, performs some operations and return the monad like before
                 .map(ResponseEntity::ok)
-                // orElseGet: if the value in the monad id not present, return the supplier function defined
+                // orElseGet: if the value in the monad is not present, return the value from the supplier function defined
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
