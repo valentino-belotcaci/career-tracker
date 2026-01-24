@@ -2,6 +2,7 @@ package VaLocaProject.Services;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -95,19 +96,21 @@ public class UserService{
         return user;
     }
 
-    public User getUserByEmail(String email){
+    public Optional<User> getUserByEmail(String email){
         String key = "user:" + email;
 
         try {
             Object cached = redisService.get(key);
             // If cached is of type User, put it in variable "user" and return it
-            if (cached instanceof User user) return user;
+            if (cached instanceof User user) return Optional.of(user);
         } catch (Exception e) {
         }
 
-        User user = userRepository.findByEmail(email);
+        // ofNullable let create a Optional like of, but is safer as it allows null 
+        Optional<User> user = Optional.ofNullable(userRepository.findByEmail(email));
 
-        if (user != null){
+
+        if (user.isPresent()){
             try {
                 redisService.save(key, user, USER_CACHE_TTL);
             } catch (Exception e) {
