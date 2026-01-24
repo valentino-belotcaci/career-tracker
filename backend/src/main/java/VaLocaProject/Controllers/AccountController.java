@@ -62,12 +62,11 @@ public class AccountController {
 
     @GetMapping("/getAccountByEmail/{email}")
     public ResponseEntity<Account> getAccountByEmail(@PathVariable String email) {
-        Optional<Account> opt = accountService.getAccountByEmail(email);
-        if (opt.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        // If value is present, return the value
-        return ResponseEntity.ok(opt.get());
+        return accountService.getAccountByEmail(email)
+                // map checks if the value actually exists, performs some operations and return the monad like before
+                .map(ResponseEntity::ok)
+                // orElseGet: if the value in the monad id not present, return the supplier function defined
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping("/authenticate")
