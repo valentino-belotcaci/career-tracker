@@ -1,5 +1,6 @@
 package VaLocaProject.Services;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +16,7 @@ import VaLocaProject.Models.Account;
 import VaLocaProject.Models.Company;
 import VaLocaProject.Models.User;
 import VaLocaProject.Security.JWTService;
+import VaLocaProject.Security.RedisService;
 
 @Service
 public class AccountService {
@@ -26,6 +28,9 @@ public class AccountService {
     @Autowired
     UserService userService;
 
+    @Autowired
+    RedisService redisService;
+
     // Injection of password encoder
     @Autowired
     BCryptPasswordEncoder passwordEncoder;
@@ -35,6 +40,9 @@ public class AccountService {
 
     @Autowired
     JWTService jwtService;
+
+    private static final Duration ACCOUNT_CACHE_TTL = Duration.ofHours(1); // Defines lifetime of cache
+
 
     public Optional<List<Account>> getAllAccounts(){
         // Creates a empty List in a Optional
@@ -103,7 +111,15 @@ public class AccountService {
 
 
     public Optional<String> authenticate(String email, String password) {
+        String key = "account:" + email;
 
+        try {
+            Object cached = redisService.get(key);
+            if (cached instanceof String token) {
+                return Optional.of(token);
+            }
+        } catch (Exception e) {
+        }
         Optional<Account> account_found = getAccountByEmail(email);
 
         if (account_found.isEmpty()) return Optional.empty();
@@ -120,7 +136,14 @@ public class AccountService {
         // 2) Generate JWT
         Optional<String> token = Optional.of(jwtService.generateToken(email));
         
-        if (token.isPresent()) return token;
+        if (token.isPresent()) {
+            try {
+                redisService.save(key, token.get(), ACCOUNT_CACHE_TTL); // cache for 1 hour
+            } catch (Exception e) {
+            }
+
+            return token;
+        }
 
         return Optional.empty();
     }
