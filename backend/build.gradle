@@ -40,9 +40,10 @@ dependencies {
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
 
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-
 	implementation 'org.springframework.session:spring-session-data-redis'
 
+	// Support Java 8+ date/time types (LocalDateTime, Instant, etc.) for Jackson
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
@@ -57,6 +58,9 @@ dependencies {
 	testImplementation 'org.mockito:mockito-core:5.5.0'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	runtimeOnly 'org.postgresql:postgresql' // PostgreSQL driver 
+
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.20.1'
+
 
 	// Spring Boot test helpers (provides WebMvcTest, MockBean, MockMvc, etc.)
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
