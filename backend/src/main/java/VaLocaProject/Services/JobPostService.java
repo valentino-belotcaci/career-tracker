@@ -1,5 +1,6 @@
 package VaLocaProject.Services;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -11,6 +12,7 @@ import VaLocaProject.Models.Company;
 import VaLocaProject.Models.JobPost;
 import VaLocaProject.Repositories.CompanyRepository;
 import VaLocaProject.Repositories.JobPostRepository;
+import VaLocaProject.Security.RedisService;
 
 @Service
 public class JobPostService {
@@ -21,11 +23,12 @@ public class JobPostService {
     @Autowired
     CompanyRepository companyRepository;
 
-    /*
+    
     @Autowired
     RedisService redisService;
+    
     private static final Duration POST_CACHE_TTL = Duration.ofHours(1); // Defines lifetime of cache
-     */
+     
 
     public List<JobPost> getAllPosts(){
         return jobPostRepository.findAll();
@@ -51,41 +54,41 @@ public class JobPostService {
         jobPostRepository.deleteById(id);
     }
 
-    public Optional<JobPost> updatePost(Long id, JobPost jobPost){
-        Optional<JobPost> foundJobPost = jobPostRepository.findById(id);
+    public Optional<JobPost> updatePost(Long id, JobPost jobPost) {
+        String key = "jobPost:" + id;
 
-        if (foundJobPost.isEmpty()) return Optional.empty();
-        
-        // I think this part could be improved
-        JobPost present_jb = foundJobPost.get();
-        // Check each field and update when non-null (or non-zero for primitives)
-        if (jobPost.getCompanyId() != null) {
-            present_jb.setCompanyId(jobPost.getCompanyId());
+        // 1) Try to get from cache 
+        Object cachedObj = redisService.get(key);
+        JobPost presentJob;
+
+        if (cachedObj instanceof JobPost cachedJob) {
+            presentJob = cachedJob; // use cached object
+        } else {
+            // Not in cache: fetch from DB
+            Optional<JobPost> foundJobPost = jobPostRepository.findById(id);
+            if (foundJobPost.isEmpty()) return Optional.empty();
+            presentJob = foundJobPost.get();
         }
 
-        if (jobPost.getName() != null) {
-            present_jb.setName(jobPost.getName());
-        }
+        //  2) Update fields if non-null
+        if (jobPost.getCompanyId() != null) presentJob.setCompanyId(jobPost.getCompanyId());
+        if (jobPost.getName() != null) presentJob.setName(jobPost.getName());
+        if (jobPost.getDescription() != null) presentJob.setDescription(jobPost.getDescription());
+        if (jobPost.getDuration() != null) presentJob.setDuration(jobPost.getDuration());
+        if (jobPost.getAvailable() != null) presentJob.setAvailable(jobPost.getAvailable());
+        if (jobPost.getSalary() != 0) presentJob.setSalary(jobPost.getSalary()); 
 
-        if (jobPost.getDescription() != null) {
-            present_jb.setDescription(jobPost.getDescription());
-        }
+        //  3) Save updated object to DB
+        JobPost updatedJobPost = jobPostRepository.save(presentJob);
 
-        if (jobPost.getDuration() != null) {
-            present_jb.setDuration(jobPost.getDuration());
-        }
+        //  4) Save updated object to cache
+        try {
+            redisService.save(key, updatedJobPost, POST_CACHE_TTL);
+        } catch (Exception ignored) {}
 
-        if (jobPost.getAvailable() != null) {
-            present_jb.setAvailable(jobPost.getAvailable());
-        }
-
-        if (jobPost.getSalary() != 0) {
-            present_jb.setSalary(jobPost.getSalary());
-        }
-
-        // Persist and return the updated entity
-        return Optional.ofNullable(jobPostRepository.save(present_jb));
+        return Optional.of(updatedJobPost);
     }
+
 
 
     public List<JobPost> getPostsByCompanyId(Long id){

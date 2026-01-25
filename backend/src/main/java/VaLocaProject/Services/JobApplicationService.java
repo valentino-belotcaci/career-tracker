@@ -51,21 +51,21 @@ public class JobApplicationService{
     public Optional<JobApplication> getApplicationById(Long id) {
         String key = "jobApplication:" + id;
 
-        // Upcast from Object to JobApplication
-        JobApplication cachedValue = (JobApplication) redisService.get(key);
-        if (cachedValue != null) {
-            return Optional.of(cachedValue);
+        // 1) Try to get from Redis cache 
+        Object cached = redisService.get(key);
+        if (cached instanceof JobApplication cachedApplication) {
+            // Found in cache, return immediately
+            return Optional.of(cachedApplication);
         }
 
-        // If not in cache, get from DB
+        // 2) Not in cache, fetch from DB and cache it
         return jobApplicationRepository.findById(id)
                 .map(jobApplication -> {
-                    // Save to cache if present
+                    // Save to cache for next time
                     redisService.save(key, jobApplication, APPLICATION_CACHE_TTL);
                     return jobApplication;
                 });
     }
-
 
     public void deleteAllApplications(){
         jobApplicationRepository.deleteAll();
