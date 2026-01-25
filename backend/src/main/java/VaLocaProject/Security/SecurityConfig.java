@@ -63,8 +63,11 @@ public class SecurityConfig {
                 "/JobPost/getPostsByCompanyId/**",
                 "/JobPost/getAllPosts",
                 "/JobPost/insertPost/**",
+                "/JobPost/deleteAllPosts",
 
                 "/JobApplication/getApplicationsByUserId/**",
+                "/JobApplication/getAllApplications",
+                "/JobApplication/deleteAllApplications",
                 // allow the various "get application by id" endpoints used by the details page
                 "/JobApplication/getApplicationById/**",
                 "/JobApplication/getApplicationByIds",
@@ -72,7 +75,7 @@ public class SecurityConfig {
 
                 // Allow clients to create job applications while debugging auth issues
                 "/JobApplication/insertApplication/**",
-
+                
                 "/User/**"
                 
             ).permitAll() 

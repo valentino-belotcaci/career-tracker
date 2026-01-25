@@ -1,5 +1,6 @@
 package VaLocaProject.Services;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,7 +32,7 @@ public class JobPostService {
         }
 
         // Creates the current date to save (not fully working)
-        jobPost.setCreatedAt(new java.sql.Date(System.currentTimeMillis()));
+        jobPost.setCreatedAt(LocalDateTime.now());
 
         return jobPostRepository.save(jobPost);
     }

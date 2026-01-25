@@ -1,5 +1,6 @@
 package VaLocaProject.Services;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,7 +32,7 @@ public class JobApplicationService{
         }
 
         // Set the creation timestamp
-        jobApplication.setCreatedAt(new java.sql.Date(System.currentTimeMillis()));
+        jobApplication.setCreatedAt(LocalDateTime.now());
 
         // Save the new application
         JobApplication saved = jobApplicationRepository.save(jobApplication);

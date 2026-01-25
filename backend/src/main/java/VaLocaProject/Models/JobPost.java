@@ -1,6 +1,6 @@
 package VaLocaProject.Models;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -30,7 +30,7 @@ public class JobPost {
     private String description;
     private String duration;
     private String available;
-    private Date createdAt;
+    private LocalDateTime createdAt;
     
 
 
@@ -89,11 +89,11 @@ public class JobPost {
         this.salary = salary;
     }
 
-    public Date getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date date) {
+    public void setCreatedAt(LocalDateTime date) {
         createdAt = date;
     }
 
