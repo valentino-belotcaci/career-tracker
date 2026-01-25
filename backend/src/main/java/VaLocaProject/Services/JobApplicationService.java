@@ -19,7 +19,7 @@ public class JobApplicationService{
         return jobApplicationRepository.findAll();
     }
 
-    public Optional<JobApplication> insertApplication(JobApplication jobApplication) {
+    public JobApplication insertApplication(JobApplication jobApplication) {
         // Check if an application already exists
         Optional<JobApplication> foundApplication = getApplicationByIds(
                 jobApplication.getPostId(), jobApplication.getUserId()
@@ -27,7 +27,7 @@ public class JobApplicationService{
 
         // If the user already submitted an application for this post, return empty
         if (foundApplication.isPresent()) {
-            return Optional.empty();
+            return null;
         }
 
         // Set the creation timestamp
@@ -36,7 +36,7 @@ public class JobApplicationService{
         // Save the new application
         JobApplication saved = jobApplicationRepository.save(jobApplication);
 
-        return Optional.ofNullable(saved);
+        return saved;
     }
 
     public Optional<JobApplication> getApplicationById(Long id){

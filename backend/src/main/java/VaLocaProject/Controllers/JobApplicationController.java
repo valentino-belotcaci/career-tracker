@@ -34,13 +34,13 @@ public class JobApplicationController {
 
     @PostMapping("/insertApplication")
     public ResponseEntity<?> insertApplication(@RequestBody JobApplication jobApplication) {
-        Optional<JobApplication> inserted = jobApplicationService.insertApplication(jobApplication);
+        JobApplication inserted = jobApplicationService.insertApplication(jobApplication);
         // If the Optional is empty the service found an existing application and did not create a new one
-        if (inserted.isEmpty()) {
+        if (inserted == null) {
             return ResponseEntity.status(409).body(Map.of("error", "Application already exists"));
         }
 
-        return ResponseEntity.ok(inserted.get());
+        return ResponseEntity.ok(inserted);
     }
 
     @DeleteMapping("/deleteAllApplications")
