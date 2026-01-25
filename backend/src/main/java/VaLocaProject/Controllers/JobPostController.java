@@ -56,13 +56,17 @@ public class JobPostController {
 
     @GetMapping("/getPostByPostId/{id}")
     public ResponseEntity<JobPost> getPostByPostId(@PathVariable Long id) {
-        return ResponseEntity.ok(jobPostService.getPostByPostId(id));
+        return jobPostService.getPostByPostId(id)
+        .map(ResponseEntity::ok)
+        .orElseGet(() -> ResponseEntity.notFound().build());
     }
     
 
     @PutMapping("/updatePost/{id}")
     public ResponseEntity<JobPost> updatePost(@PathVariable Long id, @RequestBody JobPost jobPost) {
-        return ResponseEntity.ok(jobPostService.updatePost(id, jobPost));
+        return jobPostService.updatePost(id, jobPost)
+        .map(ResponseEntity::ok)
+        .orElseGet(() -> ResponseEntity.notFound().build());
     }
     
     

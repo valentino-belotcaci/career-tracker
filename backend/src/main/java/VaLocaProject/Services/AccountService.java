@@ -104,15 +104,9 @@ public class AccountService {
 
         Optional<Account> account_found = getAccountByEmail(email);
 
-
         if (account_found.isEmpty()) return Optional.empty();
-        
-
-        
-
-
             
-        // Authenticate with RAW password
+        // 1) Authenticate with RAW password
         Authentication authentication = authManager.authenticate(
             new UsernamePasswordAuthenticationToken(email, password)
         );

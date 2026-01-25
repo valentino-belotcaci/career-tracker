@@ -1,6 +1,7 @@
 package VaLocaProject.Services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,36 +44,40 @@ public class JobPostService {
         jobPostRepository.deleteById(id);
     }
 
-    public JobPost updatePost(Long id, JobPost jobPost){
-        JobPost foundJobPost = jobPostRepository.findById(id).orElseThrow(
-            () -> new RuntimeException("JobPost not found"));
+    public Optional<JobPost> updatePost(Long id, JobPost jobPost){
+        Optional<JobPost> foundJobPost = jobPostRepository.findById(id);
+
+        if (foundJobPost.isEmpty()) return Optional.empty();
+        
+        // I think this part could be improved
+        JobPost present_jb = foundJobPost.get();
         // Check each field and update when non-null (or non-zero for primitives)
         if (jobPost.getCompanyId() != null) {
-            foundJobPost.setCompanyId(jobPost.getCompanyId());
+            present_jb.setCompanyId(jobPost.getCompanyId());
         }
 
         if (jobPost.getName() != null) {
-            foundJobPost.setName(jobPost.getName());
+            present_jb.setName(jobPost.getName());
         }
 
         if (jobPost.getDescription() != null) {
-            foundJobPost.setDescription(jobPost.getDescription());
+            present_jb.setDescription(jobPost.getDescription());
         }
 
         if (jobPost.getDuration() != null) {
-            foundJobPost.setDuration(jobPost.getDuration());
+            present_jb.setDuration(jobPost.getDuration());
         }
 
         if (jobPost.getAvailable() != null) {
-            foundJobPost.setAvailable(jobPost.getAvailable());
+            present_jb.setAvailable(jobPost.getAvailable());
         }
 
         if (jobPost.getSalary() != 0) {
-            foundJobPost.setSalary(jobPost.getSalary());
+            present_jb.setSalary(jobPost.getSalary());
         }
 
         // Persist and return the updated entity
-        return jobPostRepository.save(foundJobPost);
+        return Optional.ofNullable(jobPostRepository.save(present_jb));
     }
 
 
@@ -83,10 +88,7 @@ public class JobPostService {
         return jobPostRepository.findByCompanyId(foundcompany.getId());
     }
 
-    public JobPost getPostByPostId(Long id) {
-
-        JobPost foundPost = jobPostRepository.findById(id).orElse(null);
-
-        return foundPost;
+    public Optional<JobPost> getPostByPostId(Long id) {
+        return jobPostRepository.findById(id);
     }
 }
