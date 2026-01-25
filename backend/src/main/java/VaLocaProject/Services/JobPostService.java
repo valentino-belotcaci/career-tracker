@@ -35,12 +35,11 @@ public class JobPostService {
     }
 
     public JobPost insertPost(JobPost jobPost){
-        // Validate company exists
         if (jobPost.getCompanyId() == null) {
-            throw new IllegalArgumentException("Company not found");
+            return null;
         }
 
-        // Creates the current date to save (not fully working)
+        // Creates the current date to save
         jobPost.setCreatedAt(LocalDateTime.now());
 
         return jobPostRepository.save(jobPost);
