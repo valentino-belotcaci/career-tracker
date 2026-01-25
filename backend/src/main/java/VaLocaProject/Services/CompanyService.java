@@ -27,8 +27,8 @@ public class CompanyService {
 
     private static final Duration COMPANY_CACHE_TTL = Duration.ofHours(1); // Defines lifetime of cache
 
-    public Optional<List<Company>> getAllCompanies(){
-        return Optional.of(companyRepository.findAll());
+    public List<Company> getAllCompanies(){
+        return companyRepository.findAll();
     }
 
     public Company insertCompany(Company company){

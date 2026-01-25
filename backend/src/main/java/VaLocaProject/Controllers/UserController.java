@@ -29,9 +29,7 @@ public class UserController{
     // Returns all users
     @GetMapping("/getAllUsers")
     public ResponseEntity<List<User>> getAllUsers(){
-        return userService.getAllUsers()
-        .map(ResponseEntity::ok)
-        .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(userService.getAllUsers());
     }
 
     // Inserts a new user 

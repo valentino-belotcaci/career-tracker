@@ -41,17 +41,17 @@ public class AccountService {
         Optional<List<Account>> accounts = Optional.of(new ArrayList<>());
 
         // Tries to add the users, if none found, creates a new empty list
-        accounts.get().addAll(userService.getAllUsers().orElseGet(ArrayList::new));
-        accounts.get().addAll(companyService.getAllCompanies().orElseGet(ArrayList::new));
+        accounts.get().addAll(userService.getAllUsers());
+        accounts.get().addAll(companyService.getAllCompanies());
         return accounts;
     }
 
     // Return concrete lists when callers need subclass types
-    public Optional<List<User>> getAllUsers() {
+    public List<User> getAllUsers() {
         return userService.getAllUsers();
     }
 
-    public Optional<List<Company>> getAllCompanies() {
+    public List<Company> getAllCompanies() {
         return companyService.getAllCompanies();
     }
 

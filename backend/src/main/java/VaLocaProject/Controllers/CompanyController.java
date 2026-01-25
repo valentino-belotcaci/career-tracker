@@ -28,9 +28,7 @@ public class CompanyController {
     // Returns all company
     @GetMapping("/getAllCompanies")
     public ResponseEntity<List<Company>> getAllCompanies(){
-        return companyService.getAllCompanies()
-        .map(ResponseEntity::ok)
-        .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(companyService.getAllCompanies());
     }
 
     // Inserts a new company

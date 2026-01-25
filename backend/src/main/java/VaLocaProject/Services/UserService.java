@@ -28,8 +28,8 @@ public class UserService{
 
     private static final Duration USER_CACHE_TTL = Duration.ofHours(1); // Defines lifetime of cache
 
-    public Optional<List<User>> getAllUsers(){
-        return Optional.of(userRepository.findAll());
+    public List<User> getAllUsers(){
+        return userRepository.findAll();
     }
 
     // Return saved user so callers get generated id
