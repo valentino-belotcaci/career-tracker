@@ -2,6 +2,7 @@ package VaLocaProject.Services;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -81,18 +82,19 @@ public class CompanyService {
         return company;
     }
 
-    public Company getCompanyByEmail(String email){
+    public Optional<Company> getCompanyByEmail(String email){
         String key = "company:" + email;
 
         try {
             Object cached = redisService.get(key);
-            if (cached instanceof Company company)  return company;
+            if (cached instanceof Company company) return Optional.of(company);
 
         } catch (Exception e) {
         }
-        Company company = companyRepository.findByEmail(email);
 
-        if (company != null){
+        Optional<Company> company = Optional.ofNullable(companyRepository.findByEmail(email));
+
+        if (company.isPresent()){
             try {
                 redisService.save(key, company, COMPANY_CACHE_TTL);
             } catch (Exception e) {

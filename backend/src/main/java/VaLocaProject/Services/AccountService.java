@@ -58,10 +58,18 @@ public class AccountService {
         companyService.deleteAllCompanies();
     }
 
-
+    // FIX: here maybe we should use Flatmap monadic method instead of map
     public Optional<Account> getAccountByEmail(String email){
+        // create a optional of the return value of the repo function(either null or user)
+        return userService.getUserByEmail(email)
+                // Checks if it exists, it casts it to account
+                .map(u -> (Account) u)
+                // Or: if value present return that, if not return a new optional from the given supplier
+                .or(() -> companyService.getCompanyByEmail(email))
+                // if instead company present, cast it and return it
+                .map(c -> (Account) c);
 
-
+        /* More intuitive beginner version
         User user = userService.getUserByEmail(email);
         if (user != null) {
             return Optional.of(user);
@@ -73,6 +81,7 @@ public class AccountService {
         }
 
         return Optional.empty();
+        */
     }
 
     // Logic for insertion of User and Company instances to the db
@@ -91,18 +100,11 @@ public class AccountService {
 
 
 
-    public String authenticate(String email, String password) {
-        User user = userService.getUserByEmail(email);
-       
-        if (user == null) {
-            Company company = companyService.getCompanyByEmail(email);
+    public Optional<String> authenticate(String email, String password) {
 
-            if (company == null) {
-                return null;
-            }
-        }
+        Optional<Account> account_found = getAccountByEmail(email);
 
-
+        if (account_found.isEmpty()) return Optional.empty();
             
         // 1) Authenticate with RAW password
         Authentication authentication = authManager.authenticate(
@@ -114,7 +116,11 @@ public class AccountService {
         }
 
         // 2) Generate JWT
-        return jwtService.generateToken(email);
+        Optional<String> token = Optional.of(jwtService.generateToken(email));
+        
+        if (token.isPresent()) return token;
+
+        return Optional.empty();
     }
 
 

@@ -62,12 +62,11 @@ public class AccountController {
 
     @GetMapping("/getAccountByEmail/{email}")
     public ResponseEntity<Account> getAccountByEmail(@PathVariable String email) {
-        Optional<Account> opt = accountService.getAccountByEmail(email);
-        if (opt.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        // If value is present, return the value
-        return ResponseEntity.ok(opt.get());
+        return accountService.getAccountByEmail(email)
+                // map checks if the value actually exists, performs some operations and return the monad like before
+                .map(ResponseEntity::ok)
+                // orElseGet: if the value in the monad is not present, return the value from the supplier function defined
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping("/authenticate")
@@ -76,12 +75,12 @@ public class AccountController {
         String password = body.get("password");
 
         if (email == null || password == null) {
-            return ResponseEntity.badRequest().body(Map.of("error", "email and password required"));
+            return ResponseEntity.badRequest().body("Error: with email and password required");
         }
 
-        String token = accountService.authenticate(email, password);
+        Optional<String> token = accountService.authenticate(email, password);
         if (token == null) {
-            return ResponseEntity.status(401).body(Map.of("error", "Login failed"));
+            return ResponseEntity.status(401).body(" Error:Login failed");
         }
 
         Optional<Account> accountOpt = accountService.getAccountByEmail(email);
@@ -89,8 +88,8 @@ public class AccountController {
         // map: takes a function with its type, returns a OPTIONAL result of the object present
         // so we add .orElse to define the other case (if not present)
         // Could be improved using bind()
-        String type = accountOpt.map(Account::getType).orElse("UNKNOWN");
-        Long id = accountOpt.map(Account::getId).orElse(null);
+        Optional<String> type = accountOpt.map(Account::getType);
+        Optional<Long> id = accountOpt.map(Account::getId);
 
         /* Intuitive and less secure version of above
         if (accountOpt.isPresent()) {
@@ -100,9 +99,9 @@ public class AccountController {
         } */
 
 
-
+        if (token.isEmpty()) return ResponseEntity.notFound().build();
         // set JWT in HttpOnly cookie
-        ResponseCookie cookie = ResponseCookie.from("token", token)
+        ResponseCookie cookie = ResponseCookie.from("token", token.get())
                 .httpOnly(true)        // JS cannot read this cookie
                 .secure(true)         // set true in production with HTTPS
                 .path("/")             // cookie sent to all endpoints
