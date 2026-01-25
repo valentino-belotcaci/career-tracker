@@ -22,41 +22,39 @@ public class CompanyService {
 
     private static final Duration COMPANY_CACHE_TTL = Duration.ofHours(1); // Defines lifetime of cache
 
-    public List<Company> getAllCompanies(){
-        return companyRepository.findAll();
+    public Optional<List<Company>> getAllCompanies(){
+        return Optional.of(companyRepository.findAll());
     }
 
-    public Company insertCompany(Company company){
-        return companyRepository.save(company);
+    public Optional<Company> insertCompany(Company company){
+        return Optional.of(companyRepository.save(company));
     }
 
     public void deleteAllCompanies(){
         companyRepository.deleteAll();
     }
 
-    public Company updateCompany(Long id, Company company){
-        // Return if else null to resolve Optional
-        Company foundCompany = companyRepository.findById(id).orElse(null);
-        if (foundCompany == null) {
-            throw new RuntimeException("Company not found");
-        }
+    public Optional<Company> updateCompany(Long id, Company company){
+        // Use map to update present fields and return Optional<Company>
+        return companyRepository.findById(id).map(existing -> {
+            if (company.getEmail() != null) existing.setEmail(company.getEmail());
+            if (company.getName() != null) existing.setName(company.getName());
+            if (company.getDescription() != null) existing.setDescription(company.getDescription());
 
-        // Check if not null to not update some fields as null
-        if (company.getEmail() != null) {
-            foundCompany.setEmail(company.getEmail());
-        }
+            // Actually updates the company
+            Company saved = companyRepository.save(existing);
+            // Updates the cache with the new data
+            try {
+                String companyId = "company:" + saved.getId();
+                redisService.save(companyId, saved, COMPANY_CACHE_TTL);
+                if (saved.getEmail() != null) {
+                    String companyEmail = "company:" + saved.getEmail();
+                    redisService.save(companyEmail, saved, COMPANY_CACHE_TTL);
+                }
+            } catch (Exception ignored) {}
 
-        if (company.getName() != null) {
-            foundCompany.setName(company.getName());
-        }
-        
-        if (company.getDescription() != null) {
-            foundCompany.setDescription(company.getDescription());
-        }
-        // Add other fields to update...
-
-        // Actualy submit the new company version
-        return companyRepository.save(foundCompany);
+            return saved;
+        });
     }
 
     public Company getCompanyByAccountId(Long id){
@@ -104,3 +102,4 @@ public class CompanyService {
         return company;
     };
 }
+
