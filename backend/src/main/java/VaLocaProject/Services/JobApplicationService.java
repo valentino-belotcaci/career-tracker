@@ -1,5 +1,6 @@
 package VaLocaProject.Services;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -9,12 +10,19 @@ import org.springframework.stereotype.Service;
 
 import VaLocaProject.Models.JobApplication;
 import VaLocaProject.Repositories.JobApplicationRepository;
+import VaLocaProject.Security.RedisService;
 
 @Service
 public class JobApplicationService{
 
     @Autowired
     JobApplicationRepository jobApplicationRepository;
+
+    @Autowired
+    RedisService redisService;
+
+    private static final Duration APPLICATION_CACHE_TTL = Duration.ofHours(1); // Defines lifetime of cache
+
 
     public List<JobApplication> getAllApplications(){
         return jobApplicationRepository.findAll();
@@ -40,8 +48,22 @@ public class JobApplicationService{
         return saved;
     }
 
-    public Optional<JobApplication> getApplicationById(Long id){
-        return jobApplicationRepository.findById(id);
+    public Optional<JobApplication> getApplicationById(Long id) {
+        String key = "jobApplication:" + id;
+
+        // Upcast from Object to JobApplication
+        JobApplication cachedValue = (JobApplication) redisService.get(key);
+        if (cachedValue != null) {
+            return Optional.of(cachedValue);
+        }
+
+        // If not in cache, get from DB
+        return jobApplicationRepository.findById(id)
+                .map(jobApplication -> {
+                    // Save to cache if present
+                    redisService.save(key, jobApplication, APPLICATION_CACHE_TTL);
+                    return jobApplication;
+                });
     }
 
 
@@ -54,9 +76,9 @@ public class JobApplicationService{
     }
 
     public Optional<JobApplication> getApplicationByIds(Long post_id, Long user_id){
-        JobApplication jobApplication = jobApplicationRepository.findByPostIdAndUserId(post_id, user_id);
-        if (jobApplication != null) return Optional.of(jobApplication);
-        return Optional.empty();
+        Optional<JobApplication> jobApplication = Optional.of(jobApplicationRepository.findByPostIdAndUserId(post_id, user_id));
+        if (jobApplication.isEmpty()) return Optional.empty();
+        return jobApplication;
     }
 
     public List<JobApplication> getApplicationsByUserId(Long id){

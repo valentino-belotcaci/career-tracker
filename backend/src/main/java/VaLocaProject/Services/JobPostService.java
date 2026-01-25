@@ -21,6 +21,12 @@ public class JobPostService {
     @Autowired
     CompanyRepository companyRepository;
 
+    /*
+    @Autowired
+    RedisService redisService;
+    private static final Duration POST_CACHE_TTL = Duration.ofHours(1); // Defines lifetime of cache
+     */
+
     public List<JobPost> getAllPosts(){
         return jobPostRepository.findAll();
     }
