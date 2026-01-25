@@ -6,125 +6,192 @@
   <title>Create Job Post - CareerTracker</title>
   <link rel="stylesheet" href="/css/style.css">
 </head>
+
 <body>
-  <header>
-    <a class="site-title" href="/indexCompany.html">CareerTracker</a>
-  </header>
+<header>
+  <a class="site-title" href="/indexCompany.html">CareerTracker</a>
+</header>
 
-  <main class="wide-card">
-    <h2>Create Job Post</h2>
-    <p id="note">Fill the form and click Create.</p>
+<main class="wide-card">
+  <h2>Create Job Post</h2>
+  <p id="note">Fill the form and click Create.</p>
 
-    <form id="createForm">
-      <input type="hidden" id="companyId" name="companyId" />
+  <form id="createForm">
+    <input type="hidden" id="companyId" name="companyId" />
 
-      <label for="name">Job title</label><br />
-      <input id="name" name="name" type="text" required /><br />
+    <label for="name">Job title</label><br />
+    <input id="name" name="name" type="text" required /><br />
 
-      <label for="description">Description</label><br />
-      <textarea id="description" name="description" rows="4" required></textarea><br />
+    <label for="description">Description</label><br />
+    <textarea id="description" name="description" rows="4" required></textarea><br />
 
-      <label for="duration">Duration</label><br />
-      <input id="duration" name="duration" type="text" /><br />
+    <label for="duration">Duration</label><br />
+    <input id="duration" name="duration" type="text" /><br />
 
-      <label for="available">Available</label><br />
-      <input id="available" name="available" type="text" /><br />
+    <label for="available">Available</label><br />
+    <input id="available" name="available" type="text" /><br />
 
-      <label for="salary">Salary</label><br />
-      <input id="salary" name="salary" type="number" /><br />
+    <label for="salary">Salary</label><br />
+    <input id="salary" name="salary" type="number" /><br />
 
-      <p id="message"></p>
-      <button type="submit">Create</button>
-      <a href="/displayJobPost.html"><button type="button">Cancel</button></a>
-    </form>
-  </main>
+    <p id="message"></p>
 
-  <footer>
-    <p>© 2026 CareerTracker</p>
-  </footer>
+    <button type="submit">Create</button>
+    <a href="/displayJobPost.html">
+      <button type="button">Cancel</button>
+    </a>
+  </form>
+</main>
 
-  <script>
-    // ===== Auth fetch helper =====
-    // This automatically sends cookies including HttpOnly JWT
-    async function authFetch(url, opts = {}) {
-      opts = opts || {};
-      opts.credentials = 'include'; // attach cookies automatically
-      opts.headers = opts.headers || {};
-      return fetch(url, opts);
+<footer>
+  <p>© 2026 CareerTracker</p>
+</footer>
+
+<script>
+  // ===== Auth fetch helper (sends HttpOnly JWT cookie) =====
+  async function authFetch(url, opts = {}) {
+    opts.credentials = 'include';
+    opts.headers = opts.headers || {};
+    return fetch(url, opts);
+  }
+
+  document.addEventListener('DOMContentLoaded', async () => {
+    const message = document.getElementById('message');
+    const form = document.getElementById('createForm');
+    const companyIdInput = document.getElementById('companyId');
+
+    const loggedId = localStorage.getItem('loggedId');
+
+    if (!loggedId) {
+      message.textContent = 'No logged account found. Redirecting to login...';
+      setTimeout(() => window.location.href = '/login.html', 1500);
+      return;
     }
 
-    document.addEventListener('DOMContentLoaded', async () => {
-      const message = document.getElementById('message');
-      const companyIdInput = document.getElementById('companyId');
-      const form = document.getElementById('createForm');
+    try {
+      // ===== Fetch company by account ID =====
+      const res = await authFetch(
+        `/Company/getCompanyByAccountId/${encodeURIComponent(loggedId)}`
+      );
 
-      // ===== Get loggedId from localStorage (only for identifying account) =====
-      const loggedId = localStorage.getItem('loggedId');
-      if (!loggedId) {
-        message.textContent = 'No logged account found. Please log in.';
-        form.querySelector('button[type="submit"]').disabled = true;
+      if (res.status === 401 || res.status === 403) {
+        message.textContent = 'You are not logged in. Redirecting...';
         setTimeout(() => window.location.href = '/login.html', 1500);
         return;
       }
 
-      try {
-        // ===== Fetch company using account ID =====
-        const res = await authFetch(`/Company/getCompanyByAccountId/${encodeURIComponent(loggedId)}`);
-
-        if (res.status === 401 || res.status === 403) {
-          message.textContent = 'You are not logged in. Redirecting to login…';
-          setTimeout(() => window.location.href = '/login.html', 1500);
-          return;
-        }
-
-        if (res.status === 404) {
-          message.textContent = 'No company profile found for this account.';
-          form.querySelector('button[type="submit"]').disabled = true;
-          return;
-        }
-
-        const company = await res.json();
-        const companyId = company.company_id || company.companyId || company.id;
-        if (!companyId) throw new Error('Company ID not found');
-
-        companyIdInput.value = Number(companyId);
-
-        // ===== Submit form handler =====
-        form.addEventListener('submit', async (e) => {
-          e.preventDefault();
-
-          const payload = {
-            companyId: Number(companyIdInput.value),
-            name: document.getElementById('name').value,
-            description: document.getElementById('description').value,
-            duration: document.getElementById('duration').value,
-            available: document.getElementById('available').value,
-            salary: Number(document.getElementById('salary').value) || 0
-          };
-
-          try {
-            // POST request sends cookie automatically via authFetch
-            const postRes = await authFetch('/JobPost/insertPost', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(payload)
-            });
-
-            if (!postRes.ok) throw new Error('Failed to create job post');
-
-            window.location.href = '/displayJobPost.html';
-          } catch (err) {
-            console.error(err);
-            message.textContent = 'Failed to create job post. ' + err.message;
-          }
-        });
-
-      } catch (err) {
-        console.error(err);
-        message.textContent = 'Error: ' + err.message;
-        form.querySelector('button[type="submit"]').disabled = true;
+      if (res.status === 404) {
+        message.textContent = 'No company profile found.';
+        disableForm();
+        return;
       }
-    });
-  </script>
+
+      const companyRaw = await res.json();
+      console.debug('Company endpoint returned:', companyRaw);
+
+      // Support different shapes: direct object, {company: {...}}, {data: {...}}, or an array
+      let company = companyRaw;
+      if (Array.isArray(companyRaw) && companyRaw.length > 0) {
+        company = companyRaw[0];
+      } else if (companyRaw?.company) {
+        company = companyRaw.company;
+      } else if (companyRaw?.data) {
+        company = companyRaw.data;
+      }
+
+      console.debug('Normalized company object:', company);
+
+      const companyId =  company.id;
+      if (!companyId) throw new Error('Company ID not found');
+
+      // ===== REQUIRED COMPANY FIELDS =====
+      // Map logical required fields to possible keys returned by various backends
+      const requiredChecks = [
+        { label: 'Name', keys: ['name'] },
+        { label: 'Email', keys: ['email'] },
+        { label: 'Password', keys: ['password'] },
+        // optional fields — keep if your app requires them; otherwise remove from the list
+        { label: 'Description', keys: ['description'] },
+        { label: 'Street', keys: ['street'] },
+        { label: 'City', keys: ['city'] },
+        { label: 'Number', keys: ['number'] }
+      ];
+
+      function hasAnyKey(obj, keys) {
+        return keys.some(k => {
+          const v = obj?.[k];
+          return v !== undefined && v !== null && String(v).trim() !== '';
+        });
+      }
+
+      const missingFields = requiredChecks
+        .filter(rc => !hasAnyKey(company, rc.keys))
+        .map(rc => rc.label);
+
+      // If validation fails, show which keys actually exist on the object to help debugging
+      if (missingFields.length > 0) {
+        const presentKeys = Object.keys(company || {}).slice(0, 50).join(', ') || '<none>';
+        console.warn('Company object keys:', presentKeys);
+        message.textContent =
+          'You need to finish the configuration for your company account before creating a job post. Missing: ' +
+          missingFields.join(', ') + '. (present keys: ' + presentKeys + ')';
+        message.style.color = 'red';
+        disableForm();
+        return;
+      }
+
+      companyIdInput.value = Number(companyId);
+
+      // ===== Submit handler =====
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const payload = {
+          companyId: Number(companyIdInput.value),
+          name: document.getElementById('name').value,
+          description: document.getElementById('description').value,
+          duration: document.getElementById('duration').value,
+          available: document.getElementById('available').value,
+          salary: Number(document.getElementById('salary').value) || 0
+        };
+
+        console.debug('Creating job post payload:', payload);
+
+        try {
+          const postRes = await authFetch('/JobPost/insertPost', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+
+          if (!postRes.ok) {
+            let errText = '';
+            try { errText = await postRes.text(); } catch(_) { errText = '<no body>'; }
+            console.error('Create job post failed:', postRes.status, errText);
+            throw new Error(errText || `Failed to create job post (status ${postRes.status})`);
+          }
+
+          window.location.href = '/displayJobPost.html';
+
+        } catch (err) {
+          console.error(err);
+          message.textContent = err.message;
+          message.style.color = 'red';
+        }
+      });
+
+    } catch (err) {
+      console.error(err);
+      message.textContent = 'Error: ' + err.message;
+      message.style.color = 'red';
+      disableForm();
+    }
+
+    function disableForm() {
+      form.querySelectorAll('input, textarea, button[type="submit"]')
+        .forEach(el => el.disabled = true);
+    }
+  });
+</script>
 </body>
 </html>

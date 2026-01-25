@@ -46,6 +46,9 @@ public class CompanyService {
             if (company.getName() != null) foundCompany.setName(company.getName());
             if (company.getDescription() != null) foundCompany.setDescription(company.getDescription());
             if (company.getPassword() != null) foundCompany.setPassword(passwordEncoder.encode(company.getPassword()));
+            if (company.getCity() != null) foundCompany.setCity(company.getCity());
+            if (company.getStreet() != null) foundCompany.setStreet(company.getStreet());
+            if (company.getNumber() != null) foundCompany.setNumber(company.getNumber());
 
             // Actually updates the company
             // .save JPA method never returns null so we can use this directly
