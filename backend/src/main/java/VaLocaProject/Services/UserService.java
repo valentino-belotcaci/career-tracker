@@ -93,18 +93,15 @@ public class UserService{
         } catch (Exception e) {
         }
 
-        // ofNullable let create a Optional like of, but is safer as it allows null 
-        Optional<User> user = Optional.ofNullable(userRepository.findByEmail(email));
-
-
-        if (user.isPresent()){
+        return userRepository.findByEmail(email)
+        .map(user -> {
             try {
                 redisService.save(key, user, USER_CACHE_TTL);
             } catch (Exception e) {
             }
-        }
+            return user;
+        });
 
-        return user;
     };
 
 }
