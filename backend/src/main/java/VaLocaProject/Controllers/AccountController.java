@@ -33,7 +33,7 @@ public class AccountController {
 
     @GetMapping("/getAllAccounts")
     public ResponseEntity<List<Account>> getAllAccounts(){
-       return accountService.getAllAccounts()
+       return Optional.ofNullable(accountService.getAllAccounts())
        .map((ResponseEntity::ok))
        .orElse(ResponseEntity.notFound().build());
     }

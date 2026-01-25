@@ -44,13 +44,10 @@ public class AccountService {
     private static final Duration ACCOUNT_CACHE_TTL = Duration.ofHours(1); // Defines lifetime of cache
 
 
-    public Optional<List<Account>> getAllAccounts(){
-        // Creates a empty List in a Optional
-        Optional<List<Account>> accounts = Optional.of(new ArrayList<>());
-
-        // Tries to add the users, if none found, creates a new empty list
-        accounts.get().addAll(userService.getAllUsers());
-        accounts.get().addAll(companyService.getAllCompanies());
+    public List<Account> getAllAccounts(){
+        List<Account> accounts = new ArrayList<>();
+        accounts.addAll(userService.getAllUsers());
+        accounts.addAll(companyService.getAllCompanies());
         return accounts;
     }
 
@@ -112,6 +109,7 @@ public class AccountService {
 
     public Optional<String> authenticate(String email, String password) {
         String key = "account:" + email;
+        
 
         try {
             Object cached = redisService.get(key);

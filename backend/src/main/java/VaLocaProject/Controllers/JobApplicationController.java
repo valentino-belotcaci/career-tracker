@@ -1,8 +1,6 @@
 package VaLocaProject.Controllers;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -33,14 +31,9 @@ public class JobApplicationController {
     }
 
     @PostMapping("/insertApplication")
-    public ResponseEntity<?> insertApplication(@RequestBody JobApplication jobApplication) {
-        JobApplication inserted = jobApplicationService.insertApplication(jobApplication);
-        // If the Optional is empty the service found an existing application and did not create a new one
-        if (inserted == null) {
-            return ResponseEntity.status(409).body(Map.of("error", "Application already exists"));
-        }
-
-        return ResponseEntity.ok(inserted);
+    public ResponseEntity<JobApplication> insertApplication(@RequestBody JobApplication jobApplication) {
+       return ResponseEntity.ok(jobApplicationService.insertApplication(jobApplication));
+ 
     }
 
     @DeleteMapping("/deleteAllApplications")
@@ -59,14 +52,9 @@ public class JobApplicationController {
     @GetMapping("/getApplicationByIds")
     public ResponseEntity<JobApplication> getApplicationByIds(@RequestParam Long post_id, @RequestParam Long user_id) {
 
-        Optional<JobApplication> jobApplication =
-                jobApplicationService.getApplicationByIds(post_id, user_id);
-
-        if (jobApplication.isEmpty()) {
-            return ResponseEntity.notFound().build(); 
-        }
-
-        return ResponseEntity.ok(jobApplication.get());
+        return jobApplicationService.getApplicationByIds(post_id, user_id)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     
@@ -78,15 +66,10 @@ public class JobApplicationController {
 
     @GetMapping("/getApplicationById/{id}")
     public ResponseEntity<JobApplication> getApplicationById(@PathVariable Long id) {
-        Optional<JobApplication> jobApplication = jobApplicationService.getApplicationById(id);
-
-        if (jobApplication.isPresent()){
-            return ResponseEntity.ok(jobApplication.get());
-        }
-
-        return ResponseEntity.notFound().build(); 
+        return jobApplicationService.getApplicationById(id)
+        .map(ResponseEntity::ok)
+        .orElseGet(() -> ResponseEntity.notFound().build());
     }
-    
     
 
 }

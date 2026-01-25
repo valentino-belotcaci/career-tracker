@@ -90,26 +90,30 @@ public class CompanyService {
         return company;
     }
 
+
     public Optional<Company> getCompanyByEmail(String email){
         String key = "company:" + email;
 
         try {
             Object cached = redisService.get(key);
             if (cached instanceof Company company) return Optional.of(company);
-
+            
         } catch (Exception e) {
         }
+        
 
-        Optional<Company> company = Optional.ofNullable(companyRepository.findByEmail(email));
-
-        if (company.isPresent()){
+        // Call map on a Optional (call the method safely with ofNullable())
+        return companyRepository.findByEmail(email)
+        .map(company -> {
             try {
                 redisService.save(key, company, COMPANY_CACHE_TTL);
             } catch (Exception e) {
             }
-        }
+            return company;
+        });
 
-        return company;
+        
+
     };
 }
 
