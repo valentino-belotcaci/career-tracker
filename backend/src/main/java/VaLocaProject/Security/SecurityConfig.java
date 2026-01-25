@@ -74,11 +74,8 @@ public class SecurityConfig {
                 "/JobApplication/getApplicationsByPostId/**",
 
                 // Allow clients to create job applications while debugging auth issues
-                "/JobApplication/insertApplication/**",
-                
-                "/User/**"
-                
-            ).permitAll() 
+                "/JobApplication/insertApplication/**"
+            ).permitAll()
             // FIX: roles don't actally work now
             .requestMatchers(
                 "/User/**"

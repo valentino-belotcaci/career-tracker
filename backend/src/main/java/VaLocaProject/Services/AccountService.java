@@ -132,20 +132,16 @@ public class AccountService {
         }
 
         // 2) Generate JWT
-        Optional<String> token = Optional.of(jwtService.generateToken(email));
-        
-        if (token.isPresent()) {
+        return Optional.of(jwtService.generateToken(email))
+        .map(token -> {
             try {
-                redisService.save(key, token.get(), ACCOUNT_CACHE_TTL); // cache for 1 hour
+                redisService.save(key, token, ACCOUNT_CACHE_TTL); // cache for 1 hour
             } catch (Exception e) {
             }
-
             return token;
-        }
-
-        return Optional.empty();
+        });
+        
     }
-
 
 
 }
