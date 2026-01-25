@@ -36,20 +36,22 @@ public class AccountService {
     @Autowired
     JWTService jwtService;
 
-    public List<Account> getAllAccounts(){
-        List<Account> accounts = new ArrayList<>();
-        // addAll accepts Collection<? extends Account>
-        accounts.addAll(userService.getAllUsers());
-        accounts.addAll(companyService.getAllCompanies());
+    public Optional<List<Account>> getAllAccounts(){
+        // Creates a empty List in a Optional
+        Optional<List<Account>> accounts = Optional.of(new ArrayList<>());
+
+        // Tries to add the users, if none found, creates a new empty list
+        accounts.get().addAll(userService.getAllUsers().orElseGet(ArrayList::new));
+        accounts.get().addAll(companyService.getAllCompanies().orElseGet(ArrayList::new));
         return accounts;
     }
 
     // Return concrete lists when callers need subclass types
-    public List<User> getAllUsers() {
+    public Optional<List<User>> getAllUsers() {
         return userService.getAllUsers();
     }
 
-    public List<Company> getAllCompanies() {
+    public Optional<List<Company>> getAllCompanies() {
         return companyService.getAllCompanies();
     }
 

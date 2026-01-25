@@ -33,7 +33,9 @@ public class AccountController {
 
     @GetMapping("/getAllAccounts")
     public ResponseEntity<List<Account>> getAllAccounts(){
-        return ResponseEntity.ok(accountService.getAllAccounts());
+       return accountService.getAllAccounts()
+       .map((ResponseEntity::ok))
+       .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping("/insertAccount")

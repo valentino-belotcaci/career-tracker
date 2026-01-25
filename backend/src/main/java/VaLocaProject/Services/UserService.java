@@ -28,8 +28,8 @@ public class UserService{
 
     private static final Duration USER_CACHE_TTL = Duration.ofHours(1); // Defines lifetime of cache
 
-    public List<User> getAllUsers(){
-        return userRepository.findAll();
+    public Optional<List<User>> getAllUsers(){
+        return Optional.of(userRepository.findAll());
     }
 
     // Return saved user so callers get generated id
@@ -41,53 +41,40 @@ public class UserService{
         userRepository.deleteAll();
     }
 
-    public User updateUser(Long id, User user){
-        User foundUser = userRepository.findById(id).orElseThrow(
-            () -> new RuntimeException("User not found"));
+    public Optional<User> updateUser(Long id, User user){
 
-        // Check if not null to not update some fields as null
-        if (user.getEmail() != null) {
-            foundUser.setEmail(user.getEmail());
-        }
-
-        if (user.getFirstName() != null) {
-            foundUser.setFirstName(user.getFirstName());
-        }
-
-        if (user.getLastName() != null) {
-            foundUser.setLastName(user.getLastName());
-        }
-        
-        if (user.getDescription() != null) {
-            foundUser.setDescription(user.getDescription());
-        }
-
-        if (user.getPassword() != null) {
+        return userRepository.findById(id).map(foundUser -> {
+            // Check if not null to not update some fields as null
+            if (user.getEmail() != null) foundUser.setEmail(user.getEmail());
+            if (user.getFirstName() != null) foundUser.setFirstName(user.getFirstName());
+            if (user.getLastName() != null) foundUser.setLastName(user.getLastName());
+            if (user.getDescription() != null) foundUser.setDescription(user.getDescription()); 
             // encode password before saving
-            foundUser.setPassword(passwordEncoder.encode(user.getPassword()));
-        }
-        // Add other fields to update...
+            if (user.getPassword() != null) foundUser.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        // Actualy submit the new user version
-        return userRepository.save(foundUser);
+            // Actualy submit the new user version
+            return userRepository.save(foundUser);
+        });
+
     }
 
-    public User getUserByAccountId(Long id){
+    public Optional<User> getUserByAccountId(Long id){
         String key = "user:" + id;
 
         // try read from redis first
         try {
             Object cached = redisService.get(key);
             // If cached is of type User, put it in variable "user" and return it
-            if (cached instanceof User user)  return user;
+            if (cached instanceof User user)  return Optional.of(user);
             
         } catch (Exception ignored) {}
 
         // fallback to DB
-        User user = userRepository.findById(id).orElse(null);
+        Optional<User> user = userRepository.findById(id);
+
 
         // cache the DB result if found
-        if (user != null) {
+        if (user.isPresent()) {
             try {
                 redisService.save(key, user, USER_CACHE_TTL);
             } catch (Exception ignored) {}

@@ -29,7 +29,9 @@ public class UserController{
     // Returns all users
     @GetMapping("/getAllUsers")
     public ResponseEntity<List<User>> getAllUsers(){
-        return ResponseEntity.ok(userService.getAllUsers());
+        return userService.getAllUsers()
+        .map(ResponseEntity::ok)
+        .orElse(ResponseEntity.notFound().build());
     }
 
     // Inserts a new user 
@@ -48,20 +50,19 @@ public class UserController{
     // Updates a user's fields
     @PutMapping("/updateUser/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
-        return ResponseEntity.ok(userService.updateUser(id, user));
+        return userService.updateUser(id, user)
+        .map(ResponseEntity::ok)
+        .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/getUserByAccountId/{id}")
     public ResponseEntity<User> getUserByAccountId(@PathVariable Long id) {
-        User user = userService.getUserByAccountId(id);
-
-        // Additional check
-        if (user == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(user);
+        return userService.getUserByAccountId(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
 
-    
 }
+
+    

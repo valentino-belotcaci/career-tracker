@@ -28,7 +28,9 @@ public class CompanyController {
     // Returns all company
     @GetMapping("/getAllCompanies")
     public ResponseEntity<List<Company>> getAllCompanies(){
-        return ResponseEntity.ok(companyService.getAllCompanies());
+        return companyService.getAllCompanies()
+        .map(ResponseEntity::ok)
+        .orElse(ResponseEntity.notFound().build());
     }
 
     // Inserts a new company
@@ -47,20 +49,17 @@ public class CompanyController {
     // Updates a company's fields
     @PutMapping("/updateCompany/{id}")
     public ResponseEntity<Company> updateUser(@PathVariable Long id, @RequestBody Company company) {
-        return ResponseEntity.ok(companyService.updateCompany(id, company));
+        return companyService.updateCompany(id, company)
+        .map(ResponseEntity::ok)
+        .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/getCompanyByAccountId/{id}")
     public ResponseEntity<Company> getCompanyByAccountId(@PathVariable Long id) {
-        Company company = companyService.getCompanyByAccountId(id);
-
-        // Additional check
-        if (company == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(company);
+        return companyService.getCompanyByAccountId(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    
     }
-
-
 
 }
