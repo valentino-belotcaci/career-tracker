@@ -32,7 +32,9 @@ public class JobPostController {
         return ResponseEntity.ok(jobPostService.getAllPosts());
     }
 
+
     @PostMapping("/insertPost")
+    // As insertPost literally can't return null, we can just return it
     public ResponseEntity<JobPost> insertPost(@RequestBody JobPost jobPost) {   
         return ResponseEntity.ok(jobPostService.insertPost(jobPost));
     }
