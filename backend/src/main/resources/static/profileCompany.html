@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -6,7 +6,6 @@
   <title>Company Profile - CareerTracker</title>
   <link rel="stylesheet" href="/css/style.css">
 </head>
-
 <body>
 <header>
   <a class="site-title" href="/indexCompany.html">CareerTracker</a>
@@ -36,22 +35,22 @@
     <input type="hidden" id="companyId">
 
     <label for="name">Company name</label>
-    <input id="name" type="text" required>
+    <input id="name" type="text">
 
     <label for="email">Email</label>
     <input id="email" type="email" required>
 
     <label for="description">Description</label>
-    <textarea id="description" required></textarea>
+    <textarea id="description"></textarea>
 
     <label for="city">City</label>
-    <input id="city" type="text" required>
+    <input id="city" type="text">
 
     <label for="street">Street</label>
-    <input id="street" type="text" required>
+    <input id="street" type="text">
 
     <label for="number">Number</label>
-    <input id="number" type="text" required>
+    <input id="number" type="text">
 
     <div class="button-row">
       <button type="submit" class="btn">Save</button>
@@ -67,16 +66,15 @@
 </footer>
 
 <script>
-(function () {
-
+(function() {
   const accountId = localStorage.getItem('loggedId');
   if (!accountId) {
     window.location.href = '/login.html';
     return;
   }
 
-  // ===== AUTH FETCH (COOKIE-BASED AUTH) =====
-  window.authFetch = function (url, opts = {}) {
+  // ===== Authenticated fetch helper =====
+  window.authFetch = function(url, opts = {}) {
     opts.credentials = 'include';
     opts.headers = opts.headers || {};
     return fetch(url, opts);
@@ -87,12 +85,15 @@
   const editMode = document.getElementById('editMode');
   const message = document.getElementById('message');
 
+  // Helper to display null/empty values as "—"
+  function show(val) {
+    return val && val.trim() !== '' ? val : '—';
+  }
+
   // ===== LOAD COMPANY =====
   async function loadCompany() {
     try {
-      const res = await authFetch(
-        '/Company/getCompanyByAccountId/' + encodeURIComponent(accountId)
-      );
+      const res = await authFetch(`/Company/getCompanyByAccountId/${encodeURIComponent(accountId)}`);
 
       if (res.status === 401 || res.status === 403) {
         window.location.href = '/login.html';
@@ -108,9 +109,10 @@
 
       const company = await res.json();
 
+      // Set hidden id for updates
       document.getElementById('companyId').value = company.id || company.companyId;
 
-      // ===== EDIT MODE FIELDS =====
+      // ===== EDIT MODE =====
       document.getElementById('name').value = company.name || '';
       document.getElementById('email').value = company.email || '';
       document.getElementById('description').value = company.description || '';
@@ -118,13 +120,13 @@
       document.getElementById('street').value = company.street || '';
       document.getElementById('number').value = company.number || '';
 
-      // ===== VIEW MODE FIELDS =====
-      document.getElementById('viewName').textContent = company.name || '';
-      document.getElementById('viewEmail').textContent = company.email || '';
-      document.getElementById('viewDescription').textContent = company.description || '';
-      document.getElementById('viewCity').textContent = company.city || '';
-      document.getElementById('viewStreet').textContent = company.street || '';
-      document.getElementById('viewNumber').textContent = company.number || '';
+      // ===== VIEW MODE =====
+      document.getElementById('viewName').textContent = show(company.name);
+      document.getElementById('viewEmail').textContent = show(company.email);
+      document.getElementById('viewDescription').textContent = show(company.description);
+      document.getElementById('viewCity').textContent = show(company.city);
+      document.getElementById('viewStreet').textContent = show(company.street);
+      document.getElementById('viewNumber').textContent = show(company.number);
 
       note.classList.add('hidden');
       viewMode.classList.remove('hidden');
@@ -162,34 +164,31 @@
 
       const payload = {
         name: document.getElementById('name').value.trim(),
-        email: document.getElementById('email').value.trim(),
+        email: document.getElementById('email').value.trim(), // required
         description: document.getElementById('description').value.trim(),
         city: document.getElementById('city').value.trim(),
         street: document.getElementById('street').value.trim(),
         number: document.getElementById('number').value.trim()
       };
 
-      const res = await authFetch(
-        `/Company/updateCompany/${encodeURIComponent(companyId)}`,
-        {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        }
-      );
+      const res = await authFetch(`/Company/updateCompany/${encodeURIComponent(companyId)}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
 
       if (!res.ok) {
         const text = await res.text().catch(() => '');
         throw new Error(text || 'Failed to save company');
       }
 
-      // update view mode immediately
-      document.getElementById('viewName').textContent = payload.name;
-      document.getElementById('viewEmail').textContent = payload.email;
-      document.getElementById('viewDescription').textContent = payload.description;
-      document.getElementById('viewCity').textContent = payload.city;
-      document.getElementById('viewStreet').textContent = payload.street;
-      document.getElementById('viewNumber').textContent = payload.number;
+      // Update view mode immediately
+      document.getElementById('viewName').textContent = show(payload.name);
+      document.getElementById('viewEmail').textContent = show(payload.email);
+      document.getElementById('viewDescription').textContent = show(payload.description);
+      document.getElementById('viewCity').textContent = show(payload.city);
+      document.getElementById('viewStreet').textContent = show(payload.street);
+      document.getElementById('viewNumber').textContent = show(payload.number);
 
       message.style.color = 'green';
       message.textContent = 'Saved successfully.';
@@ -208,5 +207,6 @@
   loadCompany();
 })();
 </script>
+
 </body>
 </html>
