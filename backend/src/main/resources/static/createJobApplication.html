@@ -89,6 +89,72 @@
     }
   }
 
+  // ===== VALIDATE USER PROFILE BEFORE ALLOWING APPLICATION =====
+  async function validateUserProfile(uid) {
+    try {
+      const r = await authFetch(`/User/getUserByAccountId/${encodeURIComponent(uid)}`);
+      if (r.status === 404) {
+        message.style.color = "red";
+        message.textContent = "No user profile found for this account.";
+        form.querySelector("button[type='submit']").disabled = true;
+        return false;
+      }
+      if (!r.ok) throw new Error(`Failed to load user profile (${r.status})`);
+
+      const raw = await r.json();
+      // normalize shapes: direct object, array, {user:...}, {data:...}
+      let user = raw;
+      if (Array.isArray(raw) && raw.length > 0) user = raw[0];
+      else if (raw?.user) user = raw.user;
+      else if (raw?.data) user = raw.data;
+
+      console.debug('Normalized user object for validation:', user);
+
+      const requiredChecks = [
+        { label: 'First name', keys: ['firstName', 'first_name', 'name'] },
+        { label: 'Last name', keys: ['lastName', 'last_name', 'surname'] },
+        { label: 'Password', keys: ['password'] },
+        { label: 'Email', keys: ['email', 'contactEmail', 'contact_email'] },
+        { label: 'Description', keys: ['description', 'bio', 'about'] }
+      ];
+
+      function resolveKey(obj, key) {
+        if (!obj || !key) return undefined;
+        if (!key.includes('.')) return obj[key];
+        return key.split('.').reduce((acc, part) => (acc && acc[part] !== undefined) ? acc[part] : undefined, obj);
+      }
+
+      function hasAnyKey(obj, keys) {
+        return keys.some(k => {
+          const v = resolveKey(obj, k);
+          return v !== undefined && v !== null && String(v).trim() !== '';
+        });
+      }
+
+      const missing = requiredChecks.filter(rc => !hasAnyKey(user, rc.keys)).map(rc => rc.label);
+      if (missing.length > 0) {
+        const presentKeys = Object.keys(user || {}).slice(0,50).join(', ') || '<none>';
+        message.style.color = "red";
+        message.textContent = `Complete your user profile before applying. Missing: ${missing.join(', ')}. (present: ${presentKeys})`;
+        console.warn('User present keys:', presentKeys);
+        form.querySelector("button[type='submit']").disabled = true;
+        return false;
+      }
+
+      // all checks passed
+      return true;
+    } catch (err) {
+      console.error('User profile validation error', err);
+      message.style.color = "red";
+      message.textContent = "Error loading user profile.";
+      form.querySelector("button[type='submit']").disabled = true;
+      return false;
+    }
+  }
+
+  // run validation and stop if it fails
+  if (!(await validateUserProfile(userId))) return;
+
   // ===== INITIALIZE FORM =====
   if (!postId || !userId) {
     message.style.color = "red";
