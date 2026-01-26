@@ -52,15 +52,6 @@ public class CompanyService {
 
                 Company saved = companyRepository.save(foundCompany);
 
-                try {
-                    String companyId = "company:" + saved.getId();
-                    redisService.save(companyId, saved, COMPANY_CACHE_TTL);
-                    if (saved.getEmail() != null) {
-                        String companyEmail = "company:" + saved.getEmail();
-                        redisService.save(companyEmail, saved, COMPANY_CACHE_TTL);
-                    }
-                } catch (Exception ignored) {}
-
                 return saved;
             })
             .orElseThrow(() -> new EntityNotFoundException("Company not found with id " + id));
@@ -77,13 +68,7 @@ public class CompanyService {
                 // Cast the object to Company
                 .map(Company.class::cast)
                 // If cache missed, fetch from DB
-                .or(() -> companyRepository.findById(id)
-                        .map(company -> {
-                            try {
-                                redisService.save(key, company, COMPANY_CACHE_TTL);
-                            } catch (Exception ignored) {}
-                            return company;
-                        }))
+                .or(() -> companyRepository.findById(id))
                 .orElseThrow(() -> new RuntimeException("Company not found for id: " + id));
     }
 
@@ -91,7 +76,7 @@ public class CompanyService {
 
 
     public Company getCompanyByEmail(String email){
-        String key = "company:" + email;
+        String key = "account:" + email;
 
         return Optional.ofNullable(redisService.get(key))
                 // Before casting, check the type of the object
@@ -99,13 +84,7 @@ public class CompanyService {
                 .map(Company.class::cast)
                 .or(() -> {
                     // If cache missed, fetch from DB
-                    return companyRepository.findByEmail(email)
-                            .map(company -> {
-                                try {
-                                    redisService.save(key, company, COMPANY_CACHE_TTL);
-                                } catch (Exception ignored) {}
-                                return company;
-                            });
+                    return companyRepository.findByEmail(email);
                 })
                 .orElseThrow(() -> new RuntimeException("Company not found for email: " + email));
     }

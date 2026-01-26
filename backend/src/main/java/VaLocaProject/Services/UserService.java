@@ -64,29 +64,17 @@ public class UserService{
         return Optional.ofNullable(redisService.get(key))
         .filter(User.class::isInstance)
         .map(User.class::cast)
-        .or(() -> userRepository.findById(id)
-            .map(user -> {
-                try {
-                    redisService.save(key, user, USER_CACHE_TTL);
-                } catch (Exception ignored) {}
-                return user;
-            }))
+        .or(() -> userRepository.findById(id))
         .orElseThrow(() -> new RuntimeException("User not found with id " + id));
     }
 
     public User getUserByEmail(String email) {
-        String key = "user:" + email;
+        String key = "account:" + email;
 
         return Optional.ofNullable(redisService.get(key))
         .filter(User.class::isInstance)
         .map(User.class::cast)
-        .or(() -> userRepository.findByEmail(email)
-            .map(user -> {
-                try {
-                    redisService.save(key, user, USER_CACHE_TTL);
-                } catch (Exception ignored) {}
-                return user;
-            }))
+        .or(() -> userRepository.findByEmail(email))
         .orElseThrow(() -> new RuntimeException("User not found for email: " + email));
     }
        
