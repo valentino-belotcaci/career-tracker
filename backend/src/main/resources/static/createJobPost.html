@@ -71,7 +71,7 @@
     try {
       // fetch company via Account API so the backend resolves the company for the account
       const res = await authFetch(
-        `/Account/getCompanyByAccountId/${encodeURIComponent(loggedId)}`
+        `/Account/getAccountById/${encodeURIComponent(loggedId)}`
       );
 
       if (res.status === 401 || res.status === 403) {

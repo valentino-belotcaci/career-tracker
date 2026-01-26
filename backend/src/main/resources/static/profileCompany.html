@@ -93,7 +93,7 @@
   // ===== LOAD COMPANY =====
   async function loadCompany() {
     try {
-      const res = await authFetch(`/Account/getCompanyByAccountId/${encodeURIComponent(accountId)}`);
+      const res = await authFetch(`/Account/getAccountById/${encodeURIComponent(accountId)}`);
 
       if (res.status === 401 || res.status === 403) {
         window.location.href = '/login.html';
@@ -171,7 +171,7 @@
         number: document.getElementById('number').value.trim()
       };
 
-      const res = await authFetch(`/Company/updateCompany/${encodeURIComponent(companyId)}`, {
+      const res = await authFetch(`/Account/updateAccount/${encodeURIComponent(companyId)}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)

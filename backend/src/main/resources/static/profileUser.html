@@ -172,7 +172,7 @@
           description: document.getElementById('description').value
         };
 
-        const res = await authFetch(`/Account/updateUser/${encodeURIComponent(id)}`, {
+        const res = await authFetch(`/Account/updateAccount/${encodeURIComponent(id)}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
