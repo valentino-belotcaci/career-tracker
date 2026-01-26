@@ -85,17 +85,8 @@ public class AccountService {
         }
     }
 
-    //  Authenticate user and return JWT token 
-    public String authenticate(String email, String password) {
-        String key = "token:" + email;
+   public String authenticate(String email, String password) {
 
-        // 1) Try cache first
-        Optional<String> cachedToken = Optional.ofNullable(redisService.get(key))
-                                               .filter(String.class::isInstance)
-                                               .map(String.class::cast);
-        if (cachedToken.isPresent()) return cachedToken.get();
-
-        // 2) Authenticate user
         Authentication authentication = authManager.authenticate(
                 new UsernamePasswordAuthenticationToken(email, password)
         );
@@ -104,17 +95,8 @@ public class AccountService {
             throw new RuntimeException("Invalid credentials for email: " + email);
         }
 
-        // 3) Generate token and save to cache
-        return Optional.of(jwtService.generateToken(email))
-                       .map(token -> {
-                           try {
-                               redisService.save(key, token, ACCOUNT_CACHE_TTL);
-                           } catch (Exception e) {
-                               // ignore cache failures
-                           }
-                           return token;
-                       })
-                       .orElseThrow(() -> new RuntimeException("Failed to generate token"));
+        return jwtService.generateToken(email);
     }
+
 
 }
