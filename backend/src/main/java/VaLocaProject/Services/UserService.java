@@ -1,6 +1,5 @@
 package VaLocaProject.Services;
 
-import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,7 +26,6 @@ public class UserService{
     @Autowired
     BCryptPasswordEncoder passwordEncoder;
 
-    private static final Duration USER_CACHE_TTL = Duration.ofHours(1); // Defines lifetime of cache
 
     public List<User> getAllUsers(){
         return userRepository.findAll();

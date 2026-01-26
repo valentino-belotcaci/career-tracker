@@ -62,17 +62,29 @@ public class AccountService {
         companyService.deleteAllCompanies();
     }
 
-    // Get account by email (User or Company) and throw if not found
     public Account getAccountByEmail(String email) {
-        return Optional.ofNullable(userService.getUserByEmail(email)) // wraps User
-                .map(user -> (Account) user)                          // casts User to Account
-                .or(() -> Optional.ofNullable(companyService.getCompanyByEmail(email)) // wraps Company
-                        .map(company -> (Account) company))           // casts Company to Account
-                .orElseThrow(() -> new RuntimeException("Account not found for email: " + email));
+        String key = "account:" + email;
+
+        return Optional.ofNullable(redisService.get(key))       // 1) Try cache
+                .filter(Account.class::isInstance)
+                .map(Account.class::cast)
+                .or(() -> Optional.ofNullable(userService.getUserByEmail(email)) // 2) Try user
+                        .map(user -> (Account) user))
+                .or(() -> Optional.ofNullable(companyService.getCompanyByEmail(email)) // 3) Try company
+                        .map(company -> (Account) company))
+                .map(account -> { // Cache the found account
+                    try {
+                        redisService.save(key, account, ACCOUNT_CACHE_TTL);
+                    } catch (Exception ignored) {}
+                    return account;
+                })
+                .orElseThrow(() -> new RuntimeException(
+                        "Account not found with email: " + email));
     }
 
 
-    //  Insert a new account 
+
+    // Insert a new account
     public Account insertAccount(String email, String password, String type) {
         String encoded = passwordEncoder.encode(password);
 
@@ -86,7 +98,6 @@ public class AccountService {
     }
 
    public String authenticate(String email, String password) {
-
         Authentication authentication = authManager.authenticate(
                 new UsernamePasswordAuthenticationToken(email, password)
         );
@@ -97,6 +108,4 @@ public class AccountService {
 
         return jwtService.generateToken(email);
     }
-
-
 }
