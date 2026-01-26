@@ -74,13 +74,15 @@ public class SecurityConfig {
                 "/JobApplication/getApplicationsByPostId/**",
 
                 // Allow clients to create job applications while debugging auth issues
-                "/JobApplication/insertApplication/**"
+                "/JobApplication/insertApplication/**",
+                "/User/**"
             ).permitAll()
+            
             // FIX: roles don't actally work now
-            .requestMatchers(
+            /* .requestMatchers(
                 "/User/**"
             ).hasRole("USER")
-
+                */
             
             // Allow OPTIONS for CORS preflight
             .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
