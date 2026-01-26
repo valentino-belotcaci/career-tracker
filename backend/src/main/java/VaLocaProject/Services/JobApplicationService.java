@@ -30,20 +30,22 @@ public class JobApplicationService{
     }
 
     public JobApplication insertApplication(JobApplication jobApplication) {
+        if (jobApplication.getApplicationId() == null) {
+            throw new IllegalStateException("JobApplication must have a JobApplicationId");
+        }
 
-        Optional<JobApplication> existingApplication = Optional.ofNullable(getApplicationByIds(
+        Optional.ofNullable(getApplicationByIds(
                 jobApplication.getPostId(),
                 jobApplication.getUserId()
-        ));
-
-        if (existingApplication.isPresent()) {
+        )).ifPresent(existing -> {
             throw new IllegalStateException(
                     "User has already applied to this job post"
             );
-        }
+        });
 
-        // If application not already present, create the date and save it
+        // No existing application so save new one
         jobApplication.setCreatedAt(LocalDateTime.now());
+        // Save always return something so its safe in theory
         return jobApplicationRepository.save(jobApplication);
     }
 
@@ -51,27 +53,21 @@ public class JobApplicationService{
     public JobApplication getApplicationById(Long id) {
         String key = "jobApplication:" + id;
 
-        // 1) Try Redis cache
-        Object cached = redisService.get(key);
-        if (cached instanceof JobApplication cachedApplication) {
-            return cachedApplication;
-        }
-
-        // 2) Fetch from DB using Optional internally
-        Optional<JobApplication> optionalApplication =
-                jobApplicationRepository.findById(id);
-
-        JobApplication jobApplication = optionalApplication.orElseThrow(
-                () -> new EntityNotFoundException(
+        return Optional.ofNullable(redisService.get(key))      // Try cache first
+                .filter(JobApplication.class::isInstance)      // Ensure it's the right type
+                .map(JobApplication.class::cast)
+                .or(() -> jobApplicationRepository.findById(id) // Fallback to DB
+                        .map(jobApplication -> {
+                            try {
+                                redisService.save(key, jobApplication, APPLICATION_CACHE_TTL);
+                            } catch (Exception ignored) {} // Ignore cache failures
+                            return jobApplication;
+                        }))
+                .orElseThrow(() -> new EntityNotFoundException(
                         "JobApplication not found with id " + id
-                )
-        );
-
-        // 3) Cache result
-        redisService.save(key, jobApplication, APPLICATION_CACHE_TTL);
-
-        return jobApplication;
+                ));
     }
+
 
 
     public void deleteAllApplications(){

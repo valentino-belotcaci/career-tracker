@@ -3,6 +3,7 @@ package VaLocaProject.Services;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,16 +35,24 @@ public class JobPostService {
         return jobPostRepository.findAll();
     }
 
-    public JobPost insertPost(JobPost jobPost){
+    public JobPost insertPost(JobPost jobPost) {
         if (jobPost.getCompanyId() == null) {
-            return null;
+            throw new IllegalStateException("JobPost must have a companyId");
         }
 
-        // Creates the current date to save
-        jobPost.setCreatedAt(LocalDateTime.now());
+        // If postId is set, check for existing post
+        if (jobPost.getPostId() != null &&
+            jobPostRepository.findById(jobPost.getPostId()).isPresent()) {
+            throw new IllegalStateException(
+                    "JobPost already exists with id " + jobPost.getPostId()
+            );
+        }
 
+        // Save new post
+        jobPost.setCreatedAt(LocalDateTime.now());
         return jobPostRepository.save(jobPost);
     }
+
 
     public void deleteAllPosts(){
         jobPostRepository.deleteAll();
@@ -103,23 +112,18 @@ public class JobPostService {
     public JobPost getPostByPostId(Long id) {
         String key = "jobPost:" + id;
 
-        try {
-            // 1) Try Redis first
-            Object cached = redisService.get(key);
-            if (cached instanceof JobPost post) {
-                return post;
-            }
-        } catch (Exception e) {
-            System.err.println("Redis read error: " + e.getMessage());
-        }
-
-        return jobPostRepository.findById(id)
-        .map(post -> {
-            try {
-                redisService.save(key, post, POST_CACHE_TTL);
-            } catch (Exception ignored) {}
-            return post;
-        })
-        .orElseThrow(() -> new EntityNotFoundException("JobPost not found with id " + id));
+        return Optional.ofNullable(redisService.get(key))
+                .filter(JobPost.class::isInstance)
+                .map(JobPost.class::cast)
+                .or(() -> jobPostRepository.findById(id)
+                        .map(post -> {
+                            try {
+                                redisService.save(key, post, POST_CACHE_TTL);
+                            } catch (Exception ignored) {}
+                            return post;
+                        }))
+                .orElseThrow(() -> new EntityNotFoundException("JobPost not found with id " + id));
     }
+
+
 }
