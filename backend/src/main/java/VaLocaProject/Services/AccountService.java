@@ -72,9 +72,12 @@ public class AccountService {
                         .map(user -> (Account) user)
                 .or(() ->companyService.getCompanyByEmail(email)) // 3) Try company
                         .map(company -> (Account) company)
-                .map(account -> { // Cache the found account
+                .map(account -> { 
+                    // Cache the found account by creating a copy without the password, then return the original
+                    Account accountCache = account;
+                    accountCache.setPassword(""); // Remove password before caching
                     try {
-                        redisService.save(key, account, ACCOUNT_CACHE_TTL);
+                        redisService.save(key, accountCache, ACCOUNT_CACHE_TTL);
                     } catch (Exception ignored) {}
                     return account;
                 })

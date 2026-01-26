@@ -126,6 +126,7 @@ public class AccountController {
     }
 
     /* AccountService updateAccount method needs to be fixed
+    We use updateUser and updateCompany separatly for now
     @PutMapping("/updateAccount/{id}")
     public ResponseEntity<Account> updateAccount(@PathVariable Long id, @RequestBody Account account) {
         return ResponseEntity.ok(accountService.updateAccount(id, account));
