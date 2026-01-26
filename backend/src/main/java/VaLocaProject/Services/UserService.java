@@ -2,6 +2,7 @@ package VaLocaProject.Services;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -62,54 +63,34 @@ public class UserService{
     public User getUserByAccountId(Long id){
         String key = "user:" + id;
 
-        // try read from redis first
-        try {
-            Object cached = redisService.get(key);
-            // If cached is of type User, put it in variable "user" and return it
-            if (cached instanceof User user)  return user;
-            
-        } catch (Exception ignored) {}
-
-        // fallback to DB
-        return userRepository.findById(id)
-        .map(user -> {
-            // cache the DB result
-            try {
-                redisService.save(key, user, USER_CACHE_TTL);
-            } catch (Exception ignored) {}
-            return user;
-        })
+        return Optional.ofNullable(redisService.get(key))
+        .filter(User.class::isInstance)
+        .map(User.class::cast)
+        .or(() -> userRepository.findById(id)
+            .map(user -> {
+                try {
+                    redisService.save(key, user, USER_CACHE_TTL);
+                } catch (Exception ignored) {}
+                return user;
+            }))
         .orElseThrow(() -> new RuntimeException("User not found with id " + id));
     }
-
 
     public User getUserByEmail(String email) {
         String key = "user:" + email;
 
-        // 1) Try cache
-        try {
-            Object cached = redisService.get(key);
-            if (cached instanceof User user) {
+        return Optional.ofNullable(redisService.get(key))
+        .filter(User.class::isInstance)
+        .map(User.class::cast)
+        .or(() -> userRepository.findByEmail(email)
+            .map(user -> {
+                try {
+                    redisService.save(key, user, USER_CACHE_TTL);
+                } catch (Exception ignored) {}
                 return user;
-            }
-        } catch (Exception e) {
-            System.err.println("Redis get error: " + e.getMessage());
-        }
-
-        // 2) Fetch from DB using Optional internally
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found for email: " + email));
-
-        // 3) Save to Redis
-        try {
-            redisService.save(key, user, USER_CACHE_TTL);
-        } catch (Exception e) {
-            System.err.println("Redis save error: " + e.getMessage());
-        }
-
-        return user;
+            }))
+        .orElseThrow(() -> new RuntimeException("User not found for email: " + email));
     }
-
-
+       
 
 }
