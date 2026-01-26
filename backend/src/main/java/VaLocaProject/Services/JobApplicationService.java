@@ -1,7 +1,6 @@
 package VaLocaProject.Services;
 
 import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,13 +29,6 @@ public class JobApplicationService{
     }
 
     public JobApplication insertApplication(JobApplication jobApplication) {
-        // Ensure ID is null so JPA generates it for new entities
-        jobApplication.setApplicationId(null);
-
-        // ensure createdAt and status defaults
-        if (jobApplication.getCreatedAt() == null) jobApplication.setCreatedAt(LocalDateTime.now());
-        if (jobApplication.getStatus() == null || jobApplication.getStatus().isBlank()) jobApplication.setStatus("SUBMITTED");
-
         return jobApplicationRepository.save(jobApplication);
     }
 
