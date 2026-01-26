@@ -79,7 +79,20 @@ public class JobApplicationService{
     }
 
     public JobApplication getApplicationByIds(Long post_id, Long user_id){
-        return jobApplicationRepository.findByPostIdAndUserId(post_id, user_id);
+        String key = "jobApplication: postId:" + post_id + ": userId:" + user_id;
+        return Optional.ofNullable(redisService.get(key))      // Try cache first
+                .filter(JobApplication.class::isInstance)      // Ensure it's the right type
+                .map(JobApplication.class::cast)
+                .or(() -> jobApplicationRepository.findByPostIdAndUserId(post_id, user_id) // Fallback to DB
+                        .map(jobApplication -> {
+                            try {
+                                redisService.save(key, jobApplication, APPLICATION_CACHE_TTL);
+                            } catch (Exception ignored) {} // Ignore cache failures
+                            return jobApplication;
+                        }))
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "JobApplication not found with postId " + post_id + " and userId " + user_id
+                ));
     }
 
     public List<JobApplication> getApplicationsByUserId(Long id){
