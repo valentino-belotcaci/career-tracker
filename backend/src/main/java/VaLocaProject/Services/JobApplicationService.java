@@ -30,22 +30,13 @@ public class JobApplicationService{
     }
 
     public JobApplication insertApplication(JobApplication jobApplication) {
-        // 1) Ensure applicationId is set
-        if (jobApplication.getApplicationId() == null) {
-            throw new IllegalStateException("JobApplication must have an applicationId");
-        }
+        // Ensure ID is null so JPA generates it for new entities
+        jobApplication.setApplicationId(null);
 
-        // 2) Check if an application with this ID already exists
-        Optional.ofNullable(jobApplication.getApplicationId())
-                .flatMap(jobApplicationRepository::findById)
-                .ifPresent(existing -> {
-                    throw new IllegalStateException(
-                            "JobApplication already exists with id " + jobApplication.getApplicationId()
-                    );
-                });
+        // ensure createdAt and status defaults
+        if (jobApplication.getCreatedAt() == null) jobApplication.setCreatedAt(LocalDateTime.now());
+        if (jobApplication.getStatus() == null || jobApplication.getStatus().isBlank()) jobApplication.setStatus("SUBMITTED");
 
-        // 3) Save new application
-        jobApplication.setCreatedAt(LocalDateTime.now());
         return jobApplicationRepository.save(jobApplication);
     }
 
