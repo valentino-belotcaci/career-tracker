@@ -52,9 +52,7 @@ public class JobApplicationController {
     @GetMapping("/getApplicationByIds")
     public ResponseEntity<JobApplication> getApplicationByIds(@RequestParam Long post_id, @RequestParam Long user_id) {
 
-        return jobApplicationService.getApplicationByIds(post_id, user_id)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        return ResponseEntity.ok(jobApplicationService.getApplicationByIds(post_id, user_id));
     }
 
     
@@ -66,9 +64,7 @@ public class JobApplicationController {
 
     @GetMapping("/getApplicationById/{id}")
     public ResponseEntity<JobApplication> getApplicationById(@PathVariable Long id) {
-        return jobApplicationService.getApplicationById(id)
-        .map(ResponseEntity::ok)
-        .orElseGet(() -> ResponseEntity.notFound().build());
+        return ResponseEntity.ok(jobApplicationService.getApplicationById(id));
     }
     
 

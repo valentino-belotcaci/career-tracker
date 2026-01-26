@@ -58,29 +58,27 @@ public class UserService{
 
     }
 
-    public Optional<User> getUserByAccountId(Long id){
+    public User getUserByAccountId(Long id){
         String key = "user:" + id;
 
         // try read from redis first
         try {
             Object cached = redisService.get(key);
             // If cached is of type User, put it in variable "user" and return it
-            if (cached instanceof User user)  return Optional.of(user);
+            if (cached instanceof User user)  return user;
             
         } catch (Exception ignored) {}
 
         // fallback to DB
-        Optional<User> user = userRepository.findById(id);
-
-
-        // cache the DB result if found
-        if (user.isPresent()) {
+        return userRepository.findById(id)
+        .map(user -> {
+            // cache the DB result
             try {
                 redisService.save(key, user, USER_CACHE_TTL);
             } catch (Exception ignored) {}
-        }
-
-        return user;
+            return user;
+        })
+        .orElseThrow(() -> new RuntimeException("User not found with id " + id));
     }
 
 

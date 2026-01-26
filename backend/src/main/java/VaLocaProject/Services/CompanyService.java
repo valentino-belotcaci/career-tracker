@@ -2,7 +2,6 @@ package VaLocaProject.Services;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -11,6 +10,7 @@ import org.springframework.stereotype.Service;
 import VaLocaProject.Models.Company;
 import VaLocaProject.Repositories.CompanyRepository;
 import VaLocaProject.Security.RedisService;
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class CompanyService {
@@ -39,33 +39,34 @@ public class CompanyService {
         companyRepository.deleteAll();
     }
 
-    public Optional<Company> updateCompany(Long id, Company company){
-        // Use map to update present fields and return Optional<Company>
-        return companyRepository.findById(id).map(foundCompany -> {
-            if (company.getEmail() != null) foundCompany.setEmail(company.getEmail());
-            if (company.getName() != null) foundCompany.setName(company.getName());
-            if (company.getDescription() != null) foundCompany.setDescription(company.getDescription());
-            if (company.getPassword() != null) foundCompany.setPassword(passwordEncoder.encode(company.getPassword()));
-            if (company.getCity() != null) foundCompany.setCity(company.getCity());
-            if (company.getStreet() != null) foundCompany.setStreet(company.getStreet());
-            if (company.getNumber() != null) foundCompany.setNumber(company.getNumber());
+    public Company updateCompany(Long id, Company company) {
+        return companyRepository.findById(id)
+            .map(foundCompany -> {
+                if (company.getEmail() != null) foundCompany.setEmail(company.getEmail());
+                if (company.getName() != null) foundCompany.setName(company.getName());
+                if (company.getDescription() != null) foundCompany.setDescription(company.getDescription());
+                if (company.getPassword() != null)
+                    foundCompany.setPassword(passwordEncoder.encode(company.getPassword()));
+                if (company.getCity() != null) foundCompany.setCity(company.getCity());
+                if (company.getStreet() != null) foundCompany.setStreet(company.getStreet());
+                if (company.getNumber() != null) foundCompany.setNumber(company.getNumber());
 
-            // Actually updates the company
-            // .save JPA method never returns null so we can use this directly
-            Company saved = companyRepository.save(foundCompany);
-            // Updates the cache with the new data
-            try {
-                String companyId = "company:" + saved.getId();
-                redisService.save(companyId, saved, COMPANY_CACHE_TTL);
-                if (saved.getEmail() != null) {
-                    String companyEmail = "company:" + saved.getEmail();
-                    redisService.save(companyEmail, saved, COMPANY_CACHE_TTL);
-                }
-            } catch (Exception ignored) {}
+                Company saved = companyRepository.save(foundCompany);
 
-            return saved;
-        });
+                try {
+                    String companyId = "company:" + saved.getId();
+                    redisService.save(companyId, saved, COMPANY_CACHE_TTL);
+                    if (saved.getEmail() != null) {
+                        String companyEmail = "company:" + saved.getEmail();
+                        redisService.save(companyEmail, saved, COMPANY_CACHE_TTL);
+                    }
+                } catch (Exception ignored) {}
+
+                return saved;
+            })
+            .orElseThrow(() -> new EntityNotFoundException("Company not found with id " + id));
     }
+
 
     public Company getCompanyByAccountId(Long id) {
         String key = "company:" + id;

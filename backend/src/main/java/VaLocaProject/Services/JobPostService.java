@@ -3,7 +3,6 @@ package VaLocaProject.Services;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +12,7 @@ import VaLocaProject.Models.JobPost;
 import VaLocaProject.Repositories.CompanyRepository;
 import VaLocaProject.Repositories.JobPostRepository;
 import VaLocaProject.Security.RedisService;
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class JobPostService {
@@ -53,39 +53,42 @@ public class JobPostService {
         jobPostRepository.deleteById(id);
     }
 
-    public Optional<JobPost> updatePost(Long id, JobPost jobPost) {
+    public JobPost updatePost(Long id, JobPost jobPost) {
         String key = "jobPost:" + id;
 
-        // 1) Try to get from cache 
-        Object cachedObj = redisService.get(key);
         JobPost presentJob;
-
+        
+        // 1) Try cache
+        Object cachedObj = redisService.get(key);
         if (cachedObj instanceof JobPost cachedJob) {
-            presentJob = cachedJob; // use cached object
+            presentJob = cachedJob;
         } else {
-            // Not in cache: fetch from DB
-            Optional<JobPost> foundJobPost = jobPostRepository.findById(id);
-            if (foundJobPost.isEmpty()) return Optional.empty();
-            presentJob = foundJobPost.get();
+            // 2) Fetch from DB using Optional internally
+            presentJob = jobPostRepository.findById(id)
+                    .orElseThrow(() ->
+                            new EntityNotFoundException(
+                                    "JobPost not found with id " + id
+                            )
+                    );
         }
 
-        //  2) Update fields if non-null
+        // 3) Update fields if non-null
         if (jobPost.getCompanyId() != null) presentJob.setCompanyId(jobPost.getCompanyId());
         if (jobPost.getName() != null) presentJob.setName(jobPost.getName());
         if (jobPost.getDescription() != null) presentJob.setDescription(jobPost.getDescription());
         if (jobPost.getDuration() != null) presentJob.setDuration(jobPost.getDuration());
         if (jobPost.getAvailable() != null) presentJob.setAvailable(jobPost.getAvailable());
-        if (jobPost.getSalary() != 0) presentJob.setSalary(jobPost.getSalary()); 
+        if (jobPost.getSalary() != 0) presentJob.setSalary(jobPost.getSalary());
 
-        //  3) Save updated object to DB
+        // 4) Save to DB
         JobPost updatedJobPost = jobPostRepository.save(presentJob);
 
-        //  4) Save updated object to cache
+        // 5) Update cache
         try {
             redisService.save(key, updatedJobPost, POST_CACHE_TTL);
         } catch (Exception ignored) {}
 
-        return Optional.of(updatedJobPost);
+        return updatedJobPost;
     }
 
 
@@ -97,7 +100,26 @@ public class JobPostService {
         return jobPostRepository.findByCompanyId(foundcompany.getId());
     }
 
-    public Optional<JobPost> getPostByPostId(Long id) {
-        return jobPostRepository.findById(id);
+    public JobPost getPostByPostId(Long id) {
+        String key = "jobPost:" + id;
+
+        try {
+            // 1) Try Redis first
+            Object cached = redisService.get(key);
+            if (cached instanceof JobPost post) {
+                return post;
+            }
+        } catch (Exception e) {
+            System.err.println("Redis read error: " + e.getMessage());
+        }
+
+        return jobPostRepository.findById(id)
+        .map(post -> {
+            try {
+                redisService.save(key, post, POST_CACHE_TTL);
+            } catch (Exception ignored) {}
+            return post;
+        })
+        .orElseThrow(() -> new EntityNotFoundException("JobPost not found with id " + id));
     }
 }

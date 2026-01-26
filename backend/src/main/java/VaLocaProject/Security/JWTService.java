@@ -17,8 +17,13 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
+/* Never put passwords inside a JWT as it is 
+ * Base64 ENCODED not encrypted, its easily accessible 
+*/
+
 @Service
 public class JWTService {
+
 
     private String secretKey = "";
 

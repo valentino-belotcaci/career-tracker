@@ -46,10 +46,8 @@ public class CompanyController {
     
     // Updates a company's fields
     @PutMapping("/updateCompany/{id}")
-    public ResponseEntity<Company> updateUser(@PathVariable Long id, @RequestBody Company company) {
-        return companyService.updateCompany(id, company)
-        .map(ResponseEntity::ok)
-        .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<Company> updateCompany(@PathVariable Long id, @RequestBody Company company) {
+        return ResponseEntity.ok(companyService.updateCompany(id, company));
     }
 
     @GetMapping("/getCompanyByAccountId/{id}")
