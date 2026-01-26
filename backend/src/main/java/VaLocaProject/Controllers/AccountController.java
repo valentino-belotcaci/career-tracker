@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -13,12 +14,15 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import VaLocaProject.Models.Account;
+import VaLocaProject.Models.User;
 import VaLocaProject.Services.AccountService;
+
 
 @RestController
 @CrossOrigin
@@ -67,6 +71,11 @@ public class AccountController {
         return ResponseEntity.ok(accountService.getAccountByEmail(email));
     }
 
+    @GetMapping("/getAccountById/{id}")
+    public ResponseEntity<Account> getAccountById(@PathVariable Long id) {
+        return ResponseEntity.ok(accountService.getAccountById(id));
+    }
+
     @PostMapping("/authenticate")
     public ResponseEntity<?> authenticateAccount(@RequestBody Map<String, String> body) {
         String email = body.get("email");
@@ -103,8 +112,7 @@ public class AccountController {
                 ));
     }
 
-
-    // FIX : Needs to be added in the frotnend for correct logout, we can add more things here
+    // To remove all headers abd cookies when loggin out
     @PostMapping("/logout")
     public ResponseEntity<Map<String, String>> logout() {
         ResponseCookie cookie = ResponseCookie.from("token", "")
@@ -118,6 +126,11 @@ public class AccountController {
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
                 .body(Map.of("message", "Logged out"));
+    }
+
+    @PutMapping("/updateUser/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable String id, @RequestBody String entity) {
+        return ResponseEntity.ok(accountService.updateUser(id, entity));
     }
 
 

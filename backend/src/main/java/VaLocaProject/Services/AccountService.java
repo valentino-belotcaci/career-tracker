@@ -68,10 +68,10 @@ public class AccountService {
         return Optional.ofNullable(redisService.get(key))       // 1) Try cache
                 .filter(Account.class::isInstance)
                 .map(Account.class::cast)
-                .or(() -> Optional.ofNullable(userService.getUserByEmail(email)) // 2) Try user
-                        .map(user -> (Account) user))
-                .or(() -> Optional.ofNullable(companyService.getCompanyByEmail(email)) // 3) Try company
-                        .map(company -> (Account) company))
+                .or(() -> userService.getUserByEmail(email)) // 2) Try user
+                        .map(user -> (Account) user)
+                .or(() ->companyService.getCompanyByEmail(email)) // 3) Try company
+                        .map(company -> (Account) company)
                 .map(account -> { // Cache the found account
                     try {
                         redisService.save(key, account, ACCOUNT_CACHE_TTL);
@@ -82,7 +82,26 @@ public class AccountService {
                         "Account not found with email: " + email));
     }
 
+    public Account getAccountById(Long id) {
+        String key = "accountId:" + id;
 
+        return Optional.ofNullable(redisService.get(key))       // 1) Try cache
+                .filter(Account.class::isInstance)
+                .map(Account.class::cast)
+                .or(() -> userService.getUserByAccountId(id) // 2) Try user
+                        .map(user -> (Account) user))
+                .or(() -> companyService.getCompanyByAccountId(id)) // 3) Try company
+                        .map(company -> (Account) company)
+                .map(account -> { // Cache the found account
+                    try {
+                        redisService.save(key, account, ACCOUNT_CACHE_TTL);
+                    } catch (Exception ignored) {}
+                    return account;
+                })
+                .orElseThrow(() -> new RuntimeException(
+                        "Account not found with id: " + id));
+
+    }
 
     // Insert a new account
     public Account insertAccount(String email, String password, String type) {
@@ -107,5 +126,10 @@ public class AccountService {
         }
 
         return jwtService.generateToken(email);
+    }
+
+    public Account updateAccount(String id, Account account) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

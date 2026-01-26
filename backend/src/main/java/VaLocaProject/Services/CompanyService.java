@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import VaLocaProject.Models.Company;
 import VaLocaProject.Repositories.CompanyRepository;
-import VaLocaProject.Security.RedisService;
 import jakarta.persistence.EntityNotFoundException;
 
 @Service
@@ -17,9 +16,6 @@ public class CompanyService {
     
     @Autowired
     CompanyRepository companyRepository;
-
-    @Autowired
-    RedisService redisService;
 
     // encode passwords on update
     @Autowired
@@ -58,35 +54,18 @@ public class CompanyService {
     }
 
 
-    public Company getCompanyByAccountId(Long id) {
-        String key = "company:" + id;
-
+    
+    public Optional<Company> getCompanyByAccountId(Long id) {
         // Try cache first, fallback to DB, save to cache if DB was used
-        return Optional.ofNullable(redisService.get(key))
-                // Before casting, check the type of the object
-                .filter(Company.class::isInstance)
-                // Cast the object to Company
-                .map(Company.class::cast)
-                // If cache missed, fetch from DB
-                .or(() -> companyRepository.findById(id))
-                .orElseThrow(() -> new RuntimeException("Company not found for id: " + id));
+        return companyRepository.findById(id);
     }
 
 
 
 
-    public Company getCompanyByEmail(String email){
-        String key = "account:" + email;
-
-        return Optional.ofNullable(redisService.get(key))
-                // Before casting, check the type of the object
-                .filter(Company.class::isInstance)
-                .map(Company.class::cast)
-                .or(() -> {
-                    // If cache missed, fetch from DB
-                    return companyRepository.findByEmail(email);
-                })
-                .orElseThrow(() -> new RuntimeException("Company not found for email: " + email));
+    public Optional<Company> getCompanyByEmail(String email){
+        return companyRepository.findByEmail(email);
+                
     }
 
 }

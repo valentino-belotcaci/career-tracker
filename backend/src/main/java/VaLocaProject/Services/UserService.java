@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import VaLocaProject.Models.User;
 import VaLocaProject.Repositories.UserRepository;
-import VaLocaProject.Security.RedisService;
 import jakarta.persistence.EntityNotFoundException;
 
 
@@ -19,8 +18,6 @@ public class UserService{
     @Autowired
     UserRepository userRepository;
 
-    @Autowired
-    RedisService redisService;
 
     // encode passwords on update
     @Autowired
@@ -58,24 +55,12 @@ public class UserService{
     }
 
 
-    public User getUserByAccountId(Long id){
-        String key = "user:" + id;
-
-        return Optional.ofNullable(redisService.get(key))
-        .filter(User.class::isInstance)
-        .map(User.class::cast)
-        .or(() -> userRepository.findById(id))
-        .orElseThrow(() -> new RuntimeException("User not found with id " + id));
+    public Optional<User> getUserByAccountId(Long id){
+        return userRepository.findById(id);
     }
 
-    public User getUserByEmail(String email) {
-        String key = "account:" + email;
-
-        return Optional.ofNullable(redisService.get(key))
-        .filter(User.class::isInstance)
-        .map(User.class::cast)
-        .or(() -> userRepository.findByEmail(email))
-        .orElseThrow(() -> new RuntimeException("User not found for email: " + email));
+    public Optional<User> getUserByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
        
 

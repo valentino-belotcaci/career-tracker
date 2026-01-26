@@ -88,7 +88,7 @@
     }
 
     try {
-      const res = await authFetch(`/User/getUserByAccountId/${encodeURIComponent(loggedId)}`);
+      const res = await authFetch(`/Account/getAccountById/${encodeURIComponent(loggedId)}`);
       if (res.status === 404) {
         note.textContent = 'No user profile found for this account.';
         return;
@@ -152,7 +152,7 @@
       try {
         let id = document.getElementById('userId').value;
         if (!id) {
-          const r = await authFetch(`/User/getUserByAccountId/${encodeURIComponent(loggedId)}`);
+          const r = await authFetch(`/Account/getAccountById/${encodeURIComponent(loggedId)}`);
           if (r.status === 404) {
             message.style.color = 'red';
             message.textContent = 'No user profile found for this account.';
@@ -172,7 +172,7 @@
           description: document.getElementById('description').value
         };
 
-        const res = await authFetch(`/User/updateUser/${encodeURIComponent(id)}`, {
+        const res = await authFetch(`/Account/updateUser/${encodeURIComponent(id)}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)

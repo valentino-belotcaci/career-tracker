@@ -92,7 +92,8 @@
   // ===== VALIDATE USER PROFILE BEFORE ALLOWING APPLICATION =====
   async function validateUserProfile(uid) {
     try {
-      const r = await authFetch(`/User/getUserByAccountId/${encodeURIComponent(uid)}`);
+      // route through Account API so backend returns the appropriate user object
+      const r = await authFetch(`/Account/getUserByAccountId/${encodeURIComponent(uid)}`);
       if (r.status === 404) {
         message.style.color = "red";
         message.textContent = "No user profile found for this account.";

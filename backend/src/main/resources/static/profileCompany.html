@@ -93,7 +93,7 @@
   // ===== LOAD COMPANY =====
   async function loadCompany() {
     try {
-      const res = await authFetch(`/Company/getCompanyByAccountId/${encodeURIComponent(accountId)}`);
+      const res = await authFetch(`/Account/getCompanyByAccountId/${encodeURIComponent(accountId)}`);
 
       if (res.status === 401 || res.status === 403) {
         window.location.href = '/login.html';
