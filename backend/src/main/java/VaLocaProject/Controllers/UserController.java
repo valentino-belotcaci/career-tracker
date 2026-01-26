@@ -48,9 +48,7 @@ public class UserController{
     // Updates a user's fields
     @PutMapping("/updateUser/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
-        return userService.updateUser(id, user)
-        .map(ResponseEntity::ok)
-        .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(userService.updateUser(id, user));
     }
 
     @GetMapping("/getUserByAccountId/{id}")

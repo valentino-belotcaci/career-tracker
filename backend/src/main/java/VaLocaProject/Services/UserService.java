@@ -2,7 +2,6 @@ package VaLocaProject.Services;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -11,6 +10,7 @@ import org.springframework.stereotype.Service;
 import VaLocaProject.Models.User;
 import VaLocaProject.Repositories.UserRepository;
 import VaLocaProject.Security.RedisService;
+import jakarta.persistence.EntityNotFoundException;
 
 
 @Service
@@ -41,22 +41,23 @@ public class UserService{
         userRepository.deleteAll();
     }
 
-    public Optional<User> updateUser(Long id, User user){
+    public User updateUser(Long id, User user) {
 
-        return userRepository.findById(id).map(foundUser -> {
-            // Check if not null to not update some fields as null
-            if (user.getEmail() != null) foundUser.setEmail(user.getEmail());
-            if (user.getFirstName() != null) foundUser.setFirstName(user.getFirstName());
-            if (user.getLastName() != null) foundUser.setLastName(user.getLastName());
-            if (user.getDescription() != null) foundUser.setDescription(user.getDescription()); 
-            // encode password before saving
-            if (user.getPassword() != null) foundUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        User foundUser = userRepository.findById(id)
+        .orElseThrow(() -> new EntityNotFoundException("User not found with id " + id));
 
-            // Actualy submit the new user version
-            return userRepository.save(foundUser);
-        });
+        // Update fields only if non-null
+        if (user.getEmail() != null) foundUser.setEmail(user.getEmail());
+        if (user.getFirstName() != null) foundUser.setFirstName(user.getFirstName());
+        if (user.getLastName() != null) foundUser.setLastName(user.getLastName());
+        if (user.getDescription() != null) foundUser.setDescription(user.getDescription());
+        if (user.getPassword() != null)
+            foundUser.setPassword(passwordEncoder.encode(user.getPassword()));
 
+        // Save updated user
+        return userRepository.save(foundUser);
     }
+
 
     public User getUserByAccountId(Long id){
         String key = "user:" + id;
