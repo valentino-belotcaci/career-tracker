@@ -7,8 +7,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -99,14 +97,6 @@ public class JobPost {
         createdAt = date;
     }
 
-    // Ensure salary is never null when persisting/updating: default to 0
-    @PrePersist
-    @PreUpdate
-    private void ensureDefaults() {
-        if (this.salary == null) {
-            this.salary = 0;
-        }
-    }
 
 
 }
