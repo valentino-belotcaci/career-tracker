@@ -2,6 +2,7 @@ package VaLocaProject.Services;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -71,54 +72,48 @@ public class CompanyService {
     public Company getCompanyByAccountId(Long id) {
         String key = "company:" + id;
 
-        // 1) Try Redis first
-        try {
-            Object cached = redisService.get(key);
-            if (cached instanceof Company company) {
-                return company;
-            }
-        } catch (Exception e) {
-            System.err.println("Redis read error: " + e.getMessage());
-        }
-
-        // 2) Fallback to DB
-        Company company = companyRepository.findById(id)
+        // Try cache first, fallback to DB, save to cache if DB was used
+        return Optional.ofNullable(redisService.get(key))
+                // Before casting, check the type of the object
+                .filter(Company.class::isInstance)
+                // Cast the object to Company
+                .map(Company.class::cast)
+                // If cache missed, fetch from DB
+                .or(() -> companyRepository.findById(id)
+                        .map(company -> {
+                            try {
+                                redisService.save(key, company, COMPANY_CACHE_TTL);
+                            } catch (Exception ignored) {}
+                            return company;
+                        }))
                 .orElseThrow(() -> new RuntimeException("Company not found for id: " + id));
-
-        // 3) Cache the DB result (side-effect)
-        try {
-            redisService.save(key, company, COMPANY_CACHE_TTL);
-        } catch (Exception e) {
-            System.err.println("Redis save error: " + e.getMessage());
-        }
-
-        return company;
     }
+
 
 
 
     public Company getCompanyByEmail(String email){
         String key = "company:" + email;
 
-        try {
-            Object cached = redisService.get(key);
-            if (cached instanceof Company company) return company;
-            
-        } catch (Exception e) {
-        }
-        
-
-        // Call map on a Optional (call the method safely with ofNullable())
-        Company company = companyRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Company not found: " + email));
-       
-        try {
-            redisService.save(key, company, COMPANY_CACHE_TTL);
-        } catch (Exception e) {
-        }
-        return company;
-
+        return Optional.ofNullable(redisService.get(key))
+                // Before casting, check the type of the object
+                .filter(Company.class::isInstance)
+                .map(Company.class::cast)
+                .or(() -> {
+                    // If cache missed, fetch from DB
+                    return companyRepository.findByEmail(email)
+                            .map(company -> {
+                                try {
+                                    redisService.save(key, company, COMPANY_CACHE_TTL);
+                                } catch (Exception ignored) {}
+                                return company;
+                            });
+                })
+                .orElseThrow(() -> new RuntimeException("Company not found for email: " + email));
     }
 
 }
+
+
 
 
