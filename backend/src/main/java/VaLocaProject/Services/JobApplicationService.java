@@ -35,7 +35,7 @@ public class JobApplicationService{
             throw new IllegalStateException("JobApplication must have an applicationId");
         }
 
-        // 2) Check if a application with this ID already exists
+        // 2) Check if an application with this ID already exists
         Optional.ofNullable(jobApplication.getApplicationId())
                 .flatMap(jobApplicationRepository::findById)
                 .ifPresent(existing -> {
@@ -48,7 +48,6 @@ public class JobApplicationService{
         jobApplication.setCreatedAt(LocalDateTime.now());
         return jobApplicationRepository.save(jobApplication);
     }
-
 
 
     public JobApplication getApplicationById(Long id) {
@@ -79,22 +78,30 @@ public class JobApplicationService{
         return jobApplicationRepository.findByPostId(postId);
     }
 
-    public JobApplication getApplicationByIds(Long post_id, Long user_id){
-        String key = "jobApplication: postId:" + post_id + ": userId:" + user_id;
-        return Optional.ofNullable(redisService.get(key))      // Try cache first
-                .filter(JobApplication.class::isInstance)      // Ensure it's the right type
-                .map(JobApplication.class::cast)
-                .or(() -> jobApplicationRepository.findByPostIdAndUserId(post_id, user_id) // Fallback to DB
-                        .map(jobApplication -> {
-                            try {
-                                redisService.save(key, jobApplication, APPLICATION_CACHE_TTL);
-                            } catch (Exception ignored) {} // Ignore cache failures
-                            return jobApplication;
-                        }))
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "JobApplication not found with postId " + post_id + " and userId " + user_id
-                ));
+    public JobApplication getApplicationByIds(Long postId, Long userId) {
+        String key = "jobApplication:postId:" + postId + ":userId:" + userId;
+
+        // 1) Try cache first
+        return Optional.ofNullable(redisService.get(key))
+            .filter(JobApplication.class::isInstance)
+            .map(JobApplication.class::cast)
+            .orElseGet(() -> {
+                // 2) Fallback to DB
+                JobApplication jobApplication = jobApplicationRepository
+                    .findByPostIdAndUserId(postId, userId)
+                        .orElseThrow(() -> new EntityNotFoundException(
+                            "JobApplication not found with postId " + postId + " and userId " + userId
+                        ));
+
+                // 3) Save to cache (side-effect separated from transformations)
+                try {
+                    redisService.save(key, jobApplication, APPLICATION_CACHE_TTL);
+                } catch (Exception ignored) {}
+
+                return jobApplication;
+                });
     }
+
 
     public List<JobApplication> getApplicationsByUserId(Long id){
         return jobApplicationRepository.findByUserId(id);
