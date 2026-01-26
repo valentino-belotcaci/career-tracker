@@ -12,6 +12,10 @@ public class RedisService {
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
+    private static final int MAX_REQUESTS = 5;
+    private static final Duration WINDOW = Duration.ofMinutes(1);
+
+
     // Save value with optional TTL
     public void save(String key, Object value, Duration ttl) {
         redisTemplate.opsForValue().set(key, value, ttl);
@@ -28,12 +32,16 @@ public class RedisService {
     }
 
     // Increment counter (for rate limiting)
-    public Long increment(String key, Duration ttl) {
+    public void checkRateLimit(String key, int maxRequests, Duration window) {
         Long count = redisTemplate.opsForValue().increment(key);
-        // set expiration if first time
-        if (count == 1) {
-            redisTemplate.expire(key, ttl);
+
+        if (count != null && count == 1) {
+            redisTemplate.expire(key, window); // set TTL 
         }
-        return count;
+
+        if (count != null && count > maxRequests) {
+            throw new RuntimeException("Too many requests");
+        }
     }
+
 }
