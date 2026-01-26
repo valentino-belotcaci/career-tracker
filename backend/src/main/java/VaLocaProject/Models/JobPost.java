@@ -7,6 +7,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,7 +28,7 @@ public class JobPost {
     @Column(name = "company_id")
     private Long companyId;
     private String name;
-    private int salary;
+    private Integer salary;
     private String description;
     private String duration;
     private String available;
@@ -81,11 +83,11 @@ public class JobPost {
         this.available = available;
     }
 
-    public int getSalary() {
+    public Integer getSalary() {
         return salary;
     }
 
-    public void setSalary(int salary) {
+    public void setSalary(Integer salary) {
         this.salary = salary;
     }
 
@@ -95,6 +97,15 @@ public class JobPost {
 
     public void setCreatedAt(LocalDateTime date) {
         createdAt = date;
+    }
+
+    // Ensure salary is never null when persisting/updating: default to 0
+    @PrePersist
+    @PreUpdate
+    private void ensureDefaults() {
+        if (this.salary == null) {
+            this.salary = 0;
+        }
     }
 
 

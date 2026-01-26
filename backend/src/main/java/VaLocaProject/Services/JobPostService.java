@@ -127,5 +127,4 @@ public class JobPostService {
                 .orElseThrow(() -> new EntityNotFoundException("JobPost not found with id " + id));
     }
 
-
 }
