@@ -107,13 +107,18 @@ public class AccountService {
     public Account insertAccount(String email, String password, String type) {
         String encoded = passwordEncoder.encode(password);
 
-        if ("USER".equalsIgnoreCase(type)) {
-            User newUser = new User(email, encoded);
-            return userService.insertUser(newUser);
-        } else {
-            Company newCompany = new Company(email, encoded);
-            return companyService.insertCompany(newCompany);
+        switch (type.toUpperCase()) {
+            case "USER" -> {
+                User newUser = new User(email, encoded);
+                return userService.insertUser(newUser);
+            }
+            case "COMPANY" -> {
+                Company newCompany = new Company(email, encoded);
+                return companyService.insertCompany(newCompany);
+            }
+            default -> throw new RuntimeException("Unknown account type: " + type);
         }
+ 
     }
 
    public String authenticate(String email, String password) {
@@ -129,17 +134,53 @@ public class AccountService {
     }
 
 
-    // Update method is the only method that is actually supported 
-    // by both User- and Company- Services
-    public Account updateAccount(Long id, Account account) {
-        switch (account) {
-            case User user -> {
-                return userService.updateUser(id, user);
-            }
-            case Company company -> {
-                return companyService.updateCompany(id, company);
-            }
-            default -> throw new RuntimeException("Unknown account type for id: " + id);
-        }
+    // Update User 
+    public User updateUserAccount(Long id, User incoming) {
+        // create patch object for update
+        User patch = new User(null, null);
+        patch.setEmail(incoming.getEmail());
+        patch.setPassword(incoming.getPassword());
+        patch.setDescription(incoming.getDescription());
+        patch.setFirstName(incoming.getFirstName());
+        patch.setLastName(incoming.getLastName());
+
+        // call userService to perform update (handles partial update & persistence)
+        User updated = userService.updateUser(id, patch);
+
+        // return the fully merged User for profile display
+        User full = new User(updated.getEmail(), null);
+        full.setId(updated.getId());
+        full.setPassword(updated.getPassword());
+        full.setDescription(updated.getDescription());
+        full.setFirstName(updated.getFirstName());
+        full.setLastName(updated.getLastName());
+
+        return full;
     }
+
+    // Update Company 
+    public Company updateCompanyAccount(Long id, Company incoming) {
+        Company patch = new Company(null, null);
+        patch.setEmail(incoming.getEmail());
+        patch.setPassword(incoming.getPassword());
+        patch.setDescription(incoming.getDescription());
+        patch.setName(incoming.getName());
+        patch.setCity(incoming.getCity());
+        patch.setStreet(incoming.getStreet());
+        patch.setNumber(incoming.getNumber());
+
+        Company updated = companyService.updateCompany(id, patch);
+
+        Company full = new Company(updated.getEmail(), null);
+        full.setId(updated.getId());
+        full.setPassword(updated.getPassword());
+        full.setDescription(updated.getDescription());
+        full.setName(updated.getName());
+        full.setCity(updated.getCity());
+        full.setStreet(updated.getStreet());
+        full.setNumber(updated.getNumber());
+
+        return full;
+    }
+
 }

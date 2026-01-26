@@ -47,6 +47,9 @@ public class SecurityConfig {
                 "/createJobPost.html",
                 "/JobApplicationDetails.html",
 
+                "/User/**",
+                "/Company/**",
+
                 "/",
                 "/css/**",
                 "/favicon.ico",
@@ -62,7 +65,10 @@ public class SecurityConfig {
                 "/JobPost/getAllPosts",
                 "/JobPost/insertPost/**",
                 "/JobPost/deleteAllPosts",
+
                 "/Account/getAccountById/**",
+                "/Account/updateAccount/**",
+                "/Account/deleteAllAccounts",
 
                 "/JobApplication/getApplicationsByUserId/**",
                 "/JobApplication/getAllApplications",
