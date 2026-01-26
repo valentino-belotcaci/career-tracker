@@ -30,24 +30,25 @@ public class JobApplicationService{
     }
 
     public JobApplication insertApplication(JobApplication jobApplication) {
+        // 1) Ensure applicationId is set
         if (jobApplication.getApplicationId() == null) {
-            throw new IllegalStateException("JobApplication must have a JobApplicationId");
+            throw new IllegalStateException("JobApplication must have an applicationId");
         }
 
-        Optional.ofNullable(getApplicationByIds(
-                jobApplication.getPostId(),
-                jobApplication.getUserId()
-        )).ifPresent(existing -> {
-            throw new IllegalStateException(
-                    "User has already applied to this job post"
-            );
-        });
+        // 2) Check if a application with this ID already exists
+        Optional.ofNullable(jobApplication.getApplicationId())
+                .flatMap(jobApplicationRepository::findById)
+                .ifPresent(existing -> {
+                    throw new IllegalStateException(
+                            "JobApplication already exists with id " + jobApplication.getApplicationId()
+                    );
+                });
 
-        // No existing application so save new one
+        // 3) Save new application
         jobApplication.setCreatedAt(LocalDateTime.now());
-        // Save always return something so its safe in theory
         return jobApplicationRepository.save(jobApplication);
     }
+
 
 
     public JobApplication getApplicationById(Long id) {

@@ -42,7 +42,8 @@ public class JobPostService {
 
         // If postId is set, check for existing post
         if (jobPost.getPostId() != null &&
-            jobPostRepository.findById(jobPost.getPostId()).isPresent()) {
+            jobPostRepository.findById(jobPost.getPostId())
+            .isPresent()) {
             throw new IllegalStateException(
                     "JobPost already exists with id " + jobPost.getPostId()
             );
