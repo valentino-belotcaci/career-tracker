@@ -83,25 +83,34 @@ public class UserService{
         return user;
     }
 
-    public Optional<User> getUserByEmail(String email){
+
+    public User getUserByEmail(String email) {
         String key = "user:" + email;
 
+        // 1) Try cache
         try {
             Object cached = redisService.get(key);
-            // If cached is of type User, put it in variable "user" and return it
-            if (cached instanceof User user) return Optional.of(user);
+            if (cached instanceof User user) {
+                return user;
+            }
         } catch (Exception e) {
+            System.err.println("Redis get error: " + e.getMessage());
         }
 
-        return userRepository.findByEmail(email)
-        .map(user -> {
-            try {
-                redisService.save(key, user, USER_CACHE_TTL);
-            } catch (Exception e) {
-            }
-            return user;
-        });
+        // 2) Fetch from DB using Optional internally
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found for email: " + email));
 
-    };
+        // 3) Save to Redis
+        try {
+            redisService.save(key, user, USER_CACHE_TTL);
+        } catch (Exception e) {
+            System.err.println("Redis save error: " + e.getMessage());
+        }
+
+        return user;
+    }
+
+
 
 }

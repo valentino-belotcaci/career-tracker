@@ -20,38 +20,35 @@ import VaLocaProject.Security.RedisService;
 
 @Service
 public class AccountService {
+
+    @Autowired
+    private CompanyService companyService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private RedisService redisService;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
+    @Autowired
+    private AuthenticationManager authManager;
+
+    @Autowired
+    private JWTService jwtService;
+
+    private static final Duration ACCOUNT_CACHE_TTL = Duration.ofHours(1);
+
     
-
-    @Autowired
-    CompanyService companyService;
-
-    @Autowired
-    UserService userService;
-
-    @Autowired
-    RedisService redisService;
-
-    // Injection of password encoder
-    @Autowired
-    BCryptPasswordEncoder passwordEncoder;
-
-    @Autowired
-    AuthenticationManager authManager;
-
-    @Autowired
-    JWTService jwtService;
-
-    private static final Duration ACCOUNT_CACHE_TTL = Duration.ofHours(1); // Defines lifetime of cache
-
-
-    public List<Account> getAllAccounts(){
+    public List<Account> getAllAccounts() {
         List<Account> accounts = new ArrayList<>();
         accounts.addAll(userService.getAllUsers());
         accounts.addAll(companyService.getAllCompanies());
         return accounts;
     }
 
-    // Return concrete lists when callers need subclass types
     public List<User> getAllUsers() {
         return userService.getAllUsers();
     }
@@ -60,38 +57,22 @@ public class AccountService {
         return companyService.getAllCompanies();
     }
 
-    public void deleteAllAccounts(){
+    public void deleteAllAccounts() {
         userService.deleteAllUsers();
         companyService.deleteAllCompanies();
     }
 
-    // FIX: here maybe we should use Flatmap monadic method instead of map
-    public Optional<Account> getAccountByEmail(String email){
-        // create a optional of the return value of the repo function(either null or user)
-        return userService.getUserByEmail(email)
-                // Checks if it exists, it casts it to account
-                .map(u -> (Account) u)
-                // Or: if value present return that, if not return a new optional from the given supplier
-                .or(() -> companyService.getCompanyByEmail(email))
-                // if instead company present, cast it and return it
-                .map(c -> (Account) c);
-
-        /* More intuitive beginner version
-        User user = userService.getUserByEmail(email);
-        if (user != null) {
-            return Optional.of(user);
-        }
-
-        Company company = companyService.getCompanyByEmail(email);
-        if (company != null) {
-            return Optional.of(company);
-        }
-
-        return Optional.empty();
-        */
+    // Get account by email (User or Company) and throw if not found
+    public Account getAccountByEmail(String email) {
+        return Optional.ofNullable(userService.getUserByEmail(email)) // wraps User
+                .map(user -> (Account) user)                          // casts User to Account
+                .or(() -> Optional.ofNullable(companyService.getCompanyByEmail(email)) // wraps Company
+                        .map(company -> (Account) company))           // casts Company to Account
+                .orElseThrow(() -> new RuntimeException("Account not found for email: " + email));
     }
 
-    // Logic for insertion of User and Company instances to the db
+
+    //  Insert a new account 
     public Account insertAccount(String email, String password, String type) {
         String encoded = passwordEncoder.encode(password);
 
@@ -104,46 +85,36 @@ public class AccountService {
         }
     }
 
+    //  Authenticate user and return JWT token 
+    public String authenticate(String email, String password) {
+        String key = "token:" + email;
 
+        // 1) Try cache first
+        Optional<String> cachedToken = Optional.ofNullable(redisService.get(key))
+                                               .filter(String.class::isInstance)
+                                               .map(String.class::cast);
+        if (cachedToken.isPresent()) return cachedToken.get();
 
-
-    public Optional<String> authenticate(String email, String password) {
-        String key = "account:" + email;
-        
-
-        try {
-            Object cached = redisService.get(key);
-            if (cached instanceof String token) {
-                return Optional.of(token);
-            }
-        } catch (Exception e) {
-        }
-        Optional<Account> account_found = getAccountByEmail(email);
-
-        if (account_found.isEmpty()) return Optional.empty();
-            
-        // 1) Authenticate with RAW password
+        // 2) Authenticate user
         Authentication authentication = authManager.authenticate(
-            new UsernamePasswordAuthenticationToken(email, password)
+                new UsernamePasswordAuthenticationToken(email, password)
         );
 
         if (!authentication.isAuthenticated()) {
-            return null;
+            throw new RuntimeException("Invalid credentials for email: " + email);
         }
 
-        // 2) Generate JWT
+        // 3) Generate token and save to cache
         return Optional.of(jwtService.generateToken(email))
-        .map(token -> {
-            try {
-                redisService.save(key, token, ACCOUNT_CACHE_TTL); // cache for 1 hour
-            } catch (Exception e) {
-            }
-            return token;
-        });
-        
+                       .map(token -> {
+                           try {
+                               redisService.save(key, token, ACCOUNT_CACHE_TTL);
+                           } catch (Exception e) {
+                               // ignore cache failures
+                           }
+                           return token;
+                       })
+                       .orElseThrow(() -> new RuntimeException("Failed to generate token"));
     }
 
-
 }
-
-

@@ -54,10 +54,7 @@ public class CompanyController {
 
     @GetMapping("/getCompanyByAccountId/{id}")
     public ResponseEntity<Company> getCompanyByAccountId(@PathVariable Long id) {
-        return companyService.getCompanyByAccountId(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    
+        return ResponseEntity.ok(companyService.getCompanyByAccountId(id));
     }
 
 }

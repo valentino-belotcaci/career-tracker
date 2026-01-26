@@ -67,53 +67,57 @@ public class CompanyService {
         });
     }
 
-    public Optional<Company> getCompanyByAccountId(Long id){
+    public Company getCompanyByAccountId(Long id) {
         String key = "company:" + id;
 
-        // try read from redis first
+        // 1) Try Redis first
         try {
             Object cached = redisService.get(key);
-            if (cached instanceof Company company)  return Optional.of(company);
-            
-        } catch (Exception ignored) {}
+            if (cached instanceof Company company) {
+                return company;
+            }
+        } catch (Exception e) {
+            System.err.println("Redis read error: " + e.getMessage());
+        }
 
-        // fallback to DB
-        Optional<Company> company = companyRepository.findById(id);
+        // 2) Fallback to DB
+        Company company = companyRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Company not found for id: " + id));
 
-        // cache the DB result if found
-        if (company.isPresent()) {
-            try {
-                redisService.save(key, company, COMPANY_CACHE_TTL);
-            } catch (Exception ignored) {}
+        // 3) Cache the DB result (side-effect)
+        try {
+            redisService.save(key, company, COMPANY_CACHE_TTL);
+        } catch (Exception e) {
+            System.err.println("Redis save error: " + e.getMessage());
         }
 
         return company;
     }
 
 
-    public Optional<Company> getCompanyByEmail(String email){
+
+    public Company getCompanyByEmail(String email){
         String key = "company:" + email;
 
         try {
             Object cached = redisService.get(key);
-            if (cached instanceof Company company) return Optional.of(company);
+            if (cached instanceof Company company) return company;
             
         } catch (Exception e) {
         }
         
 
         // Call map on a Optional (call the method safely with ofNullable())
-        return companyRepository.findByEmail(email)
-        .map(company -> {
-            try {
-                redisService.save(key, company, COMPANY_CACHE_TTL);
-            } catch (Exception e) {
-            }
-            return company;
-        });
+        Company company = companyRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Company not found: " + email));
+       
+        try {
+            redisService.save(key, company, COMPANY_CACHE_TTL);
+        } catch (Exception e) {
+        }
+        return company;
 
-        
+    }
 
-    };
 }
+
 
