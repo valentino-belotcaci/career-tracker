@@ -56,10 +56,8 @@ public class SecurityConfig {
                 "/Account/authenticate",
                 "/Account/insertAccount",
                 "/Account/getAccountByEmail/**",
-
-                "/Company/getCompanyByAccountId/**",
-                "/Company/updateCompany/**",
-
+                "/Account/getAllAccounts",
+                "/Account/updateAccount/**",
                 "/JobPost/getPostsByCompanyId/**",
                 "/JobPost/getAllPosts",
                 "/JobPost/insertPost/**",
@@ -74,8 +72,8 @@ public class SecurityConfig {
                 "/JobApplication/getApplicationsByPostId/**",
 
                 // Allow clients to create job applications while debugging auth issues
-                "/JobApplication/insertApplication/**",
-                "/User/**"
+                "/JobApplication/insertApplication/**"
+                
             ).permitAll()
             
             // FIX: roles don't actally work now

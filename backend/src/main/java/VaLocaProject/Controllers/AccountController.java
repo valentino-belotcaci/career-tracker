@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.apache.catalina.connector.Response;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import VaLocaProject.Models.Account;
-import VaLocaProject.Models.User;
 import VaLocaProject.Services.AccountService;
 
 
@@ -128,9 +126,9 @@ public class AccountController {
                 .body(Map.of("message", "Logged out"));
     }
 
-    @PutMapping("/updateUser/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable String id, @RequestBody String entity) {
-        return ResponseEntity.ok(accountService.updateUser(id, entity));
+    @PutMapping("/updateAccount/{id}")
+    public ResponseEntity<Account> updateAccount(@PathVariable Long id, @RequestBody Account account) {
+        return ResponseEntity.ok(accountService.updateAccount(id, account));
     }
 
 

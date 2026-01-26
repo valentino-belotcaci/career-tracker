@@ -128,8 +128,18 @@ public class AccountService {
         return jwtService.generateToken(email);
     }
 
-    public Account updateAccount(String id, Account account) {
-        // TODO Auto-generated method stub
-        return null;
+
+    // Update method is the only method that is actually supported 
+    // by both User- and Company- Services
+    public Account updateAccount(Long id, Account account) {
+        switch (account) {
+            case User user -> {
+                return userService.updateUser(id, user);
+            }
+            case Company company -> {
+                return companyService.updateCompany(id, company);
+            }
+            default -> throw new RuntimeException("Unknown account type for id: " + id);
+        }
     }
 }
