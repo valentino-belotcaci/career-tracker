@@ -8,7 +8,7 @@
 </head>
 <body>
 <header>
-  <a id="homeLink" class="site-title" href="#">CareerTracker</a>
+    <a class="site-title" href="/indexUser.html">CareerTracker</a>
 </header>
 
 <main class="wide-card">
@@ -55,8 +55,12 @@
   const message = document.getElementById("message");
   const cancelBtn = document.getElementById("cancelBtn");
   const postId = getQueryParam("postId");
+  const userDescriptionEl = document.getElementById("userDescription");
 
   cancelBtn.addEventListener("click", () => window.history.back());
+
+  // disable description initially until validation finishes
+  userDescriptionEl.disabled = true;
 
   // ===== GET USER INFO FROM localStorage ONLY =====
   let userId = localStorage.getItem("loggedId");
@@ -66,6 +70,7 @@
     message.style.color = "red";
     message.textContent = "You must be logged in to create an application.";
     form.querySelector("button[type='submit']").disabled = true;
+    userDescriptionEl.disabled = true;
     return;
   }
 
@@ -77,6 +82,7 @@
         message.style.color = "red";
         message.textContent = "No user profile found for this account.";
         form.querySelector("button[type='submit']").disabled = true;
+        userDescriptionEl.disabled = true;
         return false;
       }
 
@@ -99,15 +105,21 @@
         message.style.color = "red";
         message.textContent = `Complete your user profile before applying. Missing: ${missing.join(', ')}.`;
         form.querySelector("button[type='submit']").disabled = true;
+        // prevent typing / submitting by disabling description
+        userDescriptionEl.disabled = true;
         return false;
       }
 
+      // profile ok -> enable textarea and submit
+      userDescriptionEl.disabled = false;
+      form.querySelector("button[type='submit']").disabled = false;
       return true;
     } catch (err) {
       console.error(err);
       message.style.color = "red";
       message.textContent = "Error loading user profile.";
       form.querySelector("button[type='submit']").disabled = true;
+      userDescriptionEl.disabled = true;
       return false;
     }
   }
@@ -119,6 +131,7 @@
     message.style.color = "red";
     message.textContent = "Missing post ID.";
     form.querySelector("button[type='submit']").disabled = true;
+    userDescriptionEl.disabled = true;
     return;
   }
 
