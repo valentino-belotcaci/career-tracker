@@ -85,7 +85,7 @@
           }
 
           // Get company by account id
-          const companyRes = await authFetch(`/Company/getCompanyByAccountId/${encodeURIComponent(loggedAccountId)}`);
+          const companyRes = await authFetch(`/Account/getAccountById/${encodeURIComponent(loggedAccountId)}`);
           if (!companyRes.ok) {
             if (companyRes.status === 404) {
               note.textContent = 'No company profile found for this account.';
@@ -132,7 +132,7 @@
             <td>${p.description || ''}</td>
             <td>${p.duration || ''}</td>
             <td>${p.available || ''}</td>
-            <td>${p.salary || ''}</td>
+            <td>${p.salary || 'Not specified'}</td>
           `;
           tr.style.cursor = 'pointer';
           tr.addEventListener('click', () => {

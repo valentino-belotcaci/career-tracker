@@ -1,7 +1,7 @@
 package VaLocaProject.Services;
 
-import java.time.Duration;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import VaLocaProject.Models.Company;
 import VaLocaProject.Repositories.CompanyRepository;
-import VaLocaProject.Security.RedisService;
 import jakarta.persistence.EntityNotFoundException;
 
 @Service
@@ -18,14 +17,10 @@ public class CompanyService {
     @Autowired
     CompanyRepository companyRepository;
 
-    @Autowired
-    RedisService redisService;
-
     // encode passwords on update
     @Autowired
     BCryptPasswordEncoder passwordEncoder;
 
-    private static final Duration COMPANY_CACHE_TTL = Duration.ofHours(1); // Defines lifetime of cache
 
     public List<Company> getAllCompanies(){
         return companyRepository.findAll();
@@ -53,72 +48,28 @@ public class CompanyService {
 
                 Company saved = companyRepository.save(foundCompany);
 
-                try {
-                    String companyId = "company:" + saved.getId();
-                    redisService.save(companyId, saved, COMPANY_CACHE_TTL);
-                    if (saved.getEmail() != null) {
-                        String companyEmail = "company:" + saved.getEmail();
-                        redisService.save(companyEmail, saved, COMPANY_CACHE_TTL);
-                    }
-                } catch (Exception ignored) {}
-
                 return saved;
             })
             .orElseThrow(() -> new EntityNotFoundException("Company not found with id " + id));
     }
 
 
-    public Company getCompanyByAccountId(Long id) {
-        String key = "company:" + id;
-
-        // 1) Try Redis first
-        try {
-            Object cached = redisService.get(key);
-            if (cached instanceof Company company) {
-                return company;
-            }
-        } catch (Exception e) {
-            System.err.println("Redis read error: " + e.getMessage());
-        }
-
-        // 2) Fallback to DB
-        Company company = companyRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Company not found for id: " + id));
-
-        // 3) Cache the DB result (side-effect)
-        try {
-            redisService.save(key, company, COMPANY_CACHE_TTL);
-        } catch (Exception e) {
-            System.err.println("Redis save error: " + e.getMessage());
-        }
-
-        return company;
+    
+    public Optional<Company> getCompanyByAccountId(Long id) {
+        // Try cache first, fallback to DB, save to cache if DB was used
+        return companyRepository.findById(id);
     }
 
 
 
-    public Company getCompanyByEmail(String email){
-        String key = "company:" + email;
 
-        try {
-            Object cached = redisService.get(key);
-            if (cached instanceof Company company) return company;
-            
-        } catch (Exception e) {
-        }
-        
-
-        // Call map on a Optional (call the method safely with ofNullable())
-        Company company = companyRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Company not found: " + email));
-       
-        try {
-            redisService.save(key, company, COMPANY_CACHE_TTL);
-        } catch (Exception e) {
-        }
-        return company;
-
+    public Optional<Company> getCompanyByEmail(String email){
+        return companyRepository.findByEmail(email);
+                
     }
 
 }
+
+
 
 

@@ -26,7 +26,7 @@ public class JobPost {
     @Column(name = "company_id")
     private Long companyId;
     private String name;
-    private int salary;
+    private Integer salary;
     private String description;
     private String duration;
     private String available;
@@ -81,11 +81,11 @@ public class JobPost {
         this.available = available;
     }
 
-    public int getSalary() {
+    public Integer getSalary() {
         return salary;
     }
 
-    public void setSalary(int salary) {
+    public void setSalary(Integer salary) {
         this.salary = salary;
     }
 
@@ -96,6 +96,7 @@ public class JobPost {
     public void setCreatedAt(LocalDateTime date) {
         createdAt = date;
     }
+
 
 
 }

@@ -47,6 +47,9 @@ public class SecurityConfig {
                 "/createJobPost.html",
                 "/JobApplicationDetails.html",
 
+                "/User/**",
+                "/Company/**",
+
                 "/",
                 "/css/**",
                 "/favicon.ico",
@@ -56,14 +59,16 @@ public class SecurityConfig {
                 "/Account/authenticate",
                 "/Account/insertAccount",
                 "/Account/getAccountByEmail/**",
-
-                "/Company/getCompanyByAccountId/**",
-                "/Company/updateCompany/**",
-
+                "/Account/getAllAccounts",
+                "/Account/updateAccount/**",
                 "/JobPost/getPostsByCompanyId/**",
                 "/JobPost/getAllPosts",
                 "/JobPost/insertPost/**",
                 "/JobPost/deleteAllPosts",
+
+                "/Account/getAccountById/**",
+                "/Account/updateAccount/**",
+                "/Account/deleteAllAccounts",
 
                 "/JobApplication/getApplicationsByUserId/**",
                 "/JobApplication/getAllApplications",
@@ -74,8 +79,8 @@ public class SecurityConfig {
                 "/JobApplication/getApplicationsByPostId/**",
 
                 // Allow clients to create job applications while debugging auth issues
-                "/JobApplication/insertApplication/**",
-                "/User/**"
+                "/JobApplication/insertApplication/**"
+                
             ).permitAll()
             
             // FIX: roles don't actally work now

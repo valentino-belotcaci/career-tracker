@@ -34,20 +34,27 @@ public class JobApplication {
     private String userDescription;
 
 
+
+    public Long getApplicationId() {
+        return applicationId;
+    }
+    public void setApplicationId(Long applicationId) {
+        this.applicationId = applicationId;
+    }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
-
-    public void setCreatedAt(LocalDateTime date) {
-        createdAt = date;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public Long getPostId() {
         return postId;
     }
 
-    public void getPostId(Long id) {
-        postId = id;
+    public void setPostId(Long postId) {
+        this.postId = postId;
     }
 
 

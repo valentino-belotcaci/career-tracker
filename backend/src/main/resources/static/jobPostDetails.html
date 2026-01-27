@@ -113,7 +113,7 @@ async function loadPostDetails() {
     document.getElementById("description").textContent = post.description || "";
     document.getElementById("duration").textContent = post.duration || "";
     document.getElementById("available").textContent = post.available || "";
-    document.getElementById("salary").textContent = post.salary || "";
+    document.getElementById("salary").textContent = post.salary || 0;
     document.getElementById("createdAt").textContent = post.createdAt || post.created_at || "";
 
     await configureView(postId);

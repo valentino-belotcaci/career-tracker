@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import VaLocaProject.Models.Account;
 import VaLocaProject.Services.AccountService;
 
+
 @RestController
 @CrossOrigin
 @RequestMapping("/Account")
@@ -67,6 +68,11 @@ public class AccountController {
         return ResponseEntity.ok(accountService.getAccountByEmail(email));
     }
 
+    @GetMapping("/getAccountById/{id}")
+    public ResponseEntity<Account> getAccountById(@PathVariable Long id) {
+        return ResponseEntity.ok(accountService.getAccountById(id));
+    }
+
     @PostMapping("/authenticate")
     public ResponseEntity<?> authenticateAccount(@RequestBody Map<String, String> body) {
         String email = body.get("email");
@@ -103,8 +109,7 @@ public class AccountController {
                 ));
     }
 
-
-    // FIX : Needs to be added in the frotnend for correct logout, we can add more things here
+    // To remove all headers abd cookies when loggin out
     @PostMapping("/logout")
     public ResponseEntity<Map<String, String>> logout() {
         ResponseCookie cookie = ResponseCookie.from("token", "")
@@ -119,6 +124,14 @@ public class AccountController {
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
                 .body(Map.of("message", "Logged out"));
     }
+
+    /* AccountService updateAccount method needs to be fixed
+    We use updateUser and updateCompany separatly for now
+    @PutMapping("/updateAccount/{id}")
+    public ResponseEntity<Account> updateAccount(@PathVariable Long id, @RequestBody Account account) {
+        return ResponseEntity.ok(accountService.updateAccount(id, account));
+    }
+         */
 
 
 }

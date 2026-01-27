@@ -3,11 +3,11 @@ package VaLocaProject.Services;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import VaLocaProject.Models.Company;
 import VaLocaProject.Models.JobPost;
 import VaLocaProject.Repositories.CompanyRepository;
 import VaLocaProject.Repositories.JobPostRepository;
@@ -34,16 +34,23 @@ public class JobPostService {
         return jobPostRepository.findAll();
     }
 
-    public JobPost insertPost(JobPost jobPost){
-        if (jobPost.getCompanyId() == null) {
-            return null;
+    public JobPost insertPost(JobPost jobPost) {
+        if (jobPost.getCompanyId() == null || jobPost.getPostId() == 0) {
+            throw new IllegalStateException("JobPost must have a companyId and postId");
         }
 
-        // Creates the current date to save
-        jobPost.setCreatedAt(LocalDateTime.now());
 
-        return jobPostRepository.save(jobPost);
+        return jobPostRepository.findById(jobPost.getPostId())
+            .map(existingPost -> {
+                jobPost.setCreatedAt(LocalDateTime.now());
+                return jobPostRepository.save(jobPost);
+            })
+            .orElseThrow(() -> new IllegalStateException(
+                "JobPost already exists with id " + jobPost.getPostId()
+            ));
     }
+
+
 
     public void deleteAllPosts(){
         jobPostRepository.deleteAll();
@@ -95,31 +102,27 @@ public class JobPostService {
 
     public List<JobPost> getPostsByCompanyId(Long id){
         // Checks if the company exists
-        Company foundcompany = companyRepository.findById(id).orElse(null);
-        
-        return jobPostRepository.findByCompanyId(foundcompany.getId());
+        return companyRepository.findById(id)
+        .map(company -> {
+            return jobPostRepository.findByCompanyId(company.getId());
+        })
+        .orElseThrow(() -> new EntityNotFoundException("Posts or Company not found"));
     }
 
     public JobPost getPostByPostId(Long id) {
         String key = "jobPost:" + id;
 
-        try {
-            // 1) Try Redis first
-            Object cached = redisService.get(key);
-            if (cached instanceof JobPost post) {
-                return post;
-            }
-        } catch (Exception e) {
-            System.err.println("Redis read error: " + e.getMessage());
-        }
-
-        return jobPostRepository.findById(id)
-        .map(post -> {
-            try {
-                redisService.save(key, post, POST_CACHE_TTL);
-            } catch (Exception ignored) {}
-            return post;
-        })
-        .orElseThrow(() -> new EntityNotFoundException("JobPost not found with id " + id));
+        return Optional.ofNullable(redisService.get(key))
+                .filter(JobPost.class::isInstance)
+                .map(JobPost.class::cast)
+                .or(() -> jobPostRepository.findById(id)
+                        .map(post -> {
+                            try {
+                                redisService.save(key, post, POST_CACHE_TTL);
+                            } catch (Exception ignored) {}
+                            return post;
+                        }))
+                .orElseThrow(() -> new EntityNotFoundException("JobPost not found with id " + id));
     }
+
 }

@@ -1,7 +1,6 @@
 package VaLocaProject.Services;
 
 import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,20 +29,6 @@ public class JobApplicationService{
     }
 
     public JobApplication insertApplication(JobApplication jobApplication) {
-
-        Optional<JobApplication> existingApplication = Optional.ofNullable(getApplicationByIds(
-                jobApplication.getPostId(),
-                jobApplication.getUserId()
-        ));
-
-        if (existingApplication.isPresent()) {
-            throw new IllegalStateException(
-                    "User has already applied to this job post"
-            );
-        }
-
-        // If application not already present, create the date and save it
-        jobApplication.setCreatedAt(LocalDateTime.now());
         return jobApplicationRepository.save(jobApplication);
     }
 
@@ -51,27 +36,21 @@ public class JobApplicationService{
     public JobApplication getApplicationById(Long id) {
         String key = "jobApplication:" + id;
 
-        // 1) Try Redis cache
-        Object cached = redisService.get(key);
-        if (cached instanceof JobApplication cachedApplication) {
-            return cachedApplication;
-        }
-
-        // 2) Fetch from DB using Optional internally
-        Optional<JobApplication> optionalApplication =
-                jobApplicationRepository.findById(id);
-
-        JobApplication jobApplication = optionalApplication.orElseThrow(
-                () -> new EntityNotFoundException(
+        return Optional.ofNullable(redisService.get(key))      // Try cache first
+                .filter(JobApplication.class::isInstance)      // Ensure it's the right type
+                .map(JobApplication.class::cast)
+                .or(() -> jobApplicationRepository.findById(id) // Fallback to DB
+                        .map(jobApplication -> {
+                            try {
+                                redisService.save(key, jobApplication, APPLICATION_CACHE_TTL);
+                            } catch (Exception ignored) {} // Ignore cache failures
+                            return jobApplication;
+                        }))
+                .orElseThrow(() -> new EntityNotFoundException(
                         "JobApplication not found with id " + id
-                )
-        );
-
-        // 3) Cache result
-        redisService.save(key, jobApplication, APPLICATION_CACHE_TTL);
-
-        return jobApplication;
+                ));
     }
+
 
 
     public void deleteAllApplications(){
@@ -82,9 +61,30 @@ public class JobApplicationService{
         return jobApplicationRepository.findByPostId(postId);
     }
 
-    public JobApplication getApplicationByIds(Long post_id, Long user_id){
-        return jobApplicationRepository.findByPostIdAndUserId(post_id, user_id);
+    public JobApplication getApplicationByIds(Long postId, Long userId) {
+        String key = "jobApplication:postId:" + postId + ":userId:" + userId;
+
+        // 1) Try cache first
+        return Optional.ofNullable(redisService.get(key))
+            .filter(JobApplication.class::isInstance)
+            .map(JobApplication.class::cast)
+            .orElseGet(() -> {
+                // 2) Fallback to DB
+                JobApplication jobApplication = jobApplicationRepository
+                    .findByPostIdAndUserId(postId, userId)
+                        .orElseThrow(() -> new EntityNotFoundException(
+                            "JobApplication not found with postId " + postId + " and userId " + userId
+                        ));
+
+                // 3) Save to cache (side-effect separated from transformations)
+                try {
+                    redisService.save(key, jobApplication, APPLICATION_CACHE_TTL);
+                } catch (Exception ignored) {}
+
+                return jobApplication;
+                });
     }
+
 
     public List<JobApplication> getApplicationsByUserId(Long id){
         return jobApplicationRepository.findByUserId(id);

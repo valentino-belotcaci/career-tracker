@@ -76,5 +76,7 @@ public class Account {
         return "UNKNOWN";
     }
 
+    public void setType(String type) {
+    }
     
 }
