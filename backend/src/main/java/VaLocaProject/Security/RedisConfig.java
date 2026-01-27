@@ -22,7 +22,7 @@ public class RedisConfig {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
 
-        // Use GenericJackson2JsonRedisSerializer with the mapper
+        // Use GenericJackson2JsonRedisSerializer to serialize java object as jsons
         GenericJackson2JsonRedisSerializer serializer = new GenericJackson2JsonRedisSerializer(mapper);
 
         // Set key and value serializers

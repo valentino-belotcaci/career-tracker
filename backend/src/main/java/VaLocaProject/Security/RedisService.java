@@ -32,14 +32,14 @@ public class RedisService {
     }
 
     // Increment counter (for rate limiting)
-    public void checkRateLimit(String key, int maxRequests, Duration window) {
+    public void checkRateLimit(String key) {
         Long count = redisTemplate.opsForValue().increment(key);
 
         if (count != null && count == 1) {
-            redisTemplate.expire(key, window); // set TTL 
+            redisTemplate.expire(key, WINDOW); // set TTL 
         }
 
-        if (count != null && count > maxRequests) {
+        if (count != null && count > MAX_REQUESTS) {
             throw new RuntimeException("Too many requests");
         }
     }
