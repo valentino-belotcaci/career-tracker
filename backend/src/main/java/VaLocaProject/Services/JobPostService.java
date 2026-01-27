@@ -8,7 +8,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import VaLocaProject.Models.Company;
 import VaLocaProject.Models.JobPost;
 import VaLocaProject.Repositories.CompanyRepository;
 import VaLocaProject.Repositories.JobPostRepository;
@@ -105,10 +104,11 @@ public class JobPostService {
 
     public List<JobPost> getPostsByCompanyId(Long id){
         // Checks if the company exists
-        Company foundcompany = companyRepository.findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("Company not found with id " + id));
-        
-        return jobPostRepository.findByCompanyId(foundcompany.getId());
+        return companyRepository.findById(id)
+        .map(company -> {
+            return jobPostRepository.findByCompanyId(company.getId());
+        })
+        .orElseThrow(() -> new EntityNotFoundException("Posts or Company not found"));
     }
 
     public JobPost getPostByPostId(Long id) {
