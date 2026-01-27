@@ -1,6 +1,5 @@
 package VaLocaProject.Services;
 
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +15,6 @@ import VaLocaProject.Models.Account;
 import VaLocaProject.Models.Company;
 import VaLocaProject.Models.User;
 import VaLocaProject.Security.JWTService;
-import VaLocaProject.Security.RedisService;
 
 @Service
 public class AccountService {
@@ -27,8 +25,8 @@ public class AccountService {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private RedisService redisService;
+    //@Autowired
+    //private RedisService redisService;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -39,7 +37,10 @@ public class AccountService {
     @Autowired
     private JWTService jwtService;
 
-    private static final Duration ACCOUNT_CACHE_TTL = Duration.ofHours(1);
+    // FIX : We need to remove the cache operations 
+    // from the User- and Company Service and move them 
+    // here for avoiding code duplication
+    //private static final Duration ACCOUNT_CACHE_TTL = Duration.ofHours(1);
 
     
     public List<Account> getAllAccounts() {
