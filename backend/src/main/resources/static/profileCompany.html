@@ -171,8 +171,8 @@
         number: document.getElementById('number').value.trim()
       };
 
-      const res = await authFetch(`/Company/updateCompany/${encodeURIComponent(companyId)}`, {
-        method: 'PUT',
+      const res = await authFetch(`/Account/updateAccount/${encodeURIComponent(companyId)}`, {
+        method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       });

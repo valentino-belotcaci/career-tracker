@@ -141,59 +141,6 @@ public class AccountService {
     }
 
 
-    /* 
-    // Update User 
-    public User updateUserAccount(Long id, User incoming) {
-        // create patch object for update
-        User patch = new User(null, null);
-        patch.setEmail(incoming.getEmail());
-        patch.setPassword(incoming.getPassword());
-        patch.setDescription(incoming.getDescription());
-        patch.setFirstName(incoming.getFirstName());
-        patch.setLastName(incoming.getLastName());
-
-        // call userService to perform update (handles partial update & persistence)
-        User updated = userService.updateUser(id, patch);
-
-        // return the fully merged User for profile display
-        User full = new User(updated.getEmail(), null);
-        full.setId(updated.getId());
-        full.setPassword(updated.getPassword());
-        full.setDescription(updated.getDescription());
-        full.setFirstName(updated.getFirstName());
-        full.setLastName(updated.getLastName());
-
-        return full;
-    }
-
-    // Update Company 
-    public Company updateCompanyAccount(Long id, Company incoming) {
-        Company patch = new Company(null, null);
-        patch.setEmail(incoming.getEmail());
-        patch.setPassword(incoming.getPassword());
-        patch.setDescription(incoming.getDescription());
-        patch.setName(incoming.getName());
-        patch.setCity(incoming.getCity());
-        patch.setStreet(incoming.getStreet());
-        patch.setNumber(incoming.getNumber());
-
-        Company updated = companyService.updateCompany(id, patch);
-
-        Company full = new Company(updated.getEmail(), null);
-        full.setId(updated.getId());
-        full.setPassword(updated.getPassword());
-        full.setDescription(updated.getDescription());
-        full.setName(updated.getName());
-        full.setCity(updated.getCity());
-        full.setStreet(updated.getStreet());
-        full.setNumber(updated.getNumber());
-
-        return full;
-    }
-
-    */
-
-
 
     public Account updateAccount(Long id, UpdateAccountDTO update) {
         Account account = getAccountById(id);
