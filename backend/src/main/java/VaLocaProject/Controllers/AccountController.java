@@ -132,7 +132,6 @@ public class AccountController {
     public ResponseEntity<Account> updateAccount(@PathVariable Long id, @RequestBody UpdateAccountDTO update) {
         return ResponseEntity.ok(accountService.updateAccount(id, update));
     }
-         
 
 
 }

@@ -143,11 +143,11 @@ public class AccountService {
 
 
     public Account updateAccount(Long id, UpdateAccountDTO update) {
-        Account account = getAccountById(id);
+        Account found = getAccountById(id);
         Account updatedAccount = null;
-        if (account instanceof User) {
+        if (found instanceof User) {
             updatedAccount = userService.updateUser(id, update);        
-        } else if (account instanceof Company) {
+        } else if (found instanceof Company) {
             updatedAccount = companyService.updateCompany(id, update);  
         }
 
