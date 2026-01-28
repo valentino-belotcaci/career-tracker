@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -125,13 +126,12 @@ public class AccountController {
                 .body(Map.of("message", "Logged out"));
     }
 
-    /* AccountService updateAccount method needs to be fixed
-    We use updateUser and updateCompany separatly for now
+
     @PutMapping("/updateAccount/{id}")
     public ResponseEntity<Account> updateAccount(@PathVariable Long id, @RequestBody Account account) {
         return ResponseEntity.ok(accountService.updateAccount(id, account));
     }
-         */
+         
 
 
 }
