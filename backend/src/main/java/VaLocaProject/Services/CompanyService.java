@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import VaLocaProject.DTO.UpdateAccountDTO;
 import VaLocaProject.Models.Company;
 import VaLocaProject.Repositories.CompanyRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -34,11 +35,11 @@ public class CompanyService {
         companyRepository.deleteAll();
     }
 
-    public Company updateCompany(Long id, Company company) {
+    public Company updateCompany(Long id, UpdateAccountDTO company) {
         return companyRepository.findById(id)
             .map(foundCompany -> {
                 if (company.getEmail() != null) foundCompany.setEmail(company.getEmail());
-                if (company.getName() != null) foundCompany.setName(company.getName());
+                if (company.getCompanyName() != null) foundCompany.setName(company.getCompanyName());
                 if (company.getDescription() != null) foundCompany.setDescription(company.getDescription());
                 if (company.getPassword() != null)
                     foundCompany.setPassword(passwordEncoder.encode(company.getPassword()));

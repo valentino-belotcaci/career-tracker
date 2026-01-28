@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import VaLocaProject.DTO.UpdateAccountDTO;
 import VaLocaProject.Models.User;
 import VaLocaProject.Repositories.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -37,7 +38,7 @@ public class UserService{
         userRepository.deleteAll();
     }
 
-    public User updateUser(Long id, User user) {
+    public User updateUser(Long id, UpdateAccountDTO user) {
 
         User foundUser = userRepository.findById(id)
         .orElseThrow(() -> new EntityNotFoundException("User not found with id " + id));

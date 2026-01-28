@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import VaLocaProject.DTO.UpdateAccountDTO;
 import VaLocaProject.Models.Account;
 import VaLocaProject.Services.AccountService;
 
@@ -128,8 +129,8 @@ public class AccountController {
 
 
     @PutMapping("/updateAccount/{id}")
-    public ResponseEntity<Account> updateAccount(@PathVariable Long id, @RequestBody Account account) {
-        return ResponseEntity.ok(accountService.updateAccount(id, account));
+    public ResponseEntity<Account> updateAccount(@PathVariable Long id, @RequestBody UpdateAccountDTO update) {
+        return ResponseEntity.ok(accountService.updateAccount(id, update));
     }
          
 

@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import VaLocaProject.DTO.UpdateAccountDTO;
 import VaLocaProject.Models.Account;
 import VaLocaProject.Models.Company;
 import VaLocaProject.Models.User;
@@ -139,16 +140,6 @@ public class AccountService {
         return jwtService.generateToken(email);
     }
 
-    public Account updateAccount(Long id, Account incoming) {
-        Account existingAccount = getAccountById(id);
-        Account returnAccount = null;
-
-        if (existingAccount instanceof User) {
-            returnAccount = userService.updateUser(id, (User) incoming);
-        } else if (existingAccount instanceof Company) returnAccount = companyService.updateCompany(id, (Company) incoming);
-        
-        return returnAccount;
-    }   
 
     /* 
     // Update User 
@@ -201,5 +192,20 @@ public class AccountService {
     }
 
     */
+
+
+
+    public Account updateAccount(Long id, UpdateAccountDTO update) {
+        Account account = getAccountById(id);
+        Account updatedAccount = null;
+        if (account instanceof User) {
+            updatedAccount = userService.updateUser(id, update);        
+        } else if (account instanceof Company) {
+            updatedAccount = companyService.updateCompany(id, update);  
+        }
+
+        return updatedAccount;
+    }
+
 
 }
