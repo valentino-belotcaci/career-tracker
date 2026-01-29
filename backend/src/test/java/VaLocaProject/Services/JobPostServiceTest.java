@@ -56,6 +56,7 @@ public class JobPostServiceTest {
 
         assertEquals(2, response.size());
         assertEquals("Cacca", response.get(0).getName());
+
     }
 
 
@@ -73,6 +74,8 @@ public class JobPostServiceTest {
         // .longValue() is necessary to compare longs(primitive), 
         // without it it would return a Long(object wrapper)
         assertEquals(100L, response.getCompanyId().longValue());
+
+        verify(jobPostRepository, times(1)).save(post1);
     }
 
 
@@ -128,5 +131,33 @@ public class JobPostServiceTest {
         verify(jobPostRepository, times(1)).deleteAll();
     }
 
+    @Test
+    void testUpdatePost() {
+        Long postId = 1L;
+
+        // Existing post in DB
+        JobPost existingPost = new JobPost();
+        existingPost.setPostId(postId);
+        existingPost.setCompanyId(100L);
+        existingPost.setName("Original Job");
+
+        // Incoming update
+        JobPost update = new JobPost();
+        update.setCompanyId(200L);
+        update.setName("Updated Job");
+
+        // Mock repository
+        when(jobPostRepository.findById(postId)).thenReturn(Optional.of(existingPost));
+
+        // Call service (ignore Redis)
+        JobPost updatedPost = jobPostService.updatePost(postId, update);
+
+        // Assertions
+        assertEquals(200L, updatedPost.getCompanyId());
+        assertEquals("Updated Job", updatedPost.getName());
+
+        // Verify repository method was called
+        verify(jobPostRepository, times(1)).findById(postId);
+    }
 
 }

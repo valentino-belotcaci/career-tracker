@@ -10,6 +10,7 @@ import VaLocaProject.Models.JobPost;
 import VaLocaProject.Repositories.JobPostRepository;
 import VaLocaProject.Security.RedisService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 
 @Service
 public class JobPostService {
@@ -51,8 +52,9 @@ public class JobPostService {
         jobPostRepository.deleteAll();
     }
 
+    @Transactional
     public JobPost updatePost(Long id, JobPost jobPost) {
-        // 1) Fetch from DB
+        // 1) Fetch from DB (managed entity)
         JobPost presentJob = jobPostRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("JobPost not found with id " + id));
 
@@ -64,17 +66,15 @@ public class JobPostService {
         if (jobPost.getAvailable() != null) presentJob.setAvailable(jobPost.getAvailable());
         if (jobPost.getSalary() != 0) presentJob.setSalary(jobPost.getSalary());
 
-        // 3) Save to DB
-        JobPost updatedJobPost = jobPostRepository.save(presentJob);
-
-        // WE NEED TO CHECK IF THIS MAKES SENSE
-        // 4) Update cache with new data 
+        // 3) update cache
         try {
-            redisService.save("jobPost:" + id, updatedJobPost, POST_CACHE_TTL);
+            redisService.save("jobPost:" + id, presentJob, POST_CACHE_TTL);
         } catch (Exception ignored) {}
 
-        return updatedJobPost;
+        // 4) Return the jpa managed entity (JPA will auto-persist changes)
+        return presentJob;
     }
+
 
     public List<JobPost> getPostsByCompanyId(Long companyId) {
         return jobPostRepository.findPostsByCompanyId(companyId);

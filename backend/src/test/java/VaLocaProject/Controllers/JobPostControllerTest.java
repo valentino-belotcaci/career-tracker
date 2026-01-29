@@ -54,9 +54,7 @@ public class JobPostControllerTest {
         assertEquals(200, response.getStatusCode().value());
         assertEquals(2, response.getBody().size());
         assertEquals("Software Engineer", response.getBody().get(0).getName());
-
-        // Verify the service method was called once
-        verify(jobPostService, times(1)).getAllPosts();
+        assertEquals("Data Scientist", response.getBody().get(1).getName());
     }
 
 
@@ -75,13 +73,13 @@ public class JobPostControllerTest {
         assertEquals(200, response.getStatusCode().value());
         assertEquals("Backend Developer", response.getBody().getName());
 
+        // Verify the service method was called once
+        // This check should only be done on methods that return void 
+        // or we need to check if multiple call might happen and we don't notice (like here the insert)
+        // (We use it in every non-GET method test))
         verify(jobPostService, times(1)).insertPost(newPost);
-
     }
 
-
-    // Hard to test as for now we return void from the service method deletePost
-    // Same for deleteAllPosts
     @Test 
     void testDeletePost() {
         Long postId = 1L;
@@ -94,8 +92,7 @@ public class JobPostControllerTest {
         verify(jobPostService, times(1)).deletePost(postId);
     }
 
-    // Hard to test as for now we return void from the service method deletePost
-    // Same for deleteAllPosts
+
     @Test 
     void testDeleteAllPosts() {
         ResponseEntity<String> response = jobPostController.deleteAllPosts();
@@ -108,21 +105,22 @@ public class JobPostControllerTest {
 
     @Test
     void testGetPostsByCompanyId() {
+        Long companyId = 100L;
         JobPost post1 = new JobPost();
         post1.setPostId(1L);
         post1.setName("CIAOO");
-        post1.setCompanyId(100L);
+        post1.setCompanyId(companyId);
 
         JobPost post2 = new JobPost();
         post2.setPostId(2L);
-        post2.setCompanyId(100L);
+        post2.setCompanyId(companyId);
         post2.setDescription("SPINGEREEE");
 
         List<JobPost> mockPosts = Arrays.asList(post1, post2);
 
         when(jobPostService.getPostsByCompanyId(100L)).thenReturn(mockPosts);
 
-        ResponseEntity<List<JobPost>> response = jobPostController.getPostsByCompanyId(100L);
+        ResponseEntity<List<JobPost>> response = jobPostController.getPostsByCompanyId(companyId);
 
         assertEquals(200, response.getStatusCode().value());
         assertEquals(2, response.getBody().size());
@@ -130,24 +128,38 @@ public class JobPostControllerTest {
         assertEquals("SPINGEREEE", response.getBody().get(1).getDescription());
         // Here we dont need .longValue() because java is using the Long(object wrapper) for both values
         assertEquals(100L, response.getBody().get(0).getCompanyId());
-
     }
 
 
     @Test
     void testGetPostById(){
+        Long postId = 1L;
         JobPost post1 = new JobPost();
-        post1.setPostId(1L);
+        post1.setPostId(postId);
         post1.setName("Tester");
 
-        when(jobPostService.getPostByPostId(1L)).thenReturn(post1);
+        when(jobPostService.getPostByPostId(postId)).thenReturn(post1);
 
-        ResponseEntity<JobPost> response = jobPostController.getPostByPostId(1L);
+        ResponseEntity<JobPost> response = jobPostController.getPostByPostId(postId);
 
         assertEquals(200, response.getStatusCode().value());
         assertEquals("Tester", response.getBody().getName());
-
     }
 
+    @Test
+    void testUpdatePost(){
+        Long postId = 1L;
+        JobPost updatedPost = new JobPost();
+        updatedPost.setPostId(1L);
+        updatedPost.setName("Updated Tester");  
 
+        when(jobPostService.updatePost(postId, updatedPost)).thenReturn(updatedPost);   
+
+        ResponseEntity<JobPost> response = jobPostController.updatePost(postId, updatedPost);   
+
+        assertEquals(200, response.getStatusCode().value());
+        assertEquals("Updated Tester", response.getBody().getName());
+
+        verify(jobPostService, times(1)).updatePost(postId, updatedPost);
+    }
 }
