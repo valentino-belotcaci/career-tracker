@@ -25,6 +25,7 @@ public class JobPostControllerTest {
     @InjectMocks
     private JobPostController jobPostController;
 
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);  // Initialize mocks
@@ -100,8 +101,9 @@ public class JobPostControllerTest {
         post1.setName("CIAOO");
         post1.setCompanyId(100L);
         JobPost post2 = new JobPost();
-        post1.setPostId(2L);
-        post1.setCompanyId(100L);
+        post2.setPostId(2L);
+        post2.setCompanyId(100L);
+        post2.setDescription("SPINGEREEE");
 
         List<JobPost> mockPosts = Arrays.asList(post1, post2);
 
@@ -112,6 +114,8 @@ public class JobPostControllerTest {
         assertEquals(200, response.getStatusCode().value());
         assertEquals(2, response.getBody().size());
         assertEquals("CIAOO", response.getBody().get(0).getName());
+        assertEquals("SPINGEREEE", response.getBody().get(1).getDescription());
+
     }
 
 
