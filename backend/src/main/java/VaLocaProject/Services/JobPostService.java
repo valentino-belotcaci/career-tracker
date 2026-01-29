@@ -41,19 +41,14 @@ public class JobPostService {
     }
 
     public JobPost insertPost(JobPost jobPost) {
-        if (jobPost.getCompanyId() == null || jobPost.getPostId() == 0) {
-            throw new IllegalStateException("JobPost must have a companyId and postId");
+
+        if (jobPost.getCompanyId() == null) {
+            throw new IllegalStateException("JobPost must have a companyId");
         }
 
+        jobPost.setCreatedAt(LocalDateTime.now());
 
-        return jobPostRepository.findById(jobPost.getPostId())
-            .map(existingPost -> {
-                jobPost.setCreatedAt(LocalDateTime.now());
-                return jobPostRepository.save(jobPost);
-            })
-            .orElseThrow(() -> new IllegalStateException(
-                "JobPost already exists with id " + jobPost.getPostId()
-            ));
+        return jobPostRepository.save(jobPost);
     }
 
 

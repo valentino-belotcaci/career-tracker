@@ -25,10 +25,10 @@ public class JobPostControllerTest {
     @InjectMocks
     private JobPostController jobPostController;
 
-
+    // Initialize mocks
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);  // Initialize mocks
+        MockitoAnnotations.openMocks(this);  
     }
 
     @Test
