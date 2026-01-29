@@ -12,7 +12,7 @@ public class UpdateAccountDTO {
     private String lastName;
 
     // COMPANY FIELDS
-    private String Name;
+    private String companyName;
     private String city;
     private String street;
     private String number;
@@ -59,12 +59,13 @@ public class UpdateAccountDTO {
         this.password = password;
     }
 
-    public String getName() {
-        return Name;
+    public String getCompanyName() {
+        return companyName;
     }
 
     public void setCompanyName(String companyName) {
-        this.Name = companyName;
+        this.
+        companyName = companyName;
     }
 
     public String getCity() {

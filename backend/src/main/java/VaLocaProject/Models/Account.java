@@ -68,7 +68,6 @@ public class Account {
         this.description = description;
     }
 
-    // runtime-derived account type so controllers / frontend can decide redirects
     // returns "USER" if this instance is a User, "COMPANY" if Company, otherwise "UNKNOWN"
     public String getType() {
         if (this instanceof User) return "USER";
