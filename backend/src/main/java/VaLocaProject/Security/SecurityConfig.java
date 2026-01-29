@@ -2,7 +2,6 @@ package VaLocaProject.Security;
 
 import java.util.Arrays;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -21,8 +20,11 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Configuration
 public class SecurityConfig {
 
-    @Autowired
-    private JWTFilter jwtFilter;
+    private final JWTFilter jwtFilter;
+
+    public SecurityConfig(JWTFilter jwtFilter) {
+        this.jwtFilter = jwtFilter;
+    }
     
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {

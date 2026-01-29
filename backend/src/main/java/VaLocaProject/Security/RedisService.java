@@ -2,15 +2,17 @@ package VaLocaProject.Security;
 
 import java.time.Duration;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
 public class RedisService {
 
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
+    private final RedisTemplate<String, Object> redisTemplate;
+
+    public RedisService(RedisTemplate<String, Object> redisTemplate) {
+        this.redisTemplate = redisTemplate;
+    }
 
     private static final int MAX_REQUESTS = 5;
     private static final Duration WINDOW = Duration.ofMinutes(1);

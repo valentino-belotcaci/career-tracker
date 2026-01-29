@@ -2,7 +2,6 @@ package VaLocaProject.Controllers;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,7 +28,7 @@ public class JobPostController {
     public JobPostController(JobPostService jobPostService) {
         this.jobPostService = jobPostService;
     }
-    
+
     @GetMapping("/getAllPosts")
     public ResponseEntity<List<JobPost>> getAllPosts() {
         return ResponseEntity.ok(jobPostService.getAllPosts());

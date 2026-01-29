@@ -2,7 +2,6 @@ package VaLocaProject.Security;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,11 +14,17 @@ import VaLocaProject.Repositories.UserRepository;
 @Service
 public class AccountDetailsService implements UserDetailsService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private CompanyRepository companyRepository;
+    private final CompanyRepository companyRepository;
+
+    public AccountDetailsService(
+            UserRepository userRepository,
+            CompanyRepository companyRepository
+    ) {
+        this.userRepository = userRepository;
+        this.companyRepository = companyRepository;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
