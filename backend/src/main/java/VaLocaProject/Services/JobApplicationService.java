@@ -4,7 +4,6 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
 
-
 import org.springframework.stereotype.Service;
 
 import VaLocaProject.Models.JobApplication;
@@ -36,6 +35,9 @@ public class JobApplicationService{
     }
 
     public JobApplication insertApplication(JobApplication jobApplication) {
+        if (jobApplication.getPostId() == null || jobApplication.getUserId() == null) {
+            throw new IllegalStateException("JobApplication must have a postId and userId");
+        }
         return jobApplicationRepository.save(jobApplication);
     }
 

@@ -41,11 +41,9 @@ public class JobPostService {
     }
 
     public JobPost insertPost(JobPost jobPost) {
-
         if (jobPost.getCompanyId() == null) {
             throw new IllegalStateException("JobPost must have a companyId");
         }
-
         jobPost.setCreatedAt(LocalDateTime.now());
 
         return jobPostRepository.save(jobPost);
