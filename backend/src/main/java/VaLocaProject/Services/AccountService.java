@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -148,14 +147,13 @@ public class AccountService {
 
     public Account updateAccount(Long id, UpdateAccountDTO update) {
         Account found = getAccountById(id);
-        Account updatedAccount = null;
         if (found instanceof User) {
-            updatedAccount = userService.updateUser(id, update);        
+            return userService.updateUser(id, update);        
         } else if (found instanceof Company) {
-            updatedAccount = companyService.updateCompany(id, update);  
+            return companyService.updateCompany(id, update);  
         }
 
-        return updatedAccount;
+        return null;
     }
 
 
