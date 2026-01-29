@@ -15,14 +15,17 @@ import VaLocaProject.DTO.UpdateAccountDTO;
 import VaLocaProject.Models.Account;
 import VaLocaProject.Models.Company;
 import VaLocaProject.Models.User;
+import VaLocaProject.Repositories.CompanyRepository;
+import VaLocaProject.Repositories.UserRepository;
 import VaLocaProject.Security.JWTService;
 import VaLocaProject.Security.RedisService;
+import jakarta.transaction.Transactional;
 
 @Service
 public class AccountService {
 
-    private final CompanyService companyService;
-    private final UserService userService;
+    private final CompanyRepository companyRepository;
+    private final UserRepository userRepository;
     private final RedisService redisService;
     private final BCryptPasswordEncoder passwordEncoder;
     private final AuthenticationManager authManager;
@@ -34,15 +37,15 @@ public class AccountService {
     private static final Duration ACCOUNT_CACHE_TTL = Duration.ofHours(1);
 
     public AccountService(
-            CompanyService companyService,
-            UserService userService,
+            CompanyRepository companyRepository,
+            UserRepository userRepository,
             RedisService redisService,
             BCryptPasswordEncoder passwordEncoder,
             AuthenticationManager authManager,
             JWTService jwtService
     ) {
-        this.companyService = companyService;
-        this.userService = userService;
+        this.companyRepository = companyRepository;
+        this.userRepository = userRepository;
         this.redisService = redisService;
         this.passwordEncoder = passwordEncoder;
         this.authManager = authManager;
@@ -51,22 +54,22 @@ public class AccountService {
     
     public List<Account> getAllAccounts() {
         List<Account> accounts = new ArrayList<>();
-        accounts.addAll(userService.getAllUsers());
-        accounts.addAll(companyService.getAllCompanies());
+        accounts.addAll(userRepository.findAll());
+        accounts.addAll(companyRepository.findAll());
         return accounts;
     }
 
     public List<User> getAllUsers() {
-        return userService.getAllUsers();
+        return userRepository.findAll();
     }
 
     public List<Company> getAllCompanies() {
-        return companyService.getAllCompanies();
+        return companyRepository.findAll();
     }
 
     public void deleteAllAccounts() {
-        userService.deleteAllUsers();
-        companyService.deleteAllCompanies();
+        userRepository.deleteAll();
+        companyRepository.deleteAll();
     }
 
     public Account getAccountByEmail(String email) {
@@ -75,9 +78,9 @@ public class AccountService {
         return Optional.ofNullable(redisService.get(key))       // 1) Try cache
                 .filter(Account.class::isInstance)
                 .map(Account.class::cast)
-                .or(() -> userService.getUserByEmail(email)) // 2) Try user
+                .or(() -> userRepository.findByEmail(email)) // 2) Try user
                         .map(user -> (Account) user)
-                .or(() ->companyService.getCompanyByEmail(email)) // 3) Try company
+                .or(() ->companyRepository.findByEmail(email)) // 3) Try company
                         .map(company -> (Account) company)
                 .map(account -> { 
                     // Cache the found account by creating a copy without the password, then return the original
@@ -98,9 +101,9 @@ public class AccountService {
         return Optional.ofNullable(redisService.get(key))       // 1) Try cache
                 .filter(Account.class::isInstance)
                 .map(Account.class::cast)
-                .or(() -> userService.getUserByAccountId(id) // 2) Try user
+                .or(() -> userRepository.findById(id) // 2) Try user
                         .map(user -> (Account) user))
-                .or(() -> companyService.getCompanyByAccountId(id)) // 3) Try company
+                .or(() -> companyRepository.findById(id)) // 3) Try company
                         .map(company -> (Account) company)
                 .map(account -> { // Cache the found account
                     try {
@@ -120,11 +123,11 @@ public class AccountService {
         switch (type.toUpperCase()) {
             case "USER" -> {
                 User newUser = new User(email, encoded);
-                return userService.insertUser(newUser);
+                return userRepository.save(newUser);
             }
             case "COMPANY" -> {
                 Company newCompany = new Company(email, encoded);
-                return companyService.insertCompany(newCompany);
+                return companyRepository.save(newCompany);
             }
             default -> throw new RuntimeException("Unknown account type: " + type);
         }
@@ -144,17 +147,29 @@ public class AccountService {
     }
 
 
-
+    @Transactional
     public Account updateAccount(Long id, UpdateAccountDTO update) {
-        Account found = getAccountById(id);
-        if (found instanceof User) {
-            return userService.updateUser(id, update);        
-        } else if (found instanceof Company) {
-            return companyService.updateCompany(id, update);  
+        Account account = getAccountById(id);
+
+        // Common fields
+        if (update.getEmail() != null) account.setEmail(update.getEmail());
+        if (update.getDescription() != null) account.setDescription(update.getDescription());
+        if (update.getPassword() != null) account.setPassword(passwordEncoder.encode(update.getPassword()));
+
+        // Type-specific updates
+        if (account instanceof User user) {
+            if (update.getFirstName() != null) user.setFirstName(update.getFirstName());
+            if (update.getLastName() != null) user.setLastName(update.getLastName());
+        } else if (account instanceof Company company) {
+            if (update.getCompanyName() != null) company.setName(update.getCompanyName());
+            if (update.getCity() != null) company.setCity(update.getCity());
+            if (update.getStreet() != null) company.setStreet(update.getStreet());
+            if (update.getNumber() != null) company.setNumber(update.getNumber());
         }
 
-        return null;
+        return account;
     }
+
 
 
 }
