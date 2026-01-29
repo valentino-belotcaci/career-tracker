@@ -14,7 +14,6 @@ import jakarta.persistence.EntityNotFoundException;
 @Service
 public class JobApplicationService{
 
-
     private final JobApplicationRepository jobApplicationRepository;
 
     private final RedisService redisService;
@@ -67,7 +66,7 @@ public class JobApplicationService{
     }
 
     public List<JobApplication> getApplicationsByPostId(Long postId){
-        return jobApplicationRepository.findByPostId(postId);
+        return jobApplicationRepository.findApplicationsByPostId(postId);
     }
 
     public JobApplication getApplicationByIds(Long postId, Long userId) {
@@ -96,6 +95,6 @@ public class JobApplicationService{
 
 
     public List<JobApplication> getApplicationsByUserId(Long id){
-        return jobApplicationRepository.findByUserId(id);
+        return jobApplicationRepository.findApplicationsByUserId(id);
     }
 }

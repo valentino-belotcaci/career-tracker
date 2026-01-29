@@ -3,6 +3,7 @@ package VaLocaProject.Services;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,11 +15,17 @@ import org.mockito.MockitoAnnotations;
 
 import VaLocaProject.Models.JobPost;
 import VaLocaProject.Repositories.JobPostRepository;
+import VaLocaProject.Security.RedisService;
 
 public class JobPostServiceTest {
 
     @Mock
     private JobPostRepository jobPostRepository;
+
+    @Mock
+    // We need to just mock the redisservice to avoid nullpointer exception 
+    // we DON'T actually use it here
+    private RedisService redisService;
 
     @InjectMocks
     private JobPostService jobPostService;
@@ -68,7 +75,7 @@ public class JobPostServiceTest {
 
 
     @Test
-    public void testGetPostsByCompanyId() {
+    void testGetPostsByCompanyId() {
         JobPost post1 = new JobPost();
         post1.setPostId(1L);
         post1.setCompanyId(100L);
@@ -78,7 +85,7 @@ public class JobPostServiceTest {
         post2.setName("job 2");
         post2.setCompanyId(100L);
 
-        when(jobPostRepository.findByCompanyId(100L)).thenReturn(Arrays.asList(post1, post2));
+        when(jobPostRepository.findPostsByCompanyId(100L)).thenReturn(Arrays.asList(post1, post2));
 
         
         List<JobPost> response = jobPostService.getPostsByCompanyId(100L);
@@ -88,4 +95,22 @@ public class JobPostServiceTest {
         
     
     }
+
+    @Test
+    void testGetPostByPostId() {
+        JobPost post1 = new JobPost();
+        post1.setPostId(1L);
+        post1.setName("Lavoro loca");
+
+
+        when(jobPostRepository.findById(1L)).thenReturn(Optional.of(post1));
+
+        JobPost response = jobPostService.getPostByPostId(1L);
+
+        assertEquals("Lavoro loca", response.getName());
+    }
+
+
+
+
 }

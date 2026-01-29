@@ -63,13 +63,11 @@ public class JobPostController {
         return ResponseEntity.ok(jobPostService.getPostByPostId(id));
 
     }
-    
 
     @PutMapping("/updatePost/{id}")
     public ResponseEntity<JobPost> updatePost(@PathVariable Long id, @RequestBody JobPost jobPost) {
         return ResponseEntity.ok(jobPostService.updatePost(id, jobPost));
 
     }
-    
     
 }
