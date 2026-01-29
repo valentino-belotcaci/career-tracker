@@ -164,7 +164,7 @@ public class AccountService {
             if (update.getFirstName() != null) user.setFirstName(update.getFirstName());
             if (update.getLastName() != null) user.setLastName(update.getLastName());
         } else if (account instanceof Company company) {
-            if (update.getCompanyName() != null) company.setName(update.getCompanyName());
+            if (update.getName() != null) company.setName(update.getName());
             if (update.getCity() != null) company.setCity(update.getCity());
             if (update.getStreet() != null) company.setStreet(update.getStreet());
             if (update.getNumber() != null) company.setNumber(update.getNumber());
