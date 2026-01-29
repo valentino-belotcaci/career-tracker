@@ -64,7 +64,7 @@ public class JobPostService {
         if (jobPost.getDescription() != null) presentJob.setDescription(jobPost.getDescription());
         if (jobPost.getDuration() != null) presentJob.setDuration(jobPost.getDuration());
         if (jobPost.getAvailable() != null) presentJob.setAvailable(jobPost.getAvailable());
-        if (jobPost.getSalary() != null && jobPost.getSalary() != 0) presentJob.setSalary(jobPost.getSalary());
+        if (jobPost.getSalary() != null) presentJob.setSalary(jobPost.getSalary());
 
         // 3) update cache
         try {
