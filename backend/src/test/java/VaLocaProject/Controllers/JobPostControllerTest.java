@@ -100,6 +100,7 @@ public class JobPostControllerTest {
         post1.setPostId(1L);
         post1.setName("CIAOO");
         post1.setCompanyId(100L);
+
         JobPost post2 = new JobPost();
         post2.setPostId(2L);
         post2.setCompanyId(100L);
@@ -115,6 +116,8 @@ public class JobPostControllerTest {
         assertEquals(2, response.getBody().size());
         assertEquals("CIAOO", response.getBody().get(0).getName());
         assertEquals("SPINGEREEE", response.getBody().get(1).getDescription());
+        // Here we dont need .longValue() because java is using the Long(object wrapper) for both values
+        assertEquals(100L, response.getBody().get(0).getCompanyId());
 
     }
 

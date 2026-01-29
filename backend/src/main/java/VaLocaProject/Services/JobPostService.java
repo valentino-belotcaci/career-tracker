@@ -98,7 +98,6 @@ public class JobPostService {
     }
 
 
-
     public List<JobPost> getPostsByCompanyId(Long id){
         // Checks if the company exists
         return companyRepository.findById(id)
@@ -108,6 +107,7 @@ public class JobPostService {
         .orElseThrow(() -> new EntityNotFoundException("Posts or Company not found"));
     }
 
+    
     public JobPost getPostByPostId(Long id) {
         String key = "jobPost:" + id;
 
