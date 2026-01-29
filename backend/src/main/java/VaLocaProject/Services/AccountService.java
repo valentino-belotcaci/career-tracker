@@ -22,29 +22,33 @@ import VaLocaProject.Security.RedisService;
 @Service
 public class AccountService {
 
-    @Autowired
-    private CompanyService companyService;
-
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private RedisService redisService;
-
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
-
-    @Autowired
-    private AuthenticationManager authManager;
-
-    @Autowired
-    private JWTService jwtService;
+    private final CompanyService companyService;
+    private final UserService userService;
+    private final RedisService redisService;
+    private final BCryptPasswordEncoder passwordEncoder;
+    private final AuthenticationManager authManager;
+    private final JWTService jwtService;
 
     // FIX : We need to remove the cache operations 
     // from the User- and Company Service and move them 
     // here for avoiding code duplication
     private static final Duration ACCOUNT_CACHE_TTL = Duration.ofHours(1);
 
+    public AccountService(
+            CompanyService companyService,
+            UserService userService,
+            RedisService redisService,
+            BCryptPasswordEncoder passwordEncoder,
+            AuthenticationManager authManager,
+            JWTService jwtService
+    ) {
+        this.companyService = companyService;
+        this.userService = userService;
+        this.redisService = redisService;
+        this.passwordEncoder = passwordEncoder;
+        this.authManager = authManager;
+        this.jwtService = jwtService;
+    }
     
     public List<Account> getAllAccounts() {
         List<Account> accounts = new ArrayList<>();

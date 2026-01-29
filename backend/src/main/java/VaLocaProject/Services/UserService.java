@@ -16,13 +16,15 @@ import jakarta.persistence.EntityNotFoundException;
 @Service
 public class UserService{
 
-    @Autowired
-    UserRepository userRepository;
-
-
+    private final UserRepository userRepository;
+    
     // encode passwords on update
-    @Autowired
-    BCryptPasswordEncoder passwordEncoder;
+    private final BCryptPasswordEncoder passwordEncoder;
+
+    public UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
 
     public List<User> getAllUsers(){

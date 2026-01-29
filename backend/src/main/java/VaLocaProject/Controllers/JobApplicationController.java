@@ -22,8 +22,12 @@ import VaLocaProject.Services.JobApplicationService;
 @RequestMapping("/JobApplication")
 public class JobApplicationController {
     
-    @Autowired
-    JobApplicationService jobApplicationService;
+    
+    private final JobApplicationService jobApplicationService;
+
+    public JobApplicationController(JobApplicationService jobApplicationService) {
+        this.jobApplicationService = jobApplicationService;
+    }
 
     @GetMapping("/getAllApplications")
     public ResponseEntity<List<JobApplication>> getAllApplications() {

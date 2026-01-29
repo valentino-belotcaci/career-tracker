@@ -15,11 +15,18 @@ import jakarta.persistence.EntityNotFoundException;
 @Service
 public class JobApplicationService{
 
-    @Autowired
-    JobApplicationRepository jobApplicationRepository;
 
-    @Autowired
-    RedisService redisService;
+    private final JobApplicationRepository jobApplicationRepository;
+
+    private final RedisService redisService;
+
+    public JobApplicationService(
+            JobApplicationRepository jobApplicationRepository,
+            RedisService redisService
+    ) {
+        this.jobApplicationRepository = jobApplicationRepository;
+        this.redisService = redisService;
+    }
 
     private static final Duration APPLICATION_CACHE_TTL = Duration.ofHours(1); // Defines lifetime of cache
 

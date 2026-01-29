@@ -23,10 +23,13 @@ import VaLocaProject.Services.JobPostService;
 
 public class JobPostController {
     
-    @Autowired
-    JobPostService jobPostService;
+    
+    private final JobPostService jobPostService;
 
-
+    public JobPostController(JobPostService jobPostService) {
+        this.jobPostService = jobPostService;
+    }
+    
     @GetMapping("/getAllPosts")
     public ResponseEntity<List<JobPost>> getAllPosts() {
         return ResponseEntity.ok(jobPostService.getAllPosts());

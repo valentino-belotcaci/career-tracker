@@ -15,12 +15,16 @@ import jakarta.persistence.EntityNotFoundException;
 @Service
 public class CompanyService {
     
-    @Autowired
-    CompanyRepository companyRepository;
+    
+    private final CompanyRepository companyRepository;
 
     // encode passwords on update
-    @Autowired
-    BCryptPasswordEncoder passwordEncoder;
+    private final BCryptPasswordEncoder passwordEncoder;
+
+    public CompanyService(CompanyRepository companyRepository, BCryptPasswordEncoder passwordEncoder) {
+        this.companyRepository = companyRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
 
     public List<Company> getAllCompanies(){

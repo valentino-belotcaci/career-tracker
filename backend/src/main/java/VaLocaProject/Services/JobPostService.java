@@ -17,15 +17,22 @@ import jakarta.persistence.EntityNotFoundException;
 @Service
 public class JobPostService {
     
-    @Autowired
-    JobPostRepository jobPostRepository;
-
-    @Autowired
-    CompanyRepository companyRepository;
-
     
-    @Autowired
-    RedisService redisService;
+    private final JobPostRepository jobPostRepository;
+    
+    private final CompanyRepository companyRepository;
+
+    private final RedisService redisService;
+
+    public JobPostService(
+            JobPostRepository jobPostRepository,
+            CompanyRepository companyRepository,
+            RedisService redisService
+    ) {
+        this.jobPostRepository = jobPostRepository;
+        this.companyRepository = companyRepository;
+        this.redisService = redisService;
+    }
     
     private static final Duration POST_CACHE_TTL = Duration.ofHours(1); // Defines lifetime of cache
      
