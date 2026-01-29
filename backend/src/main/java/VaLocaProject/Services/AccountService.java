@@ -147,6 +147,9 @@ public class AccountService {
     }
 
 
+
+    // This is needed as JPA still manages the obejct after retrieval 
+    // and with this it automatically updates it when the function returns
     @Transactional
     public Account updateAccount(Long id, UpdateAccountDTO update) {
         Account account = getAccountById(id);
