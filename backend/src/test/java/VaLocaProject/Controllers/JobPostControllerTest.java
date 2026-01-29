@@ -32,7 +32,7 @@ public class JobPostControllerTest {
 
     @Test
     void testGetAllPosts() {
-        // Arrange
+        // Mock data
         JobPost post1 = new JobPost();
         post1.setPostId(1L);
         post1.setName("Software Engineer");
@@ -43,6 +43,7 @@ public class JobPostControllerTest {
 
         List<JobPost> mockPosts = Arrays.asList(post1, post2);
 
+        // To make the service return our mock data
         when(jobPostService.getAllPosts()).thenReturn(mockPosts);
 
         // Act
@@ -56,4 +57,79 @@ public class JobPostControllerTest {
         // Verify the service method was called once
         verify(jobPostService, times(1)).getAllPosts();
     }
+
+
+    @Test
+    void testInsertPost() {
+
+        JobPost newPost = new JobPost();
+        newPost.setPostId(1L);
+        newPost.setName("Backend Developer");
+
+        when(jobPostService.insertPost(newPost)).thenReturn(newPost);
+
+        ResponseEntity<JobPost> response = jobPostController.insertPost(newPost);
+        
+
+        assertEquals(200, response.getStatusCode().value());
+        assertEquals("Backend Developer", response.getBody().getName());
+
+        verify(jobPostService, times(1)).insertPost(newPost);
+
+    }
+
+
+    // Hard to test as for now we return void from the service method deletePost
+    // Same for deleteAllPosts
+    @Test 
+    void testDeletePost() {
+        Long postId = 1L;
+
+        ResponseEntity<String> response = jobPostController.deletePost(postId);
+
+        assertEquals(200, response.getStatusCode().value());
+        assertEquals("The post has been deleted", response.getBody());
+
+        verify(jobPostService, times(1)).deletePost(postId);
+    }
+
+    @Test
+    void testGetPostsByCompanyId() {
+        JobPost post1 = new JobPost();
+        post1.setPostId(1L);
+        post1.setName("CIAOO");
+        post1.setCompanyId(100L);
+        JobPost post2 = new JobPost();
+        post1.setPostId(2L);
+        post1.setCompanyId(100L);
+
+        List<JobPost> mockPosts = Arrays.asList(post1, post2);
+
+        when(jobPostService.getPostsByCompanyId(100L)).thenReturn(mockPosts);
+
+        ResponseEntity<List<JobPost>> response = jobPostController.getPostsByCompanyId(100L);
+
+        assertEquals(200, response.getStatusCode().value());
+        assertEquals(2, response.getBody().size());
+        assertEquals("CIAOO", response.getBody().get(0).getName());
+    }
+
+
+    @Test
+    void testGetPostById(){
+        JobPost post1 = new JobPost();
+        post1.setPostId(1L);
+        post1.setName("Tester");
+
+        when(jobPostService.getPostByPostId(1L)).thenReturn(post1);
+
+        ResponseEntity<JobPost> response = jobPostController.getPostByPostId(1L);
+
+        assertEquals(200, response.getStatusCode().value());
+        assertEquals("Tester", response.getBody().getName());
+
+    }
+
+    
+
 }
