@@ -74,8 +74,5 @@ public class Account {
         if (this instanceof Company) return "COMPANY";
         return "UNKNOWN";
     }
-
-    public void setType(String type) {
-    }
     
 }
