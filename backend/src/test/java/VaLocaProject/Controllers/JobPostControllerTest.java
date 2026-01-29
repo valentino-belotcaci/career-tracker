@@ -94,6 +94,18 @@ public class JobPostControllerTest {
         verify(jobPostService, times(1)).deletePost(postId);
     }
 
+    // Hard to test as for now we return void from the service method deletePost
+    // Same for deleteAllPosts
+    @Test 
+    void testDeleteAllPosts() {
+        ResponseEntity<String> response = jobPostController.deleteAllPosts();
+
+        assertEquals(200, response.getStatusCode().value());
+        assertEquals("All posts have been deleted", response.getBody());
+
+        verify(jobPostService, times(1)).deleteAllPosts();
+    }
+
     @Test
     void testGetPostsByCompanyId() {
         JobPost post1 = new JobPost();
@@ -137,6 +149,5 @@ public class JobPostControllerTest {
 
     }
 
-    
 
 }

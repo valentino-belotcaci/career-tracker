@@ -10,6 +10,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
 
@@ -92,8 +94,6 @@ public class JobPostServiceTest {
 
         assertEquals(2, response.size());
         assertEquals("job 2", response.get(1).getName());
-        
-    
     }
 
     @Test
@@ -110,7 +110,23 @@ public class JobPostServiceTest {
         assertEquals("Lavoro loca", response.getName());
     }
 
+    @Test
+    void testDeletePost() {
+        Long postId = 1L;
 
+        // We don't need to mock return value for deleteById because it returns void
+        jobPostService.deletePost(postId);
+
+        // Verify that the repository's deleteById was called once
+        verify(jobPostRepository, times(1)).deleteById(postId);
+    }
+
+
+    @Test
+    void testDeleteAllPosts() {
+        jobPostService.deleteAllPosts();
+        verify(jobPostRepository, times(1)).deleteAll();
+    }
 
 
 }

@@ -1,8 +1,8 @@
 package VaLocaProject.Services;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -37,28 +37,32 @@ public class JobApplicationService{
         if (jobApplication.getPostId() == null || jobApplication.getUserId() == null) {
             throw new IllegalStateException("JobApplication must have a postId and userId");
         }
+        jobApplication.setCreatedAt(LocalDateTime.now());
+
         return jobApplicationRepository.save(jobApplication);
     }
-
 
     public JobApplication getApplicationById(Long id) {
         String key = "jobApplication:" + id;
 
-        return Optional.ofNullable(redisService.get(key))      // Try cache first
-                .filter(JobApplication.class::isInstance)      // Ensure it's the right type
-                .map(JobApplication.class::cast)
-                .or(() -> jobApplicationRepository.findById(id) // Fallback to DB
-                        .map(jobApplication -> {
-                            try {
-                                redisService.save(key, jobApplication, APPLICATION_CACHE_TTL);
-                            } catch (Exception ignored) {} // Ignore cache failures
-                            return jobApplication;
-                        }))
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "JobApplication not found with id " + id
-                ));
-    }
+        // 1) Try cache
+        Object cached = redisService.get(key);
+        if (cached instanceof JobApplication jobApplication) {
+            return jobApplication;
+        }
 
+        // 2) Fallback to DB
+        JobApplication application = jobApplicationRepository.findById(id)
+                .orElseThrow(() ->
+                        new EntityNotFoundException("JobApplication not found with id " + id));
+
+        // 3) Save to cache
+        try {
+            redisService.save(key, application, APPLICATION_CACHE_TTL);
+        } catch (Exception ignored) {}
+
+        return application;
+    }
 
 
     public void deleteAllApplications(){
@@ -70,28 +74,29 @@ public class JobApplicationService{
     }
 
     public JobApplication getApplicationByIds(Long postId, Long userId) {
-        String key = "jobApplication:postId:" + postId + ":userId:" + userId;
+        String key = "jobApplication:postId:" + postId + "userId:" + userId;
 
-        // 1) Try cache first
-        return Optional.ofNullable(redisService.get(key))
-            .filter(JobApplication.class::isInstance)
-            .map(JobApplication.class::cast)
-            .orElseGet(() -> {
-                // 2) Fallback to DB
-                JobApplication jobApplication = jobApplicationRepository
-                    .findByPostIdAndUserId(postId, userId)
-                        .orElseThrow(() -> new EntityNotFoundException(
-                            "JobApplication not found with postId " + postId + " and userId " + userId
-                        ));
+        // 1) Try cache
+        Object cached = redisService.get(key);
+        if (cached instanceof JobApplication jobApplication) {
+            return jobApplication;
+        }
 
-                // 3) Save to cache (side-effect separated from transformations)
-                try {
-                    redisService.save(key, jobApplication, APPLICATION_CACHE_TTL);
-                } catch (Exception ignored) {}
+        // 2) Fallback to DB
+        JobApplication jobApplication = jobApplicationRepository
+                .findByPostIdAndUserId(postId, userId)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "JobApplication not found with postId " + postId + " and userId " + userId
+                ));
 
-                return jobApplication;
-                });
+        // 3) Save to cache
+        try {
+            redisService.save(key, jobApplication, APPLICATION_CACHE_TTL);
+        } catch (Exception ignored) {}
+
+        return jobApplication;
     }
+
 
 
     public List<JobApplication> getApplicationsByUserId(Long id){

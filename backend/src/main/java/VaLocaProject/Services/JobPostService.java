@@ -67,7 +67,8 @@ public class JobPostService {
         // 3) Save to DB
         JobPost updatedJobPost = jobPostRepository.save(presentJob);
 
-        // 4) Update cache
+        // WE NEED TO CHECK IF THIS MAKES SENSE
+        // 4) Update cache with new data 
         try {
             redisService.save("jobPost:" + id, updatedJobPost, POST_CACHE_TTL);
         } catch (Exception ignored) {}
@@ -84,8 +85,8 @@ public class JobPostService {
 
         // Try cache first 
         Object cached = redisService.get(key);
-        if (cached instanceof JobPost) {
-            return (JobPost) cached;
+        if (cached instanceof JobPost jobPost) {
+            return jobPost;
         }
         
         // Fallback to DB
@@ -97,7 +98,6 @@ public class JobPostService {
             redisService.save(key, post, POST_CACHE_TTL);
         } catch (Exception ignored) {}
     
-
         return post;
     }
 

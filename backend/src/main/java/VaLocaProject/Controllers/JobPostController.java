@@ -50,7 +50,7 @@ public class JobPostController {
     @DeleteMapping("/deleteAllPosts")
     public ResponseEntity<String> deleteAllPosts(){
        jobPostService.deleteAllPosts();
-        return ResponseEntity.ok("All posts deleted");
+        return ResponseEntity.ok("All posts have been deleted");
     }
 
     @GetMapping("/getPostsByCompanyId/{id}")
