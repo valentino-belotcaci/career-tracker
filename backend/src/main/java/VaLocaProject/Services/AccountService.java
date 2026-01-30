@@ -245,10 +245,9 @@ public class AccountService {
             if (update.getStreet() != null) company.setStreet(update.getStreet());
             if (update.getNumber() != null) company.setNumber(update.getNumber());
         }
-        invalidateAccountCache(id, account.getEmail());
+        invalidateAccountCache(id, update.getEmail());
+
         return account;
     }
-
-
 
 }
