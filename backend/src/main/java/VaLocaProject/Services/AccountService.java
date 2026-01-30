@@ -75,25 +75,33 @@ public class AccountService {
     public Account getAccountByEmail(String email) {
         String key = "account:" + email;
 
-        return Optional.ofNullable(redisService.get(key))       // 1) Try cache
-                .filter(Account.class::isInstance)
-                .map(Account.class::cast)
-                .or(() -> userRepository.findByEmail(email)) // 2) Try user
-                        .map(user -> (Account) user)
-                .or(() ->companyRepository.findByEmail(email)) // 3) Try company
-                        .map(company -> (Account) company)
-                .map(account -> { 
-                    // Cache the found account by creating a copy without the password, then return the original
-                    Account accountCache = account;
-                    accountCache.setPassword(""); // Remove password before caching
-                    try {
-                        redisService.save(key, accountCache, ACCOUNT_CACHE_TTL);
-                    } catch (Exception ignored) {}
-                    return account;
-                })
-                .orElseThrow(() -> new RuntimeException(
-                        "Account not found with email: " + email));
-    }
+        // 1) Try cache
+        Object cached = redisService.get(key);
+        if (cached instanceof Account account) {
+            return account;
+        }
+
+        // 2) Try user repository
+        // Use "? extends Account" to accept all subclasses of Account
+        Optional<? extends Account> accountOpt = userRepository.findByEmail(email);
+        if (accountOpt.isEmpty()) {
+            // 3) Try company repository
+            accountOpt = companyRepository.findByEmail(email);
+        }
+        Account account = accountOpt.orElseThrow(() ->
+                new RuntimeException("Account not found with email: " + email)
+        );
+
+        // 4) Cache a SAFE copy (no password)
+        try {
+            Account cacheCopy = account;
+            cacheCopy.setPassword(""); // Remove password before caching
+            redisService.save(key, cacheCopy, ACCOUNT_CACHE_TTL);
+        } catch (Exception ignored) {}
+
+        return account;
+}
+
 
     public Account getAccountById(Long id) {
         String key = "accountId:" + id;
