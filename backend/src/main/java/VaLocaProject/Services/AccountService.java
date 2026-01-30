@@ -53,32 +53,31 @@ public class AccountService {
 
     // Helper method to create a safe copy of Account for caching
     private Account createSafeCacheCopy(Account account) {
-        Account copy;
+        Account safeCopy;
 
-        // 1) Create the correct subtype
+        // Use the cast in the if statement to access specific getters and setters
         if (account instanceof User user) {
             User userCopy = new User(user.getId());
             userCopy.setFirstName(user.getFirstName());
             userCopy.setLastName(user.getLastName());
-            copy = userCopy;
-
+            safeCopy = userCopy;
         } else if (account instanceof Company company) {
             Company companyCopy = new Company(company.getId());
             companyCopy.setCompanyName(company.getCompanyName());
             companyCopy.setCity(company.getCity());
             companyCopy.setStreet(company.getStreet());
             companyCopy.setNumber(company.getNumber());
-            copy = companyCopy;
-
+            safeCopy = companyCopy;
         } else {
-            copy = new Account(account.getId());
+            throw new IllegalArgumentException("Unknown Account subtype: " + account.getClass());
         }
-        // 2) Set common fields 
-        copy.setEmail(account.getEmail());
-        copy.setDescription(account.getDescription());
+
+        // common fields
+        safeCopy.setEmail(account.getEmail());
+        safeCopy.setDescription(account.getDescription());
         // password intentionally NOT copied
 
-        return copy;
+        return safeCopy;
     }
 
     // Helper method that invalidates saved account in cache
@@ -87,8 +86,8 @@ public class AccountService {
         String idKey = "account:" + id;
         String emailKey = "account:" + email;
         try { 
-        redisService.delete(idKey);
-        redisService.delete(emailKey);
+            redisService.delete(idKey);
+            redisService.delete(emailKey);
         } catch (Exception ignored) {}
 
     }
