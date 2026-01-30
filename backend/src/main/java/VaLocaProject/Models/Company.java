@@ -24,7 +24,7 @@ public class Company extends Account {
     private String number;
 
     // No-arg constructor for JPA
-    protected Company() {
+    public Company() {
         super();
     }
 

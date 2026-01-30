@@ -14,7 +14,7 @@
         private String lastName = "";
 
         // Explicit no-args constructor
-        protected User() {
+        public User() {
         }
 
         public User(String email, String password) {
