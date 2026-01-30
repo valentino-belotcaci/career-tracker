@@ -8,9 +8,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import VaLocaProject.Models.JobApplication;
 public interface JobApplicationRepository extends JpaRepository<JobApplication, Long> {
     // Derived query to find all applications for a given post id
-    List<JobApplication> findByPostId(Long postId);
+    List<JobApplication> findApplicationsByPostId(Long postId);
 
     // Use camelCase so Spring Data can derive the query from entity property names
     Optional<JobApplication> findByPostIdAndUserId(Long postId, Long userId);
-    List<JobApplication> findByUserId(Long userId);
+    List<JobApplication> findApplicationsByUserId(Long userId);
 }

@@ -3,15 +3,14 @@ package VaLocaProject.Services;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import VaLocaProject.Models.JobPost;
-import VaLocaProject.Repositories.CompanyRepository;
 import VaLocaProject.Repositories.JobPostRepository;
 import VaLocaProject.Security.RedisService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 
 @Service
 public class JobPostService {
@@ -19,17 +18,13 @@ public class JobPostService {
     
     private final JobPostRepository jobPostRepository;
     
-    private final CompanyRepository companyRepository;
-
     private final RedisService redisService;
 
     public JobPostService(
             JobPostRepository jobPostRepository,
-            CompanyRepository companyRepository,
             RedisService redisService
     ) {
         this.jobPostRepository = jobPostRepository;
-        this.companyRepository = companyRepository;
         this.redisService = redisService;
     }
     
@@ -41,94 +36,70 @@ public class JobPostService {
     }
 
     public JobPost insertPost(JobPost jobPost) {
-        if (jobPost.getCompanyId() == null || jobPost.getPostId() == 0) {
-            throw new IllegalStateException("JobPost must have a companyId and postId");
+        if (jobPost.getCompanyId() == null) {
+            throw new IllegalStateException("JobPost must have a companyId");
         }
+        jobPost.setCreatedAt(LocalDateTime.now());
 
-
-        return jobPostRepository.findById(jobPost.getPostId())
-            .map(existingPost -> {
-                jobPost.setCreatedAt(LocalDateTime.now());
-                return jobPostRepository.save(jobPost);
-            })
-            .orElseThrow(() -> new IllegalStateException(
-                "JobPost already exists with id " + jobPost.getPostId()
-            ));
-    }
-
-
-
-    public void deleteAllPosts(){
-        jobPostRepository.deleteAll();
+        return jobPostRepository.save(jobPost);
     }
 
     public void deletePost(Long id){
         jobPostRepository.deleteById(id);
     }
 
+    public void deleteAllPosts(){
+        jobPostRepository.deleteAll();
+    }
+
+    @Transactional
     public JobPost updatePost(Long id, JobPost jobPost) {
-        String key = "jobPost:" + id;
+        // 1) Fetch from DB (managed entity)
+        JobPost presentJob = jobPostRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("JobPost not found with id " + id));
 
-        JobPost presentJob;
-        
-        // 1) Try cache
-        Object cachedObj = redisService.get(key);
-        if (cachedObj instanceof JobPost cachedJob) {
-            presentJob = cachedJob;
-        } else {
-            // 2) Fetch from DB using Optional internally
-            presentJob = jobPostRepository.findById(id)
-                    .orElseThrow(() ->
-                            new EntityNotFoundException(
-                                    "JobPost not found with id " + id
-                            )
-                    );
-        }
-
-        // 3) Update fields if non-null
+        // 2) Update fields if non-null
         if (jobPost.getCompanyId() != null) presentJob.setCompanyId(jobPost.getCompanyId());
         if (jobPost.getName() != null) presentJob.setName(jobPost.getName());
         if (jobPost.getDescription() != null) presentJob.setDescription(jobPost.getDescription());
         if (jobPost.getDuration() != null) presentJob.setDuration(jobPost.getDuration());
         if (jobPost.getAvailable() != null) presentJob.setAvailable(jobPost.getAvailable());
-        if (jobPost.getSalary() != 0) presentJob.setSalary(jobPost.getSalary());
+        if (jobPost.getSalary() != null) presentJob.setSalary(jobPost.getSalary());
 
-        // 4) Save to DB
-        JobPost updatedJobPost = jobPostRepository.save(presentJob);
-
-        // 5) Update cache
+        // 3) update cache
         try {
-            redisService.save(key, updatedJobPost, POST_CACHE_TTL);
+            redisService.save("jobPost:" + id, presentJob, POST_CACHE_TTL);
         } catch (Exception ignored) {}
 
-        return updatedJobPost;
+        // 4) Return the jpa managed entity (JPA will auto-persist changes)
+        return presentJob;
     }
 
 
-
-    public List<JobPost> getPostsByCompanyId(Long id){
-        // Checks if the company exists
-        return companyRepository.findById(id)
-        .map(company -> {
-            return jobPostRepository.findByCompanyId(company.getId());
-        })
-        .orElseThrow(() -> new EntityNotFoundException("Posts or Company not found"));
+    public List<JobPost> getPostsByCompanyId(Long companyId) {
+        return jobPostRepository.findPostsByCompanyId(companyId);
     }
 
     public JobPost getPostByPostId(Long id) {
         String key = "jobPost:" + id;
 
-        return Optional.ofNullable(redisService.get(key))
-                .filter(JobPost.class::isInstance)
-                .map(JobPost.class::cast)
-                .or(() -> jobPostRepository.findById(id)
-                        .map(post -> {
-                            try {
-                                redisService.save(key, post, POST_CACHE_TTL);
-                            } catch (Exception ignored) {}
-                            return post;
-                        }))
+        // Try cache first 
+        Object cached = redisService.get(key);
+        if (cached instanceof JobPost jobPost) {
+            return jobPost;
+        }
+        
+        // Fallback to DB
+        JobPost post = jobPostRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("JobPost not found with id " + id));
+
+        // Save to cache
+        try {
+            redisService.save(key, post, POST_CACHE_TTL);
+        } catch (Exception ignored) {}
+    
+        return post;
     }
+
 
 }

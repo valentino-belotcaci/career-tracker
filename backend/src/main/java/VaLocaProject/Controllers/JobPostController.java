@@ -50,7 +50,7 @@ public class JobPostController {
     @DeleteMapping("/deleteAllPosts")
     public ResponseEntity<String> deleteAllPosts(){
        jobPostService.deleteAllPosts();
-        return ResponseEntity.ok("All posts deleted");
+        return ResponseEntity.ok("All posts have been deleted");
     }
 
     @GetMapping("/getPostsByCompanyId/{id}")
@@ -63,13 +63,11 @@ public class JobPostController {
         return ResponseEntity.ok(jobPostService.getPostByPostId(id));
 
     }
-    
 
     @PutMapping("/updatePost/{id}")
     public ResponseEntity<JobPost> updatePost(@PathVariable Long id, @RequestBody JobPost jobPost) {
         return ResponseEntity.ok(jobPostService.updatePost(id, jobPost));
 
     }
-    
     
 }
