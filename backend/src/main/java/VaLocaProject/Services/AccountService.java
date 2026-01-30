@@ -81,9 +81,6 @@ public class AccountService {
         return copy;
     }
 
-
-
-    
     public List<Account> getAllAccounts() {
         List<Account> accounts = new ArrayList<>();
         accounts.addAll(userRepository.findAll());
@@ -168,7 +165,20 @@ public class AccountService {
 
         return account;
     }
-   
+
+    // This method gets account by id but doesn't use cache,
+    // needed because in the update method, if the instance 
+    // comes from redis and not JPA, 
+    // the updates don't persist in the DB
+    private Account getAccountByIdFromDb(Long id) {
+        return userRepository.findById(id)
+            .map(user -> (Account) user)
+            .orElseGet(() ->
+                companyRepository.findById(id)
+                .map(company -> (Account) company)
+                .orElseThrow(() -> new RuntimeException("Account not found with id: " + id)));
+    }
+
 
     // Insert a new account
     public Account insertAccount(String email, String password, String type) {
@@ -206,7 +216,7 @@ public class AccountService {
     // and with this it automatically updates it when the function returns
     @Transactional
     public Account updateAccount(Long id, UpdateAccountDTO update) {
-        Account account = getAccountById(id);
+        Account account = getAccountByIdFromDb(id);
 
         // Common fields
         if (update.getEmail() != null) account.setEmail(update.getEmail());
