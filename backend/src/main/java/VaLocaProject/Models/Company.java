@@ -12,7 +12,7 @@ public class Company extends Account {
 
     // Use nullable columns and avoid default empty strings so DB receives NULL when value is not provided
     @Column(name = "company_name", nullable = true)
-    private String CompanyName;
+    private String companyName;
 
     @Column(name = "city", nullable = true)
     private String city;
@@ -35,11 +35,11 @@ public class Company extends Account {
     }
 
     public String getCompanyName() {
-        return CompanyName;
+        return companyName;
     }
 
-    public void setCompanyName(String CompanyName) {
-        this.CompanyName = CompanyName;
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 
     public String getCity(){
