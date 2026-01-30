@@ -135,7 +135,8 @@ public class AccountService {
                     );
         }
 
-        // 4) Cache SAFE copy (never mutate managed entity)
+        // 4) Cache safe copy (needed because otherwise by reducting 
+        // the password in the cache, we also do that in the db)
         try {
             Account cacheCopy = createSafeCacheCopy(account);
             redisService.save(key, cacheCopy, ACCOUNT_CACHE_TTL);
@@ -246,6 +247,5 @@ public class AccountService {
 
         return account;
     }
-
 
 }

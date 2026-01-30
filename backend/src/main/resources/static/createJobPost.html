@@ -107,10 +107,9 @@
       // ===== REQUIRED COMPANY FIELDS =====
       // Map logical required fields to possible keys returned by various backends
       const requiredChecks = [
-        { label: 'Name', keys: ['name'] },
+        { label: 'Name', keys: ['companyName'] },
         { label: 'Email', keys: ['email'] },
         { label: 'Password', keys: ['password'] },
-        // optional fields — keep if your app requires them; otherwise remove from the list
         { label: 'Description', keys: ['description'] },
         { label: 'Street', keys: ['street'] },
         { label: 'City', keys: ['city'] },
