@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import VaLocaProject.Models.JobPost;
@@ -80,25 +81,12 @@ public class JobPostService {
         return jobPostRepository.findPostsByCompanyId(companyId);
     }
 
+    @Cacheable(cacheNames = "jobPosts", key = "'jobpost:' + #id")
     public JobPost getPostByPostId(Long id) {
-        String key = "jobPost:" + id;
-
-        // Try cache first 
-        Object cached = redisService.get(key);
-        if (cached instanceof JobPost jobPost) {
-            return jobPost;
-        }
-        
         // Fallback to DB
-        JobPost post = jobPostRepository.findById(id)
+        return jobPostRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("JobPost not found with id " + id));
 
-        // Save to cache
-        try {
-            redisService.save(key, post, POST_CACHE_TTL);
-        } catch (Exception ignored) {}
-    
-        return post;
     }
 
 
