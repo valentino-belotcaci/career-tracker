@@ -18,10 +18,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import VaLocaProject.DTO.UpdateAccountDTO;
 import VaLocaProject.Models.Account;
@@ -139,6 +135,8 @@ class AccountControllerTest {
         verify(accountService, times(1)).getAccountByEmail(email);
     }
 
+
+
     @Test
     public void testGetAccountById() { 
         //arrange
@@ -152,7 +150,7 @@ class AccountControllerTest {
         ResponseEntity<Account> response = accountController.getAccountById(id);
 
         //assert
-         assertEquals(200, response.getStatusCode().value());
+        assertEquals(200, response.getStatusCode().value());
         assertEquals(u, response.getBody());
         verify(accountService, times(1)).getAccountById(id);
     }
