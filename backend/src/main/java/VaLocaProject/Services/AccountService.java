@@ -81,6 +81,18 @@ public class AccountService {
         return copy;
     }
 
+    // Helper method that invalidates saved account in cache
+    // for both email- and id-based accounts
+    public void invalidateAccountCache(Long id, String email) {
+        String idKey = "account:" + id;
+        String emailKey = "account:" + email;
+        try { 
+        redisService.delete(idKey);
+        redisService.delete(emailKey);
+        } catch (Exception ignored) {}
+
+    }
+
     public List<Account> getAllAccounts() {
         List<Account> accounts = new ArrayList<>();
         accounts.addAll(userRepository.findAll());
@@ -233,6 +245,7 @@ public class AccountService {
             if (update.getStreet() != null) company.setStreet(update.getStreet());
             if (update.getNumber() != null) company.setNumber(update.getNumber());
         }
+        invalidateAccountCache(id, account.getEmail());
         return account;
     }
 
