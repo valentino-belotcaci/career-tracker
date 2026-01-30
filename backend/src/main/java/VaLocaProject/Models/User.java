@@ -14,9 +14,12 @@
         private String lastName = "";
 
         // Explicit no-args constructor
-        public User() {
+        protected User() {
         }
 
+        public User(Long id) {
+            super(id);
+        }
         public User(String email, String password) {
             super(email, password);
         }

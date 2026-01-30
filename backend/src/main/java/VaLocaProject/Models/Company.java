@@ -24,10 +24,11 @@ public class Company extends Account {
     private String number;
 
     // No-arg constructor for JPA
-    public Company() {
-        super();
+    protected Company() {
     }
-
+    public Company(Long id) {
+        super(id);
+    }
     // Constructor that initializes company fields
     public Company(String email, String password) {
         super(email, password);

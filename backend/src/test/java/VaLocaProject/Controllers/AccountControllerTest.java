@@ -1,22 +1,21 @@
 package VaLocaProject.Controllers;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import org.springframework.http.HttpHeaders;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 
 import VaLocaProject.DTO.UpdateAccountDTO;
@@ -41,11 +40,9 @@ class AccountControllerTest {
     @Test
     public void testGetAllAccounts() {
         // Arrange (setup part)
-        User user = new User();
-        user.setId(1L);
+        User user = new User(1L);
 
-        Company company = new Company();
-        company.setId(2L);
+        Company company = new Company(2L);
 
         List<Account> accounts = Arrays.asList(user, company);
 
@@ -121,7 +118,7 @@ class AccountControllerTest {
     public void testGetAccountByEmail() { 
         //arrange
         String email = "vale@email.com";
-        User u = new User();
+        User u = new User(1L);
         u.setEmail(email);
 
         when(accountService.getAccountByEmail(email)).thenReturn(u);
@@ -141,7 +138,7 @@ class AccountControllerTest {
     public void testGetAccountById() { 
         //arrange
         Long id = 1L;
-        User u = new User();
+        User u = new User(id);
         u.setId(id);
 
         when(accountService.getAccountById(id)).thenReturn(u);
@@ -213,7 +210,7 @@ class AccountControllerTest {
         updateDTO.setPassword("updatedPassword");
 
         Long id = 1L;
-        User updatedUser = new User();
+        User updatedUser = new User(id);
         updatedUser.setId(id);
 
 

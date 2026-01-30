@@ -3,7 +3,6 @@ package VaLocaProject.Services;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -51,6 +50,39 @@ public class AccountService {
         this.authManager = authManager;
         this.jwtService = jwtService;
     }
+
+    // Helper method to create a safe copy of Account for caching
+    private Account createSafeCacheCopy(Account account) {
+        Account copy;
+
+        // 1) Create the correct subtype
+        if (account instanceof User user) {
+            User userCopy = new User(user.getId());
+            userCopy.setFirstName(user.getFirstName());
+            userCopy.setLastName(user.getLastName());
+            copy = userCopy;
+
+        } else if (account instanceof Company company) {
+            Company companyCopy = new Company(company.getId());
+            companyCopy.setName(company.getName());
+            companyCopy.setCity(company.getCity());
+            companyCopy.setStreet(company.getStreet());
+            companyCopy.setNumber(company.getNumber());
+            copy = companyCopy;
+
+        } else {
+            copy = new Account(account.getId());
+        }
+        // 2) Set common fields 
+        copy.setEmail(account.getEmail());
+        copy.setDescription(account.getDescription());
+        // password intentionally NOT copied
+
+        return copy;
+    }
+
+
+
     
     public List<Account> getAllAccounts() {
         List<Account> accounts = new ArrayList<>();
@@ -82,47 +114,61 @@ public class AccountService {
         }
 
         // 2) Try user repository
-        // Use "? extends Account" to accept all subclasses of Account
-        Optional<? extends Account> accountOpt = userRepository.findByEmail(email);
-        if (accountOpt.isEmpty()) {
-            // 3) Try company repository
-            accountOpt = companyRepository.findByEmail(email);
-        }
-        Account account = accountOpt.orElseThrow(() ->
-                new RuntimeException("Account not found with email: " + email)
-        );
+        Account account = userRepository.findByEmail(email)
+                .map(user -> (Account) user)
+                .orElse(null);
 
-        // 4) Cache a SAFE copy (no password)
+        // 3) Try company repository
+        if (account == null) {
+            account = companyRepository.findByEmail(email)
+                    .map(company -> (Account) company)
+                    .orElseThrow(() ->
+                            new RuntimeException("Account not found with email: " + email)
+                    );
+        }
+
+        // 4) Cache SAFE copy (never mutate managed entity)
         try {
-            Account cacheCopy = account;
-            cacheCopy.setPassword(""); // Remove password before caching
+            Account cacheCopy = createSafeCacheCopy(account);
             redisService.save(key, cacheCopy, ACCOUNT_CACHE_TTL);
         } catch (Exception ignored) {}
 
         return account;
-}
+    }
 
 
     public Account getAccountById(Long id) {
-        String key = "accountId:" + id;
+        String key = "account:" + id;
 
-        return Optional.ofNullable(redisService.get(key))       // 1) Try cache
-                .filter(Account.class::isInstance)
-                .map(Account.class::cast)
-                .or(() -> userRepository.findById(id) // 2) Try user
-                        .map(user -> (Account) user))
-                .or(() -> companyRepository.findById(id)) // 3) Try company
-                        .map(company -> (Account) company)
-                .map(account -> { // Cache the found account
-                    try {
-                        redisService.save(key, account, ACCOUNT_CACHE_TTL);
-                    } catch (Exception ignored) {}
-                    return account;
-                })
-                .orElseThrow(() -> new RuntimeException(
-                        "Account not found with id: " + id));
+        // 1) Try cache
+        Object cached = redisService.get(key);
+        if (cached instanceof Account account) {
+            return account;
+        }
 
+        // 2) Try user repository
+        Account account = userRepository.findById(id)
+                .map(user -> (Account) user)
+                .orElse(null);
+
+        // 3) Try company repository
+        if (account == null) {
+            account = companyRepository.findById(id)
+                    .map(company -> (Account) company)
+                    .orElseThrow(() ->
+                            new RuntimeException("Account not found with id: " + id)
+                    );
+        }
+
+        // 4) Cache SAFE copy (never mutate managed entity)
+        try {
+            Account cacheCopy = createSafeCacheCopy(account);
+            redisService.save(key, cacheCopy, ACCOUNT_CACHE_TTL);
+        } catch (Exception ignored) {}
+
+        return account;
     }
+   
 
     // Insert a new account
     public Account insertAccount(String email, String password, String type) {
