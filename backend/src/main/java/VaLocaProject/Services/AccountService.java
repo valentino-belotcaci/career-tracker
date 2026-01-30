@@ -64,7 +64,7 @@ public class AccountService {
 
         } else if (account instanceof Company company) {
             Company companyCopy = new Company(company.getId());
-            companyCopy.setName(company.getName());
+            companyCopy.setCompanyName(company.getCompanyName());
             companyCopy.setCity(company.getCity());
             companyCopy.setStreet(company.getStreet());
             companyCopy.setNumber(company.getNumber());
@@ -224,8 +224,6 @@ public class AccountService {
 
 
 
-    // This is needed as JPA still manages the obejct after retrieval 
-    // and with this it automatically updates it when the function returns
     @Transactional
     public Account updateAccount(Long id, UpdateAccountDTO update) {
         Account account = getAccountByIdFromDb(id);
@@ -240,14 +238,15 @@ public class AccountService {
             if (update.getFirstName() != null) user.setFirstName(update.getFirstName());
             if (update.getLastName() != null) user.setLastName(update.getLastName());
         } else if (account instanceof Company company) {
-            if (update.getCompanyName() != null) company.setName(update.getCompanyName());
+            if (update.getCompanyName() != null) company.setCompanyName(update.getCompanyName());
             if (update.getCity() != null) company.setCity(update.getCity());
             if (update.getStreet() != null) company.setStreet(update.getStreet());
             if (update.getNumber() != null) company.setNumber(update.getNumber());
         }
-        invalidateAccountCache(id, update.getEmail());
+        invalidateAccountCache(id, account.getEmail());
 
         return account;
     }
+
 
 }

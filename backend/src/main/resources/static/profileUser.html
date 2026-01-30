@@ -86,10 +86,10 @@
       if (!res.ok) throw new Error(`Failed to load profile (${res.status})`);
       const user = await res.json();
 
-      document.getElementById('userId').value = user.id || user.userId || '';
-      const first = user.firstName || '---';
-      const last = user.lastName || '---';
-      const description = user.description || '---';
+      document.getElementById('userId').value = user.id;
+      const first = user.firstName;
+      const last = user.lastName;
+      const description = user.description;
       document.getElementById('viewFirstName').textContent = first;
       document.getElementById('viewLastName').textContent = last;
       document.getElementById('viewEmail').textContent = user.email;

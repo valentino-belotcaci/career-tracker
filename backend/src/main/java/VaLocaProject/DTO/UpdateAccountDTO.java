@@ -64,8 +64,7 @@ public class UpdateAccountDTO {
     }
 
     public void setCompanyName(String companyName) {
-        this.
-        companyName = companyName;
+        this.companyName = companyName;
     }
 
     public String getCity() {

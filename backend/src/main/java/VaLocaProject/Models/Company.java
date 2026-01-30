@@ -11,8 +11,8 @@ import jakarta.persistence.Table;
 public class Company extends Account {
 
     // Use nullable columns and avoid default empty strings so DB receives NULL when value is not provided
-    @Column(name = "name", nullable = true)
-    private String name;
+    @Column(name = "company_name", nullable = true)
+    private String CompanyName;
 
     @Column(name = "city", nullable = true)
     private String city;
@@ -34,12 +34,12 @@ public class Company extends Account {
         super(email, password);
     }
 
-    public String getName() {
-        return name;
+    public String getCompanyName() {
+        return CompanyName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCompanyName(String CompanyName) {
+        this.CompanyName = CompanyName;
     }
 
     public String getCity(){

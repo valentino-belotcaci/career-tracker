@@ -18,7 +18,7 @@
 
   <!-- ===== VIEW MODE ===== -->
   <div id="viewMode" class="hidden">
-    <p><strong>Name:</strong> <span id="viewName"></span></p>
+    <p><strong>Company Name:</strong> <span id="viewName"></span></p>
     <p><strong>Email:</strong> <span id="viewEmail"></span></p>
     <p><strong>Description:</strong> <span id="viewDescription"></span></p>
     <p><strong>City:</strong> <span id="viewCity"></span></p>
@@ -34,8 +34,8 @@
   <form id="editMode" class="hidden">
     <input type="hidden" id="companyId">
 
-    <label for="name">Company name</label>
-    <input id="name" type="text">
+    <label for="companyName">Company name</label>
+    <input id="companyName" type="text">
 
     <label for="email">Email</label>
     <input id="email" type="email" required>
@@ -113,7 +113,7 @@
       document.getElementById('companyId').value = company.id || company.companyId;
 
       // ===== EDIT MODE =====
-      document.getElementById('name').value = company.name || '';
+      document.getElementById('companyName').value = company.companyName || '';
       document.getElementById('email').value = company.email || '';
       document.getElementById('description').value = company.description || '';
       document.getElementById('city').value = company.city || '';
@@ -121,7 +121,7 @@
       document.getElementById('number').value = company.number || '';
 
       // ===== VIEW MODE =====
-      document.getElementById('viewName').textContent = show(company.name);
+      document.getElementById('viewName').textContent = show(company.companyName);
       document.getElementById('viewEmail').textContent = show(company.email);
       document.getElementById('viewDescription').textContent = show(company.description);
       document.getElementById('viewCity').textContent = show(company.city);
@@ -163,8 +163,8 @@
       const companyId = document.getElementById('companyId').value;
 
       const payload = {
-        name: document.getElementById('name').value.trim(),
-        email: document.getElementById('email').value.trim(), // required
+        companyName: document.getElementById('companyName').value.trim(),
+        email: document.getElementById('email').value.trim(),
         description: document.getElementById('description').value.trim(),
         city: document.getElementById('city').value.trim(),
         street: document.getElementById('street').value.trim(),
@@ -184,7 +184,7 @@
       }
 
       // Update view mode immediately
-      document.getElementById('viewName').textContent = show(payload.name);
+      document.getElementById('viewName').textContent = show(payload.companyName);
       document.getElementById('viewEmail').textContent = show(payload.email);
       document.getElementById('viewDescription').textContent = show(payload.description);
       document.getElementById('viewCity').textContent = show(payload.city);
