@@ -3,6 +3,7 @@ package VaLocaProject.Services;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -39,21 +40,50 @@ class AccountControllerTest {
     }
 
     @Test
-    public void testGetAllAccounts() {
-        // Arrange 
+    void testGetAllAccounts() {
+        // Arrange
         User user = new User(1L);
         Company company = new Company(2L);
-        List<Account> accounts = Arrays.asList(user, company);
 
-        // Mocking the repository methods
-        when(accountService.getAllAccounts()).thenReturn(accounts);
+        when(userRepository.findAll()).thenReturn(List.of(user));
+        when(companyRepository.findAll()).thenReturn(List.of(company));
+
+        // Act
         List<Account> result = accountService.getAllAccounts();
 
         // Assert
         assertNotNull(result);
         assertEquals(2, result.size());
-        verify(accountService, times(1)).getAllAccounts();
-            
+
+        verify(userRepository, times(1)).findAll();
+        verify(companyRepository, times(1)).findAll();
+    }
+
+
+    public void testGetAllUsers() {
+
+        User user = new User(1L);
+
+        when(userRepository.findAll()).thenReturn(List.of(user));
+
+        List<User> result = accountService.getAllUsers(); 
+
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        verify(userRepository, times(1)).findAll();
+    }
+
+    public void testGetAllCompanies() {
+
+        Company company = new Company(1L);
+
+        when(companyRepository.findAll()).thenReturn(List.of(company));
+
+        List<Company> result = accountService.getAllCompanies(); 
+
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        verify(companyRepository, times(1)).findAll();
     }
 
 }
