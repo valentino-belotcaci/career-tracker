@@ -38,5 +38,22 @@ class AccountControllerTest {
         MockitoAnnotations.openMocks(this);
     }
 
+    @Test
+    public void testGetAllAccounts() {
+        // Arrange 
+        User user = new User(1L);
+        Company company = new Company(2L);
+        List<Account> accounts = Arrays.asList(user, company);
+
+        // Mocking the repository methods
+        when(accountService.getAllAccounts()).thenReturn(accounts);
+        List<Account> result = accountService.getAllAccounts();
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        verify(accountService, times(1)).getAllAccounts();
+            
+    }
 
 }
