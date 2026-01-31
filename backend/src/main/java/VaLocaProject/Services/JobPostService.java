@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import VaLocaProject.Models.JobPost;
@@ -80,7 +81,7 @@ public class JobPostService {
         return jobPostRepository.findPostsByCompanyId(companyId);
     }
 
-    //@Cacheable(cacheNames = "jobPosts", key = "'jobpost:' + #id")
+    @Cacheable(key = "'jobpost:' + #id")
     public JobPost getPostByPostId(Long id) {
         // Fallback to DB
         return jobPostRepository.findById(id)
