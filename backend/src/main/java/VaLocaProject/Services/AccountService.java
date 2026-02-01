@@ -1,6 +1,5 @@
 package VaLocaProject.Services;
 
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +16,6 @@ import VaLocaProject.Models.User;
 import VaLocaProject.Repositories.CompanyRepository;
 import VaLocaProject.Repositories.UserRepository;
 import VaLocaProject.Security.JWTService;
-import VaLocaProject.Security.RedisService;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -25,7 +23,6 @@ public class AccountService {
 
     private final CompanyRepository companyRepository;
     private final UserRepository userRepository;
-    private final RedisService redisService;
     private final BCryptPasswordEncoder passwordEncoder;
     private final AuthenticationManager authManager;
     private final JWTService jwtService;
@@ -33,64 +30,21 @@ public class AccountService {
     // FIX : We need to remove the cache operations 
     // from the User- and Company Service and move them 
     // here for avoiding code duplication
-    private static final Duration ACCOUNT_CACHE_TTL = Duration.ofHours(1);
 
     public AccountService(
             CompanyRepository companyRepository,
             UserRepository userRepository,
-            RedisService redisService,
             BCryptPasswordEncoder passwordEncoder,
             AuthenticationManager authManager,
             JWTService jwtService
     ) {
         this.companyRepository = companyRepository;
         this.userRepository = userRepository;
-        this.redisService = redisService;
         this.passwordEncoder = passwordEncoder;
         this.authManager = authManager;
         this.jwtService = jwtService;
     }
 
-    // Helper method to create a safe copy of Account for caching
-    private Account createSafeCacheCopy(Account account) {
-        Account safeCopy;
-
-        // Use the cast in the if statement to access specific getters and setters
-        if (account instanceof User user) {
-            User userCopy = new User(user.getId());
-            userCopy.setFirstName(user.getFirstName());
-            userCopy.setLastName(user.getLastName());
-            safeCopy = userCopy;
-        } else if (account instanceof Company company) {
-            Company companyCopy = new Company(company.getId());
-            companyCopy.setCompanyName(company.getCompanyName());
-            companyCopy.setCity(company.getCity());
-            companyCopy.setStreet(company.getStreet());
-            companyCopy.setNumber(company.getNumber());
-            safeCopy = companyCopy;
-        } else {
-            throw new IllegalArgumentException("Unknown Account subtype: " + account.getClass());
-        }
-
-        // common fields
-        safeCopy.setEmail(account.getEmail());
-        safeCopy.setDescription(account.getDescription());
-        // password intentionally NOT copied
-
-        return safeCopy;
-    }
-
-    // Helper method that invalidates saved account in cache
-    // for both email- and id-based accounts
-    public void invalidateAccountCache(Long id, String email) {
-        String idKey = "account:" + id;
-        String emailKey = "account:" + email;
-        try { 
-            redisService.delete(idKey);
-            redisService.delete(emailKey);
-        } catch (Exception ignored) {}
-
-    }
 
     public List<Account> getAllAccounts() {
         List<Account> accounts = new ArrayList<>();
@@ -113,14 +67,6 @@ public class AccountService {
     }
 
     public Account getAccountByEmail(String email) {
-        String key = "account:" + email;
-
-        // 1) Try cache
-        Object cached = redisService.get(key);
-        if (cached instanceof Account account) {
-            return account;
-        }
-
         // 2) Try user repository
         Account account = userRepository.findByEmail(email)
                 .map(user -> (Account) user)
@@ -135,27 +81,12 @@ public class AccountService {
                     );
         }
 
-        // 4) Cache safe copy (needed because otherwise by reducting 
-        // the password in the cache, we also do that in the db)
-        try {
-            Account cacheCopy = createSafeCacheCopy(account);
-            redisService.save(key, cacheCopy, ACCOUNT_CACHE_TTL);
-        } catch (Exception ignored) {}
-
         return account;
     }
 
 
     public Account getAccountById(Long id) {
-        String key = "account:" + id;
-
-        // 1) Try cache
-        Object cached = redisService.get(key);
-        if (cached instanceof Account account) {
-            return account;
-        }
-
-        // 2) Try user repository
+        // 1) Try user repository
         Account account = userRepository.findById(id)
                 .map(user -> (Account) user)
                 .orElse(null);
@@ -168,12 +99,6 @@ public class AccountService {
                             new RuntimeException("Account not found with id: " + id)
                     );
         }
-
-        // 4) Cache SAFE copy (never mutate managed entity)
-        try {
-            Account cacheCopy = createSafeCacheCopy(account);
-            redisService.save(key, cacheCopy, ACCOUNT_CACHE_TTL);
-        } catch (Exception ignored) {}
 
         return account;
     }
@@ -243,7 +168,6 @@ public class AccountService {
             if (update.getStreet() != null) company.setStreet(update.getStreet());
             if (update.getNumber() != null) company.setNumber(update.getNumber());
         }
-        invalidateAccountCache(id, account.getEmail());
 
         return account;
     }
