@@ -45,6 +45,11 @@ public class JobApplicationController {
         return ResponseEntity.ok("All job applications deleted");
     }
 
+    @DeleteMapping("/deleteApplication/{id}")
+    public ResponseEntity<String> deleteApplication(@PathVariable Long id){
+        jobApplicationService.deleteApplication(id);
+        return ResponseEntity.ok("The job application has been deleted");
+    }
     // For companies
     @GetMapping("/getApplicationsByPostId/{id}")
     public ResponseEntity<List<JobApplication>> getApplicationsByPostId(@PathVariable Long id) {

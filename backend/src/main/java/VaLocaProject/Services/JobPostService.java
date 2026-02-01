@@ -32,6 +32,7 @@ public class JobPostService {
     // Updates the cache for the specific job post, and evicts the company posts list cache 
     put = @CachePut(value = "jobposts", key = "#result.id"),
     evict = @CacheEvict(value = "jobpostsByCompany", key = "#jobPost.companyId"))
+    @Transactional
     public JobPost insertPost(JobPost jobPost) {
         if (jobPost.getCompanyId() == null) {
             throw new IllegalStateException("JobPost must have a companyId");
