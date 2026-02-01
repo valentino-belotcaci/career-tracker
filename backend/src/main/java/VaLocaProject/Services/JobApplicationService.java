@@ -97,6 +97,32 @@ public class JobApplicationService{
 
     @Cacheable("jobApplicationsByUser")
     public List<JobApplication> getApplicationsByUserId(Long id){
+        
         return jobApplicationRepository.findApplicationsByUserId(id);
+    }
+
+
+    @Transactional
+    // Now the updatePost method updates the cache for the specific job post
+    // and invalidates the cache for the list of posts by the company
+    /*@Caching(
+    put = @CachePut(value = "jobApplications", key = "#result.applicationId"),
+    evict = {@CacheEvict(value = "jobApplicationsByUser", key = "#jobApplication.userId"),
+        @CacheEvict(value = "jobApplicationsByPost", key = "#jobApplication.postId")
+    })      */ 
+    public JobApplication updateApplication(Long id, JobApplication jobApplication) {
+        // 1) Fetch from DB (managed entity)
+        JobApplication presentApplication = jobApplicationRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("JobApplication not found with id " + id));
+
+        // 2) Update fields if non-null
+        if (jobApplication.getPostId() != null) presentApplication.setPostId(jobApplication.getPostId());
+        if (jobApplication.getUserId() != null) presentApplication.setUserId(jobApplication.getUserId());
+        if (jobApplication.getStatus() != null) presentApplication.setStatus(jobApplication.getStatus());
+        if (jobApplication.getUserDescription() != null) presentApplication.setUserDescription(jobApplication.getUserDescription());
+
+
+        // Return the jpa managed entity (JPA will auto-persist changes)
+        return presentApplication;
     }
 }

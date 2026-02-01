@@ -84,7 +84,7 @@ public class SecurityConfig {
                 "/JobApplication/getApplicationById/**",
                 "/JobApplication/getApplicationByIds",
                 "/JobApplication/getApplicationsByPostId/**",
-
+                "/JobApplication/updateApplication/**",
                 // Allow clients to create job applications while debugging auth issues
                 "/JobApplication/insertApplication/**"
                 
