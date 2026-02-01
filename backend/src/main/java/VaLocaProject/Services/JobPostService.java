@@ -81,7 +81,7 @@ public class JobPostService {
         return jobPostRepository.findPostsByCompanyId(companyId);
     }
 
-    @Cacheable(value = "jobposts", key = "'jobpost:' + #id")
+    @Cacheable("jobposts")
     public JobPost getPostByPostId(Long id) {
         // Fallback to DB
         return jobPostRepository.findById(id)
