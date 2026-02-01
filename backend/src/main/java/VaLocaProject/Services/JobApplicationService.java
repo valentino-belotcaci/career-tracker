@@ -105,11 +105,11 @@ public class JobApplicationService{
     @Transactional
     // Now the updatePost method updates the cache for the specific job post
     // and invalidates the cache for the list of posts by the company
-    /*@Caching(
+    @Caching(
     put = @CachePut(value = "jobApplications", key = "#result.applicationId"),
     evict = {@CacheEvict(value = "jobApplicationsByUser", key = "#jobApplication.userId"),
         @CacheEvict(value = "jobApplicationsByPost", key = "#jobApplication.postId")
-    })      */ 
+    })      
     public JobApplication updateApplication(Long id, JobApplication jobApplication) {
         // 1) Fetch from DB (managed entity)
         JobApplication presentApplication = jobApplicationRepository.findById(id)
