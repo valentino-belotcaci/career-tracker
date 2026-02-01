@@ -7,7 +7,6 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
-import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.stereotype.Service;
 
 import VaLocaProject.Models.JobPost;
@@ -18,16 +17,10 @@ import jakarta.transaction.Transactional;
 @Service
 public class JobPostService {
 
-    private final RedisCacheManager cacheManager;
-    
-    
     private final JobPostRepository jobPostRepository;
     
-    public JobPostService(
-            JobPostRepository jobPostRepository,
-            RedisCacheManager cacheManager) {
+    public JobPostService(JobPostRepository jobPostRepository) {
         this.jobPostRepository = jobPostRepository;
-        this.cacheManager = cacheManager;
     }
          
     @Cacheable("AllJobPosts")
@@ -101,6 +94,4 @@ public class JobPostService {
         return jobPostRepository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException("JobPost not found with id " + id));
     }
-
-
 }
