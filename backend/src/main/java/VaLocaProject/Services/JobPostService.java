@@ -81,12 +81,11 @@ public class JobPostService {
         return jobPostRepository.findPostsByCompanyId(companyId);
     }
 
-    @Cacheable(key = "'jobpost:' + #id")
+    @Cacheable(value = "jobposts", key = "'jobpost:' + #id")
     public JobPost getPostByPostId(Long id) {
         // Fallback to DB
         return jobPostRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("JobPost not found with id " + id));
-
+            .orElseThrow(() -> new EntityNotFoundException("JobPost not found with id " + id));
     }
 
 
