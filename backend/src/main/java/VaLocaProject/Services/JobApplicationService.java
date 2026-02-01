@@ -24,7 +24,7 @@ public class JobApplicationService{
         this.jobApplicationRepository = jobApplicationRepository;
     }
 
-    @Cacheable("AllJobApplications")
+    //@Cacheable("AllJobApplications")
     public List<JobApplication> getAllApplications(){
         return jobApplicationRepository.findAll();
     }
@@ -61,7 +61,7 @@ public class JobApplicationService{
     
     // Remove cache form list of jobApplications, and for the lists by post and user
     @Caching(evict = {
-        @CacheEvict(value = "jobApplications", key = "#id"),
+        @CacheEvict(value = "jobApplications", allEntries = true),
         @CacheEvict(value = "jobApplicationsByPost", allEntries = true),
         @CacheEvict(value = "jobApplicationsByUser", allEntries = true)
     })
@@ -70,9 +70,9 @@ public class JobApplicationService{
     }
 
     @Caching(evict = {
-        @CacheEvict(value = "jobApplications", key = "#jobApplication.id"),
-        @CacheEvict(value = "jobApplicationsByPost", key = "#jobApplication.postId"),
-        @CacheEvict(value = "jobApplicationsByUser", key = "#jobApplication.userId")
+        @CacheEvict(value = "jobApplications", key = "#id"),
+        @CacheEvict(value = "jobApplicationsByPost", allEntries = true),
+        @CacheEvict(value = "jobApplicationsByUser", allEntries = true)
     })
     public void deleteApplication(Long id){
         jobApplicationRepository.deleteById(id);
@@ -93,7 +93,6 @@ public class JobApplicationService{
 
         return jobApplication;
     }
-
 
     @Cacheable("jobApplicationsByUser")
     public List<JobApplication> getApplicationsByUserId(Long id){

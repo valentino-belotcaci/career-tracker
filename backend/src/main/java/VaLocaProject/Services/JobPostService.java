@@ -23,7 +23,7 @@ public class JobPostService {
         this.jobPostRepository = jobPostRepository;
     }
          
-    @Cacheable("AllJobPosts")
+    //@Cacheable("AllJobPosts")
     public List<JobPost> getAllPosts(){
         return jobPostRepository.findAll();
     }
