@@ -16,7 +16,7 @@ Get-Content .env | ForEach-Object {
     }
 }
 
-
+docker buildx build --platform linux/amd64 -t loca0307/careertracker --push .
 
 ##  Features
 
