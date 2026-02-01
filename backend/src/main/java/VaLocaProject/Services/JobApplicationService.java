@@ -52,8 +52,8 @@ public class JobApplicationService{
     public JobApplication getApplicationById(Long id) {
         // Fallback to DB
         JobApplication application = jobApplicationRepository.findById(id)
-                .orElseThrow(() ->
-                        new EntityNotFoundException("JobApplication not found with id " + id));
+            .orElseThrow(() ->
+                new EntityNotFoundException("JobApplication not found with id " + id));
 
         return application;
     }
@@ -86,10 +86,9 @@ public class JobApplicationService{
     public JobApplication getApplicationByIds(Long postId, Long userId) {
         // Fallback to DB
         JobApplication jobApplication = jobApplicationRepository
-                .findByPostIdAndUserId(postId, userId)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "JobApplication not found with postId " + postId + " and userId " + userId
-                ));
+            .findByPostIdAndUserId(postId, userId)
+            .orElseThrow(() -> new EntityNotFoundException(
+                "JobApplication not found with postId " + postId + " and userId " + userId));
 
         return jobApplication;
     }
