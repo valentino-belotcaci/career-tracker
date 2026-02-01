@@ -64,7 +64,7 @@ public class JobPostService {
     // Now the updatePost method updates the cache for the specific job post
     // and invalidates the cache for the list of posts by the company
     @Caching(
-    put = @CachePut(value = "jobposts", key = "#result.id"),
+    put = @CachePut(value = "jobposts", key = "#result.postId"),
     evict = @CacheEvict(value = "jobpostsByCompany", key = "#jobPost.companyId"))       
     public JobPost updatePost(Long id, JobPost jobPost) {
         // 1) Fetch from DB (managed entity)
