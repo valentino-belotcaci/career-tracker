@@ -32,7 +32,7 @@ public class JobApplicationService{
     // Create cache annotation, update the jobApplication in the cache list 
     // then evict the list of applications for that post and user
     @Caching(
-        put = @CachePut(value = "jobApplications", key = "#result.id"),
+        put = @CachePut(value = "jobApplications", key = "#result.applicationId"),
         evict = {
             @CacheEvict(value = "jobApplicationsByPost", key = "#jobApplication.postId"),
             @CacheEvict(value = "jobApplicationsByUser", key = "#jobApplication.userId")
@@ -43,6 +43,7 @@ public class JobApplicationService{
         if (jobApplication.getPostId() == null || jobApplication.getUserId() == null) {
             throw new IllegalStateException("JobApplication must have a postId and userId");
         }
+        jobApplication.setStatus("SUBMITTED");
         jobApplication.setCreatedAt(LocalDateTime.now());
 
         return jobApplicationRepository.save(jobApplication);

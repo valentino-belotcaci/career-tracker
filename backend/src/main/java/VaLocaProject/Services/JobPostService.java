@@ -30,7 +30,7 @@ public class JobPostService {
 
     @Caching(
     // Updates the cache for the specific job post, and evicts the company posts list cache 
-    put = @CachePut(value = "jobposts", key = "#result.id"),
+    put = @CachePut(value = "jobposts", key = "#result.postId"),
     evict = @CacheEvict(value = "jobpostsByCompany", key = "#jobPost.companyId"))
     @Transactional
     public JobPost insertPost(JobPost jobPost) {
