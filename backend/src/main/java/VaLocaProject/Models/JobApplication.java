@@ -28,10 +28,11 @@ public class JobApplication {
     @Column(name = "user_id")
     private Long userId;
     private String status;
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
     @Column(name = "user_description")
     private String userDescription;
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
 
 
 

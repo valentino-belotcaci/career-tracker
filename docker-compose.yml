@@ -20,6 +20,4 @@ services:
 volumes:
   redis-data:
 
-# We need to implement Networks to add the frontend
-# Also consider volumes (a way to save the data created in the container outside of it)
 

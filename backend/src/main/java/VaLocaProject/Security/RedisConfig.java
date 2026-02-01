@@ -1,37 +1,62 @@
 package VaLocaProject.Security;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import java.time.Duration;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.cache.RedisCacheConfiguration;
+import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.RedisSerializationContext;
+import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
 public class RedisConfig {
 
     @Bean
-    // We define a redis template to use, we are going to store a key of type String for every type object
-    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
+    // Template needed to connect to Redis and perform operations
+    RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
+
         RedisTemplate<String, Object> template = new RedisTemplate<>();
+        // Connect to actual redis server
         template.setConnectionFactory(connectionFactory);
 
-        // Create ObjectMapper with JavaTimeModule
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
+        // Define a redis serializer that uses JSON format to trnasalte redis bytes
+        RedisSerializer<Object> jsonSerializer = RedisSerializer.json();
 
-        // Use GenericJackson2JsonRedisSerializer to serialize java object as jsons
-        GenericJackson2JsonRedisSerializer serializer = new GenericJackson2JsonRedisSerializer(mapper);
-
-        // Set key and value serializers
+        // Set keys and values type for normal and hash operations
         template.setKeySerializer(new StringRedisSerializer());
-        template.setValueSerializer(serializer);
+        template.setValueSerializer(jsonSerializer);
         template.setHashKeySerializer(new StringRedisSerializer());
-        template.setHashValueSerializer(serializer);
+        template.setHashValueSerializer(jsonSerializer);
 
-        template.afterPropertiesSet();
         return template;
+    }
+
+
+    @Bean
+    // Needed to configure spring cache abstraction with redis
+    RedisCacheManager cacheManager(RedisConnectionFactory factory) {
+
+        RedisSerializer<Object> jsonSerializer = RedisSerializer.json();
+
+        // Class used to configure redis cache behavior
+        RedisCacheConfiguration config =
+        // Based on default cache config of spring
+            RedisCacheConfiguration.defaultCacheConfig()
+                .computePrefixWith(name -> name + ":")
+                // Define duration of cache entries
+                .entryTtl(Duration.ofMinutes(30))
+                // Tells redis to use json serializer for values
+                .serializeValuesWith(
+                    RedisSerializationContext.SerializationPair.fromSerializer(jsonSerializer)
+                );
+
+        // Creates the actual cache manager
+        return RedisCacheManager.builder(factory)
+                .cacheDefaults(config)
+                .build();
     }
 }

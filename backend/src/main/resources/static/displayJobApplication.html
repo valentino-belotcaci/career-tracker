@@ -13,6 +13,9 @@
     #appsTable tbody tr:hover {
       background-color: #f0f0f0;
     }
+    .hidden {
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -32,11 +35,10 @@
   <table id="appsTable" class="posts-table hidden">
     <thead>
       <tr>
+        <th>Application ID</th>
         <th>Post ID</th>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Duration</th>
-        <th>Salary</th>
+        <th>User ID</th>
+        <th>User Description</th>
         <th>Status</th>
         <th>Applied At</th>
       </tr>
@@ -122,19 +124,16 @@ async function loadMyApplications() {
     tbody.innerHTML = '';
 
     applications.forEach(app => {
-      const post = app.jobPost || {};
-      const postId = post.id ?? '';
       const appId = app.applicationId ?? app.id;
 
       const tr = document.createElement('tr');
       tr.innerHTML = `
-        <td>${postId}</td>
-        <td>${post.name ?? ''}</td>
-        <td>${post.description ?? ''}</td>
-        <td>${post.duration ?? ''}</td>
-        <td>${post.salary ?? ''}</td>
+        <td>${app.applicationId ?? ''}</td>
+        <td>${app.postId ?? ''}</td>
+        <td>${app.userId ?? ''}</td>
+        <td>${app.userDescription ?? ''}</td>
         <td>${app.status ?? ''}</td>
-        <td>${app.createdAt ?? ''}</td>
+        <td>${app.createdAt ? new Date(app.createdAt).toLocaleString() : ''}</td>
       `;
 
       // Redirect to single application details page

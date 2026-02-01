@@ -63,9 +63,14 @@ public class SecurityConfig {
                 "/Account/getAccountByEmail/**",
                 "/Account/getAllAccounts",
                 "/Account/updateAccount/**",
+
                 "/JobPost/getPostsByCompanyId/**",
                 "/JobPost/getAllPosts",
                 "/JobPost/insertPost/**",
+                "/JobPost/deleteAllPosts",
+                "/JobPost/getPostByPostId/**",
+                "/JobPost/updatePost/**",
+                "/JobPost/deletePost/**",
                 "/JobPost/deleteAllPosts",
 
                 "/Account/getAccountById/**",
@@ -79,7 +84,7 @@ public class SecurityConfig {
                 "/JobApplication/getApplicationById/**",
                 "/JobApplication/getApplicationByIds",
                 "/JobApplication/getApplicationsByPostId/**",
-
+                "/JobApplication/updateApplication/**",
                 // Allow clients to create job applications while debugging auth issues
                 "/JobApplication/insertApplication/**"
                 
@@ -95,12 +100,12 @@ public class SecurityConfig {
             .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
             .anyRequest().authenticated()
             )
+            // To add the JWT filter as first filter, to not even touch the backend without it
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
             // Define the sesionManagemant as STATELESS (STATEFULL as default)
             .sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
-            // To add the JWT filter as first filter, to not even touch the backend without it
             .formLogin(form -> form.disable())
             .logout(logout -> logout.permitAll());
 

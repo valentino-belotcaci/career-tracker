@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import VaLocaProject.Models.JobApplication;
 import VaLocaProject.Services.JobApplicationService;
+
 
 
 
@@ -45,6 +47,11 @@ public class JobApplicationController {
         return ResponseEntity.ok("All job applications deleted");
     }
 
+    @DeleteMapping("/deleteApplication/{id}")
+    public ResponseEntity<String> deleteApplication(@PathVariable Long id){
+        jobApplicationService.deleteApplication(id);
+        return ResponseEntity.ok("The job application has been deleted");
+    }
     // For companies
     @GetMapping("/getApplicationsByPostId/{id}")
     public ResponseEntity<List<JobApplication>> getApplicationsByPostId(@PathVariable Long id) {
@@ -68,5 +75,8 @@ public class JobApplicationController {
         return ResponseEntity.ok(jobApplicationService.getApplicationById(id));
     }
 
-
+    @PutMapping("/updateApplication/{id}")
+    public ResponseEntity<JobApplication> updateApplication(@PathVariable Long id, @RequestBody JobApplication jobApplication) {
+        return ResponseEntity.ok(jobApplicationService.updateApplication(id, jobApplication));
+    }
 }
