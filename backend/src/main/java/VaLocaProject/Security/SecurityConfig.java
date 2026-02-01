@@ -69,6 +69,7 @@ public class SecurityConfig {
                 "/JobPost/insertPost/**",
                 "/JobPost/deleteAllPosts",
                 "/JobPost/getPostByPostId/**",
+                "/JobPost/updatePost/**",
 
                 "/Account/getAccountById/**",
                 "/Account/updateAccount/**",

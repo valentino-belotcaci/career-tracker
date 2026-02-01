@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -54,6 +55,7 @@ public class JobPostService {
     }
 
     @Transactional
+    @CachePut(value = "jobposts", key = "#id")    
     public JobPost updatePost(Long id, JobPost jobPost) {
         // 1) Fetch from DB (managed entity)
         JobPost presentJob = jobPostRepository.findById(id)
@@ -67,16 +69,11 @@ public class JobPostService {
         if (jobPost.getAvailable() != null) presentJob.setAvailable(jobPost.getAvailable());
         if (jobPost.getSalary() != null) presentJob.setSalary(jobPost.getSalary());
 
-        // 3) update cache
-        try {
-            redisService.save("jobPost:" + id, presentJob, POST_CACHE_TTL);
-        } catch (Exception ignored) {}
-
-        // 4) Return the jpa managed entity (JPA will auto-persist changes)
+        // Return the jpa managed entity (JPA will auto-persist changes)
         return presentJob;
     }
 
-
+    @Cacheable("jobpostsByCompany")
     public List<JobPost> getPostsByCompanyId(Long companyId) {
         return jobPostRepository.findPostsByCompanyId(companyId);
     }
