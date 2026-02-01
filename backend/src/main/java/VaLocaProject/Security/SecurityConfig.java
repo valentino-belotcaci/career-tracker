@@ -70,6 +70,8 @@ public class SecurityConfig {
                 "/JobPost/deleteAllPosts",
                 "/JobPost/getPostByPostId/**",
                 "/JobPost/updatePost/**",
+                "/JobPost/deletePost/**",
+                "/JobPost/deleteAllPosts",
 
                 "/Account/getAccountById/**",
                 "/Account/updateAccount/**",
@@ -98,12 +100,12 @@ public class SecurityConfig {
             .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
             .anyRequest().authenticated()
             )
+            // To add the JWT filter as first filter, to not even touch the backend without it
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
             // Define the sesionManagemant as STATELESS (STATEFULL as default)
             .sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
-            // To add the JWT filter as first filter, to not even touch the backend without it
             .formLogin(form -> form.disable())
             .logout(logout -> logout.permitAll());
 
