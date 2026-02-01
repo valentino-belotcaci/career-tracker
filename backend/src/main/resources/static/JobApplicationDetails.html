@@ -13,6 +13,9 @@
     #appsTable tbody tr:hover {
       background-color: #f0f0f0;
     }
+    .hidden {
+      display: none;
+    }
   </style>
 </head>
 
@@ -32,10 +35,7 @@
   <table id="appsTable" class="posts-table hidden">
     <thead>
       <tr>
-        <th>Name</th>
         <th>Description</th>
-        <th>Duration</th>
-        <th>Salary</th>
         <th>Status</th>
         <th>Applied At</th>
       </tr>
@@ -45,13 +45,9 @@
 
   <!-- Single application view -->
   <div id="singleAppDetails" class="hidden">
-    <p><strong>Job Name:</strong> <span id="jobName"></span></p>
-    <p><strong>Description:</strong> <span id="description"></span></p>
-    <p><strong>Duration:</strong> <span id="duration"></span></p>
-    <p><strong>Salary:</strong> <span id="salary"></span></p>
+    <p><strong>Description:</strong> <span id="userDescription"></span></p>
     <p><strong>Status:</strong> <span id="status"></span></p>
     <p><strong>Applied At:</strong> <span id="appliedAt"></span></p>
-    <p><strong>Company:</strong> <span id="companyName"></span></p>
     <button id="backBtn">Back</button>
   </div>
 
@@ -63,7 +59,6 @@
 </footer>
 
 <script>
-/* ===== Home link ===== */
 (function setHomeLink() {
   const type = localStorage.getItem("type");
   const homeLink = document.getElementById("homeLink");
@@ -72,20 +67,16 @@
                  : "/index.html";
 })();
 
-/* ===== Auth fetch helper (cookies) ===== */
 function authFetch(url, opts = {}) {
   opts.credentials = 'include';
   opts.headers = opts.headers || {};
   return fetch(url, opts);
 }
 
-
-/* ===== Helpers ===== */
 function getQueryParam(name) {
   return new URLSearchParams(window.location.search).get(name);
 }
 
-/* ===== Load either all applications or single application ===== */
 async function loadApplications() {
   const applicationId = getQueryParam('applicationId');
   if (applicationId) {
@@ -95,7 +86,6 @@ async function loadApplications() {
   }
 }
 
-/* ===== Load all applications for the logged user ===== */
 async function loadAllApplications() {
   const note = document.getElementById('note');
   const tbody = document.getElementById('appsBody');
@@ -127,34 +117,33 @@ async function loadAllApplications() {
     }
 
     tbody.innerHTML = '';
+
     applications.forEach(app => {
-      const post = app.jobPost || {};
       const appId = app.applicationId ?? app.id;
 
       const tr = document.createElement('tr');
       tr.innerHTML = `
-         <td>${post.name ?? ''}</td>
-         <td>${post.description ?? ''}</td>
-         <td>${post.duration ?? ''}</td>
-         <td>${post.salary ?? ''}</td>
+         <td>${app.userDescription ?? ''}</td>
          <td>${app.status ?? ''}</td>
          <td>${app.createdAt ?? ''}</td>
        `;
+
       tr.addEventListener('click', () => {
         window.location.href = `/JobApplicationDetails.html?applicationId=${encodeURIComponent(appId)}`;
       });
+
       tbody.appendChild(tr);
     });
 
     note.classList.add('hidden');
     table.classList.remove('hidden');
+
   } catch (err) {
     console.error(err);
     note.textContent = 'Error loading applications.';
   }
 }
 
-/* ===== Load a single application ===== */
 async function loadSingleApplication(applicationId) {
   const note = document.getElementById('note');
   const single = document.getElementById('singleAppDetails');
@@ -162,6 +151,7 @@ async function loadSingleApplication(applicationId) {
 
   try {
     const res = await authFetch(`/JobApplication/getApplicationById/${encodeURIComponent(applicationId)}`);
+
     if (res.status === 403) {
       note.textContent = 'Access denied. Please log in.';
       return;
@@ -173,35 +163,29 @@ async function loadSingleApplication(applicationId) {
     if (!res.ok) throw new Error('Failed to load application');
 
     const app = await res.json();
-    const post = app.jobPost || {};
 
-    document.getElementById("jobName").textContent = post.name || '';
-    document.getElementById("description").textContent = post.description || '';
-    document.getElementById("duration").textContent = post.duration || '';
-    document.getElementById("salary").textContent = post.salary || '';
+    document.getElementById("userDescription").textContent = app.userDescription || '';
     document.getElementById("status").textContent = app.status || '';
     document.getElementById("appliedAt").textContent = app.createdAt || '';
-    document.getElementById("companyName").textContent = post.company?.name || '';
 
     table.classList.add('hidden');
     note.classList.add('hidden');
     single.classList.remove('hidden');
+
   } catch (err) {
     console.error(err);
     note.textContent = 'Error loading application details.';
   }
 }
 
-/* ===== Buttons ===== */
 document.getElementById('backBtn').addEventListener('click', () => history.back());
 
-/* ===== Run ===== */
 loadApplications();
 
-// Optional: auto-refresh only when viewing the list
 if (!getQueryParam('applicationId')) {
   setInterval(loadApplications, 5000);
 }
 </script>
 
+</body>
 </html>
