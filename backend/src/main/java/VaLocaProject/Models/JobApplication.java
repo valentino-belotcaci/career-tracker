@@ -1,7 +1,6 @@
 package VaLocaProject.Models;
 
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
@@ -19,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "job_applications") // To define which table it represents
 @NoArgsConstructor
 @AllArgsConstructor // Creates specific constructors for all fields
-public class JobApplication implements Serializable {
+public class JobApplication {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "application_id")

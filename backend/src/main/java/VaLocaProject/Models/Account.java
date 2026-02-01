@@ -1,7 +1,5 @@
 package VaLocaProject.Models;
 
-import java.io.Serializable;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -9,7 +7,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 
 @MappedSuperclass
-public class Account implements Serializable{
+public class Account {
     // id mapping is inherited by subclasses (User, Company) but Account is not an entity/table itself
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
