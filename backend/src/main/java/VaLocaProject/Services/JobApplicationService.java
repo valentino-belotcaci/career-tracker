@@ -63,7 +63,8 @@ public class JobApplicationService{
     @Caching(evict = {
         @CacheEvict(value = "jobApplications", allEntries = true),
         @CacheEvict(value = "jobApplicationsByPost", allEntries = true),
-        @CacheEvict(value = "jobApplicationsByUser", allEntries = true)
+        @CacheEvict(value = "jobApplicationsByUser", allEntries = true),
+        @CacheEvict(value = "jobApplicationsByIds", allEntries = true)
     })
     public void deleteAllApplications(){
         jobApplicationRepository.deleteAll();
