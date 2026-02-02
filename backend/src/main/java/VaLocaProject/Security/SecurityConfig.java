@@ -33,6 +33,9 @@ public class SecurityConfig {
             // Disable csrf token as we are using JWT stateless session managing
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(request -> request 
+            .requestMatchers(
+                "/Account/**"
+            ).hasRole("USER")
             // static pages and public resources - allow the browser to GET the HTML (client will attach JWT for API calls)
             .requestMatchers(
                 "/index.html",                    
@@ -53,45 +56,14 @@ public class SecurityConfig {
                 "/css/**",
                 "/favicon.ico",
                 "/error",
+
                 "/Account/logout",
-
-                "/Account/authenticate",
-                "/Account/insertAccount",
-                "/Account/getAccountByEmail/**",
-                "/Account/getAllAccounts",
-                "/Account/updateAccount/**",
-
-                "/JobPost/getPostsByCompanyId/**",
-                "/JobPost/getAllPosts",
-                "/JobPost/insertPost/**",
-                "/JobPost/deleteAllPosts",
-                "/JobPost/getPostByPostId/**",
-                "/JobPost/updatePost/**",
-                "/JobPost/deletePost/**",
-                "/JobPost/deleteAllPosts",
-
-                "/Account/getAccountById/**",
-                "/Account/updateAccount/**",
-                "/Account/deleteAllAccounts",
-
-                "/JobApplication/getApplicationsByUserId/**",
-                "/JobApplication/getAllApplications",
-                "/JobApplication/deleteAllApplications",
-                // allow the various "get application by id" endpoints used by the details page
-                "/JobApplication/getApplicationById/**",
-                "/JobApplication/getApplicationByIds",
-                "/JobApplication/getApplicationsByPostId/**",
-                "/JobApplication/updateApplication/**",
-                // Allow clients to create job applications while debugging auth issues
-                "/JobApplication/insertApplication/**"
-                
+                "/Account/authenticate"
             ).permitAll()
             
-            // FIX: roles don't actally work now
-            /* .requestMatchers(
-                "/User/**"
-            ).hasRole("USER")
-                */
+           
+
+                
             
             // Allow OPTIONS for CORS preflight
             .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
