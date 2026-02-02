@@ -55,7 +55,6 @@ public class SecurityConfig {
                 "/favicon.ico",
                 "/error",
 
-                "/Account/logout",
                 "/Account/authenticate",
                 "/Account/insertAccount"
             ).permitAll()
