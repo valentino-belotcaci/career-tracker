@@ -56,14 +56,33 @@ public class SecurityConfig {
                 "/error",
 
                 "/Account/logout",
-                "/Account/authenticate"
+                "/Account/authenticate",
+                "/Account/insertAccount"
             ).permitAll()
-            
-           
 
             .requestMatchers(
-                "/Account/**"
+                "/Account/**",
+                "/JobPost/getPostByPostId/**",
+                "/JobApplication/getApplicationById/**"
+            ).hasAnyRole("USER", "COMPANY")
+            
+            .requestMatchers(
+                "/JobPost/insertJobPost",
+                "/JobPost/updateJobPost/**",
+                "/JobPost/deleteJobPost/**",
+                "/JobPost/getPostsByCompanyId",
+                "/JobApplication/getApplicationsByPostId/**"
+            ).hasRole("COMPANY")
+
+            .requestMatchers(
+                "/JobApplication/**",
+                "/JobPost/getAllJobPosts",
+                "/JobApplication/getApplicationsByUserId/**"
             ).hasRole("USER")
+
+
+            
+            
             
             // Allow OPTIONS for CORS preflight
             .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
