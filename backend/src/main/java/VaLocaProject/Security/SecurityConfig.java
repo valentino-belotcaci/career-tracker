@@ -60,7 +60,11 @@ public class SecurityConfig {
             ).permitAll()
 
             .requestMatchers(
-                "/Account/**",
+                "/Account/getAccountById/**",
+                "/Account/getAccountByEmail/**",
+                "/Account/updateAccount/**",
+                "/Account/deleteAccount/**",
+                "/Account/getAllAccounts",
                 "/JobPost/getPostByPostId/**",
                 "/JobApplication/getApplicationById/**"
             ).hasAnyRole("USER", "COMPANY")
