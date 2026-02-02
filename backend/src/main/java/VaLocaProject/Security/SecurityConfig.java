@@ -75,9 +75,11 @@ public class SecurityConfig {
             ).hasRole("COMPANY")
 
             .requestMatchers(
-                "/JobApplication/**",
-                "/JobPost/getAllJobPosts",
-                "/JobApplication/getApplicationsByUserId/**"
+                "/JobApplication/insertJobApplication",
+                "/JobApplication/updateJobApplication/**",
+                "/JobApplication/deleteJobApplication/**",
+                "/JobApplication/getApplicationsByUserId/**",
+                "/JobPost/getAllJobPosts"
             ).hasRole("USER")
 
 
