@@ -13,6 +13,7 @@ import VaLocaProject.Models.Company;
 import VaLocaProject.Models.User;
 import VaLocaProject.Repositories.CompanyRepository;
 import VaLocaProject.Repositories.UserRepository;
+import VaLocaProject.Security.JWTService;
 import VaLocaProject.Security.RedisService;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -23,6 +24,10 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 
 class AccountControllerTest {
@@ -33,8 +38,14 @@ class AccountControllerTest {
     @Mock
     private UserRepository userRepository;
 
-    @Mock 
-    private RedisService redisService;
+    @Mock
+    private BCryptPasswordEncoder passwordEncoder;
+
+    @Mock
+    private AuthenticationManager authManager;
+
+    @Mock
+    private JWTService jwtService;
     
     @InjectMocks
     private AccountService accountService;
@@ -64,7 +75,7 @@ class AccountControllerTest {
         verify(companyRepository, times(1)).findAll();
     }
 
-
+    @Test
     public void testGetAllUsers() {
 
         User user = new User(1L);
@@ -78,6 +89,7 @@ class AccountControllerTest {
         verify(userRepository, times(1)).findAll();
     }
 
+    @Test
     public void testGetAllCompanies() {
 
         Company company = new Company(1L);
@@ -91,6 +103,7 @@ class AccountControllerTest {
         verify(companyRepository, times(1)).findAll();
     }
 
+    @Test
     public void testDeleteAllAccounts(){
         //act
         accountService.deleteAllAccounts();
@@ -100,6 +113,7 @@ class AccountControllerTest {
         verify(companyRepository, times(1)).deleteAll();
     }
 
+    @Test
     public void testGetAccountByEmail(){
         //arrange
 
@@ -109,7 +123,7 @@ class AccountControllerTest {
         Company company = new Company(1L);
         company.setEmail("loca@belo.com");
 
-        when(redisService.get("account:" + email)).thenReturn(null);
+
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
         when(companyRepository.findByEmail(email)).thenReturn(Optional.of(company));
 
@@ -124,12 +138,13 @@ class AccountControllerTest {
         verify(companyRepository, times(0)).findByEmail(email);
     }
 
+    @Test
     public void testGetAccountById(){
         Long id = 1L;
         User user = new User(id);
         Company company = new Company(2L);
 
-        when(redisService.get("account:" + id)).thenReturn(null);
+
         when(userRepository.findById(id)).thenReturn(Optional.of(user));
         when(companyRepository.findById(id)).thenReturn(Optional.of(company));
 
@@ -143,5 +158,75 @@ class AccountControllerTest {
         verify(userRepository, times(1)).findById(id);
         verify(companyRepository, times(0)).findById(id);
     }
+
+    @Test
+    public void testInsertAccount() {
+        // Arrange
+        String email = "vale@tino.com";
+        String password = "1111";
+        String encodedPassword = "encoded123"; // fake encoded password
+        String type = "USER";
+
+        User savedUser = new User(1L); // what the repo should return
+        savedUser.setEmail(email);
+        savedUser.setPassword(encodedPassword);
+
+        // Mock passwordEncoder
+        when(passwordEncoder.encode(password)).thenReturn(encodedPassword);
+
+        // Mock repository save to return the saved user
+        when(userRepository.save(org.mockito.ArgumentMatchers.any(User.class))).thenReturn(savedUser);
+
+        // Act
+        Account result = accountService.insertAccount(email, password, type);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(email, result.getEmail());
+        assertEquals(encodedPassword, result.getPassword());
+        assertEquals("USER", result.getType());
+
+        // Verify repository calls
+        verify(userRepository, times(1)).save(org.mockito.ArgumentMatchers.any(User.class));
+        verify(companyRepository, times(0)).save(org.mockito.ArgumentMatchers.any());
+    }
+
+    @Test
+    public void testAuthenticate() {
+        // Arrange
+        String email = "test@example.com";
+        String password = "password123";
+        String fakeToken = "fake-jwt-token";
+
+        Authentication mockAuth = org.mockito.Mockito.mock(Authentication.class);
+
+        // Mock the AuthenticationManager
+        when(authManager.authenticate(org.mockito.ArgumentMatchers.any(UsernamePasswordAuthenticationToken.class)))
+                .thenReturn(mockAuth);
+
+        // Mock authenticated status
+        when(mockAuth.isAuthenticated()).thenReturn(true);
+
+        // Mock JWTService
+        when(jwtService.generateToken(email)).thenReturn(fakeToken);
+
+        // Act
+        String token = accountService.authenticate(email, password);
+
+        // Assert
+        assertEquals(fakeToken, token);
+
+        // Verify that AuthenticationManager was called with correct credentials
+        verify(authManager, times(1)).authenticate(
+            org.mockito.ArgumentMatchers.argThat(argument ->
+                argument.getName().equals(email) && argument.getCredentials().equals(password)
+            )
+        );
+
+        // Verify JWTService was called
+        verify(jwtService, times(1)).generateToken(email);
+    }
+
+
 
 }
