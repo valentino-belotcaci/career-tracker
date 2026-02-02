@@ -51,12 +51,8 @@ public class JWTFilter extends OncePerRequestFilter {
         chain.doFilter(request, response);
     }
 
-    // Helper to get token from Authorization header OR cookies
+    // Helper to get token from cookies
     private String extractToken(HttpServletRequest request) {
-        String authHeader = request.getHeader("Authorization");
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            return authHeader.substring(7);
-        }
 
         if (request.getCookies() != null) {
             for (Cookie c : request.getCookies()) {
