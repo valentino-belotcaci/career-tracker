@@ -6,12 +6,14 @@ import static org.mockito.Mockito.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import VaLocaProject.Models.Account;
 import VaLocaProject.Models.Company;
 import VaLocaProject.Models.User;
 import VaLocaProject.Repositories.CompanyRepository;
 import VaLocaProject.Repositories.UserRepository;
+import VaLocaProject.Security.RedisService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,6 +33,9 @@ class AccountControllerTest {
     @Mock
     private UserRepository userRepository;
 
+    @Mock 
+    private RedisService redisService;
+    
     @InjectMocks
     private AccountService accountService;
 
@@ -84,6 +89,59 @@ class AccountControllerTest {
         assertNotNull(result);
         assertEquals(1, result.size());
         verify(companyRepository, times(1)).findAll();
+    }
+
+    public void testDeleteAllAccounts(){
+        //act
+        accountService.deleteAllAccounts();
+
+        // Assert
+        verify(userRepository, times(1)).deleteAll();
+        verify(companyRepository, times(1)).deleteAll();
+    }
+
+    public void testGetAccountByEmail(){
+        //arrange
+
+        String email = "vale@tino.com";
+        User user = new User(1L);
+        user.setEmail(email);
+        Company company = new Company(1L);
+        company.setEmail("loca@belo.com");
+
+        when(redisService.get("account:" + email)).thenReturn(null);
+        when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
+        when(companyRepository.findByEmail(email)).thenReturn(Optional.of(company));
+
+
+        //act
+        Account result = accountService.getAccountByEmail(email);
+
+        //assert
+        assertNotNull(result);
+        assertEquals(email, result.getEmail());
+        verify(userRepository, times(1)).findByEmail(email);
+        verify(companyRepository, times(0)).findByEmail(email);
+    }
+
+    public void testGetAccountById(){
+        Long id = 1L;
+        User user = new User(id);
+        Company company = new Company(2L);
+
+        when(redisService.get("account:" + id)).thenReturn(null);
+        when(userRepository.findById(id)).thenReturn(Optional.of(user));
+        when(companyRepository.findById(id)).thenReturn(Optional.of(company));
+
+
+        //act
+        Account result = accountService.getAccountById(id);
+
+        //assert
+        assertNotNull(result);
+        assertEquals(id, result.getId());
+        verify(userRepository, times(1)).findById(id);
+        verify(companyRepository, times(0)).findById(id);
     }
 
 }
