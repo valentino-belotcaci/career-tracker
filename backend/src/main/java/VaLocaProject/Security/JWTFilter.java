@@ -30,7 +30,8 @@ public class JWTFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
-
+                
+                
         String token = extractToken(request);
         if (token != null) {
             // extract username(email in our case) from the token
@@ -56,7 +57,7 @@ public class JWTFilter extends OncePerRequestFilter {
 
         if (request.getCookies() != null) {
             for (Cookie c : request.getCookies()) {
-                if ("jwt".equals(c.getName())) return c.getValue();
+                if ("token".equals(c.getName())) return c.getValue();
             }
         }
         return null;
