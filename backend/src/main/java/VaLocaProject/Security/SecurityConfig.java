@@ -33,9 +33,7 @@ public class SecurityConfig {
             // Disable csrf token as we are using JWT stateless session managing
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(request -> request 
-            .requestMatchers(
-                "/Account/**"
-            ).hasRole("USER")
+
             // static pages and public resources - allow the browser to GET the HTML (client will attach JWT for API calls)
             .requestMatchers(
                 "/index.html",                    
@@ -63,7 +61,9 @@ public class SecurityConfig {
             
            
 
-                
+            .requestMatchers(
+                "/Account/**"
+            ).hasRole("USER")
             
             // Allow OPTIONS for CORS preflight
             .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
