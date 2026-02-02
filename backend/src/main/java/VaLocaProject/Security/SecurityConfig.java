@@ -49,9 +49,6 @@ public class SecurityConfig {
                 "/createJobPost.html",
                 "/JobApplicationDetails.html",
 
-                "/User/**",
-                "/Company/**",
-
                 "/",
                 "/css/**",
                 "/favicon.ico",
