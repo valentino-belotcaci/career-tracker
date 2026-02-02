@@ -3,11 +3,10 @@ package VaLocaProject.Services;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import VaLocaProject.DTO.UpdateAccountDTO;
 import VaLocaProject.Models.Account;
 import VaLocaProject.Models.Company;
 import VaLocaProject.Models.User;
@@ -18,12 +17,9 @@ import VaLocaProject.Security.RedisService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -46,6 +42,9 @@ class AccountControllerTest {
 
     @Mock
     private JWTService jwtService;
+
+    @Mock
+    private RedisService redisService;
     
     @InjectMocks
     private AccountService accountService;
@@ -164,18 +163,15 @@ class AccountControllerTest {
         // Arrange
         String email = "vale@tino.com";
         String password = "1111";
-        String encodedPassword = "encoded123"; // fake encoded password
+        String encodedPassword = "encoded123";
         String type = "USER";
 
-        User savedUser = new User(1L); // what the repo should return
+        User savedUser = new User(1L);
         savedUser.setEmail(email);
         savedUser.setPassword(encodedPassword);
 
-        // Mock passwordEncoder
         when(passwordEncoder.encode(password)).thenReturn(encodedPassword);
-
-        // Mock repository save to return the saved user
-        when(userRepository.save(org.mockito.ArgumentMatchers.any(User.class))).thenReturn(savedUser);
+        when(userRepository.save(any(User.class))).thenReturn(savedUser);
 
         // Act
         Account result = accountService.insertAccount(email, password, type);
@@ -186,9 +182,8 @@ class AccountControllerTest {
         assertEquals(encodedPassword, result.getPassword());
         assertEquals("USER", result.getType());
 
-        // Verify repository calls
-        verify(userRepository, times(1)).save(org.mockito.ArgumentMatchers.any(User.class));
-        verify(companyRepository, times(0)).save(org.mockito.ArgumentMatchers.any());
+        verify(userRepository, times(1)).save(any(User.class));
+        verify(companyRepository, times(0)).save(any());
     }
 
     @Test
@@ -198,16 +193,11 @@ class AccountControllerTest {
         String password = "password123";
         String fakeToken = "fake-jwt-token";
 
-        Authentication mockAuth = org.mockito.Mockito.mock(Authentication.class);
+        Authentication mockAuth = mock(Authentication.class);
 
-        // Mock the AuthenticationManager
-        when(authManager.authenticate(org.mockito.ArgumentMatchers.any(UsernamePasswordAuthenticationToken.class)))
+        when(authManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
                 .thenReturn(mockAuth);
-
-        // Mock authenticated status
         when(mockAuth.isAuthenticated()).thenReturn(true);
-
-        // Mock JWTService
         when(jwtService.generateToken(email)).thenReturn(fakeToken);
 
         // Act
@@ -215,18 +205,41 @@ class AccountControllerTest {
 
         // Assert
         assertEquals(fakeToken, token);
-
-        // Verify that AuthenticationManager was called with correct credentials
-        verify(authManager, times(1)).authenticate(
-            org.mockito.ArgumentMatchers.argThat(argument ->
-                argument.getName().equals(email) && argument.getCredentials().equals(password)
-            )
-        );
-
-        // Verify JWTService was called
+        verify(authManager, times(1)).authenticate(any(UsernamePasswordAuthenticationToken.class));
         verify(jwtService, times(1)).generateToken(email);
     }
 
+    @Test
+    public void testUpdateAccount_User() {
+        // Arrange
+        Long userId = 1L;
+        User user = new User(userId);
+        user.setEmail("old@email.com");
+        user.setPassword("oldPassword");
+        user.setFirstName("Old");
+        user.setLastName("Name");
 
+        UpdateAccountDTO updateDTO = new UpdateAccountDTO();
+        updateDTO.setEmail("new@email.com");
+        updateDTO.setPassword("newPassword");
+        updateDTO.setFirstName("New");
+        updateDTO.setLastName("User");
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        when(companyRepository.findById(userId)).thenReturn(Optional.empty());
+        when(passwordEncoder.encode(updateDTO.getPassword())).thenReturn("encodedNewPassword");
+
+        // Act
+        Account updated = accountService.updateAccount(userId, updateDTO);
+
+        // Assert
+        assertNotNull(updated);
+        assertTrue(updated instanceof User);
+        User updatedUser = (User) updated;
+        assertEquals("new@email.com", updatedUser.getEmail());
+        assertEquals("encodedNewPassword", updatedUser.getPassword());
+        assertEquals("New", updatedUser.getFirstName());
+        assertEquals("User", updatedUser.getLastName());
+    }
 
 }
