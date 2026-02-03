@@ -16,7 +16,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 public class RedisConfig {
 
     @Bean
-    // Template needed to connect to Redis and perform operations
+    // Template needed to connect to Redis and perform operations with redisservice
     RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
 
         RedisTemplate<String, Object> template = new RedisTemplate<>();

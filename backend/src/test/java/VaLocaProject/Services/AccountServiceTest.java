@@ -1,10 +1,28 @@
 package VaLocaProject.Services;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.mockito.ArgumentMatchers.any;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import org.mockito.MockitoAnnotations;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import VaLocaProject.DTO.UpdateAccountDTO;
 import VaLocaProject.Models.Account;
@@ -13,20 +31,9 @@ import VaLocaProject.Models.User;
 import VaLocaProject.Repositories.CompanyRepository;
 import VaLocaProject.Repositories.UserRepository;
 import VaLocaProject.Security.JWTService;
-import VaLocaProject.Security.RedisService;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 
-class AccountControllerTest {
+class AccountServiceTest {
 
     @Mock
     private CompanyRepository companyRepository;
@@ -42,9 +49,12 @@ class AccountControllerTest {
 
     @Mock
     private JWTService jwtService;
-
+    
     @Mock
-    private RedisService redisService;
+    private CacheManager cacheManager;
+    
+    @Mock
+    private Cache cache;
     
     @InjectMocks
     private AccountService accountService;
@@ -52,13 +62,17 @@ class AccountControllerTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        // ensure cache lookups inside AccountService don't NPE in unit tests
+        when(cacheManager.getCache("accounts")).thenReturn(cache);
     }
 
     @Test
     void testGetAllAccounts() {
         // Arrange
-        User user = new User(1L);
-        Company company = new Company(2L);
+        UUID id1 = UUID.fromString("00000000-0000-0000-0000-000000000001");
+        UUID companyId = UUID.fromString("00000000-0000-0000-0000-000000000002");
+        User user = new User(id1);
+        Company company = new Company(companyId);
 
         when(userRepository.findAll()).thenReturn(List.of(user));
         when(companyRepository.findAll()).thenReturn(List.of(company));
@@ -77,7 +91,8 @@ class AccountControllerTest {
     @Test
     public void testGetAllUsers() {
 
-        User user = new User(1L);
+        UUID id1 = UUID.fromString("00000000-0000-0000-0000-000000000001");
+        User user = new User(id1);
 
         when(userRepository.findAll()).thenReturn(List.of(user));
 
@@ -91,7 +106,8 @@ class AccountControllerTest {
     @Test
     public void testGetAllCompanies() {
 
-        Company company = new Company(1L);
+        UUID companyId = UUID.fromString("00000000-0000-0000-0000-000000000001");
+        Company company = new Company(companyId);
 
         when(companyRepository.findAll()).thenReturn(List.of(company));
 
@@ -115,11 +131,11 @@ class AccountControllerTest {
     @Test
     public void testGetAccountByEmail(){
         //arrange
-
+        UUID id1 = UUID.fromString("00000000-0000-0000-0000-000000000001");
         String email = "vale@tino.com";
-        User user = new User(1L);
+        User user = new User(id1);
         user.setEmail(email);
-        Company company = new Company(1L);
+        Company company = new Company(id1);
         company.setEmail("loca@belo.com");
 
 
@@ -139,23 +155,24 @@ class AccountControllerTest {
 
     @Test
     public void testGetAccountById(){
-        Long id = 1L;
-        User user = new User(id);
-        Company company = new Company(2L);
+        UUID id1 = UUID.fromString("00000000-0000-0000-0000-000000000001");
+        UUID companyId = UUID.fromString("00000000-0000-0000-0000-000000000002");
+        User user = new User(id1);
+        Company company = new Company(companyId);
 
 
-        when(userRepository.findById(id)).thenReturn(Optional.of(user));
-        when(companyRepository.findById(id)).thenReturn(Optional.of(company));
+        when(userRepository.findById(id1)).thenReturn(Optional.of(user));
+        when(companyRepository.findById(id1)).thenReturn(Optional.of(company));
 
 
         //act
-        Account result = accountService.getAccountById(id);
+        Account result = accountService.getAccountById(id1);
 
         //assert
         assertNotNull(result);
-        assertEquals(id, result.getId());
-        verify(userRepository, times(1)).findById(id);
-        verify(companyRepository, times(0)).findById(id);
+        assertEquals(id1, result.getId());
+        verify(userRepository, times(1)).findById(id1);
+        verify(companyRepository, times(0)).findById(id1);
     }
 
     @Test
@@ -165,8 +182,9 @@ class AccountControllerTest {
         String password = "1111";
         String encodedPassword = "encoded123";
         String type = "USER";
+        UUID id1 = UUID.fromString("00000000-0000-0000-0000-000000000001");
 
-        User savedUser = new User(1L);
+        User savedUser = new User(id1);
         savedUser.setEmail(email);
         savedUser.setPassword(encodedPassword);
 
@@ -212,7 +230,7 @@ class AccountControllerTest {
     @Test
     public void testUpdateAccount_User() {
         // Arrange
-        Long userId = 1L;
+        UUID userId = UUID.fromString("00000000-0000-0000-0000-000000000001");
         User user = new User(userId);
         user.setEmail("old@email.com");
         user.setPassword("oldPassword");

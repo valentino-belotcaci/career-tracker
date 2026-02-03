@@ -4,6 +4,7 @@ package VaLocaProject.Services;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,17 +18,11 @@ import org.mockito.MockitoAnnotations;
 
 import VaLocaProject.Models.JobPost;
 import VaLocaProject.Repositories.JobPostRepository;
-import VaLocaProject.Security.RedisService;
 
 public class JobPostServiceTest {
 
     @Mock
     private JobPostRepository jobPostRepository;
-
-    @Mock
-    // We need to just mock the redisservice to avoid nullpointer exception 
-    // we DON'T actually use it here
-    private RedisService redisService;
 
     @InjectMocks
     private JobPostService jobPostService;
@@ -39,12 +34,14 @@ public class JobPostServiceTest {
 
     @Test
     void testGetAllPosts() {
+        UUID id1 = UUID.fromString("00000000-0000-0000-0000-000000000001");
+        UUID id2 = UUID.fromString("00000000-0000-0000-0000-000000000002");
         JobPost post1 = new JobPost();
-        post1.setPostId(1L);
+        post1.setPostId(id1);
         post1.setName("Cacca");
 
         JobPost post2 = new JobPost();
-        post2.setPostId(2L);
+        post2.setPostId(id2);
         post2.setName("Pipi");
 
         List<JobPost> jobPosts = Arrays.asList(post1, post2);
@@ -62,9 +59,11 @@ public class JobPostServiceTest {
 
     @Test
     void testInsertPost() {
+        UUID id1 = UUID.fromString("00000000-0000-0000-0000-000000000001");
+        UUID companyId = UUID.fromString("00000000-0000-0000-0000-000000000100");
         JobPost post1 = new JobPost();
-        post1.setPostId(1L);
-        post1.setCompanyId(100L);
+        post1.setPostId(id1);
+        post1.setCompanyId(companyId);
         post1.setName("job 1");
         
 
@@ -73,7 +72,7 @@ public class JobPostServiceTest {
         
         // .longValue() is necessary to compare longs(primitive), 
         // without it it would return a Long(object wrapper)
-        assertEquals(100L, response.getCompanyId().longValue());
+        assertEquals(companyId, response.getCompanyId());
 
         verify(jobPostRepository, times(1)).save(post1);
     }
@@ -81,19 +80,22 @@ public class JobPostServiceTest {
 
     @Test
     void testGetPostsByCompanyId() {
+        UUID id1 = UUID.fromString("00000000-0000-0000-0000-000000000001");
+        UUID id2 = UUID.fromString("00000000-0000-0000-0000-000000000002");
+        UUID companyId = UUID.fromString("00000000-0000-0000-0000-000000000100");
         JobPost post1 = new JobPost();
-        post1.setPostId(1L);
-        post1.setCompanyId(100L);
+        post1.setPostId(id1);
+        post1.setCompanyId(companyId);
 
         JobPost post2 = new JobPost();
-        post2.setPostId(2L);
+        post2.setPostId(id2);
         post2.setName("job 2");
-        post2.setCompanyId(100L);
+        post2.setCompanyId(companyId);
 
-        when(jobPostRepository.findPostsByCompanyId(100L)).thenReturn(Arrays.asList(post1, post2));
+        when(jobPostRepository.findPostsByCompanyId(companyId)).thenReturn(Arrays.asList(post1, post2));
 
         
-        List<JobPost> response = jobPostService.getPostsByCompanyId(100L);
+        List<JobPost> response = jobPostService.getPostsByCompanyId(companyId);
 
         assertEquals(2, response.size());
         assertEquals("job 2", response.get(1).getName());
@@ -101,21 +103,22 @@ public class JobPostServiceTest {
 
     @Test
     void testGetPostByPostId() {
+        UUID id1 = UUID.fromString("00000000-0000-0000-0000-000000000001");
         JobPost post1 = new JobPost();
-        post1.setPostId(1L);
+        post1.setPostId(id1);
         post1.setName("Lavoro loca");
 
 
-        when(jobPostRepository.findById(1L)).thenReturn(Optional.of(post1));
+        when(jobPostRepository.findById(id1)).thenReturn(Optional.of(post1));
 
-        JobPost response = jobPostService.getPostByPostId(1L);
+        JobPost response = jobPostService.getPostByPostId(id1);
 
         assertEquals("Lavoro loca", response.getName());
     }
 
     @Test
     void testDeletePost() {
-        Long postId = 1L;
+        UUID postId = UUID.fromString("00000000-0000-0000-0000-000000000001");
 
         // We don't need to mock return value for deleteById because it returns void
         jobPostService.deletePost(postId);
@@ -133,17 +136,18 @@ public class JobPostServiceTest {
 
     @Test
     void testUpdatePost() {
-        Long postId = 1L;
-
+        UUID postId = UUID.fromString("00000000-0000-0000-0000-000000000001");
+        UUID companyId1 = UUID.fromString("00000000-0000-0000-0000-000000000100");
         // Existing post in DB
         JobPost existingPost = new JobPost();
         existingPost.setPostId(postId);
-        existingPost.setCompanyId(100L);
+        existingPost.setCompanyId(companyId1);
         existingPost.setName("Original Job");
 
+        UUID companyId2 = UUID.fromString("00000000-0000-0000-0000-000000000200");
         // Incoming update
         JobPost update = new JobPost();
-        update.setCompanyId(200L);
+        update.setCompanyId(companyId2);
         update.setName("Updated Job");
 
         // Mock repository
@@ -153,7 +157,7 @@ public class JobPostServiceTest {
         JobPost updatedPost = jobPostService.updatePost(postId, update);
 
         // Assertions
-        assertEquals(200L, updatedPost.getCompanyId());
+        assertEquals(companyId2, updatedPost.getCompanyId());
         assertEquals("Updated Job", updatedPost.getName());
 
         // Verify repository method was called

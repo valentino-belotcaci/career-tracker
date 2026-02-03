@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -40,9 +41,11 @@ class AccountControllerTest {
     @Test
     public void testGetAllAccounts() {
         // Arrange (setup part)
-        User user = new User(1L);
+        UUID id1 = UUID.fromString("00000000-0000-0000-0000-000000000001");
+        UUID id2 = UUID.fromString("00000000-0000-0000-0000-000000000002");
+        User user = new User(id1);
 
-        Company company = new Company(2L);
+        Company company = new Company(id2);
 
         List<Account> accounts = Arrays.asList(user, company);
 
@@ -60,8 +63,8 @@ class AccountControllerTest {
         assertEquals(2, response.getBody().size());
 
         // Verify that the IDs match
-        assertEquals(1L, response.getBody().get(0).getId());
-        assertEquals(2L, response.getBody().get(1).getId());
+        assertEquals(id1, response.getBody().get(0).getId());
+        assertEquals(id2, response.getBody().get(1).getId());
 
         // Verify that the service method was called once
         verify(accountService, times(1)).getAllAccounts();
@@ -117,8 +120,9 @@ class AccountControllerTest {
     @Test
     public void testGetAccountByEmail() { 
         //arrange
+        UUID id1 = UUID.fromString("00000000-0000-0000-0000-000000000001");
         String email = "vale@email.com";
-        User u = new User(1L);
+        User u = new User(id1);
         u.setEmail(email);
 
         when(accountService.getAccountByEmail(email)).thenReturn(u);
@@ -127,8 +131,9 @@ class AccountControllerTest {
         ResponseEntity<Account> response = accountController.getAccountByEmail(email);
 
         //assert
-         assertEquals(200, response.getStatusCode().value());
+        assertEquals(200, response.getStatusCode().value());
         assertEquals(u, response.getBody());
+        assertEquals(id1, response.getBody().getId());
         verify(accountService, times(1)).getAccountByEmail(email);
     }
 
@@ -137,24 +142,25 @@ class AccountControllerTest {
     @Test
     public void testGetAccountById() { 
         //arrange
-        Long id = 1L;
-        User u = new User(id);
-        u.setId(id);
+        UUID id1 = UUID.fromString("00000000-0000-0000-0000-000000000001");
+        User u = new User(id1);
+        u.setId(id1);
 
-        when(accountService.getAccountById(id)).thenReturn(u);
+        when(accountService.getAccountById(id1)).thenReturn(u);
 
         //act
-        ResponseEntity<Account> response = accountController.getAccountById(id);
+        ResponseEntity<Account> response = accountController.getAccountById(id1);
 
         //assert
         assertEquals(200, response.getStatusCode().value());
         assertEquals(u, response.getBody());
-        verify(accountService, times(1)).getAccountById(id);
+        verify(accountService, times(1)).getAccountById(id1);
     }
 
     @Test
     public void testAuthenticateAccount() {
 
+        UUID id1 = UUID.fromString("00000000-0000-0000-0000-000000000001");
         // Arrange
         Map<String, String> body = new HashMap<>();
         body.put("email", "vale@capo.com");
@@ -163,7 +169,7 @@ class AccountControllerTest {
         String fakeToken = "fake-jwt-token-123";
 
         User account = new User(body.get("email"), body.get("password"));
-        account.setId(1L);
+        account.setId(id1);
 
         when(accountService.authenticate(body.get("email"), body.get("password")))
                 .thenReturn(fakeToken);
@@ -179,7 +185,7 @@ class AccountControllerTest {
 
         Map<String, Object> responseBody = (Map<String, Object>) response.getBody();
         assertEquals("USER", responseBody.get("type"));
-        assertEquals(1L, responseBody.get("id"));
+        assertEquals(id1, responseBody.get("id"));
 
         verify(accountService, times(1)).authenticate(body.get("email"), body.get("password"));
         verify(accountService, times(1)).getAccountByEmail(body.get("email"));
@@ -209,18 +215,18 @@ class AccountControllerTest {
         updateDTO.setEmail("updated@email.com");
         updateDTO.setPassword("updatedPassword");
 
-        Long id = 1L;
-        User updatedUser = new User(id);
-        updatedUser.setId(id);
+        UUID id1 = UUID.fromString("00000000-0000-0000-0000-000000000001");
+        User updatedUser = new User(id1);
+        updatedUser.setId(id1);
 
 
-        when(accountService.updateAccount(id, updateDTO)).thenReturn(updatedUser);
+        when(accountService.updateAccount(id1, updateDTO)).thenReturn(updatedUser);
 
         //act
-        ResponseEntity<Account> response = accountController.updateAccount(id, updateDTO);
+        ResponseEntity<Account> response = accountController.updateAccount(id1, updateDTO);
         //assert
         assertEquals(200, response.getStatusCode().value());
         assertEquals(updatedUser, response.getBody());  
-        verify(accountService, times(1)).updateAccount(id, updateDTO);
+        verify(accountService, times(1)).updateAccount(id1, updateDTO);
     }
 }

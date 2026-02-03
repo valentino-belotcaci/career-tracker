@@ -3,6 +3,7 @@ package VaLocaProject.Services;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -17,15 +18,12 @@ import org.mockito.MockitoAnnotations;
 
 import VaLocaProject.Models.JobApplication;
 import VaLocaProject.Repositories.JobApplicationRepository;
-import VaLocaProject.Security.RedisService;
 
 public class JobApplicationServiceTest {
   
     @Mock
     JobApplicationRepository jobApplicationRepository;
 
-    @Mock
-    RedisService redisService;
 
     @InjectMocks
     JobApplicationService jobApplicationService;
@@ -39,10 +37,12 @@ public class JobApplicationServiceTest {
     @Test
     void testGetAllApplications() {
         JobApplication application1 = new JobApplication();
-        application1.setApplicationId(1L);
+        UUID id1 = UUID.fromString("00000000-0000-0000-0000-000000000001");
+        UUID id2 = UUID.fromString("00000000-0000-0000-0000-000000000002");
+        application1.setApplicationId(id1);
 
         JobApplication application2 = new JobApplication();
-        application2.setApplicationId(2L);
+        application2.setApplicationId(id2);
 
         List<JobApplication> mockApplications = Arrays.asList(application1, application2);
 
@@ -51,16 +51,20 @@ public class JobApplicationServiceTest {
         List<JobApplication> response = jobApplicationService.getAllApplications();
 
         assertEquals(2, response.size());
-        assertEquals(1L, response.get(0).getApplicationId());
+        assertEquals(id1, response.get(0).getApplicationId());
         assertSame(application2, response.get(1));
     }
 
     @Test
     void testInsertApplication() {
+        UUID id1 = UUID.fromString("00000000-0000-0000-0000-000000000001");
+        UUID userId = UUID.fromString("00000000-0000-0000-0000-000000000010");
+        UUID postId = UUID.fromString("00000000-0000-0000-0000-000000000100");
+
         JobApplication application1 = new JobApplication();
-        application1.setApplicationId(1L);
-        application1.setUserId(10L);
-        application1.setPostId(20L);
+        application1.setApplicationId(id1);
+        application1.setUserId(userId);
+        application1.setPostId(postId);
         
         when(jobApplicationRepository.save(application1)).thenReturn(application1);
 
@@ -72,19 +76,23 @@ public class JobApplicationServiceTest {
 
     @Test
     void testGetApplicationById() {
-        JobApplication application1 = new JobApplication();
-        application1.setApplicationId(1L);
-        application1.setUserId(10L);
-        application1.setPostId(20L);
-        
-        when(jobApplicationRepository.findById(1L)).thenReturn(Optional.of(application1));
+        UUID id1 = UUID.fromString("00000000-0000-0000-0000-000000000001");
+        UUID userId = UUID.fromString("00000000-0000-0000-0000-000000000010");
+        UUID postId = UUID.fromString("00000000-0000-0000-0000-000000000100");
 
-        JobApplication response = jobApplicationService.getApplicationById(1L);
+        JobApplication application1 = new JobApplication();
+        application1.setApplicationId(id1);
+        application1.setUserId(userId);
+        application1.setPostId(postId);
+        
+        when(jobApplicationRepository.findById(id1)).thenReturn(Optional.of(application1));
+
+        JobApplication response = jobApplicationService.getApplicationById(id1);
 
         assertSame(application1, response);
-        assertEquals(10L, response.getUserId());
-        assertEquals(20L, response.getPostId());
-        verify(jobApplicationRepository, times(1)).findById(1L);
+        assertEquals(userId, response.getUserId());
+        assertEquals(postId, response.getPostId());
+        verify(jobApplicationRepository, times(1)).findById(id1);
     }
 
 
@@ -97,62 +105,72 @@ public class JobApplicationServiceTest {
 
     @Test
     void testGetApplicationsByPostId() { 
+        UUID id1 = UUID.fromString("00000000-0000-0000-0000-000000000001");
+        UUID id2 = UUID.fromString("00000000-0000-0000-0000-000000000002");
+        UUID postId = UUID.fromString("00000000-0000-0000-0000-000000000100");
         JobApplication application1 = new JobApplication();
-        application1.setApplicationId(1L);
-        application1.setPostId(10L);
+        application1.setApplicationId(id1);
+        application1.setPostId(postId);
 
         JobApplication application2 = new JobApplication();
-        application2.setApplicationId(2L);
-        application2.setPostId(10L);
+        application2.setApplicationId(id2);
+        application2.setPostId(postId);
 
         List<JobApplication> mockApplications = Arrays.asList(application1, application2);
 
-        when(jobApplicationRepository.findApplicationsByPostId(10L)).thenReturn(mockApplications);
+        when(jobApplicationRepository.findApplicationsByPostId(postId)).thenReturn(mockApplications);
 
-        List<JobApplication> response = jobApplicationService.getApplicationsByPostId(10L);
+        List<JobApplication> response = jobApplicationService.getApplicationsByPostId(postId);
 
         assertEquals(2, response.size());
-        assertEquals(1L, response.get(0).getApplicationId());
+        assertEquals(id1, response.get(0).getApplicationId());
         assertSame(application2, response.get(1));
         
     }
 
     @Test
     void testGetApplicationByIds() {
-        JobApplication application1 = new JobApplication();
-        application1.setApplicationId(1L);
-        application1.setPostId(10L);
-        application1.setUserId(20L);
+        UUID id1 = UUID.fromString("00000000-0000-0000-0000-000000000001");
+        UUID userId = UUID.fromString("00000000-0000-0000-0000-000000000010");
+        UUID postId = UUID.fromString("00000000-0000-0000-0000-000000000100");
 
-        when(jobApplicationRepository.findByPostIdAndUserId(10L, 20L))
+        JobApplication application1 = new JobApplication();
+        application1.setApplicationId(id1);
+        application1.setPostId(postId);
+        application1.setUserId(userId);
+
+        when(jobApplicationRepository.findByPostIdAndUserId(postId, userId))
         .thenReturn(Optional.of(application1));
 
-        JobApplication response = jobApplicationService.getApplicationByIds(10L, 20L);
+        JobApplication response = jobApplicationService.getApplicationByIds(postId, userId);
 
         assertSame(application1, response);
-        assertEquals(1L, response.getApplicationId());
+        assertEquals(id1, response.getApplicationId());
         verify(jobApplicationRepository, times(1))
-        .findByPostIdAndUserId(10L, 20L);
+        .findByPostIdAndUserId(postId, userId);
 
     }
 
     @Test
     void testGetApplicationsByUserId() { 
+        UUID id1 = UUID.fromString("00000000-0000-0000-0000-000000000001");
+        UUID userId = UUID.fromString("00000000-0000-0000-0000-000000000010");
+
         JobApplication application1 = new JobApplication();
-        application1.setApplicationId(1L);
-        application1.setUserId(20L);    
+        application1.setApplicationId(id1);
+        application1.setUserId(userId);    
 
         JobApplication application2 = new JobApplication();
-        application2.setApplicationId(1L);
-        application2.setUserId(20L);   
+        application2.setApplicationId(id1);
+        application2.setUserId(userId);   
 
         List<JobApplication> mockApplications = Arrays.asList(application1, application2);
 
-        when(jobApplicationService.getApplicationsByUserId(20L)).thenReturn(mockApplications);
+        when(jobApplicationService.getApplicationsByUserId(userId)).thenReturn(mockApplications);
 
-        List<JobApplication> response = jobApplicationService.getApplicationsByUserId(20L);
+        List<JobApplication> response = jobApplicationService.getApplicationsByUserId(userId);
         assertEquals(2, response.size());
-        assertEquals(1L, response.get(0).getApplicationId());
+        assertEquals(id1, response.get(0).getApplicationId());
         assertSame(application2, response.get(1));
     }
 

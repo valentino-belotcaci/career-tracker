@@ -2,6 +2,7 @@ package VaLocaProject.Controllers;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,12 +35,14 @@ public class JobPostControllerTest {
     @Test
     void testGetAllPosts() {
         // Mock data
+        UUID id1 = UUID.fromString("00000000-0000-0000-0000-000000000001");
         JobPost post1 = new JobPost();
-        post1.setPostId(1L);
+        post1.setPostId(id1);
         post1.setName("Software Engineer");
 
+        UUID id2 = UUID.fromString("00000000-0000-0000-0000-000000000002");
         JobPost post2 = new JobPost();
-        post2.setPostId(2L);
+        post2.setPostId(id2);
         post2.setName("Data Scientist");
 
         List<JobPost> mockPosts = Arrays.asList(post1, post2);
@@ -61,8 +64,9 @@ public class JobPostControllerTest {
     @Test
     void testInsertPost() {
 
+        UUID id1 = UUID.fromString("00000000-0000-0000-0000-000000000001");
         JobPost newPost = new JobPost();
-        newPost.setPostId(1L);
+        newPost.setPostId(id1);
         newPost.setName("Backend Developer");
 
         when(jobPostService.insertPost(newPost)).thenReturn(newPost);
@@ -72,6 +76,7 @@ public class JobPostControllerTest {
 
         assertEquals(200, response.getStatusCode().value());
         assertEquals("Backend Developer", response.getBody().getName());
+        assertEquals(id1, response.getBody().getPostId());
 
         // Verify the service method was called once
         // This check should only be done on methods that return void 
@@ -82,7 +87,7 @@ public class JobPostControllerTest {
 
     @Test 
     void testDeletePost() {
-        Long postId = 1L;
+        UUID postId = UUID.fromString("00000000-0000-0000-0000-000000000001");
 
         ResponseEntity<String> response = jobPostController.deletePost(postId);
 
@@ -105,20 +110,23 @@ public class JobPostControllerTest {
 
     @Test
     void testGetPostsByCompanyId() {
-        Long companyId = 100L;
+        UUID companyId = UUID.fromString("00000000-0000-0000-0000-000000000100");
+        UUID postId1 = UUID.fromString("00000000-0000-0000-0000-000000000001");
+        UUID postId2 = UUID.fromString("00000000-0000-0000-0000-000000000002");
+
         JobPost post1 = new JobPost();
-        post1.setPostId(1L);
+        post1.setPostId(postId1);
         post1.setName("CIAOO");
         post1.setCompanyId(companyId);
 
         JobPost post2 = new JobPost();
-        post2.setPostId(2L);
+        post2.setPostId(postId2);
         post2.setCompanyId(companyId);
         post2.setDescription("SPINGEREEE");
 
         List<JobPost> mockPosts = Arrays.asList(post1, post2);
 
-        when(jobPostService.getPostsByCompanyId(100L)).thenReturn(mockPosts);
+        when(jobPostService.getPostsByCompanyId(companyId)).thenReturn(mockPosts);
 
         ResponseEntity<List<JobPost>> response = jobPostController.getPostsByCompanyId(companyId);
 
@@ -126,14 +134,15 @@ public class JobPostControllerTest {
         assertEquals(2, response.getBody().size());
         assertEquals("CIAOO", response.getBody().get(0).getName());
         assertEquals("SPINGEREEE", response.getBody().get(1).getDescription());
+        assertEquals(post2.getPostId(), response.getBody().get(1).getPostId());
         // Here we dont need .longValue() because java is using the Long(object wrapper) for both values
-        assertEquals(100L, response.getBody().get(0).getCompanyId());
+        assertEquals(companyId, response.getBody().get(0).getCompanyId());
     }
 
 
     @Test
     void testGetPostById(){
-        Long postId = 1L;
+        UUID postId = UUID.fromString("00000000-0000-0000-0000-000000000001");
         JobPost post1 = new JobPost();
         post1.setPostId(postId);
         post1.setName("Tester");
@@ -144,13 +153,14 @@ public class JobPostControllerTest {
 
         assertEquals(200, response.getStatusCode().value());
         assertEquals("Tester", response.getBody().getName());
+        assertEquals(postId, response.getBody().getPostId());
     }
 
     @Test
     void testUpdatePost(){
-        Long postId = 1L;
+        UUID postId = UUID.fromString("00000000-0000-0000-0000-000000000001");
         JobPost updatedPost = new JobPost();
-        updatedPost.setPostId(1L);
+        updatedPost.setPostId(postId);
         updatedPost.setName("Updated Tester");  
 
         when(jobPostService.updatePost(postId, updatedPost)).thenReturn(updatedPost);   
@@ -159,6 +169,7 @@ public class JobPostControllerTest {
 
         assertEquals(200, response.getStatusCode().value());
         assertEquals("Updated Tester", response.getBody().getName());
+        assertEquals(postId, response.getBody().getPostId());
 
         verify(jobPostService, times(1)).updatePost(postId, updatedPost);
     }
