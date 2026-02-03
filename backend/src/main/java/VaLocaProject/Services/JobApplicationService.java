@@ -83,7 +83,7 @@ public class JobApplicationService{
         return jobApplicationRepository.findApplicationsByPostId(postId);
     }
 
-    @Cacheable(value = "jobApplicationsByIds", key = "{#postId, #userId}")
+    @Cacheable(value = "jobApplicationsByIds", key = "{#postId, #userId}")    
     public JobApplication getApplicationByIds(UUID postId, UUID userId) {
         // Fallback to DB
         JobApplication jobApplication = jobApplicationRepository
@@ -108,8 +108,7 @@ public class JobApplicationService{
     put = @CachePut(value = "jobApplications", key = "#result.applicationId"),
     evict = {@CacheEvict(value = "jobApplicationsByUser", key = "#jobApplication.userId"),
         @CacheEvict(value = "jobApplicationsByPost", key = "#jobApplication.postId"),
-        @CacheEvict(value = "jobApplicationsByIds", key = "#result.postId + '-' + #result.userId")
-    })      
+        @CacheEvict(value = "jobApplicationsByIds", key = "#result.postId.toString().concat('-').concat(#result.userId.toString())")    })      
     public JobApplication updateApplication(UUID id, JobApplication jobApplication) {
         // 1) Fetch from DB (managed entity)
         JobApplication presentApplication = jobApplicationRepository.findById(id)
