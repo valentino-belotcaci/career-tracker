@@ -31,6 +31,7 @@ import VaLocaProject.Models.User;
 import VaLocaProject.Repositories.CompanyRepository;
 import VaLocaProject.Repositories.UserRepository;
 import VaLocaProject.Security.JWTService;
+import VaLocaProject.Security.RedisService;
 
 
 class AccountServiceTest {
@@ -49,6 +50,9 @@ class AccountServiceTest {
 
     @Mock
     private JWTService jwtService;
+
+    @Mock
+    private RedisService redisService;
     
     @Mock
     private CacheManager cacheManager;
