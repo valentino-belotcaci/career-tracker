@@ -27,9 +27,7 @@ public class AccountService {
     private final AuthenticationManager authManager;
     private final JWTService jwtService;
 
-    // FIX : We need to remove the cache operations 
-    // from the User- and Company Service and move them 
-    // here for avoiding code duplication
+
 
     public AccountService(
             CompanyRepository companyRepository,
@@ -45,7 +43,7 @@ public class AccountService {
         this.jwtService = jwtService;
     }
 
-
+    // @Cacheable("AllAccounts")
     public List<Account> getAllAccounts() {
         List<Account> accounts = new ArrayList<>();
         accounts.addAll(userRepository.findAll());
@@ -53,14 +51,16 @@ public class AccountService {
         return accounts;
     }
 
+    // @Cacheable("AllUsers")
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
-
+    // @Cacheable("AllCompanies")
     public List<Company> getAllCompanies() {
         return companyRepository.findAll();
     }
 
+    //@CacheEvict
     public void deleteAllAccounts() {
         userRepository.deleteAll();
         companyRepository.deleteAll();
@@ -103,18 +103,6 @@ public class AccountService {
         return account;
     }
 
-    // This method gets account by id but doesn't use cache,
-    // needed because in the update method, if the instance 
-    // comes from redis and not JPA, 
-    // the updates don't persist in the DB
-    private Account getAccountByIdFromDb(Long id) {
-        return userRepository.findById(id)
-            .map(user -> (Account) user)
-            .orElseGet(() ->
-                companyRepository.findById(id)
-                .map(company -> (Account) company)
-                .orElseThrow(() -> new RuntimeException("Account not found with id: " + id)));
-    }
 
 
     // Insert a new account
@@ -151,8 +139,10 @@ public class AccountService {
 
     @Transactional
     public Account updateAccount(Long id, UpdateAccountDTO update) {
-        Account account = getAccountByIdFromDb(id);
-
+    Account account = userRepository.findById(id).map(a -> (Account) a)
+            .or(() -> companyRepository.findById(id).map(a -> (Account) a))
+            .orElseThrow(() -> new RuntimeException("Account not found with id: " + id));
+        
         // Common fields
         if (update.getEmail() != null) account.setEmail(update.getEmail());
         if (update.getDescription() != null) account.setDescription(update.getDescription());
