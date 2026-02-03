@@ -71,7 +71,7 @@ public class AccountService {
         companyRepository.deleteAll();
     }
 
-    //@Cacheable(value = "accounts", key = "#email")
+    @Cacheable("accountsByEmail")
     public Account getAccountByEmail(String email) {
         // 2) Try user repository
         Account account = userRepository.findByEmail(email)
@@ -86,11 +86,14 @@ public class AccountService {
                             new RuntimeException("Account not found with email: " + email)
                     );
         }
+
+        // When method is called( so no cache hit), we put also in the id-based cache
+        // As that method is used a lot more
         cacheManager.getCache("accounts").put(account.getId(), account);
         return account;
     }
 
-    @Cacheable(value="accounts", key="#id")
+    @Cacheable("accountsById")
     public Account getAccountById(Long id) {
         // 1) Try user repository
         Account account = userRepository.findById(id)
