@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -65,7 +66,7 @@ public class AccountService {
         return companyRepository.findAll();
     }
 
-    //@CacheEvict
+    @CacheEvict{}
     public void deleteAllAccounts() {
         userRepository.deleteAll();
         companyRepository.deleteAll();
@@ -113,8 +114,9 @@ public class AccountService {
     }
 
 
-
-    // Insert a new account
+    @CachePut{
+        @CachePut(value = "accountsByEmail", key = "#result.email"),
+        @CachePut(value = "accountsById", key = "#result.id")}
     public Account insertAccount(String email, String password, String type) {
         String encoded = passwordEncoder.encode(password);
 
