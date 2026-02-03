@@ -138,26 +138,38 @@ async function configureView(postId) {
   if (type === "USER" && loggedId) {
     applyBtn.classList.remove("hidden");
     try {
+      // Logic check to see if application exists
       const exists = await checkExistingApplication(postId, loggedId);
       if (exists) {
         applyBtn.textContent = "Already applied";
         applyBtn.disabled = true;
       }
     } catch (err) {
-      console.error("Error checking application:", err);
+      console.error("Error checking application status:", err);
     }
   }
 }
 
-/* ================= CHECK IF USER APPLIED ================= */
+/* ================= CHECK IF USER APPLIED (FIXED FOR REDIS) ================= */
 async function checkExistingApplication(postId, userId) {
   try {
-    const res = await authFetch(`/JobApplication/getApplicationByIds?post_id=${postId}&user_id=${userId}`);
-    if (res.status === 200) return true;
-    if (res.status === 404) return false;
+    /** * FIXED: Changed post_id -> postId and user_id -> userId 
+     * to match your Java @RequestParam UUID postId and @RequestParam UUID userId.
+     */
+    const res = await authFetch(`/JobApplication/getApplicationByIds?postId=${postId}&userId=${userId}`);
+    
+    if (res.status === 200) {
+      // 200 means record exists -> cached in Redis
+      return true; 
+    }
+    if (res.status === 404) {
+      // 404 means no application found -> correct state, not cached
+      return false; 
+    }
+    
     throw new Error("Unexpected response: " + res.status);
   } catch (err) {
-    console.error(err);
+    console.error("Failed to fetch application status:", err);
     return false;
   }
 }
@@ -198,13 +210,11 @@ async function loadApplicationsForPost(postId) {
         <td>${a.createdAt || a.created_at}</td>
       `;
 
-      // Clickable: go to JobApplicationDetails
       const appId = a.applicationId || a.id;
       if (appId) {
         tr.addEventListener("click", () => {
           window.location.href = `/JobApplicationDetails.html?applicationId=${encodeURIComponent(appId)}`;
         });
-        tr.style.cursor = 'pointer';
       }
 
       appsBody.appendChild(tr);
