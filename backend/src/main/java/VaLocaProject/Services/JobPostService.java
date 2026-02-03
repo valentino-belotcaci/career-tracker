@@ -1,6 +1,7 @@
 package VaLocaProject.Services;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -47,7 +48,7 @@ public class JobPostService {
     @CacheEvict(value = "jobPosts", key = "#id"),
     @CacheEvict(value = "jobPostsByCompany", allEntries = true)
     })
-    public void deletePost(Long id){
+    public void deletePost(UUID id){
         jobPostRepository.deleteById(id);
     }
 
@@ -64,7 +65,7 @@ public class JobPostService {
     @Caching(
     put = @CachePut(value = "jobPosts", key = "#result.postId"),
     evict = @CacheEvict(value = "jobPostsByCompany", key = "#jobPost.companyId"))       
-    public JobPost updatePost(Long id, JobPost jobPost) {
+    public JobPost updatePost(UUID id, JobPost jobPost) {
         // 1) Fetch from DB (managed entity)
         JobPost presentJob = jobPostRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("JobPost not found with id " + id));
@@ -82,12 +83,12 @@ public class JobPostService {
     }
 
     @Cacheable("jobPostsByCompany")
-    public List<JobPost> getPostsByCompanyId(Long companyId) {
+    public List<JobPost> getPostsByCompanyId(UUID companyId) {
         return jobPostRepository.findPostsByCompanyId(companyId);
     }
 
     @Cacheable("jobPosts")
-    public JobPost getPostByPostId(Long id) {
+    public JobPost getPostByPostId(UUID id) {
         // Fallback to DB
         return jobPostRepository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException("JobPost not found with id " + id));

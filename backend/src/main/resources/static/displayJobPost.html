@@ -101,7 +101,7 @@
           }
 
           // Request posts for this company
-          const companyId = company.id || company.companyId;
+          const companyId = company.id;
           postsRes = await authFetch(`/JobPost/getPostsByCompanyId/${encodeURIComponent(companyId)}`);
         } else {
           // USER: fetch all posts

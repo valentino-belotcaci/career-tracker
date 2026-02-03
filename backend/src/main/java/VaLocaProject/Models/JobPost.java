@@ -1,12 +1,14 @@
 package VaLocaProject.Models;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,34 +21,36 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor // Creates specific constructors for all fields
 public class JobPost {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "post_id")
-    private Long postId;
-
+    private UUID postId;
     @Column(name = "company_id")
-    private Long companyId;
+    private UUID companyId;
     private String name;
     private Integer salary = 0;
     private String description = "";
     private String duration;
     private String available = "YES";
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime createdAt;
     
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
 
-
-    public Long getPostId() {
+    public UUID getPostId() {
         return postId;
     }
 
-    public void setPostId(Long postId) {
+    public void setPostId(UUID postId) {
         this.postId = postId;
     }
 
-    public Long getCompanyId() {
+    public UUID getCompanyId() {
         return companyId;
     }
 
-    public void setCompanyId(Long companyId) {
+    public void setCompanyId(UUID companyId) {
         this.companyId = companyId;
     }
 
@@ -91,10 +95,6 @@ public class JobPost {
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime date) {
-        createdAt = date;
     }
 
 

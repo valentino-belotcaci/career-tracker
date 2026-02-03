@@ -154,8 +154,8 @@
 
     try {
       const payload = {
-        postId: Number(postId),
-        userId: Number(userId),
+        postId: postId,
+        userId: userId,
         userDescription: document.getElementById("userDescription").value,
         status: "SUBMITTED",
         createdAt: new Date().toISOString()

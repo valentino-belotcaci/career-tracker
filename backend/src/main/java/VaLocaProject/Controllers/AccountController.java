@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
@@ -71,7 +72,7 @@ public class AccountController {
     }
 
     @GetMapping("/getAccountById/{id}")
-    public ResponseEntity<Account> getAccountById(@PathVariable Long id) {
+    public ResponseEntity<Account> getAccountById(@PathVariable UUID id) {
         return ResponseEntity.ok(accountService.getAccountById(id));
     }
 
@@ -129,7 +130,7 @@ public class AccountController {
 
 
     @PatchMapping("/updateAccount/{id}")
-    public ResponseEntity<Account> updateAccount(@PathVariable Long id, @RequestBody UpdateAccountDTO update) {
+    public ResponseEntity<Account> updateAccount(@PathVariable UUID id, @RequestBody UpdateAccountDTO update) {
         return ResponseEntity.ok(accountService.updateAccount(id, update));
     }
 

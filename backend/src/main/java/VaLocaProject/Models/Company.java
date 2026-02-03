@@ -1,5 +1,7 @@
 package VaLocaProject.Models;
 
+import java.util.UUID;
+
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -26,7 +28,7 @@ public class Company extends Account {
     // No-arg constructor for JPA
     protected Company() {
     }
-    public Company(Long id) {
+    public Company(UUID id) {
         super(id);
     }
     // Constructor that initializes company fields

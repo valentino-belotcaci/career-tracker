@@ -1,6 +1,7 @@
 package VaLocaProject.Controllers;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -42,7 +43,7 @@ public class JobPostController {
     }
 
     @DeleteMapping("/deletePost/{id}")
-    public ResponseEntity<String> deletePost(@PathVariable Long id){
+    public ResponseEntity<String> deletePost(@PathVariable UUID id){
         jobPostService.deletePost(id);
         return ResponseEntity.ok("The post has been deleted");
     }
@@ -54,18 +55,18 @@ public class JobPostController {
     }
 
     @GetMapping("/getPostsByCompanyId/{id}")
-    public ResponseEntity<List<JobPost>> getPostsByCompanyId(@PathVariable Long id) {
+    public ResponseEntity<List<JobPost>> getPostsByCompanyId(@PathVariable UUID id) {
         return ResponseEntity.ok(jobPostService.getPostsByCompanyId(id)); 
     }
 
     @GetMapping("/getPostByPostId/{id}")
-    public ResponseEntity<JobPost> getPostByPostId(@PathVariable Long id) {
+    public ResponseEntity<JobPost> getPostByPostId(@PathVariable UUID id) {
         return ResponseEntity.ok(jobPostService.getPostByPostId(id));
 
     }
 
     @PutMapping("/updatePost/{id}")
-    public ResponseEntity<JobPost> updatePost(@PathVariable Long id, @RequestBody JobPost jobPost) {
+    public ResponseEntity<JobPost> updatePost(@PathVariable UUID id, @RequestBody JobPost jobPost) {
         return ResponseEntity.ok(jobPostService.updatePost(id, jobPost));
 
     }

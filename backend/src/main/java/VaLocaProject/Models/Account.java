@@ -1,5 +1,7 @@
 package VaLocaProject.Models;
 
+import java.util.UUID;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -10,9 +12,9 @@ import jakarta.persistence.MappedSuperclass;
 public class Account {
     // id mapping is inherited by subclasses (User, Company) but Account is not an entity/table itself
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id") // align JPA mapping with your DB column
-    private Long id;
+    private UUID id;
     @Column(name = "email", nullable = false)
     private String email;
     @Column(name = "password", nullable = false)
@@ -30,16 +32,16 @@ public class Account {
     }
 
     // public constructor for tests
-    public Account(Long id) {
+    public Account(UUID id) {
         this.id = id;
     }
 
 
-    public Long getId(){
+    public UUID getId(){
         return id;
     }
 
-    public void setId(Long id){
+    public void setId(UUID id){
         this.id = id;
     }
 

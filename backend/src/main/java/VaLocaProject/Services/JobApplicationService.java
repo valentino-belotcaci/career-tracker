@@ -1,6 +1,7 @@
 package VaLocaProject.Services;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -48,7 +49,7 @@ public class JobApplicationService{
     }
 
     @Cacheable("jobApplications")
-    public JobApplication getApplicationById(Long id) {
+    public JobApplication getApplicationById(UUID id) {
         // Fallback to DB
         JobApplication application = jobApplicationRepository.findById(id)
             .orElseThrow(() ->
@@ -73,17 +74,17 @@ public class JobApplicationService{
         @CacheEvict(value = "jobApplicationsByPost", allEntries = true),
         @CacheEvict(value = "jobApplicationsByUser", allEntries = true)
     })
-    public void deleteApplication(Long id){
+    public void deleteApplication(UUID id){
         jobApplicationRepository.deleteById(id);
     }
 
     @Cacheable("jobApplicationsByPost")
-    public List<JobApplication> getApplicationsByPostId(Long postId){
+    public List<JobApplication> getApplicationsByPostId(UUID postId){
         return jobApplicationRepository.findApplicationsByPostId(postId);
     }
 
     @Cacheable(value = "jobApplicationsByIds", key = "#postId + '-' + #userId")
-    public JobApplication getApplicationByIds(Long postId, Long userId) {
+    public JobApplication getApplicationByIds(UUID postId, UUID userId) {
         // Fallback to DB
         JobApplication jobApplication = jobApplicationRepository
             .findByPostIdAndUserId(postId, userId)
@@ -94,7 +95,7 @@ public class JobApplicationService{
     }
 
     @Cacheable("jobApplicationsByUser")
-    public List<JobApplication> getApplicationsByUserId(Long id){
+    public List<JobApplication> getApplicationsByUserId(UUID id){
         
         return jobApplicationRepository.findApplicationsByUserId(id);
     }
@@ -108,7 +109,7 @@ public class JobApplicationService{
     evict = {@CacheEvict(value = "jobApplicationsByUser", key = "#jobApplication.userId"),
         @CacheEvict(value = "jobApplicationsByPost", key = "#jobApplication.postId")
     })      
-    public JobApplication updateApplication(Long id, JobApplication jobApplication) {
+    public JobApplication updateApplication(UUID id, JobApplication jobApplication) {
         // 1) Fetch from DB (managed entity)
         JobApplication presentApplication = jobApplicationRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("JobApplication not found with id " + id));

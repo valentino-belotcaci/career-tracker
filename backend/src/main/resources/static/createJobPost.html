@@ -139,14 +139,14 @@
         return;
       }
 
-      companyIdInput.value = Number(companyId);
+      companyIdInput.value = companyId; // Remove Number() wrapper
 
       // ===== Submit handler =====
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
         const payload = {
-          companyId: Number(companyIdInput.value),
+          companyId: companyIdInput.value, // Remove Number() wrapper - UUID is a string
           name: document.getElementById('name').value,
           description: document.getElementById('description').value,
           duration: document.getElementById('duration').value,

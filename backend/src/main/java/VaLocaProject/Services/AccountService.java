@@ -2,6 +2,7 @@ package VaLocaProject.Services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
@@ -99,7 +100,7 @@ public class AccountService {
     }
 
     @Cacheable("accountsById")
-    public Account getAccountById(Long id) {
+    public Account getAccountById(UUID id) {
         // 1) Try user repository
         Account account = userRepository.findById(id)
                 .map(user -> (Account) user)
@@ -156,7 +157,7 @@ public class AccountService {
             @CachePut(value = "accountsByEmail", key = "#result.email"),
             @CachePut(value = "accountsById", key = "#result.id")})
     @Transactional
-    public Account updateAccount(Long id, UpdateAccountDTO update) {
+    public Account updateAccount(UUID id, UpdateAccountDTO update) {
     Account account = userRepository.findById(id).map(a -> (Account) a)
             .or(() -> companyRepository.findById(id).map(a -> (Account) a))
             .orElseThrow(() -> new RuntimeException("Account not found with id: " + id));

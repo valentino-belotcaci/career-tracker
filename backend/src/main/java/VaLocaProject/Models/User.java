@@ -1,5 +1,7 @@
     package VaLocaProject.Models;
 
+    import java.util.UUID;
+    
     import jakarta.persistence.Column;
     import jakarta.persistence.Entity;
     import jakarta.persistence.Table;
@@ -17,7 +19,7 @@
         protected User() {
         }
 
-        public User(Long id) {
+        public User(UUID id) {
             super(id);
         }
         public User(String email, String password) {
