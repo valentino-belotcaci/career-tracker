@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
@@ -67,7 +68,9 @@ public class AccountService {
         return companyRepository.findAll();
     }
 
-    @CacheEvict{}
+    @Caching( evict = {
+        @CacheEvict(value = "accountsByEmail", allEntries = true),
+        @CacheEvict(value = "accountsById", allEntries = true)})
     public void deleteAllAccounts() {
         userRepository.deleteAll();
         companyRepository.deleteAll();
@@ -115,8 +118,9 @@ public class AccountService {
     }
 
 
-    
-    @CachePut(value = "accountsById", key = "#result.id")
+    @Caching( put = {
+        @CachePut(value = "accountsByEmail", key = "#result.email"),
+        @CachePut(value = "accountsById", key = "#result.id")})
     public Account insertAccount(String email, String password, String type) {
         String encoded = passwordEncoder.encode(password);
 
@@ -147,7 +151,10 @@ public class AccountService {
     }
 
 
-
+    @Caching(
+        put = {
+            @CachePut(value = "accountsByEmail", key = "#result.email"),
+            @CachePut(value = "accountsById", key = "#result.id")})
     @Transactional
     public Account updateAccount(Long id, UpdateAccountDTO update) {
     Account account = userRepository.findById(id).map(a -> (Account) a)
