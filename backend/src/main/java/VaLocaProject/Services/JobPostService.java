@@ -30,8 +30,8 @@ public class JobPostService {
 
     @Caching(
     // Updates the cache for the specific job post, and evicts the company posts list cache 
-    put = @CachePut(value = "jobposts", key = "#result.postId"),
-    evict = @CacheEvict(value = "jobpostsByCompany", key = "#jobPost.companyId"))
+    put = @CachePut(value = "jobPosts", key = "#result.postId"),
+    evict = @CacheEvict(value = "jobPostsByCompany", key = "#jobPost.companyId"))
     @Transactional
     public JobPost insertPost(JobPost jobPost) {
         if (jobPost.getCompanyId() == null) {
@@ -46,15 +46,15 @@ public class JobPostService {
     // To delete the single post form caches and form the company list of posts
     // FIX: for now we invalidate all the company posts cache, we could pass the companyId too
     // as a second parameter and clear the cache only for that company
-    @CacheEvict(value = "jobposts", key = "#id"),
-    @CacheEvict(value = "jobpostsByCompany", allEntries = true)
+    @CacheEvict(value = "jobPosts", key = "#id"),
+    @CacheEvict(value = "jobPostsByCompany", allEntries = true)
     })
     public void deletePost(Long id){
         jobPostRepository.deleteById(id);
     }
 
     // Invalidate chaches for all posts and all company posts
-    @CacheEvict(value = {"jobposts", "jobpostsByCompany"}, allEntries = true)
+    @CacheEvict(value = {"jobPosts", "jobPostsByCompany"}, allEntries = true)
     public void deleteAllPosts(){
         jobPostRepository.deleteAll();
     }
@@ -64,8 +64,8 @@ public class JobPostService {
     // Now the updatePost method updates the cache for the specific job post
     // and invalidates the cache for the list of posts by the company
     @Caching(
-    put = @CachePut(value = "jobposts", key = "#result.postId"),
-    evict = @CacheEvict(value = "jobpostsByCompany", key = "#jobPost.companyId"))       
+    put = @CachePut(value = "jobPosts", key = "#result.postId"),
+    evict = @CacheEvict(value = "jobPostsByCompany", key = "#jobPost.companyId"))       
     public JobPost updatePost(Long id, JobPost jobPost) {
         // 1) Fetch from DB (managed entity)
         JobPost presentJob = jobPostRepository.findById(id)
@@ -83,14 +83,13 @@ public class JobPostService {
         return presentJob;
     }
 
-    @Cacheable("jobpostsByCompany")
+    @Cacheable("jobPostsByCompany")
     public List<JobPost> getPostsByCompanyId(Long companyId) {
         return jobPostRepository.findPostsByCompanyId(companyId);
     }
 
-    @Cacheable("jobposts")
+    @Cacheable("jobPosts")
     public JobPost getPostByPostId(Long id) {
-
         // Fallback to DB
         return jobPostRepository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException("JobPost not found with id " + id));
