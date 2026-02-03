@@ -1,6 +1,5 @@
 package VaLocaProject.Services;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.cache.annotation.CacheEvict;
@@ -43,8 +42,7 @@ public class JobApplicationService{
         if (jobApplication.getPostId() == null || jobApplication.getUserId() == null) {
             throw new IllegalStateException("JobApplication must have a postId and userId");
         }
-        jobApplication.setStatus("SUBMITTED");
-        jobApplication.setCreatedAt(LocalDateTime.now());
+
 
         return jobApplicationRepository.save(jobApplication);
     }

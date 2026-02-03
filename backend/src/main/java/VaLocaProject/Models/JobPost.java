@@ -26,11 +26,11 @@ public class JobPost {
     @Column(name = "company_id")
     private Long companyId;
     private String name;
-    private Integer salary;
-    private String description;
+    private Integer salary = 0;
+    private String description = "";
     private String duration;
-    private String available;
-    private LocalDateTime createdAt;
+    private String available = "YES";
+    private LocalDateTime createdAt = LocalDateTime.now();
     
 
 

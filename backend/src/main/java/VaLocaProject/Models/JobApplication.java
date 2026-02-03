@@ -27,11 +27,11 @@ public class JobApplication {
     private Long postId;
     @Column(name = "user_id")
     private Long userId;
-    private String status;
+    private String status = "SUBMITTED";
     @Column(name = "user_description")
-    private String userDescription;
+    private String userDescription = "";
     @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt = LocalDateTime.now();
 
 
 
