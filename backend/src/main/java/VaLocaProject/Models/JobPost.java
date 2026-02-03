@@ -33,6 +33,8 @@ public class JobPost {
     private String available = "YES";
     private LocalDateTime createdAt;
     
+    // Use @PrePersist to set createdAt before saving to DB
+    // using jakarta library, a library used for standard JPA annotation
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
