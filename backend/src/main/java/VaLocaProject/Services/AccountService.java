@@ -3,6 +3,8 @@ package VaLocaProject.Services;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -26,6 +28,7 @@ public class AccountService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final AuthenticationManager authManager;
     private final JWTService jwtService;
+    private final CacheManager cacheManager;
 
 
 
@@ -34,13 +37,15 @@ public class AccountService {
             UserRepository userRepository,
             BCryptPasswordEncoder passwordEncoder,
             AuthenticationManager authManager,
-            JWTService jwtService
+            JWTService jwtService,
+            CacheManager cacheManager
     ) {
         this.companyRepository = companyRepository;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authManager = authManager;
         this.jwtService = jwtService;
+        this.cacheManager = cacheManager;
     }
 
     // @Cacheable("AllAccounts")
@@ -66,6 +71,7 @@ public class AccountService {
         companyRepository.deleteAll();
     }
 
+    //@Cacheable(value = "accounts", key = "#email")
     public Account getAccountByEmail(String email) {
         // 2) Try user repository
         Account account = userRepository.findByEmail(email)
@@ -80,11 +86,11 @@ public class AccountService {
                             new RuntimeException("Account not found with email: " + email)
                     );
         }
-
+        cacheManager.getCache("accounts").put(account.getId(), account);
         return account;
     }
 
-
+    @Cacheable(value="accounts", key="#id")
     public Account getAccountById(Long id) {
         // 1) Try user repository
         Account account = userRepository.findById(id)
