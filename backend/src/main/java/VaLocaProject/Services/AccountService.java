@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -114,9 +115,8 @@ public class AccountService {
     }
 
 
-    @CachePut{
-        @CachePut(value = "accountsByEmail", key = "#result.email"),
-        @CachePut(value = "accountsById", key = "#result.id")}
+    
+    @CachePut(value = "accountsById", key = "#result.id")
     public Account insertAccount(String email, String password, String type) {
         String encoded = passwordEncoder.encode(password);
 
