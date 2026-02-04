@@ -9,7 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 
 @MappedSuperclass
-public class Account {
+public abstract class Account {
     // id mapping is inherited by subclasses (User, Company) but Account is not an entity/table itself
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -71,10 +71,6 @@ public class Account {
     }
 
     // returns "USER" if this instance is a User, "COMPANY" if Company, otherwise "UNKNOWN"
-    public String getType() {
-        if (this instanceof User) return "USER";
-        if (this instanceof Company) return "COMPANY";
-        return "UNKNOWN";
-    }
+    public abstract String getType();
     
 }

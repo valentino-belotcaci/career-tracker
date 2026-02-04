@@ -61,7 +61,6 @@ public class JobApplication {
         this.postId = postId;
     }
 
-
     public UUID getUserId() {
         return userId;
     }

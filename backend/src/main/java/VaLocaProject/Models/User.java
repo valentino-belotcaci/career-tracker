@@ -25,6 +25,10 @@
         public User(String email, String password) {
             super(email, password);
         }
+
+        public String getType() {
+            return "USER";
+        }
     
         public String getFirstName(){
             return firstName;

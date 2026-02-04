@@ -1,12 +1,10 @@
 package VaLocaProject.Security;
 
-import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,9 +23,10 @@ import io.jsonwebtoken.security.Keys;
 public class JWTService {
 
 
-    private String secretKey = "";
+    private String secretKey = "Ym9sZC1hbmQtYnJpdmUta2V5LXdpdGgtZW5vdWdoLWxlbmd0aC1mb3ItMjU2LWJpdHMK";
 
     public JWTService(){
+        /* 
         // Defines the procedures to determine which algorithm use to gen the secret key and encode it 
         try {
             KeyGenerator keyGen = KeyGenerator.getInstance("HmacSHA256");
@@ -36,6 +35,7 @@ public class JWTService {
         } catch (Exception e) {
             // catch
         }
+        */
     }
     
     // Method that acutally generate the JWT token to be sent to the browser after login 
