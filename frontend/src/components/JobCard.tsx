@@ -2,6 +2,7 @@ import type { JobPost } from "../types/JobPost";
 
 interface Props {
   job: JobPost;
+
 };
 
 function JobCard({ job }: Props) {
