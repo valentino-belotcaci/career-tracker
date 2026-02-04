@@ -1,8 +1,11 @@
+type statusTypes = 'SUBMITTED' | 'REJECTED' | 'ACCEPTED' | 'UNDER_REVIEW'
+
+
 export interface JobApplication {
     applicationId: string;
     postId: string;
     userId: string;
-    status: 'SUBMITTED' | 'REJECTED' | 'ACCEPTED' | 'UNDER_REVIEW';
+    status: statusTypes; 
     userDescription: string;
     createdAt: string;
 }
