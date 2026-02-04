@@ -37,6 +37,11 @@ export const logout = async () : (Promise<Map<string, string>>)=> {
   return response.data;
 }
 
+export const authenticate = async (body: Map<string, string>) : (Promise<Map<string, string>>) => {
+  const response = await client.post<Map<string, string>>(`/Account/authenticate`, body);
+  return response.data;
+}
+
 export const updateAccount = async (id: string, body: UpdateAccountDTO) : (Promise<Account>) => {
   const response = await client.put<Account>(`/Account/updateAccount/${id}`, body);
   return response.data;

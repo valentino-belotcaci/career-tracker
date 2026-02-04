@@ -59,9 +59,9 @@ public class JobPostController {
         return ResponseEntity.ok(jobPostService.getPostsByCompanyId(id)); 
     }
 
-    @GetMapping("/getPostByPostId/{id}")
-    public ResponseEntity<JobPost> getPostByPostId(@PathVariable UUID id) {
-        return ResponseEntity.ok(jobPostService.getPostByPostId(id));
+    @GetMapping("/getPostById/{id}")
+    public ResponseEntity<JobPost> getPostById(@PathVariable UUID id) {
+        return ResponseEntity.ok(jobPostService.getPostById(id));
 
     }
 

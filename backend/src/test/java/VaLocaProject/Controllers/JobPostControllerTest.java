@@ -147,9 +147,9 @@ public class JobPostControllerTest {
         post1.setPostId(postId);
         post1.setName("Tester");
 
-        when(jobPostService.getPostByPostId(postId)).thenReturn(post1);
+        when(jobPostService.getPostById(postId)).thenReturn(post1);
 
-        ResponseEntity<JobPost> response = jobPostController.getPostByPostId(postId);
+        ResponseEntity<JobPost> response = jobPostController.getPostById(postId);
 
         assertEquals(200, response.getStatusCode().value());
         assertEquals("Tester", response.getBody().getName());

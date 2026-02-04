@@ -88,7 +88,7 @@ public class JobPostService {
     }
 
     @Cacheable("jobPosts")
-    public JobPost getPostByPostId(UUID id) {
+    public JobPost getPostById(UUID id) {
         // Fallback to DB
         return jobPostRepository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException("JobPost not found with id " + id));

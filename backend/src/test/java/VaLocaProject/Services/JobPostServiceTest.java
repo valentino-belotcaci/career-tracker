@@ -102,7 +102,7 @@ public class JobPostServiceTest {
     }
 
     @Test
-    void testGetPostByPostId() {
+    void testGetPostById() {
         UUID id1 = UUID.fromString("00000000-0000-0000-0000-000000000001");
         JobPost post1 = new JobPost();
         post1.setPostId(id1);
@@ -111,7 +111,7 @@ public class JobPostServiceTest {
 
         when(jobPostRepository.findById(id1)).thenReturn(Optional.of(post1));
 
-        JobPost response = jobPostService.getPostByPostId(id1);
+        JobPost response = jobPostService.getPostById(id1);
 
         assertEquals("Lavoro loca", response.getName());
     }

@@ -65,7 +65,7 @@ public class SecurityConfig {
                 "/Account/updateAccount/**",
                 "/Account/deleteAccount/**",
                 "/Account/getAllAccounts",
-                "/JobPost/getPostByPostId/**",
+                "/JobPost/getPostById/**",
                 "/JobApplication/getApplicationById/**"
             ).hasAnyRole("USER", "COMPANY")
             
