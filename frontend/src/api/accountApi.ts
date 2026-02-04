@@ -3,7 +3,6 @@ import { type Account } from "../types/Account";
 import { type UpdateAccountDTO } from '../types/updateAccountDTO';
 
 
-
 export const getAllAccounts = async () : (Promise<Account[]>) => {
   const response = await client.get<Account[]>('/Account/getAllAccounts');
   return response.data;

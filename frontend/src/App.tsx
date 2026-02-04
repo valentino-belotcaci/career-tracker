@@ -1,6 +1,6 @@
 import { jobPosts } from "./data/jobPosts";
 import JobList from "./components/JobList";
-import Account from "./components/AccountComponent";
+import Account from "./components/Authentication";
 
 function App() {
   return (
