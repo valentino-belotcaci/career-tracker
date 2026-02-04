@@ -1,17 +1,21 @@
-// The base fields common to everyone
+// The base account fields
 export interface Account {
-  id: number;
-  email: string;
-
+    id: number;
+    email: string;
+    password: string;
+    description: string;
 }
 
-// User-specific fields
+// User fields
 export interface User extends Account {
   firstName: string;
   lastName: string;
 }
 
-// Company-specific fields
+// Company fields
 export interface Company extends Account {
     companyName: string;
+    city: string;
+    street: string;
+    number: string;
 }
