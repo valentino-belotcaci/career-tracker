@@ -100,7 +100,7 @@ public class AccountController {
                 .secure(true)
                 .path("/")
                 .maxAge(Duration.ofMinutes(15))
-                .sameSite("Strict")
+                .sameSite("Lax")
                 .build();
 
         // Return JSON body with concrete type and id
@@ -120,7 +120,7 @@ public class AccountController {
                 .secure(true)   // keep consistent with authenticate cookie settings
                 .path("/")
                 .maxAge(0)      // expires immediately
-                .sameSite("Strict")
+                .sameSite("Lax")
                 .build();
 
         return ResponseEntity.ok()
