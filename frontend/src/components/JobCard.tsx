@@ -1,6 +1,6 @@
 import type { JobPost } from "../types/JobPost";
 
-type Props = {
+interface Props {
   job: JobPost;
 };
 

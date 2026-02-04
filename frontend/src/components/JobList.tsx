@@ -1,7 +1,7 @@
 import type { JobPost } from "../types/JobPost";
 import JobCard from "./JobCard";
 
-type Props = {
+interface Props  {
   jobs: JobPost[];
 };
 
