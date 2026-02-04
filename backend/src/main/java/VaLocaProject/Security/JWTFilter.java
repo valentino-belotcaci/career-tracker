@@ -54,7 +54,12 @@ public class JWTFilter extends OncePerRequestFilter {
 
     // Helper to get token from cookies
     private String extractToken(HttpServletRequest request) {
-
+    // 1. Try to get token from Authorization Header (For React/Axios)
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            return authHeader.substring(7); // Remove "Bearer " prefix
+        }
+        
         if (request.getCookies() != null) {
             for (Cookie c : request.getCookies()) {
                 if ("token".equals(c.getName())) return c.getValue();

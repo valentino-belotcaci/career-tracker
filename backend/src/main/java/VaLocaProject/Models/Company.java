@@ -36,6 +36,10 @@ public class Company extends Account {
         super(email, password);
     }
 
+    public String getType() {
+        return "COMPANY";
+    }
+
     public String getCompanyName() {
         return companyName;
     }
