@@ -59,17 +59,19 @@ public class JobApplicationController {
         return ResponseEntity.ok(jobApplicationService.getApplicationsByPostId(id));
     }
 
+    // For users
+    @GetMapping("/getApplicationsByUserId/{id}")
+    public ResponseEntity<List<JobApplication>> getApplicationByUserId(@PathVariable UUID id) {
+        return ResponseEntity.ok(jobApplicationService.getApplicationsByUserId(id));
+    }
+
     // Parameters could be changed to 2 @PathVariable by "getApplicationsByIds/JobPost/{post_id}/User/{user_id}"
     @GetMapping("/getApplicationByIds")
     public ResponseEntity<JobApplication> getApplicationByIds(@RequestParam UUID postId, @RequestParam UUID userId) {
         return ResponseEntity.ok(jobApplicationService.getApplicationByIds(postId, userId));
     }
     
-    // For users
-    @GetMapping("/getApplicationsByUserId/{id}")
-    public ResponseEntity<List<JobApplication>> getApplicationByUserId(@PathVariable UUID id) {
-        return ResponseEntity.ok(jobApplicationService.getApplicationsByUserId(id));
-    }
+
 
     @GetMapping("/getApplicationById/{id}")
     public ResponseEntity<JobApplication> getApplicationById(@PathVariable UUID id) {

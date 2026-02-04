@@ -28,8 +28,8 @@ export const deleteAccount = async (id: string) : (Promise<void>) => {
   await client.delete<void>(`/Account/deleteAccount/${id}`);
 };
 
-export const deleteAll = async () => {
-  client.delete(`Account/deleteAll`);
+export const deleteAll = async () : (Promise<void>)=> {
+  await client.delete<void>(`Account/deleteAll`);
 }
 
 export const logout = async () : (Promise<Map<string, string>>)=> {
