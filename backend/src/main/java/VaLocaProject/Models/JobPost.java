@@ -30,7 +30,7 @@ public class JobPost {
     private Integer salary = 0;
     private String description = "";
     private String duration;
-    private String available = "YES";
+    private Boolean available = true;//true if available, false if not
     private LocalDateTime createdAt;
     
     // Use @PrePersist to set createdAt before saving to DB
@@ -79,11 +79,11 @@ public class JobPost {
         this.duration = duration;
     }
 
-    public String getAvailable() {
+    public Boolean getAvailable() {
         return available;
     }
 
-    public void setAvailable(String available) {
+    public void setAvailable(Boolean available) {
         this.available = available;
     }
 
