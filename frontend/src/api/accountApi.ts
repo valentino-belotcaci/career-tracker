@@ -36,8 +36,9 @@ export const logout = async () : (Promise<Map<string, string>>)=> {
   return response.data;
 }
 
-export const authenticate = async (body: Map<string, string>) : (Promise<Map<string, string>>) => {
-  const response = await client.post<Map<string, string>>(`/Account/authenticate`, body);
+
+export const authenticate = async (body: Record<string, string>) : (Promise<Record<string, string>>) => {
+  const response = await client.post<Record<string, string>>(`/Account/authenticate`, body);
   return response.data;
 }
 

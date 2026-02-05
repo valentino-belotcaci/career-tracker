@@ -1,23 +1,36 @@
-import { useEffect, useState } from "react";
-import { authenticate } from "../api/accountApi"; // Import your API call
-import { type Account } from "../types/Account";
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { authenticate } from "../api/accountApi"; 
 
-export default Authentication() {
+
+
+export default function Authentication() {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
+    const navigate = useNavigate();
 
-    Map<string, string> authMap = new Map<string, string>();
-    authMap.set("email", email);
-    authMap.set("password", password);
 
-    useEffect(() => {
-        authenticate().then(data => setAccount(data));
-    }, []); // Empty array means "run once on load"
+    const handleLogin = async () => {
+        const loginData = {
+            email: email,
+            password: password
+        };
+
+        try {
+            const data = await authenticate(loginData);
+            if (data) navigate("/index page");
+        } catch (error) {
+            console.error("Login failed", error);
+        }
+    };
+
 
     return (
         <div>
-            <h2>Account Email: {account?.email}</h2>
+            <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
+            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" />
+            <button onClick={handleLogin}>Login</button>
+
         </div>
     );
 }
-
