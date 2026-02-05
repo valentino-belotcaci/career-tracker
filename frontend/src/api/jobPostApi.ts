@@ -2,7 +2,7 @@ import { client } from './client';
 import { type JobPost } from '../types/JobPost';
 
 
-export const getAllPost = async () : (Promise<JobPost[]>) => {
+export const getAllPosts = async () : (Promise<JobPost[]>) => {
     const response = await client.get<JobPost[]>(`/JobPost/getAllPosts`);
     return response.data;
 }

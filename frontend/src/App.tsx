@@ -1,15 +1,18 @@
-import { jobPosts } from "./data/jobPosts";
-import JobList from "./components/JobList";
-import Account from "./components/Authentication";
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import OnBoardingPage from './pages/OnBoardingPage';
+import IndexUserPage from './pages/IndexUserPage'; 
 
 function App() {
   return (
-    // Wrap everything in a Fragment or a <div>
-    <>
-      <h1>Job Portal</h1>
-      <JobList jobs={jobPosts} />
-      <Account />
-    </>
+    <BrowserRouter>
+      <Routes>
+        {/* This is your "home" or starting page */}
+        <Route path="/" element={<OnBoardingPage />} />
+
+        {/* These are the destinations for your navigate() calls */}
+        <Route path="/indexUser" element={<IndexUserPage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

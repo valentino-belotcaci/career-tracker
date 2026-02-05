@@ -19,3 +19,4 @@ export interface Company extends Account {
     street: string;
     number: string;
 }
+
