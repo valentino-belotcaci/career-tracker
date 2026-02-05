@@ -20,8 +20,8 @@ export default function Authentication() {
             const data = await authenticate(loginData);
             console.log("Authentication data:", data);
             if (data) {
-                navigate("/indexUser");
-                //if (data.type === "COMPANY") navigate("/indexCompanyPage.tsx");
+                if (data.type === "USER") navigate("/indexUser");
+                if (data.type === "COMPANY") navigate("/indexCompany");
             } 
                 
         } catch (error) {
