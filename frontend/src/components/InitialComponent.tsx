@@ -30,16 +30,12 @@ export default function Authentication({onSubmit, mode}: AuthProps) {
 
         try {
             const data = await onSubmit(payLoad);
-
-            console.log("Authentication data:", data.type);
             navigate(data.type === "USER" ? "/indexUser" : "/indexCompany");
             
         } catch (error) {
             console.error("Failed", error);}
         
-
     }
-
 
     return (
         <div>
@@ -56,9 +52,7 @@ export default function Authentication({onSubmit, mode}: AuthProps) {
             <button onClick={handleLogic}>
                 {mode === "login" ? "Login" : "Register"}
             </button>
-
-            
-
+  
         </div>
     );
 }
