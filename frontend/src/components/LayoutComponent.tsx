@@ -2,14 +2,10 @@ import FooterComponent from "./FooterComponent";
 import HeaderComponent from './HeaderComponent';
 import { Outlet } from 'react-router-dom';
 
-type LayoutProps = {
-  type: string;
-};
-
-export default function LayoutComponent({ type }: LayoutProps) {
+export default function LayoutComponent() {
   return (
     <>
-      <HeaderComponent type={type} />
+      <HeaderComponent /> {}
       <main className="main-content">
         <Outlet />
       </main>

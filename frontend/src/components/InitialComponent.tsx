@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { Account } from '../types/Account';
 import styles from "./InitialComponent.module.css";
+import { useAuth } from './AuthContext';
 
 type AuthData = {
     email: string;
@@ -21,6 +22,7 @@ export default function Authentication({onSubmit, mode}: AuthProps) {
     const [type, setType] = useState<string>("USER");
     const navigate = useNavigate();
 
+    const { login } = useAuth();
 
     const handleLogic = async () => {
         const payLoad: AuthData = {
@@ -32,7 +34,7 @@ export default function Authentication({onSubmit, mode}: AuthProps) {
         try {
             const data = await onSubmit(payLoad);
 
-            localStorage.setItem("type", data.type);
+            login(data.type);
 
             navigate("/dashboard");
         } catch (error) {
