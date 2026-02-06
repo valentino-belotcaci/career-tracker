@@ -14,12 +14,13 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route element={<LayoutComponent children={undefined} />} />
-        <Route path="/" element={<OnBoardingPage />} />
-        <Route path="/login" element={<LoginPage/>}/> 
-        <Route path="/register" element={<RegisterPage/>}/>         
-        <Route path="/indexUser" element={<IndexUserPage />} />
-        <Route path="/indexCompany" element={<IndexCompanyPage />} />
+        <Route element={<LayoutComponent type={} />}>
+          <Route path="/" element={<OnBoardingPage />} />
+          <Route path="/login" element={<LoginPage/>}/> 
+          <Route path="/register" element={<RegisterPage/>}/>         
+          <Route path="/indexUser" element={<IndexUserPage />} />
+          <Route path="/indexCompany" element={<IndexCompanyPage />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );

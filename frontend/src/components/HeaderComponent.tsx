@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 
 
-export default function HeaderComponent(type: string) {
+export default function HeaderComponent({type} : {type:string}) {
     return (
         <header>
             <Link to={type === "USER" ? "/indexUser" : "/indexCompany"}>
