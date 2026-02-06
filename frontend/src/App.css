@@ -1,42 +1,149 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+/* ================= Root / Global ================= */
+
+/* Reset defaults */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f9fafb;
+  color: #111827;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+#root {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* ================= Header ================= */
+header, .app-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.app-header .logo {
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: #3b82f6;
+}
+
+.app-header .logo:hover {
+  color: #2563eb;
+}
+
+.app-header nav a {
+  margin-left: 1rem;
+  font-weight: 500;
+  color: #111827;
+}
+
+.app-header nav a:hover {
+  color: #3b82f6;
+}
+
+/* ================= Main Content ================= */
+.main-content {
+  max-width: 1280px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 2rem;
+  flex: 1;
+}
+
+/* ================= Footer ================= */
+footer, .app-footer {
+  width: 100%;
+  text-align: center;
+  padding: 1rem 2rem;
+  background-color: #f3f4f6;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+/* ================= Typography ================= */
+h1, h2, h3, h4, h5 {
+  font-weight: 600;
+  color: #111827;
+  margin: 0.5em 0;
+}
+
+p {
+  color: #4b5563;
+  line-height: 1.6;
+  margin: 0.5em 0 1em;
+}
+
+/* ================= Links ================= */
+a {
+  text-decoration: none;
+  color: #3b82f6;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: #2563eb;
+}
+
+/* ================= Buttons ================= */
+button {
+  cursor: pointer;
+  font-family: inherit;
+  border-radius: 8px;
+  border: none;
+  padding: 0.6em 1.2em;
+  background-color: #3b82f6;
+  color: white;
+  font-weight: 600;
+  transition: background-color 0.2s ease;
+}
+
+button:hover {
+  background-color: #2563eb;
+}
+
+/* ================= Cards ================= */
+.card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  padding: 2rem;
+  margin: 1rem 0;
+}
+
+/* ================= Logos / Images ================= */
 .logo {
   height: 6em;
   padding: 1.5em;
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
+/* ================= Misc ================= */
 .read-the-docs {
   color: #888;
+  font-size: 0.875rem;
 }

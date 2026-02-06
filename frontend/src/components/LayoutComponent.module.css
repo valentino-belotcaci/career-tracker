@@ -1,0 +1,5 @@
+.main {
+  min-height: calc(100vh - 120px); /* leave room for header + footer */
+  padding: 2rem;
+  background-color: #f9fafb;
+}

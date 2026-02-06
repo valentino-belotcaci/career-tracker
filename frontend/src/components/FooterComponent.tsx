@@ -1,10 +1,7 @@
-
-
-
-export default function OnBoardingComponent() {
-    return (
-        <div>
-            <h1>© 2026 CareerTracker</h1>
-        </div>
-    );
+export default function FooterComponent() {
+  return (
+    <footer className="app-footer">
+      © 2026 CareerTracker
+    </footer>
+  );
 }

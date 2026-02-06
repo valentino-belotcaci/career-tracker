@@ -6,6 +6,7 @@ import IndexCompanyPage from './pages/IndexCompanyPage';
 import OnBoardingPage from './pages/OnBoardingPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import DashboardPage from './pages/DashboardPage';
 
 function App() {
   const [type] = useState<string>(() => localStorage.getItem("type") || "USER");
@@ -19,6 +20,7 @@ function App() {
           <Route path="/register" element={<RegisterPage/>}/>         
           <Route path="/indexUser" element={<IndexUserPage />} />
           <Route path="/indexCompany" element={<IndexCompanyPage />} />
+          <Route path="/dashboard" element={<DashboardPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

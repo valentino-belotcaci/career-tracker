@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { Account } from '../types/Account';
+import styles from "./InitialComponent.module.css";
 
 type AuthData = {
     email: string;
@@ -25,20 +26,23 @@ export default function Authentication({onSubmit, mode}: AuthProps) {
         const payLoad: AuthData = {
             email,
             password,
-            type 
+            type
         };
 
         try {
             const data = await onSubmit(payLoad);
-            navigate(data.type === "USER" ? "/indexUser" : "/indexCompany");
-            
+
+            localStorage.setItem("type", data.type);
+
+            navigate("/dashboard");
         } catch (error) {
-            console.error("Failed", error);}
-        
-    }
+            console.error("Failed", error);
+        }
+    };
+
 
     return (
-        <div>
+        <div className={styles.container}>
             <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" />
             
