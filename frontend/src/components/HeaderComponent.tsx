@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
 
 
-export default function HeaderComponent() {
+export default function HeaderComponent(type: string) {
     return (
-        <div>
-            <Link to="/indexUser" > Carrer Tracker</Link>
-        </div>
+        <header>
+            <Link to={type === "USER" ? "/indexUser" : "/indexCompany"}>
+                    Career Tracker </Link>        
+        </header>
     );
 }
