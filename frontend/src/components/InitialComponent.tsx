@@ -17,21 +17,21 @@ type AuthProps = {
 export default function Authentication({onSubmit, mode}: AuthProps) {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
-    const [type, setType] = useState<string>("");
+    const [type, setType] = useState<string>("USER");
     const navigate = useNavigate();
 
 
-    const handleLogin = async () => {
-        const accountData: AuthData = {
+    const handleLogic = async () => {
+        const payLoad: AuthData = {
             email,
             password,
             type 
         };
 
         try {
-            const data = await onSubmit(accountData);
+            const data = await onSubmit(payLoad);
 
-            
+            console.log("Authentication data:", data.type);
             navigate(data.type === "USER" ? "/indexUser" : "/indexCompany");
             
         } catch (error) {
@@ -53,7 +53,9 @@ export default function Authentication({onSubmit, mode}: AuthProps) {
             </select>
         )}
             
-            <button onClick={handleLogin}>Login</button>
+            <button onClick={handleLogic}>
+                {mode === "login" ? "Login" : "Register"}
+            </button>
 
             
 
