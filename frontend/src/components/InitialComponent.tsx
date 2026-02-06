@@ -9,13 +9,16 @@ type AuthProps = {
 export default function Authentication({onSubmit}: AuthProps) {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
+    const [type, setType] = useState<string>("");
     const navigate = useNavigate();
 
 
     const handleLogin = async () => {
         const loginData = {
             email: email,
-            password: password
+            password: password,
+            type?: type
+        
         };
 
         try {
