@@ -2,11 +2,19 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { Account } from '../types/Account';
 
-type AuthProps = {
-    onSubmit: (data: Record<string, string>) => Promise<Account>;
+type AuthData = {
+    email: string;
+    password: string;
+    type?: string;
 }
 
-export default function Authentication({onSubmit}: AuthProps) {
+
+type AuthProps = {
+    onSubmit: (data: Record<string, string>) => Promise<Account>;
+    mode: "register" | "login";
+}
+
+export default function Authentication({onSubmit, mode}: AuthProps) {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [type, setType] = useState<string>("");
@@ -14,19 +22,18 @@ export default function Authentication({onSubmit}: AuthProps) {
 
 
     const handleLogin = async () => {
-        const loginData = {
-            email: email,
-            password: password,
-            type?: type
-        
+        const accountData: AuthData = {
+            email,
+            password,
+            type 
         };
 
         try {
-            const data = await onSubmit(loginData);
+            const data = await onSubmit(accountData);
 
-            if (data) {
-                navigate(data.type === "USER" ? "/indexUser" : "/indexCompany");
-            }
+            
+            navigate(data.type === "USER" ? "/indexUser" : "/indexCompany");
+            
         } catch (error) {
             console.error("Failed", error);}
         
@@ -38,7 +45,17 @@ export default function Authentication({onSubmit}: AuthProps) {
         <div>
             <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" />
+            
+        {mode === "register" && (
+            <select aria-label="Account type" title="Account type" value={type} onChange={(e) => setType(e.target.value)}>
+                <option value="USER">User</option>
+                <option value="COMPANY">Company</option>
+            </select>
+        )}
+            
             <button onClick={handleLogin}>Login</button>
+
+            
 
         </div>
     );

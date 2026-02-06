@@ -6,7 +6,7 @@ export default function Login() {
     return (
         <div>
             <h1>Welcome to the Register Page</h1>
-            <Authentication onSubmit={insertAccount} />
+            <Authentication mode={"register"} onSubmit={insertAccount} />
         </div>
     );
 }
