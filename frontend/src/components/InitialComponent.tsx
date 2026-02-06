@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { authenticate } from "../api/accountApi"; 
+import type { Account } from '../types/Account';
 
+type AuthProps = {
+    onSubmit: (data: Record<string, string>) => Promise<Account>;
+}
 
-
-export default function Authentication() {
+export default function Authentication({onSubmit}: AuthProps) {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const navigate = useNavigate();
@@ -17,17 +19,16 @@ export default function Authentication() {
         };
 
         try {
-            const data = await authenticate(loginData);
-            console.log("Authentication data:", data);
+            const data = await onSubmit(loginData);
+
             if (data) {
-                if (data.type === "USER") navigate("/indexUser");
-                if (data.type === "COMPANY") navigate("/indexCompany");
-            } 
-                
+                navigate(data.type === "USER" ? "/indexUser" : "/indexCompany");
+            }
         } catch (error) {
-            console.error("Login failed", error);
-        }
-    };
+            console.error("Failed", error);}
+        
+
+    }
 
 
     return (

@@ -4,6 +4,7 @@ export interface Account {
     email: string;
     password: string;
     description: string;
+    type: string;
 }
 
 // User fields

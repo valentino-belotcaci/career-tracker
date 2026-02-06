@@ -2,6 +2,8 @@ package VaLocaProject.Models;
 
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -71,6 +73,7 @@ public abstract class Account {
     }
 
     // returns "USER" if this instance is a User, "COMPANY" if Company, otherwise "UNKNOWN"
+    @JsonProperty("type")
     public abstract String getType();
     
 }

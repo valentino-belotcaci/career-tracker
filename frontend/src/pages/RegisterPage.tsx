@@ -5,7 +5,7 @@ import { authenticate } from '../api/accountApi';
 export default function Login() {
     return (
         <div>
-            <h1>Welcome to the Login Page</h1>
+            <h1>Welcome to the Register Page</h1>
             <Authentication onSubmit={authenticate} />
         </div>
     );

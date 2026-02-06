@@ -15,6 +15,12 @@ export const insertAccount = async (body: Record<string, string>): Promise<Accou
   return response.data;
 }
 
+export const authenticate = async (body: Record<string, string>): Promise<Account> => {
+  const response = await client.post<Account>(`/Account/authenticate`, body);
+  return response.data;
+}
+
+
 export const getAccountById = async (id: string): Promise<Account> => {
   const response = await client.get<Account>(`/Account/getAccountById/${id}`);
   return response.data;
@@ -35,11 +41,6 @@ export const deleteAll = async (): Promise<void> => {
 
 export const logout = async (): Promise<Record<string, string>> => {
   const response = await client.post<Record<string, string>>(`/Account/logout`);
-  return response.data;
-}
-
-export const authenticate = async (body: Record<string, string>): Promise<Record<string, string>> => {
-  const response = await client.post<Record<string, string>>(`/Account/authenticate`, body);
   return response.data;
 }
 

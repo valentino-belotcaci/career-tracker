@@ -106,10 +106,8 @@ public class AccountController {
         // Return JSON body with concrete type and id
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .body(Map.of(
-                        "type", account.getType(),
-                        "id", account.getId()
-                ));
+                .body(account
+                );
     }
 
     // To remove all headers abd cookies when loggin out
