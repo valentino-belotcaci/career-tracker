@@ -6,12 +6,16 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 const resources = {
   en: {
     translation: {
-      login: "Login",
-      register: "Register",
-      dashboard: "Dashboard",
-      logout: "Logout",
-      dashBoardUser: "Welcome, user. Use the navigation to manage your data.",
-      dashBoardCompany: "Welcome, company. Use the navigation to manage your company profile."
+    appTitle: "Career Tracker",
+    welcome: "Welcome to Career Tracker",
+    login: "Login",
+    register: "Register",
+    dashboard: "Dashboard",
+    logout: "Logout",
+    dashBoardUserTitle: "User Dashboard",
+    dashBoardCompanyTitle: "Company Dashboard",
+    dashBoardUserContent: "Welcome, user. Use the navigation to manage your data.",
+    dashBoardCompanyContent: "Welcome, company. Use the navigation to manage your company profile."
 
     }
   }

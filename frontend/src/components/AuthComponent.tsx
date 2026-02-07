@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { Account } from '../types/Account';
-import styles from "./InitialComponent.module.css";
+import styles from "./AuthComponent.module.css";
 import { useAuth } from './AuthContext';
 
 type AuthData = {
@@ -16,7 +16,7 @@ type AuthProps = {
     mode: "register" | "login";
 }
 
-export default function InitialComponent({onSubmit, mode}: AuthProps) {
+export default function AuthComponent({onSubmit, mode}: AuthProps) {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [type, setType] = useState<string>("USER");

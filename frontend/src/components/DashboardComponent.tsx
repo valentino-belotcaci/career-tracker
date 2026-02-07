@@ -25,11 +25,11 @@ export default function DashboardComponent() {
 
     return (
         <div className={styles.container}>
-            <h2>{isUser ? "User Dashboard" : "Company Dashboard"}</h2>
+            <h2>{isUser ? t('dashBoardUserTitle') : t('dashBoardCompanyTitle')}</h2>
         <p>
             {isUser
-            ? t('dashBoardUser')
-            : t('dashBoardCompany')}
+            ? t('dashBoardUserContent')
+            : t('dashBoardCompanyContent')}
         </p>
         <Link className={styles.link} to={isUser ? "/profileUser" : "/profileCompany"}>
             View profile
