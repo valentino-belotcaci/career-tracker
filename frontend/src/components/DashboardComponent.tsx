@@ -1,10 +1,13 @@
 import { Link, useNavigate } from "react-router-dom";
 import { logout as logoutApi } from "../api/accountApi"; 
-import styles from "./indexComponent.module.css";
+import styles from "./DashBoardComponent.module.css";
 import { useAuth } from "./AuthContext";
+import { useTranslation } from 'react-i18next';
+
 
 export default function DashboardComponent() {
     const navigate = useNavigate();
+    const { t } = useTranslation();
     const { logout, accountType } = useAuth(); //this is Context logout and accountType
     // Boolean version of accountype
     const isUser = accountType === "USER";
@@ -25,8 +28,8 @@ export default function DashboardComponent() {
             <h2>{isUser ? "User Dashboard" : "Company Dashboard"}</h2>
         <p>
             {isUser
-            ? "Welcome, user. Use the navigation to manage your data."
-            : "Welcome, company. Use the navigation to manage your company profile."}
+            ? t('dashBoardUser')
+            : t('dashBoardCompany')}
         </p>
         <Link className={styles.link} to={isUser ? "/profileUser" : "/profileCompany"}>
             View profile
