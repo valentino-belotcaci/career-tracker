@@ -8,15 +8,20 @@ const resources = {
     translation: {
     appTitle: "Career Tracker",
     welcome: "Welcome to Career Tracker",
-    login: "Login",
-    register: "Register",
+    loginButton: "Login",
+    registerContent: "Welcome to the registration page",
+    loginContent: "Welcome to the login page",
+    userOption: "User",
+    companyOption: "Company",
+    registerButton: "Register",
+    logoutButton: "Logout",
     dashboard: "Dashboard",
-    logout: "Logout",
+    profileButton: "View Profile",
     dashBoardUserTitle: "User Dashboard",
     dashBoardCompanyTitle: "Company Dashboard",
     dashBoardUserContent: "Welcome, user. Use the navigation to manage your data.",
-    dashBoardCompanyContent: "Welcome, company. Use the navigation to manage your company profile."
-
+    dashBoardCompanyContent: "Welcome, company. Use the navigation to manage your company profile.",
+    footerContent: "© 2026 CareerTracker"
     }
   }
 };

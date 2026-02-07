@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import type { Account } from '../types/Account';
 import styles from "./AuthComponent.module.css";
 import { useAuth } from './AuthContext';
+import { useTranslation } from 'react-i18next';
+
 
 type AuthData = {
     email: string;
@@ -21,6 +23,7 @@ export default function AuthComponent({onSubmit, mode}: AuthProps) {
     const [password, setPassword] = useState<string>("");
     const [type, setType] = useState<string>("USER");
 
+    const { t } = useTranslation();
     const navigate = useNavigate();
 
     const { login } = useAuth();
@@ -49,19 +52,19 @@ export default function AuthComponent({onSubmit, mode}: AuthProps) {
     return (
         
         <div className={styles.container}>
-            <h1>{isRegister ? "Welcome to the registration page" : "Welcome to the login page"}</h1> 
+            <h1>{isRegister ? t('registerContent') : t('loginContent')}</h1> 
             <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" />
             
-        {mode === "register" && (
+        {isRegister && (
             <select aria-label="Account type" title="Account type" value={type} onChange={(e) => setType(e.target.value)}>
-                <option value="USER">User</option>
-                <option value="COMPANY">Company</option>
+                <option value="USER">{t('userOption')}</option>
+                <option value="COMPANY">{t('CompanyOption')}</option>
             </select>
         )}
             
             <button onClick={handleLogic}>
-                {mode === "login" ? "Login" : "Register"}
+                {isRegister ? t('registerButton') : t('loginButton')}
             </button>
   
         </div>

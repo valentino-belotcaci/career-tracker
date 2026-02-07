@@ -1,7 +1,13 @@
+import { useTranslation } from 'react-i18next';
+
+
 export default function FooterComponent() {
+
+  const { t } = useTranslation();
+
   return (
     <footer className="app-footer">
-      © 2026 CareerTracker
+      {t('footerContent')}
     </footer>
   );
 }

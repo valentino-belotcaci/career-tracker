@@ -32,7 +32,7 @@ export default function DashboardComponent() {
             : t('dashBoardCompanyContent')}
         </p>
         <Link className={styles.link} to={isUser ? "/profileUser" : "/profileCompany"}>
-            View profile
+            {t('profileButton')}
         </Link>
         <Link className={styles.link} to={isUser ? "/jobPosts" : "/jobApplications"}>
             {isUser ? "Job Applications" : "Job Posts"}
