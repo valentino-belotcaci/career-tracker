@@ -3,22 +3,20 @@ import { logout as logoutApi } from "../api/accountApi";
 import styles from "./indexComponent.module.css";
 import { useAuth } from "./AuthContext";
 
-export default function IndexComponent({ type }: { type: string }) {
-    const isUser = type === "USER";
+export default function IndexComponent() {
     const navigate = useNavigate();
-    const { logout } = useAuth(); //this is  Context logout
-
+    const { logout, accountType } = useAuth(); //this is Context logout and accountType
+    // Boolean version of accountype
+    const isUser = accountType === "USER";
     const handleLogout = async (e: React.MouseEvent) => {
         e.preventDefault();
         try {
-            //call the API first
+            // clean the cookies(logoutApi) and localstorage(logout)
             await logoutApi(); 
+            logout(); 
+            navigate("/", {replace:true});
         } catch (err) {
             console.warn("Server logout failed", err);
-        } finally {
-            //then clear the local React state
-            logout(); 
-            navigate("/", { replace: true });
         }
     };
 
@@ -36,7 +34,7 @@ export default function IndexComponent({ type }: { type: string }) {
         <Link className={styles.link} to={isUser ? "/jobPosts" : "/jobApplications"}>
             {isUser ? "Job Applications" : "Job Posts"}
         </Link>
-        <button className={styles.link} onClick={handleLogout} style={{cursor: 'pointer'}}>Logout</button>
+        <button className={styles.link} onClick={handleLogout}>Logout</button>
         </div>
     );
 }
