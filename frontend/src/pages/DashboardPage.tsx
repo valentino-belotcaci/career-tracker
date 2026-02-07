@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import IndexComponent from "../components/IndexComponent";
+import DashboardComponent from '../components/DashboardComponent';
 
 export default function DashboardPage() {
     const navigate = useNavigate();
@@ -14,5 +14,5 @@ export default function DashboardPage() {
 
     if (!type) return null;
 
-    return <IndexComponent type={type} />;
+    return <DashboardComponent />;
 }

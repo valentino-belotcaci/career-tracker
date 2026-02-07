@@ -16,7 +16,7 @@ type AuthProps = {
     mode: "register" | "login";
 }
 
-export default function Authentication({onSubmit, mode}: AuthProps) {
+export default function InitialComponent({onSubmit, mode}: AuthProps) {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [type, setType] = useState<string>("USER");

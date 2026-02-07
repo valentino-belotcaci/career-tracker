@@ -3,7 +3,7 @@ import { logout as logoutApi } from "../api/accountApi";
 import styles from "./indexComponent.module.css";
 import { useAuth } from "./AuthContext";
 
-export default function IndexComponent() {
+export default function DashboardComponent() {
     const navigate = useNavigate();
     const { logout, accountType } = useAuth(); //this is Context logout and accountType
     // Boolean version of accountype
