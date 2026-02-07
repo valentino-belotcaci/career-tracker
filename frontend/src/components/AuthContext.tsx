@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
 
 type AuthContextType = {
-  accountType: "USER" | "COMPANY" | null;
+  accountType: string | null;
   login: (type: string) => void;
   logout: () => void;
 };
@@ -9,7 +9,7 @@ type AuthContextType = {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [accountType, setAccountType] = useState<"USER" | "COMPANY">(localStorage.getItem("type"));
+  const [accountType, setAccountType] = useState<string | null>(localStorage.getItem("type"));
 
   const login = (type: string) => {
     localStorage.setItem("type", type);
