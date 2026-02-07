@@ -20,9 +20,12 @@ export default function AuthComponent({onSubmit, mode}: AuthProps) {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [type, setType] = useState<string>("USER");
+
     const navigate = useNavigate();
 
     const { login } = useAuth();
+
+    const isRegister = mode === "register"; 
 
     const handleLogic = async () => {
         const payLoad: AuthData = {
@@ -44,7 +47,9 @@ export default function AuthComponent({onSubmit, mode}: AuthProps) {
 
 
     return (
+        
         <div className={styles.container}>
+            <h1>{isRegister ? "Welcome to the registration page" : "Welcome to the login page"}</h1> 
             <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" />
             
