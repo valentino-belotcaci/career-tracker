@@ -14,7 +14,7 @@ export default function HeaderComponent() {
           if userType is null link to / .
       */}
       <Link className={styles.logo} to={accountType ? "/dashboard" : "/"}>
-       {t('appName')}
+       {t('appTitle')}
       </Link>
     </header>
   );
