@@ -4,14 +4,14 @@ import { useAuth } from "./AuthContext";
 
 export default function HeaderComponent() {
   //check if the user is logged in by looking for the 'type' in storage
-  const { userType } = useAuth();
+  const { accountType } = useAuth();
 
   return (
     <header className={styles.header}>
       {/*if userType exists link to /dashboard. 
           if userType is null link to / .
       */}
-      <Link className={styles.logo} to={userType ? "/dashboard" : "/"}>
+      <Link className={styles.logo} to={accountType ? "/dashboard" : "/"}>
         Career Tracker
       </Link>
     </header>

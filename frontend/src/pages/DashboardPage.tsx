@@ -7,7 +7,6 @@ export default function DashboardPage() {
     const type = localStorage.getItem("type");
 
     useEffect(() => {
-        //if the key doesn't exist at all they aren't logged in.
         if (!type) {
             navigate("/"); 
         }
