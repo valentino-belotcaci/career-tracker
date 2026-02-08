@@ -32,7 +32,6 @@ export default function DisplayJobPosts() {
         navigate("/jobPostDetails", { state: { postId } });
     }
 
-
     return (
         <div>
             <h1>Job Posts</h1>
