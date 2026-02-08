@@ -6,6 +6,7 @@ import DashBoardPage from './pages/DashBoardPage/DashBoardPage';
 import DisplayJobPostsPage from './pages/DisplayJobPostsPage/DisplayJobPostsPage';
 import { ContextProvider } from './components/Context';
 import CreateJobPostPage from './pages/CreateJobPostPage/CreateJobPostPage';
+import JobPostDetailsPage from './pages/JobPostDetails/JobPostDetailsPage';
 
 function App() {
 
@@ -19,6 +20,7 @@ function App() {
             <Route path="/dashboard" element={<DashBoardPage />} />
             <Route path="/displayJobPosts" element={<DisplayJobPostsPage/>}/>
             <Route path="/createJobPost" element={<CreateJobPostPage/>} />
+            <Route path="/jobPostDetails" element={<JobPostDetailsPage/>}/>
           </Route>
         </Routes>
       </BrowserRouter>
