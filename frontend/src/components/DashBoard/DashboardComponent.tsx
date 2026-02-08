@@ -34,7 +34,7 @@ export default function DashboardComponent() {
         <Link className={styles.link} to={isUser ? "/profileUser" : "/profileCompany"}>
             {t('profileButton')}
         </Link>
-        <Link className={styles.link} to={isUser ? "/jobPosts" : "/jobApplications"}>
+        <Link className={styles.link} to={isUser ? "/displayJobApplications" : "/displayJobPosts"}>
             {isUser ? "Job Applications" : "Job Posts"}
         </Link>
         <button className={styles.link} onClick={handleLogout}>Logout</button>
