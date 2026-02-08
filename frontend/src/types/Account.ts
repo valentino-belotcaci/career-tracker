@@ -1,6 +1,6 @@
 // The base account fields
 export interface Account {
-    id: number;
+    id: string;
     email: string;
     password: string;
     description: string;

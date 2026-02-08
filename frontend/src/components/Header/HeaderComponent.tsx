@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import styles from "./HeaderComponent.module.css";
-import { useAuth } from "./AuthContext";
+import { useAuth } from "../AuthContext";
 import { useTranslation } from 'react-i18next';
 
 export default function HeaderComponent() {

@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import type { Account } from '../types/Account';
+import type { Account } from '../../types/Account';
 import styles from "./AuthComponent.module.css";
-import { useAuth } from './AuthContext';
+import { useAuth } from '../AuthContext';
 import { useTranslation } from 'react-i18next';
 
 
@@ -39,8 +39,8 @@ export default function AuthComponent({onSubmit, mode}: AuthProps) {
 
         try {
             const data = await onSubmit(payLoad);
-
-            login(data.type);
+            // use type and id to be set in localstorage and context
+            login(data.type, data.id);
 
             navigate("/dashboard");
         } catch (error) {

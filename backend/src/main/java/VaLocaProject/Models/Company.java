@@ -28,6 +28,7 @@ public class Company extends Account {
     // No-arg constructor for JPA
     protected Company() {
     }
+    
     public Company(UUID id) {
         super(id);
     }
@@ -36,6 +37,7 @@ public class Company extends Account {
         super(email, password);
     }
 
+    @Override
     public String getType() {
         return "COMPANY";
     }

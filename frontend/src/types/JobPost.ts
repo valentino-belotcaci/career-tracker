@@ -5,6 +5,6 @@ export interface JobPost {
     salary: number
     description: string;
     duration: string;
-    available: boolean;
+    available: string;
     createdAt: string;
 }

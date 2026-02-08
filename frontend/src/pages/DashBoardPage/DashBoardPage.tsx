@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import DashboardComponent from '../components/DashboardComponent';
-
+import DashboardComponent from "../../components/DashBoard/DashboardComponent";
 export default function DashboardPage() {
     const navigate = useNavigate();
     const type = localStorage.getItem("type");

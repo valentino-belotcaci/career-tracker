@@ -26,6 +26,7 @@
             super(email, password);
         }
 
+        @Override
         public String getType() {
             return "USER";
         }

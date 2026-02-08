@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
-import { logout as logoutApi } from "../api/accountApi"; 
+import { logout as logoutApi } from "../../api/accountApi"; 
 import styles from "./DashBoardComponent.module.css";
-import { useAuth } from "./AuthContext";
+import { useAuth } from "../AuthContext";
 import { useTranslation } from 'react-i18next';
 
 
@@ -34,7 +34,7 @@ export default function DashboardComponent() {
         <Link className={styles.link} to={isUser ? "/profileUser" : "/profileCompany"}>
             {t('profileButton')}
         </Link>
-        <Link className={styles.link} to={isUser ? "/jobPosts" : "/jobApplications"}>
+        <Link className={styles.link} to={isUser ? "/displayJobApplications" : "/displayJobPosts"}>
             {isUser ? "Job Applications" : "Job Posts"}
         </Link>
         <button className={styles.link} onClick={handleLogout}>Logout</button>
