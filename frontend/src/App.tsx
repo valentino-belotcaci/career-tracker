@@ -16,11 +16,11 @@ function App() {
         <Routes>
           <Route element={<LayoutComponent />}>
             <Route path="/" element={<OnBoardingPage />} />
-            <Route path="/authentication" element={<AuthPage/>}/> 
+            <Route path="/authentication/:type" element={<AuthPage/>}/> 
             <Route path="/dashboard" element={<DashBoardPage />} />
             <Route path="/displayJobPosts" element={<DisplayJobPostsPage/>}/>
             <Route path="/createJobPost" element={<CreateJobPostPage/>} />
-            <Route path="/jobPostDetails" element={<JobPostDetailsPage/>}/>
+            <Route path="/jobPostDetails/:postId" element={<JobPostDetailsPage/>}/>
           </Route>
         </Routes>
       </BrowserRouter>

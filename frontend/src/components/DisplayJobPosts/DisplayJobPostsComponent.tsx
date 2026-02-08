@@ -29,7 +29,7 @@ export default function DisplayJobPosts() {
     }, [loggedId]);
 
     const handlePostClick = (postId: string) => {
-        navigate("/jobPostDetails", { state: { postId } });
+        navigate(`/jobPostDetails/${postId}`);
     }
 
     return (
