@@ -1,9 +1,10 @@
 import JobPostDetailsComponent from '../../components/JobPostDetails/JobPostDetailsComponent';
-import { useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 export default function JobPostDetailsPage() {
 
-const { postId } = useLocation().state;
+const { postId } = useParams<{ postId: string }>();
+if (postId) 
 
     return (
         <div>

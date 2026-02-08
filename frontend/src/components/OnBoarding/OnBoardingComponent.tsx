@@ -10,11 +10,11 @@ export default function OnBoardingComponent() {
         <div className={styles.container}>
             <h1>{t('welcome')}</h1>
             <div>
-                <Link to="/authentication" state={"register"} >
+                <Link to="/authentication/register" >
                     {t('register')}
                 </Link>
                 
-                <Link to="/authentication" state={"login"} >
+                <Link to="/authentication/login">
                     {t('login')}
                 </Link>
             </div>

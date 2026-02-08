@@ -1,15 +1,15 @@
 import AuthComponent from '../../components/Auth/AuthComponent';
 import { authenticate, insertAccount } from '../../api/accountApi';
-import { useLocation } from 'react-router-dom';
+import {  useParams } from 'react-router-dom';
 
-// USELOCATION
 export default function AuthPage() {
-    const location = useLocation();
-    const type = location.state;
+    const {type} = useParams<{type: string}>();
     const isRegister = type === "register";
+    // Set default type to login if actually type is login or undefined
+    const modeName = (type === "register" ? "register" : "login") as "register" | "login";
     return (
         <div>
-            <AuthComponent mode={type} onSubmit={isRegister? insertAccount: authenticate} />
+            <AuthComponent mode={modeName} onSubmit={isRegister? insertAccount: authenticate} />
         </div>
     );
 }
