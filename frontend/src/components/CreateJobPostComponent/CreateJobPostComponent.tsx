@@ -16,7 +16,7 @@ export default function CreateJobPostComponent() {
         description: "",
         duration: "",
         salary: 0,
-        available: true,
+        available: "YES",
         createdAt: new Date().toISOString()
     });    
     const navigate = useNavigate();
@@ -39,7 +39,9 @@ export default function CreateJobPostComponent() {
         const { name, value, type } = e.target;
 
         setJobPost((prev) => ({
-            ...prev, // Spread the existing state so we don't lose other fields
+            // Spread the existing state so we don't lose other fields
+            ...prev, 
+            // check if the type of some inputs need to be change from string to number for db acquisition
             [name]: type === "number" ? Number(value) : value 
         }));
     };
