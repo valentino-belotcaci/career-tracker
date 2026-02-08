@@ -2,14 +2,14 @@
 import {type JobPost} from "../../types/JobPost";
 import { getPostsByCompanyId } from '../../api/jobPostApi';
 import JobPostItem from './JobPostItem';
-import { useAuth } from '../AuthContext';
+import { Context } from '../Context';
 import { useEffect, useState } from "react";
 
 
 
 export default function DisplayJobPosts() {
     const [jobPosts, setJobPosts] = useState<JobPost[]>([]);
-    const { loggedId } = useAuth();
+    const { loggedId } = Context();
 
     // TO update the list every time a new jobPost is created
     useEffect(() => {

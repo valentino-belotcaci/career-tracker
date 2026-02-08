@@ -4,7 +4,7 @@ import OnBoardingPage from './pages/OnBoardingPage/OnBoardingPage';
 import AuthPage from './pages/AuthPage/AuthPage';
 import DashBoardPage from './pages/DashBoardPage/DashBoardPage';
 import DisplayJobPostsPage from './pages/DisplayJobPostsPage/DisplayJobPostsPage';
-import { AuthProvider } from './components/AuthContext';
+import { AuthProvider } from './components/Context';
 import CreateJobPostPage from './pages/CreateJobPostPage/CreateJobPostPage';
 
 function App() {

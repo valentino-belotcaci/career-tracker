@@ -9,7 +9,7 @@ type AuthContextType = {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export function AuthProvider({ children }: { children: ReactNode }) {
+export function ContextProvider({ children }: { children: ReactNode }) {
   const [accountType, setAccountType] = useState<string | null>(localStorage.getItem("type"));
   const [loggedId, setLoggedId] = useState<string | null>(localStorage.getItem("loggedId"));
   
@@ -35,7 +35,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 }
 
-export const useAuth = () => {
+export const Context = () => {
   const context = useContext(AuthContext);
   if (!context) throw new Error("useAuth must be used within AuthProvider");
   return context;

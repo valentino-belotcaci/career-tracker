@@ -1,14 +1,14 @@
 import { Link, useNavigate } from "react-router-dom";
 import { logout as logoutApi } from "../../api/accountApi"; 
 import styles from "./DashBoardComponent.module.css";
-import { useAuth } from "../AuthContext";
+import { Context } from "../Context";
 import { useTranslation } from 'react-i18next';
 
 
 export default function DashboardComponent() {
     const navigate = useNavigate();
     const { t } = useTranslation();
-    const { logout, accountType } = useAuth(); //this is Context logout and accountType
+    const { logout, accountType } = Context(); //this is Context logout and accountType
     // Boolean version of accountype
     const isUser = accountType === "USER";
     const handleLogout = async (e: React.MouseEvent) => {

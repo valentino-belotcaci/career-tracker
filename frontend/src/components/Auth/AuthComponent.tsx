@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { Account } from '../../types/Account';
 import styles from "./AuthComponent.module.css";
-import { useAuth } from '../AuthContext';
+import { Context } from '../Context';
 import { useTranslation } from 'react-i18next';
 
 
@@ -26,7 +26,7 @@ export default function AuthComponent({onSubmit, mode}: AuthProps) {
     const { t } = useTranslation();
     const navigate = useNavigate();
 
-    const { login } = useAuth();
+    const { login } = Context();
 
     const isRegister = mode === "register"; 
 

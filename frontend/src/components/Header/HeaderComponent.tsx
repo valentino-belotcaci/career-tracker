@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
 import styles from "./HeaderComponent.module.css";
-import { useAuth } from "../AuthContext";
+import { Context } from "../Context";
 import { useTranslation } from 'react-i18next';
 
 export default function HeaderComponent() {
   const { t } = useTranslation();
   //check if the user is logged in by looking for the 'type' in storage
-  const { accountType } = useAuth();
+  const { accountType } = Context();
 
   return (
     <header className={styles.header}>
