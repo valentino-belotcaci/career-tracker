@@ -5,6 +5,7 @@ import AuthPage from './pages/AuthPage/AuthPage';
 import DashBoardPage from './pages/DashBoardPage/DashBoardPage';
 import DisplayJobPostsPage from './pages/DisplayJobPostsPage/DisplayJobPostsPage';
 import { AuthProvider } from './components/AuthContext';
+import CreateJobPostPage from './pages/CreateJobPostPage/CreateJobPostPage';
 
 function App() {
 
@@ -17,6 +18,7 @@ function App() {
             <Route path="/authentication" element={<AuthPage/>}/> 
             <Route path="/dashboard" element={<DashBoardPage />} />
             <Route path="/displayJobPosts" element={<DisplayJobPostsPage/>}/>
+            <Route path="/createJobPost" element={<CreateJobPostPage/>} />
           </Route>
         </Routes>
       </BrowserRouter>
