@@ -3,9 +3,7 @@ import CreateJobPostComponent from '../../components/CreateJobPostComponent/Crea
 export default function CreateJobPostPage() {
     return (
         <div>
-            
             <CreateJobPostComponent/>
-            
         </div>
-        );
+    );
 }

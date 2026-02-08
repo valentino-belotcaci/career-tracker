@@ -34,17 +34,23 @@ export default function CreateJobPostComponent() {
     }
 
     // Logic that handles the string changes in the input fields and synchonizes the payload
-    const handleChange = () => {
-        
-    }
+    // NOTE: this is needed beacuse our useState object is composed, not simpl like we did in the authComponent
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value, type } = e.target;
+
+        setJobPost((prev) => ({
+            ...prev, // Spread the existing state so we don't lose other fields
+            [name]: type === "number" ? Number(value) : value 
+        }));
+    };
 
     return (
         <>
-        <input value={jobPost.name} onChange={}>Job title:</input>
-        <input value={jobPost.description} onChange={}>description:</input>
-        <input value={jobPost.duration} onChange={}>Duration:</input>
-        <input value={jobPost.available.toString()} onChange={}>Available:</input>
-        <input value={jobPost.salary} onChange={}>Salary:</input>
+        <input value={jobPost.name} name="name"  onChange={handleChange}/>
+        <input value={jobPost.description} name="description" onChange={handleChange}/>
+        <input value={jobPost.duration} name="duration" onChange={handleChange}/>
+        <input value={jobPost.available.toString()} type="number" name="available" onChange={handleChange}/>
+        <input value={jobPost.salary} name="salary" onChange={handleChange}/>
 
         <button onClick={handleInsertion}>Submit</button>
         </>
