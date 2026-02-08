@@ -4,12 +4,14 @@ import { getPostsByCompanyId } from '../../api/jobPostApi';
 import JobPostItem from './JobPostItem';
 import { Context } from '../Context';
 import { useEffect, useState } from "react";
+import { useNavigate } from 'react-router-dom';
 
 
 
 export default function DisplayJobPosts() {
     const [jobPosts, setJobPosts] = useState<JobPost[]>([]);
     const { loggedId } = Context();
+    const navigate = useNavigate();
 
     // TO update the list every time a new jobPost is created
     useEffect(() => {
@@ -26,6 +28,9 @@ export default function DisplayJobPosts() {
         if (loggedId) fetchPosts();
     }, [loggedId]);
 
+    const handlePostClick = (postId: string) => {
+        navigate("/jobPostDetails", { state: { postId } });
+    }
 
 
     return (
@@ -34,7 +39,7 @@ export default function DisplayJobPosts() {
             <table>
                 <tbody>
                     {jobPosts.map((post) => (
-                        <JobPostItem key={post.postId} jobPost={post} />
+                        <JobPostItem key={post.postId} onClick={() => handlePostClick(post.postId)} jobPost={post} />
                         ))}
                 </tbody>
             </table>

@@ -18,27 +18,34 @@ export default function JobPostDetailsComponent({postId} : {postId: string}) {
         salary: 0,
     });
 
-    const fetchJobPost = async () => {
-
-        try {
-            const data = await getPostById(postId);
-            setJobPost(data);
-        } catch (error) {
-            console.error("Failed to load job post details", error);
-        }
-    }
-
     useEffect(() => {
-        async () => {
-            await fetchJobPost();
+        // If the given postId changes, refetch the data
+        const fetchJobPost = async () => {
+            try {
+                const data = await getPostById(postId);
+                setJobPost(data);
+            } catch (error) {
+                console.error("Failed to load job post details", error);
+            }
+        };
+
+        // Actual function call only happens if the postId is present
+        if (postId) {
+            fetchJobPost();
         }
-    }, [jobPost])
+    }, [postId]);
 
     return (
         <table>
             <tbody>
                 <tr>
-                    <td>name: {jobPost.name}</td>
+                    <td> name: {jobPost.name}</td>
+                    <td>id: {jobPost.companyId}</td>
+                    <td>duration: {jobPost.duration}</td>
+                    <td>salary: {jobPost.salary}</td>
+                    <td>created at: {jobPost.createdAt}</td>
+                    <td>available: {jobPost.available}</td>
+                    <td>description: {jobPost.description}</td>
                     
                 </tr>
                 

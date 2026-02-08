@@ -2,9 +2,9 @@ import { type JobPost } from '../../types/JobPost';
 
 
 
-export default function JobPostItem({ jobPost }: { jobPost: JobPost }) {
+export default function JobPostItem({ jobPost, onClick }: { jobPost: JobPost, onClick: () => void }) {
     return (
-        <tr>
+        <tr onClick={onClick} style={{ cursor: "pointer" }}>
             <td> name: {jobPost.name}</td>
             <td>id: {jobPost.companyId}</td>
             <td>duration: {jobPost.duration}</td>
