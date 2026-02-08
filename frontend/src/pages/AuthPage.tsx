@@ -1,4 +1,4 @@
-import AuthComponent from '../components/AuthComponent';
+import AuthComponent from '../components/Auth/AuthComponent';
 import { authenticate, insertAccount } from '../api/accountApi';
 import { useLocation } from 'react-router-dom';
 

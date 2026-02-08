@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import type { Account } from '../types/Account';
+import type { Account } from '../../types/Account';
 import styles from "./AuthComponent.module.css";
-import { useAuth } from './AuthContext';
+import { useAuth } from '../AuthContext';
 import { useTranslation } from 'react-i18next';
 
 

@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
-import { logout as logoutApi } from "../api/accountApi"; 
+import { logout as logoutApi } from "../../api/accountApi"; 
 import styles from "./DashBoardComponent.module.css";
-import { useAuth } from "./AuthContext";
+import { useAuth } from "../AuthContext";
 import { useTranslation } from 'react-i18next';
 
 
