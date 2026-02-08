@@ -30,7 +30,7 @@ public class JobPost {
     private Integer salary = 0;
     private String description = "";
     private String duration;
-    private String available = "YES";//true if available, false if not
+    private String available = "YES";
     private LocalDateTime createdAt;
     
     // Use @PrePersist to set createdAt before saving to DB

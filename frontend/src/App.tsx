@@ -1,8 +1,8 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import LayoutComponent from './components/Layout/LayoutComponent';
-import OnBoardingPage from './pages/OnBoardingPage';
-import AuthPage from './pages/AuthPage';
-import DashBoardPage from './pages/DashboardPage';
+import OnBoardingPage from './pages/OnBoardingPage/OnBoardingPage';
+import AuthPage from './pages/AuthPage/AuthPage';
+import DashBoardPage from './pages/DashBoardPage/DashBoardPage';
 import { AuthProvider } from './components/AuthContext';
 
 function App() {

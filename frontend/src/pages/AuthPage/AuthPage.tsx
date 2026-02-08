@@ -1,5 +1,5 @@
-import AuthComponent from '../components/Auth/AuthComponent';
-import { authenticate, insertAccount } from '../api/accountApi';
+import AuthComponent from '../../components/Auth/AuthComponent';
+import { authenticate, insertAccount } from '../../api/accountApi';
 import { useLocation } from 'react-router-dom';
 
 // USELOCATION
