@@ -18,7 +18,7 @@ function App() {
             <Route path="/" element={<OnBoardingPage />} />
             <Route path="/authentication/:type" element={<AuthPage/>}/> 
             <Route path="/dashboard" element={<DashBoardPage />} />
-            <Route path="/displayJobPosts" element={<DisplayJobPostsPage/>}/>
+            <Route path="/:displayJobData" element={<DisplayJobPostsPage/>}/>
             <Route path="/createJobPost" element={<CreateJobPostPage/>} />
             {/*Defines the place for the useParams data to be expected */}
             <Route path="/jobPostDetails/:postId" element={<JobPostDetailsPage/>}/>
