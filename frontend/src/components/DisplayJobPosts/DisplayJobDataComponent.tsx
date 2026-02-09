@@ -9,52 +9,59 @@ import { getApplicationsByUserId } from "../../api/jobApplicationApi";
 import JobApplicationItem from './JobApplicationItem';
 import { type JobApplication } from '../../types/JobApplication';
 
-
-
 export default function DisplayJobPosts() {
-    const [jobData, setJobData] = useState<JobPost[] | JobApplication[]>([]);
+    const [jobPosts, setJobPosts] = useState<JobPost[]>([]); 
+    const [jobApplications, setJobApplications] = useState<JobApplication[]>([]); 
     const { loggedId } = Context();
-    const { dataType } = useParams<string>();
+    const { dataType } = useParams<{ dataType: string }>();
 
     const isPost = dataType === "displayJobPosts";
-
-    const jobPostUrl = "JobPostDetails";
-    const jobApplicationUrl = "JobApplicationDetails";
-
-
     const navigate = useNavigate();
 
-    // TO update the list every time a new jobPost is created
     useEffect(() => {
-        const fetchPosts = async () => {
+        const fetchData = async () => {
+            if (!loggedId) return;
             try {
-                if (!loggedId) return;
-                const data = isPost ? await getPostsByCompanyId(loggedId) : await getApplicationsByUserId(loggedId); 
-                setJobData(data);
+                if (isPost) {
+                    const posts = await getPostsByCompanyId(loggedId);
+                    setJobPosts(posts);
+                } else {
+                    const applications = await getApplicationsByUserId(loggedId);
+                    setJobApplications(applications);
+                }
             } catch (error) {
-                console.error("Failed to load posts", error);
+                console.error("Failed to load data", error);
             }
         };
         
-        if (loggedId) fetchPosts();
-    }, [loggedId]);
+        fetchData();
+    }, [loggedId, isPost]);
 
-    const handlePostClick = (postId: string, pageType: string) => {
-        navigate(`/${pageType}/${postId}`);
+    const handlePostClick = (id: string, path: string) => {
+        navigate(`/${path}/${id}`);
     }
 
     return (
         <div>
-            <h1>Job Posts</h1>
+            <h1>{isPost ? "Job Posts" : "My Applications"}</h1>
             <table>
                 <tbody>
-                    {jobData.map((data) => (
-                        isPost ?
-                        <JobPostItem onClick={() => handlePostClick(data.postId, jobPostUrl)} jobPost={data as JobPost} />
-                        :
-                        <JobApplicationItem onClick={() => handlePostClick(data.postId, jobApplicationUrl)} jobApplication={data as JobApplication} />
-                        ))}
-
+                    {isPost 
+                        ? jobPosts.map((post) => (
+                            <JobPostItem 
+                                key={post.postId} // Added key for React list optimization
+                                onClick={() => handlePostClick(post.postId, "JobPostDetails")} 
+                                jobPost={post} 
+                            />
+                        ))
+                        : jobApplications.map((app) => (
+                            <JobApplicationItem 
+                                key={app.applicationId} // Assuming applicationId exists
+                                onClick={() => handlePostClick(app.applicationId, "JobApplicationDetails")} 
+                                jobApplication={app} 
+                            />
+                        ))
+                    }
                 </tbody>
             </table>
         </div>
