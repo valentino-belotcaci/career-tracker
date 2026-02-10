@@ -13,8 +13,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
-import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -35,11 +33,12 @@ public class SecurityConfig {
         http
             .cors(cors -> cors.configurationSource(corsConfigurationSource())) 
             // As we are using cookie to send the JWT we need csrf protection
-            .csrf(csrf -> csrf
+            .csrf(csrf -> csrf.disable())
+            /* .csrf(csrf -> csrf
             .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()) 
             // withHttpOnlyFalse allows React to read the CSRF token string
             .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
-        )
+        )*/
             .authorizeHttpRequests(request -> request 
 
             // static pages and public resources - allow the browser to GET the HTML (client will attach JWT for API calls)

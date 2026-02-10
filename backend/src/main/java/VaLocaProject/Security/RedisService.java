@@ -5,7 +5,7 @@ import java.time.Duration;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-// IMPOERTANT:
+// IMPORTANT:
 // NOW OBSOLETE AS WE USE SPRING CACHE ABSTRACTION WITH REDIS
 @Service
 public class RedisService {
@@ -16,7 +16,7 @@ public class RedisService {
         this.redisTemplate = redisTemplate;
     }
 
-    private static final int MAX_REQUESTS = 5;
+    private static final int MAX_REQUESTS = 100;
     private static final Duration WINDOW = Duration.ofMinutes(1);
 
 
