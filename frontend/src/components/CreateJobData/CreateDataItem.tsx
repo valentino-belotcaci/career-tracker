@@ -20,12 +20,7 @@ export const CreateJobPostItem = ({jobPost, changeFunction} : {jobPost : JobPost
 export const CreateJobApplicationItem = ({jobApplication, changeFunction} : {jobApplication : JobApplication, changeFunction: (e: React.ChangeEvent<HTMLInputElement>) => void}) => {
     return (
         <>
-        <input value={jobApplication.postId} name="postId"  onChange={changeFunction}/>
-        <input value={jobApplication.userId} name="userId" onChange={changeFunction}/>
-        <input value={jobApplication.userDescription} name="userDescription" onChange={changeFunction}/>
-        <input value={jobApplication.status} name="status" onChange={changeFunction}/>
-
-        
+        <input value={jobApplication.userDescription} name="userDescription" onChange={changeFunction}/>        
         </>
     )
 }
