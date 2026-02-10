@@ -7,8 +7,7 @@ import DisplayJobDataPage from './pages/DisplayJobDataPage/DisplayJobDataPage';
 import { ContextProvider } from './components/Context';
 import CreateJobDataPage from './pages/CreateJobDataPage/CreateJobDataPage';
 import JobDataDetailsPage from './pages/JobDataDetails/JobDataDetailsPage';
-import ProfileComponent from './components/Profile/profileComponent';
-
+import ProfileComponent from './components/Profile/ProfileComponent';
 function App() {
 
   return (
