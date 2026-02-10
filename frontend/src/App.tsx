@@ -3,7 +3,7 @@ import LayoutComponent from './components/Layout/LayoutComponent';
 import OnBoardingPage from './pages/OnBoardingPage/OnBoardingPage';
 import AuthPage from './pages/AuthPage/AuthPage';
 import DashBoardPage from './pages/DashBoardPage/DashBoardPage';
-import DisplayJobPostsPage from './pages/DisplayJobPostsPage/DisplayJobPostsPage';
+import DisplayJobDataPage from './pages/DisplayJobPostsPage/DisplayJobPostsPage';
 import { ContextProvider } from './components/Context';
 import CreateJobPostPage from './pages/CreateJobPostPage/CreateJobPostPage';
 import JobDataDetailsPage from './pages/JobDataDetails/JobDataDetailsPage';
@@ -18,7 +18,7 @@ function App() {
             <Route path="/" element={<OnBoardingPage />} />
             <Route path="/authentication/:type" element={<AuthPage/>}/> 
             <Route path="/dashboard" element={<DashBoardPage />} />
-            <Route path="/:dataType" element={<DisplayJobPostsPage/>}/>
+            <Route path="/display/:dataType" element={<DisplayJobDataPage/>}/>
             <Route path="/createJobPost" element={<CreateJobPostPage/>} />
             {/*Defines the place for the useParams data to be expected */}
             <Route path="/:jobType/:jobId" element={<JobDataDetailsPage/>}/>

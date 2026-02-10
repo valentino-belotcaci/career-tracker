@@ -9,12 +9,12 @@ import { getApplicationsByUserId } from "../../api/jobApplicationApi";
 import JobApplicationItem from './JobApplicationItem';
 import { type JobApplication } from '../../types/JobApplication';
 
-export default function DisplayJobPosts() {
+export default function DisplayJobData() {
     const [jobData, setJobData] = useState<JobPost[] | JobApplication[]>([]);
     const { loggedId } = Context();
     const { dataType } = useParams<{ dataType: string }>();
 
-    const isPost = dataType === "displayJobPosts";
+    const isPost = dataType === "JobPosts";
     const navigate = useNavigate();
 
     useEffect(() => {
