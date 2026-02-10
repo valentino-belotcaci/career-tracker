@@ -18,7 +18,6 @@ export default function CreateJobDataComponent() {
 
     const handleInsertion = async () => {
         try {
-            if (!jobData || !loggedId) return;
             const payload = isPost 
                 ? { ...jobData, companyId: loggedId } as JobPost
                 : { ...jobData, userId: loggedId } as JobApplication;
