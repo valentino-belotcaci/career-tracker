@@ -15,7 +15,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        // Limit only sensitive actions, like creating posts or applications
+        // We can decde to limit only some specific endpoints
         registry.addInterceptor(rateLimitInterceptor)
                 .addPathPatterns("**");
     }

@@ -91,7 +91,7 @@ public class SecurityConfig {
                 "/JobApplication/getApplicationsByUserId/**",
                 "/JobPost/getAllJobPosts"
             ).hasRole("USER")
-
+            
 
             
             
