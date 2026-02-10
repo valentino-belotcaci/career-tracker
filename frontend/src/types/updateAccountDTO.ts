@@ -1,6 +1,5 @@
 export interface UpdateAccountDTO {
     email: string;
-    password: string;
     description?: string; 
 
     //user fields

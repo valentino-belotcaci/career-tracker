@@ -55,7 +55,6 @@ export default function ProfileComponent(){
         // Build DTO properly
         const dto: UpdateAccountDTO = {
             email: profile.email || "",
-            password: profile.password || "", // <- keep original password if user didn't change
             description: profile.description || "",
             firstName: accountType === "USER" ? profile.firstName || "" : "",
             lastName: accountType === "USER" ? profile.lastName || "" : "",
@@ -67,10 +66,8 @@ export default function ProfileComponent(){
 
         await updateAccount(loggedId, dto);
         setIsEditing(false);
-        alert("Profile updated successfully!");
     } catch (err) {
         console.error("Failed to update profile:", err);
-        alert("Failed to save profile. Try again.");
     }
 };
 
