@@ -16,7 +16,7 @@ public class RedisService {
         this.redisTemplate = redisTemplate;
     }
 
-    private static final int MAX_REQUESTS = 5;
+    private static final int MAX_REQUESTS = 100;
     private static final Duration WINDOW = Duration.ofMinutes(1);
 
 
