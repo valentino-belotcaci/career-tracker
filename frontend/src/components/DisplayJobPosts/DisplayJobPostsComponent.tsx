@@ -32,13 +32,14 @@ export default function DisplayJobPosts() {
         navigate(`/jobPostDetails/${postId}`);
     }
 
+
     return (
         <div>
             <h1>Job Posts</h1>
             <table>
                 <tbody>
                     {jobPosts.map((post) => (
-                        <JobPostItem key={post.postId} onClick={() => handlePostClick(post.postId)} jobPost={post} />
+                        <JobPostItem onClick={() => handlePostClick(post.postId)} jobPost={post} />
                         ))}
                 </tbody>
             </table>

@@ -22,6 +22,7 @@ function App() {
             <Route path="/createJobPost" element={<CreateJobPostPage/>} />
             {/*Defines the place for the useParams data to be expected */}
             <Route path="/jobPostDetails/:postId" element={<JobPostDetailsPage/>}/>
+            <Route path="/jobPostDetails/:postId" element={<JobPostDetailsPage/>}/>
           </Route>
         </Routes>
       </BrowserRouter>
