@@ -1,29 +1,39 @@
 import { useEffect, useState } from "react";
 import { Context } from "../Context";
 import { getAccountById, updateAccount } from "../../api/accountApi";
-import { type Account } from "../../types/Account";
+import { type Account, type User, type Company } from "../../types/Account";
 import type { UpdateAccountDTO } from "../../types/updateAccountDTO";
 
-export default function ProfileUserComponent(){
+//combine optional fields for User and Company
+type ProfileState = Partial<User> & Partial<Company>;
+
+export default function ProfileComponent(){
 
     const { loggedId, accountType } = Context(); //get authentication data(id of the logged in user)
 
-    const [profile, setProfile] = useState<Partial<Account>>({}); //partial acc good for editable forms
+    const [profile, setProfile] = useState<ProfileState>({}); //partial acc good for editable forms
     //profile holds user data, set profile to update it when we clicke edit
     const [isEditing, setIsEditing] = useState(false); //false view mode, true edit mode
 
     useEffect(() => { //we fetch the data after the component renders
         
-        const fetchUser = async () => {
+        const fetchProfile = async () => {
 
-            if (!loggedId) //at this point its defenitely a string, if  not we go back
-                return;
+            if (!loggedId) 
+                return; //at this point its defenitely a string, if  not we go back
+            
+            try {
 
-            const data = await getAccountById(loggedId);
-            setProfile(data);
-            };
+                const data = await getAccountById(loggedId);
+                setProfile(data);
 
-            if (loggedId) fetchUser();
+            } catch (err) {
+
+                console.error("Failed to fetch profile:", err);
+            }
+    };
+
+    fetchProfile();
 
     }, [loggedId]);
 
@@ -37,12 +47,23 @@ export default function ProfileUserComponent(){
         });
     }
 
+
     const handleSave = async () => { //calls updateAccount
 
-        if (!loggedId) return;
-        await updateAccount(loggedId,  profile as UpdateAccountDTO);
+        if (!loggedId) 
+            return;
+        try {
 
-        setIsEditing(false);
+            await updateAccount(loggedId, profile as UpdateAccountDTO);
+            setIsEditing(false);
+            alert("Profile updated successfully!");
+
+        } catch (err) {
+
+            console.error("Failed to update profile:", err);
+            alert("Failed to save profile. Try again.");
+        }
     };
 
-};
+    
+}
