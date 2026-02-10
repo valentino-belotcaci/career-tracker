@@ -1,4 +1,4 @@
-import CreateJobPostComponent from '../../components/CreateJobPost/CreateJobPostComponent';
+import CreateJobPostComponent from '../../components/CreateJobData/CreateJobDataComponent';
 
 export default function CreateJobPostPage() {
     return (
