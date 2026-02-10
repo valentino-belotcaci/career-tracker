@@ -45,6 +45,6 @@ export const logout = async (): Promise<Record<string, string>> => {
 }
 
 export const updateAccount = async (id: string, body: UpdateAccountDTO): Promise<Account> => {
-  const response = await client.put<Account>(`/Account/updateAccount/${id}`, body);
+  const response = await client.patch<Account>(`/Account/updateAccount/${id}`, body);
   return response.data;
 }

@@ -3,10 +3,11 @@ import LayoutComponent from './components/Layout/LayoutComponent';
 import OnBoardingPage from './pages/OnBoardingPage/OnBoardingPage';
 import AuthPage from './pages/AuthPage/AuthPage';
 import DashBoardPage from './pages/DashBoardPage/DashBoardPage';
-import DisplayJobDataPage from './pages/DisplayJobPostsPage/DisplayJobPostsPage';
+import DisplayJobDataPage from './pages/DisplayJobDataPage/DisplayJobDataPage';
 import { ContextProvider } from './components/Context';
-import CreateJobDataPage from './pages/CreateJobPostPage/CreateJobPostPage';
+import CreateJobDataPage from './pages/CreateJobDataPage/CreateJobDataPage';
 import JobDataDetailsPage from './pages/JobDataDetails/JobDataDetailsPage';
+import ProfileComponent from './components/Profile/profileComponent';
 
 function App() {
 
@@ -22,6 +23,7 @@ function App() {
             <Route path="/create/:dataType" element={<CreateJobDataPage/>} />
             {/*Defines the place for the useParams data to be expected */}
             <Route path="/:jobType/:jobId" element={<JobDataDetailsPage/>}/>
+            <Route path="/profile" element={<ProfileComponent />} />
           </Route>
         </Routes>
       </BrowserRouter>

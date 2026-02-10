@@ -1,4 +1,4 @@
-import DisplayJobPostsComponent from "../../components/DisplayJobData/DisplayJobDataComponent";
+import DisplayJobDataComponent from "../../components/DisplayJobData/DisplayJobDataComponent";
 import { Link } from 'react-router-dom';
 import { Context } from '../../components/Context';
 
@@ -8,7 +8,7 @@ export default function DisplayJobDataPage() {
     return (
         <div>
             {isCompany && <Link to="/create/JobPost">new Post</Link>}
-            <DisplayJobPostsComponent />
+            <DisplayJobDataComponent />
         </div>
     );
 }
