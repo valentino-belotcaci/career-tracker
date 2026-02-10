@@ -1,6 +1,6 @@
 
 import { type JobPost } from '../../types/JobPost';
-import { getPostsByCompanyId } from '../../api/jobPostApi';
+import { getAllPosts, getPostsByCompanyId } from '../../api/jobPostApi';
 import {JobPostItem, JobApplicationItem} from './JobDataItem';
 import { Context } from '../Context';
 import { useEffect, useState } from "react";
@@ -10,10 +10,11 @@ import { type JobApplication } from '../../types/JobApplication';
 
 export default function DisplayJobData() {
     const [jobData, setJobData] = useState<JobPost[] | JobApplication[]>([]);
-    const { loggedId } = Context();
+    const { loggedId, accountType } = Context();
     const { dataType } = useParams<{ dataType: string }>();
 
     const isPost = dataType === "JobPost";
+    const isUser = accountType === "USER";
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -21,7 +22,7 @@ export default function DisplayJobData() {
             if (!loggedId) return;
             try {
                 const data = isPost 
-                    ? await getPostsByCompanyId(loggedId) 
+                    ? isUser ? await getAllPosts() : await getPostsByCompanyId(loggedId) 
                     : await getApplicationsByUserId(loggedId); 
                 setJobData(data);
             } catch (error) {
