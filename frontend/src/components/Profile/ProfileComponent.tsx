@@ -1,87 +1,76 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Context } from "../Context";
 import { getAccountById, updateAccount } from "../../api/accountApi";
-import { type Account, type User, type Company } from "../../types/Account";
+import { type User, type Company } from "../../types/Account";
 import type { UpdateAccountDTO } from "../../types/updateAccountDTO";
+import styles from "./ProfileComponent.module.css";
 
-//combine optional fields for User and Company
+// Combine optional fields for User and Company
 type ProfileState = Partial<User> & Partial<Company>;
 
-export default function ProfileComponent(){
+export default function ProfileComponent() {
+  const { loggedId, accountType } = Context();
+  const navigate = useNavigate();
 
-    const { loggedId, accountType } = Context(); //get authentication data(id of the logged in user)
+  const [profile, setProfile] = useState<ProfileState>({});
+  const [isEditing, setIsEditing] = useState(false);
 
-    const [profile, setProfile] = useState<ProfileState>({}); //partial acc good for editable forms
-    //profile holds user data, set profile to update it when we clicke edit
-    const [isEditing, setIsEditing] = useState(false); //false view mode, true edit mode
+  useEffect(() => {
+    const fetchProfile = async () => {
+      if (!loggedId) return;
 
-    useEffect(() => { //we fetch the data after the component renders
-        
-        const fetchProfile = async () => {
-
-            if (!loggedId) 
-                return; //at this point its defenitely a string, if  not we go back
-            
-            try {
-
-                const data = await getAccountById(loggedId);
-                setProfile(data);
-
-            } catch (err) {
-
-                console.error("Failed to fetch profile:", err);
-            }
+      try {
+        const data = await getAccountById(loggedId);
+        setProfile(data);
+      } catch (err) {
+        console.error("Failed to fetch profile:", err);
+      }
     };
 
     fetchProfile();
+  }, [loggedId]);
 
-    }, [loggedId]);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setProfile({ ...profile, [e.target.name]: e.target.value });
+  };
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {//It contains everything about the change that just happened.
-
-        if (!profile) return;
-
-        setProfile({ //setProfile updates react state
-            ...profile,
-            [e.target.name]: e.target.value //e.target is the input element itself that triggered the change.
-        });
-    }
-
-
-    const handleSave = async () => {
+  const handleSave = async () => {
     if (!loggedId) return;
 
     try {
-        // Build DTO properly
-        const dto: UpdateAccountDTO = {
-            email: profile.email || "",
-            description: profile.description || "",
-            firstName: accountType === "USER" ? profile.firstName || "" : "",
-            lastName: accountType === "USER" ? profile.lastName || "" : "",
-            companyName: accountType === "COMPANY" ? profile.companyName || "" : "",
-            city: accountType === "COMPANY" ? profile.city || "" : "",
-            street: accountType === "COMPANY" ? profile.street || "" : "",
-            number: accountType === "COMPANY" ? profile.number || "" : "",
-        };
+      const dto: UpdateAccountDTO = {
+        email: profile.email || "",
+        description: profile.description || "",
+        firstName: accountType === "USER" ? profile.firstName || "" : "",
+        lastName: accountType === "USER" ? profile.lastName || "" : "",
+        companyName: accountType === "COMPANY" ? profile.companyName || "" : "",
+        city: accountType === "COMPANY" ? profile.city || "" : "",
+        street: accountType === "COMPANY" ? profile.street || "" : "",
+        number: accountType === "COMPANY" ? profile.number || "" : "",
+      };
 
-        await updateAccount(loggedId, dto);
-        setIsEditing(false);
+      await updateAccount(loggedId, dto);
+      setIsEditing(false);
     } catch (err) {
-        console.error("Failed to update profile:", err);
+      console.error("Failed to update profile:", err);
     }
-};
+  };
 
+  const handleBack = () => {
+    navigate(-1); // go to previous page
+  };
 
-    //show loading while profile id is null
-    if (!loggedId || Object.keys(profile).length === 0) return <p>Loading...</p>;
+  if (!loggedId || Object.keys(profile).length === 0) return <p>Loading...</p>;
 
-
-    return (
-    <div style={{ maxWidth: 600, margin: "0 auto" }}>
-      <h1>{accountType === "USER" ? "User Profile" : "Company Profile"}</h1>
+  return (
+    <div className={styles.container}>
+      <h1 className={styles.title}>
+        {accountType === "USER" ? "User Profile" : "Company Profile"}
+      </h1>
 
       {/* COMMON FIELDS */}
-      <div>
+      <div className={styles.field}>
         <label>Email:</label>
         {isEditing ? (
           <input name="email" value={profile.email || ""} onChange={handleChange} />
@@ -90,7 +79,7 @@ export default function ProfileComponent(){
         )}
       </div>
 
-      <div>
+      <div className={styles.field}>
         <label>Description:</label>
         {isEditing ? (
           <input name="description" value={profile.description || ""} onChange={handleChange} />
@@ -99,10 +88,10 @@ export default function ProfileComponent(){
         )}
       </div>
 
-      {/* USER-SPECIFIC FIELDS */}
+      {/* USER FIELDS */}
       {accountType === "USER" && (
         <>
-          <div>
+          <div className={styles.field}>
             <label>First Name:</label>
             {isEditing ? (
               <input name="firstName" value={profile.firstName || ""} onChange={handleChange} />
@@ -111,7 +100,7 @@ export default function ProfileComponent(){
             )}
           </div>
 
-          <div>
+          <div className={styles.field}>
             <label>Last Name:</label>
             {isEditing ? (
               <input name="lastName" value={profile.lastName || ""} onChange={handleChange} />
@@ -122,10 +111,10 @@ export default function ProfileComponent(){
         </>
       )}
 
-      {/* COMPANY-SPECIFIC FIELDS */}
+      {/* COMPANY FIELDS */}
       {accountType === "COMPANY" && (
         <>
-          <div>
+          <div className={styles.field}>
             <label>Company Name:</label>
             {isEditing ? (
               <input
@@ -138,7 +127,7 @@ export default function ProfileComponent(){
             )}
           </div>
 
-          <div>
+          <div className={styles.field}>
             <label>City:</label>
             {isEditing ? (
               <input name="city" value={profile.city || ""} onChange={handleChange} />
@@ -147,7 +136,7 @@ export default function ProfileComponent(){
             )}
           </div>
 
-          <div>
+          <div className={styles.field}>
             <label>Street:</label>
             {isEditing ? (
               <input name="street" value={profile.street || ""} onChange={handleChange} />
@@ -156,7 +145,7 @@ export default function ProfileComponent(){
             )}
           </div>
 
-          <div>
+          <div className={styles.field}>
             <label>Number:</label>
             {isEditing ? (
               <input name="number" value={profile.number || ""} onChange={handleChange} />
@@ -168,13 +157,18 @@ export default function ProfileComponent(){
       )}
 
       {/* Buttons */}
-      <div style={{ marginTop: 20 }}>
+      <div className={styles.buttons}>
+        <button className={`${styles.button} ${styles.back}`} onClick={handleBack}>
+          Back
+        </button>
         {isEditing ? (
-          <button onClick={handleSave} style={{ marginRight: 10 }}>
+          <button className={`${styles.button} ${styles.save}`} onClick={handleSave}>
             Save
           </button>
         ) : (
-          <button onClick={() => setIsEditing(true)}>Edit</button>
+          <button className={`${styles.button} ${styles.edit}`} onClick={() => setIsEditing(true)}>
+            Edit
+          </button>
         )}
       </div>
     </div>
