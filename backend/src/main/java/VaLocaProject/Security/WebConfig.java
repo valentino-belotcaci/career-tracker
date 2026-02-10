@@ -17,6 +17,6 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         // Limit only sensitive actions, like creating posts or applications
         registry.addInterceptor(rateLimitInterceptor)
-                .addPathPatterns("/JobPost/getAllPosts", "/JobApplication/insertJobApplication");
+                .addPathPatterns("**");
     }
 }
