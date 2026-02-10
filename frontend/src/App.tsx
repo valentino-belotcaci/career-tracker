@@ -7,6 +7,7 @@ import DisplayJobPostsPage from './pages/DisplayJobPostsPage/DisplayJobPostsPage
 import { ContextProvider } from './components/Context';
 import CreateJobPostPage from './pages/CreateJobPostPage/CreateJobPostPage';
 import JobPostDetailsPage from './pages/JobPostDetails/JobPostDetailsPage';
+import ProfileComponent from './components/Profile/ProfileComponent';
 
 function App() {
 
@@ -22,7 +23,7 @@ function App() {
             <Route path="/createJobPost" element={<CreateJobPostPage/>} />
             {/*Defines the place for the useParams data to be expected */}
             <Route path="/jobPostDetails/:postId" element={<JobPostDetailsPage/>}/>
-            <Route path="/jobPostDetails/:postId" element={<JobPostDetailsPage/>}/>
+            <Route path="/profile" element={<ProfileComponent />} />
           </Route>
         </Routes>
       </BrowserRouter>

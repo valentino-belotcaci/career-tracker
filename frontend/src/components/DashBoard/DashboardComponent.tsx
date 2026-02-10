@@ -31,7 +31,7 @@ export default function DashboardComponent() {
             ? t('dashBoardUserContent')
             : t('dashBoardCompanyContent')}
         </p>
-        <Link className={styles.link} to={isUser ? "/profileUser" : "/profileCompany"}>
+        <Link className={styles.link} to={"/profile"}>
             {t('profileButton')}
         </Link>
         <Link className={styles.link} to={isUser ? "/displayJobApplications" : "/displayJobPosts"}>
