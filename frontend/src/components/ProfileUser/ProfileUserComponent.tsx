@@ -65,9 +65,111 @@ export default function ProfileComponent(){
         }
     };
 
-    //show loading while id is null
+    //show loading while profile id is null
     if (!loggedId || Object.keys(profile).length === 0) return <p>Loading...</p>;
 
 
-    
+    return (
+    <div style={{ maxWidth: 600, margin: "0 auto" }}>
+      <h1>{accountType === "USER" ? "User Profile" : "Company Profile"}</h1>
+
+      {/* COMMON FIELDS */}
+      <div>
+        <label>Email:</label>
+        {isEditing ? (
+          <input name="email" value={profile.email || ""} onChange={handleChange} />
+        ) : (
+          <p>{profile.email}</p>
+        )}
+      </div>
+
+      <div>
+        <label>Description:</label>
+        {isEditing ? (
+          <input name="description" value={profile.description || ""} onChange={handleChange} />
+        ) : (
+          <p>{profile.description}</p>
+        )}
+      </div>
+
+      {/* USER-SPECIFIC FIELDS */}
+      {accountType === "USER" && (
+        <>
+          <div>
+            <label>First Name:</label>
+            {isEditing ? (
+              <input name="firstName" value={profile.firstName || ""} onChange={handleChange} />
+            ) : (
+              <p>{profile.firstName}</p>
+            )}
+          </div>
+
+          <div>
+            <label>Last Name:</label>
+            {isEditing ? (
+              <input name="lastName" value={profile.lastName || ""} onChange={handleChange} />
+            ) : (
+              <p>{profile.lastName}</p>
+            )}
+          </div>
+        </>
+      )}
+
+      {/* COMPANY-SPECIFIC FIELDS */}
+      {accountType === "COMPANY" && (
+        <>
+          <div>
+            <label>Company Name:</label>
+            {isEditing ? (
+              <input
+                name="companyName"
+                value={profile.companyName || ""}
+                onChange={handleChange}
+              />
+            ) : (
+              <p>{profile.companyName}</p>
+            )}
+          </div>
+
+          <div>
+            <label>City:</label>
+            {isEditing ? (
+              <input name="city" value={profile.city || ""} onChange={handleChange} />
+            ) : (
+              <p>{profile.city}</p>
+            )}
+          </div>
+
+          <div>
+            <label>Street:</label>
+            {isEditing ? (
+              <input name="street" value={profile.street || ""} onChange={handleChange} />
+            ) : (
+              <p>{profile.street}</p>
+            )}
+          </div>
+
+          <div>
+            <label>Number:</label>
+            {isEditing ? (
+              <input name="number" value={profile.number || ""} onChange={handleChange} />
+            ) : (
+              <p>{profile.number}</p>
+            )}
+          </div>
+        </>
+      )}
+
+      {/* Buttons */}
+      <div style={{ marginTop: 20 }}>
+        {isEditing ? (
+          <button onClick={handleSave} style={{ marginRight: 10 }}>
+            Save
+          </button>
+        ) : (
+          <button onClick={() => setIsEditing(true)}>Edit</button>
+        )}
+      </div>
+    </div>
+  );
 }
