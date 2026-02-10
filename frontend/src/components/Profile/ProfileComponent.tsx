@@ -48,22 +48,32 @@ export default function ProfileComponent(){
     }
 
 
-    const handleSave = async () => { //calls updateAccount
+    const handleSave = async () => {
+    if (!loggedId) return;
 
-        if (!loggedId) 
-            return;
-        try {
+    try {
+        // Build DTO properly
+        const dto: UpdateAccountDTO = {
+            email: profile.email || "",
+            password: profile.password || "", // <- keep original password if user didn't change
+            description: profile.description || "",
+            firstName: accountType === "USER" ? profile.firstName || "" : "",
+            lastName: accountType === "USER" ? profile.lastName || "" : "",
+            companyName: accountType === "COMPANY" ? profile.companyName || "" : "",
+            city: accountType === "COMPANY" ? profile.city || "" : "",
+            street: accountType === "COMPANY" ? profile.street || "" : "",
+            number: accountType === "COMPANY" ? profile.number || "" : "",
+        };
 
-            await updateAccount(loggedId, profile as UpdateAccountDTO);
-            setIsEditing(false);
-            alert("Profile updated successfully!");
+        await updateAccount(loggedId, dto);
+        setIsEditing(false);
+        alert("Profile updated successfully!");
+    } catch (err) {
+        console.error("Failed to update profile:", err);
+        alert("Failed to save profile. Try again.");
+    }
+};
 
-        } catch (err) {
-
-            console.error("Failed to update profile:", err);
-            alert("Failed to save profile. Try again.");
-        }
-    };
 
     //show loading while profile id is null
     if (!loggedId || Object.keys(profile).length === 0) return <p>Loading...</p>;
