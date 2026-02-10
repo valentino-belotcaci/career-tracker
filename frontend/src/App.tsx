@@ -6,7 +6,7 @@ import DashBoardPage from './pages/DashBoardPage/DashBoardPage';
 import DisplayJobPostsPage from './pages/DisplayJobPostsPage/DisplayJobPostsPage';
 import { ContextProvider } from './components/Context';
 import CreateJobPostPage from './pages/CreateJobPostPage/CreateJobPostPage';
-import JobPostDetailsPage from './pages/JobPostDetails/JobPostDetailsPage';
+import JobDataDetailsPage from './pages/JobDataDetails/JobDataDetailsPage';
 
 function App() {
 
@@ -21,7 +21,7 @@ function App() {
             <Route path="/:dataType" element={<DisplayJobPostsPage/>}/>
             <Route path="/createJobPost" element={<CreateJobPostPage/>} />
             {/*Defines the place for the useParams data to be expected */}
-            <Route path="/jobPostDetails/:postId" element={<JobPostDetailsPage/>}/>
+            <Route path="/:jobType/:jobId" element={<JobDataDetailsPage/>}/>
           </Route>
         </Routes>
       </BrowserRouter>

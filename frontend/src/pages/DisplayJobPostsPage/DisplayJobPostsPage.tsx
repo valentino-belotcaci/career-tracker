@@ -1,4 +1,4 @@
-import DisplayJobPostsComponent from "../../components/DisplayJobPosts/DisplayJobDataComponent";
+import DisplayJobPostsComponent from "../../components/DisplayJobData/DisplayJobDataComponent";
 import { Link } from 'react-router-dom';
 
 export default function DisplayJobPostsPage() {

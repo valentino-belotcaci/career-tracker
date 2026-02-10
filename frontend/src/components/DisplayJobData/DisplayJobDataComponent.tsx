@@ -33,7 +33,7 @@ export default function DisplayJobPosts() {
     }, [loggedId, isPost]);
 
     const handleItemClick = (id: string) => {
-        const path = isPost ? "JobPostDetails" : "JobApplicationDetails";
+        const path = isPost ? "JobPost" : "JobApplication";
         navigate(`/${path}/${id}`);
     };
 
