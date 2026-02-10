@@ -1,17 +1,18 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import DashboardComponent from "../../components/DashBoard/DashboardComponent";
+import { Context } from "../../components/Context";
 export default function DashboardPage() {
     const navigate = useNavigate();
-    const type = localStorage.getItem("type");
+    const {accountType} = Context();
 
     useEffect(() => {
-        if (!type) {
+        if (!accountType) {
             navigate("/"); 
         }
-    }, [type, navigate]);
+    }, [accountType, navigate]);
 
-    if (!type) return null;
+    if (!accountType) return null;
 
     return <DashboardComponent />;
 }
