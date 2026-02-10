@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { Context } from "../Context";
 import { getAccountById, updateAccount } from "../../api/accountApi";
 import { type Account } from "../../types/Account";
+import type { UpdateAccountDTO } from "../../types/updateAccountDTO";
 
 export default function ProfileUserComponent(){
 
-    const { loggedId } = Context(); //get authentication data(id of the logged in user)
+    const { loggedId, accountType } = Context(); //get authentication data(id of the logged in user)
 
     const [profile, setProfile] = useState<Partial<Account>>({}); //partial acc good for editable forms
     //profile holds user data, set profile to update it when we clicke edit
@@ -24,19 +25,24 @@ export default function ProfileUserComponent(){
 
             if (loggedId) fetchUser();
 
-        }, [loggedId]);
+    }, [loggedId]);
 
-        const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {//It contains everything about the change that just happened.
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {//It contains everything about the change that just happened.
 
-            if (!profile) return;
+        if (!profile) return;
 
-            setProfile({ //setProfile updates react state
-                ...profile,
-                [e.target.name]: e.target.value //e.target is the input element itself that triggered the change.
+        setProfile({ //setProfile updates react state
+            ...profile,
+            [e.target.name]: e.target.value //e.target is the input element itself that triggered the change.
         });
+    }
+
+    const handleSave = async () => { //calls updateAccount
+
+        if (!loggedId) return;
+        await updateAccount(loggedId,  profile as UpdateAccountDTO);
+
+        setIsEditing(false);
+    };
+
 };
-
-    
-
-    
-}
