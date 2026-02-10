@@ -13,7 +13,7 @@ export default function DisplayJobData() {
     const { loggedId } = Context();
     const { dataType } = useParams<{ dataType: string }>();
 
-    const isPost = dataType === "JobPosts";
+    const isPost = dataType === "JobPost";
     const navigate = useNavigate();
 
     useEffect(() => {
