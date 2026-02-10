@@ -65,5 +65,9 @@ export default function ProfileComponent(){
         }
     };
 
+    //show loading while id is null
+    if (!loggedId || Object.keys(profile).length === 0) return <p>Loading...</p>;
+
+
     
 }
