@@ -1,12 +1,11 @@
 
 import { type JobPost } from '../../types/JobPost';
 import { getPostsByCompanyId } from '../../api/jobPostApi';
-import JobPostItem from './JobPostItem';
+import {JobPostItem, JobApplicationItem} from './JobDataItem';
 import { Context } from '../Context';
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
 import { getApplicationsByUserId } from "../../api/jobApplicationApi";
-import JobApplicationItem from './JobApplicationItem';
 import { type JobApplication } from '../../types/JobApplication';
 
 export default function DisplayJobData() {
