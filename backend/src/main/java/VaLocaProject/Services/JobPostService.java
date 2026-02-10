@@ -7,6 +7,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import VaLocaProject.Models.JobPost;
@@ -60,6 +61,7 @@ public class JobPostService {
 
 
     @Transactional
+    @PreAuthorize("#jobPost.companyId.toString() == authentication.principal.id")
     // Now the updatePost method updates the cache for the specific job post
     // and invalidates the cache for the list of posts by the company
     @Caching(
