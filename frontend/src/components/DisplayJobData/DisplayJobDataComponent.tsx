@@ -1,20 +1,19 @@
 
 import { type JobPost } from '../../types/JobPost';
 import { getPostsByCompanyId } from '../../api/jobPostApi';
-import JobPostItem from './JobPostItem';
+import {JobPostItem, JobApplicationItem} from './JobDataItem';
 import { Context } from '../Context';
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
 import { getApplicationsByUserId } from "../../api/jobApplicationApi";
-import JobApplicationItem from './JobApplicationItem';
 import { type JobApplication } from '../../types/JobApplication';
 
-export default function DisplayJobPosts() {
+export default function DisplayJobData() {
     const [jobData, setJobData] = useState<JobPost[] | JobApplication[]>([]);
     const { loggedId } = Context();
     const { dataType } = useParams<{ dataType: string }>();
 
-    const isPost = dataType === "displayJobPosts";
+    const isPost = dataType === "JobPosts";
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -33,7 +32,7 @@ export default function DisplayJobPosts() {
     }, [loggedId, isPost]);
 
     const handleItemClick = (id: string) => {
-        const path = isPost ? "JobPostDetails" : "JobApplicationDetails";
+        const path = isPost ? "JobPost" : "JobApplication";
         navigate(`/${path}/${id}`);
     };
 
