@@ -31,7 +31,6 @@ public class JWTFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
                 
-                
         String token = extractToken(request);
         if (token != null) {
             // extract username(email in our case) from the token
@@ -52,9 +51,9 @@ public class JWTFilter extends OncePerRequestFilter {
         chain.doFilter(request, response);
     }
 
-    // Helper to get token from cookies
+    // Helper to get token from cookies or Auth header
     private String extractToken(HttpServletRequest request) {
-    // 1. Try to get token from Authorization Header (For React/Axios)
+    // Try to get token from Authorization Header (For React/Axios)
         String authHeader = request.getHeader("Authorization");
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             return authHeader.substring(7); // Remove "Bearer " prefix

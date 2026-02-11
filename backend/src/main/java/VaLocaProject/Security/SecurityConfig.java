@@ -13,6 +13,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -33,12 +35,13 @@ public class SecurityConfig {
         http
             .cors(cors -> cors.configurationSource(corsConfigurationSource())) 
             // As we are using cookie to send the JWT we need csrf protection
-            .csrf(csrf -> csrf.disable())
-            /* .csrf(csrf -> csrf
+            .csrf(csrf -> csrf
             .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()) 
             // withHttpOnlyFalse allows React to read the CSRF token string
             .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
-        )*/
+            // Add this so that the csrf token is not necessary for login and register
+            .ignoringRequestMatchers("/Account/authenticate", "/Account/insertAccount", "/Account/logout")
+            )
             .authorizeHttpRequests(request -> request 
 
             // static pages and public resources - allow the browser to GET the HTML (client will attach JWT for API calls)
@@ -102,6 +105,8 @@ public class SecurityConfig {
             )
             // To add the JWT filter as first filter, to not even touch the backend without it
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+            // Add csrf filter after JWT but still before the normal authentication
+            .addFilterAfter(new CsrfCookieFilter(), UsernamePasswordAuthenticationFilter.class)
             // Define the sesionManagemant as STATELESS (STATEFULL as default)
             .sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
