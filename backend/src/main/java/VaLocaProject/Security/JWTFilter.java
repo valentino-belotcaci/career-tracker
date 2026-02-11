@@ -44,6 +44,8 @@ public class JWTFilter extends OncePerRequestFilter {
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                     auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(auth);
+                } else {
+                    clearTokenCookie(response);
                 }
             }
         }
@@ -65,5 +67,14 @@ public class JWTFilter extends OncePerRequestFilter {
             }
         }
         return null;
+    }
+
+    // Helper method to clear the token cookie
+    private void clearTokenCookie(HttpServletResponse response) {
+        Cookie cookie = new Cookie("token", null);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(0); // Scade ora
+        response.addCookie(cookie);
     }
 }
