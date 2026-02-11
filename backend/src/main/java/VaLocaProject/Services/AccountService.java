@@ -118,10 +118,8 @@ public class AccountService {
         return account;
     }
 
-    /*
-    @Caching( put = {
-        @CachePut(value = "accountsByEmail", key = "#result.email"),
-        @CachePut(value = "accountsById", key = "#result.id")}) */
+    
+    @CachePut(value = "accountsByEmail", key = "#email")
     public String insertAccount(String email, String password, String type) {
         String encoded = passwordEncoder.encode(password);
 
