@@ -182,26 +182,25 @@ class AccountServiceTest {
         String password = "1111";
         String encodedPassword = "encoded123";
         String type = "USER";
-        UUID id1 = UUID.fromString("00000000-0000-0000-0000-000000000001");
+        String expectedToken = "mocked-jwt-token";
 
-        User savedUser = new User(id1);
-        savedUser.setEmail(email);
-        savedUser.setPassword(encodedPassword);
 
         when(passwordEncoder.encode(password)).thenReturn(encodedPassword);
-        when(userRepository.save(any(User.class))).thenReturn(savedUser);
+        when(jwtService.generateToken(email)).thenReturn(expectedToken);
 
         // Act
-        Account result = accountService.insertAccount(email, password, type);
+        String resultToken = accountService.insertAccount(email, password, type);
 
         // Assert
-        assertNotNull(result);
-        assertEquals(email, result.getEmail());
-        assertEquals(encodedPassword, result.getPassword());
-        assertEquals("USER", result.getType());
+        assertNotNull(resultToken);
+        assertEquals(expectedToken, resultToken);
 
+        // Verifica che l'utente sia stato effettivamente salvato con i dati corretti
         verify(userRepository, times(1)).save(any(User.class));
         verify(companyRepository, times(0)).save(any());
+        
+        // Verifica che il token sia stato generato per l'email corretta
+        verify(jwtService, times(1)).generateToken(email);
     }
 
     @Test

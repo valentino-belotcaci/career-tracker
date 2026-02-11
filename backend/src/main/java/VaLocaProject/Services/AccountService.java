@@ -134,7 +134,7 @@ public class AccountService {
             }
             default -> throw new RuntimeException("Unknown account type: " + type);
         }
-
+    
         return jwtService.generateToken(email);
  
     }
