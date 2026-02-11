@@ -76,38 +76,34 @@ public class AccountController {
         return ResponseEntity.ok(accountService.getAccountById(id));
     }
 
+    // NOTE: This logic needs to stay here as it is Response handling logic,
+    // so the service shouldn't interact with it
     @PostMapping("/authenticate")
-    public ResponseEntity<?> authenticateAccount(@RequestBody Map<String, String> body) {
+    public ResponseEntity<Account> authenticateAccount(@RequestBody Map<String, String> body) {
         String email = body.get("email");
         String password = body.get("password");
 
-        if (email == null || password == null) {
-            return ResponseEntity.badRequest().body("Error: email and password required");
-        }
+        // 1) Authenticate to the service and receive the JWT token as string
+        String jwtToken = accountService.authenticate(email, password);
 
-        
-        String token = accountService.authenticate(email, password);
-        if (token == null) {
-            return ResponseEntity.status(401).body("Error: Login failed");
-        }
-
-        // Get account directly
-        Account account = accountService.getAccountByEmail(email);
-
-        // JWT cookie
-        ResponseCookie cookie = ResponseCookie.from("token", token)
+        // 2) DEfine the ResponseCookie with the JWT token.
+        // The token needs to have the same configurations as the one defined in the SecurityConfig
+        ResponseCookie cookie = ResponseCookie.from("token", jwtToken)
                 .httpOnly(true)
-                .secure(true)
+                .secure(true) // Assicurati che React sia su HTTPS o usa false per localhost
                 .path("/")
-                .maxAge(Duration.ofMinutes(15))
+                .maxAge(Duration.ofMinutes(30))
                 .sameSite("Lax")
                 .build();
 
-        // Return JSON body with concrete type and id
+        // 3) Fetch the account details to add in the body of the response
+        Account account = accountService.getAccountByEmail(email);
+
+        // Return the actual response with cookie inside the
+        // the header and the logged account as the body
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .body(account
-                );
+                .body(account);
     }
 
     // To remove all headers abd cookies when loggin out

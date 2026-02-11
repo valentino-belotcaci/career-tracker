@@ -11,7 +11,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -140,15 +139,19 @@ public class AccountService {
  
     }
 
-   public String authenticate(String email, String password) {
-        Authentication authentication = authManager.authenticate(
+    public String authenticate(String email, String password) {
+        if (email == null || password == null) {
+            throw new IllegalArgumentException("Email e password obbligatorie");
+        }
+
+        // Use Spring security to authenticate
+        // Authentication authentication = 
+        // if we need to perform some operations on the authentication we can store it
+        authManager.authenticate(
                 new UsernamePasswordAuthenticationToken(email, password)
         );
 
-        if (!authentication.isAuthenticated()) {
-            throw new RuntimeException("Invalid credentials for email: " + email);
-        }
-
+        // Return the JWT token
         return jwtService.generateToken(email);
     }
 

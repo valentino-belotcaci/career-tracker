@@ -15,6 +15,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
+import org.springframework.security.web.csrf.CsrfTokenRequestHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -38,7 +39,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf
             .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()) 
             // withHttpOnlyFalse allows React to read the CSRF token string
-            .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
+            .csrfTokenRequestHandler(createSpaRequestHandler())
             // Add this so that the csrf token is not necessary for login and register
             .ignoringRequestMatchers("/Account/authenticate", "/Account/insertAccount", "/Account/logout")
             )
@@ -143,6 +144,15 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
+
+    // Helper needed to manually define a new csrf token with null name 
+    // to bypass the lazy loading of the token and send it at the first request
+    private CsrfTokenRequestHandler createSpaRequestHandler() {
+        CsrfTokenRequestAttributeHandler requestHandler = new CsrfTokenRequestAttributeHandler();
+        requestHandler.setCsrfRequestAttributeName(null);
+    return requestHandler;
+}
 
 
 }
