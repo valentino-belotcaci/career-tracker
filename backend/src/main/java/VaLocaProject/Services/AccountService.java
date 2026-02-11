@@ -22,6 +22,7 @@ import VaLocaProject.Models.User;
 import VaLocaProject.Repositories.CompanyRepository;
 import VaLocaProject.Repositories.UserRepository;
 import VaLocaProject.Security.JWTService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -82,7 +83,7 @@ public class AccountService {
         // 2) Try user repository
         Account account = userRepository.findByEmail(email)
                 .map(user -> (Account) user)
-                .orElse(null);
+                .orElseThrow(() -> new EntityNotFoundException("Account not found with email: " + email));
 
         // 3) Try company repository
         if (account == null) {
@@ -104,7 +105,7 @@ public class AccountService {
         // 1) Try user repository
         Account account = userRepository.findById(id)
                 .map(user -> (Account) user)
-                .orElse(null);
+                .orElseThrow(() -> new EntityNotFoundException("Account not found with id: " + id));
 
         // 3) Try company repository
         if (account == null) {
