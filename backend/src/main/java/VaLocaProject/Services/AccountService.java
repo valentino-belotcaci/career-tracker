@@ -118,24 +118,26 @@ public class AccountService {
         return account;
     }
 
-
+    /*
     @Caching( put = {
         @CachePut(value = "accountsByEmail", key = "#result.email"),
-        @CachePut(value = "accountsById", key = "#result.id")})
-    public Account insertAccount(String email, String password, String type) {
+        @CachePut(value = "accountsById", key = "#result.id")}) */
+    public String insertAccount(String email, String password, String type) {
         String encoded = passwordEncoder.encode(password);
 
         switch (type.toUpperCase()) {
             case "USER" -> {
                 User newUser = new User(email, encoded);
-                return userRepository.save(newUser);
+                userRepository.save(newUser);
             }
             case "COMPANY" -> {
                 Company newCompany = new Company(email, encoded);
-                return companyRepository.save(newCompany);
+                companyRepository.save(newCompany);
             }
             default -> throw new RuntimeException("Unknown account type: " + type);
         }
+
+        return jwtService.generateToken(email);
  
     }
 

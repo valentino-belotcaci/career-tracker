@@ -51,12 +51,24 @@ public class AccountController {
         if (email == null || password == null || type == null) {
             return ResponseEntity.badRequest().build(); // return a ResponseEntity with no body with the header of badRequest
         }
+        String jwtToken = accountService.insertAccount(email, password, type);
 
-        Account saved = accountService.insertAccount(email, password, type);
+        Account saved = accountService.getAccountByEmail(email);
+
+        ResponseCookie cookie = ResponseCookie.from("token", jwtToken)
+            .httpOnly(true)
+            .secure(true) // Assicurati che React sia su HTTPS o usa false per localhost
+            .path("/")
+            .maxAge(Duration.ofMinutes(30))
+            .sameSite("Lax")
+            .build();
+
         if (saved == null) {
             return ResponseEntity.status(500).build();
         }
-        return ResponseEntity.ok(saved);
+        return ResponseEntity.ok()
+        .header(HttpHeaders.SET_COOKIE, cookie.toString())
+        .body(saved);
     }
 
 
@@ -89,12 +101,12 @@ public class AccountController {
         // 2) DEfine the ResponseCookie with the JWT token.
         // The token needs to have the same configurations as the one defined in the SecurityConfig
         ResponseCookie cookie = ResponseCookie.from("token", jwtToken)
-                .httpOnly(true)
-                .secure(true) // Assicurati che React sia su HTTPS o usa false per localhost
-                .path("/")
-                .maxAge(Duration.ofMinutes(30))
-                .sameSite("Lax")
-                .build();
+            .httpOnly(true)
+            .secure(true) // Assicurati che React sia su HTTPS o usa false per localhost
+            .path("/")
+            .maxAge(Duration.ofMinutes(30))
+            .sameSite("Lax")
+            .build();
 
         // 3) Fetch the account details to add in the body of the response
         Account account = accountService.getAccountByEmail(email);
@@ -102,23 +114,23 @@ public class AccountController {
         // Return the actual response with cookie inside the
         // the header and the logged account as the body
         return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .body(account);
+            .header(HttpHeaders.SET_COOKIE, cookie.toString())
+            .body(account);
     }
 
     // To remove all headers abd cookies when loggin out
     @PostMapping("/logout")
     public ResponseEntity<Map<String, String>> logout() {
         ResponseCookie jwtCookie = ResponseCookie.from("token", "")
-                .httpOnly(true)
-                .secure(true)   // keep consistent with authenticate cookie settings
-                .path("/")
-                .maxAge(0)      // expires immediately
-                .sameSite("Lax")
-                .build();
+            .httpOnly(true)
+            .secure(true)   // keep consistent with authenticate cookie settings
+            .path("/")
+            .maxAge(0)      // expires immediately
+            .sameSite("Lax")
+            .build();
 
         ResponseCookie csrfCookie = ResponseCookie.from("XSRF-TOKEN", "")
-            .httpOnly(false) 
+            .httpOnly(true) 
             .secure(true)
             .path("/")
             .maxAge(0)
@@ -126,9 +138,9 @@ public class AccountController {
             .build();
 
         return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
-                .header(HttpHeaders.SET_COOKIE, csrfCookie.toString())
-                .body(Map.of("message", "Logged out"));
+            .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
+            .header(HttpHeaders.SET_COOKIE, csrfCookie.toString())
+            .body(Map.of("message", "Logged out"));
     }
 
 
