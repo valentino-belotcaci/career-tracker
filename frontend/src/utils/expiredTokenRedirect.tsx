@@ -10,14 +10,13 @@ const AxiosInterceptor = ({ children }: { children: React.ReactNode }) => {
       (error) => {
         if (error.response && (error.response.status === 401 || error.response.status === 403)) {
           console.warn("Sessione scaduta o non valida. Reindirizzamento all'onboarding...");
-          
+          localStorage.clear(); // Clear local storage to remove any stale data
           navigate('/'); 
         }
         return Promise.reject(error);
       }
     );
 
-    // Pulizia dell'intercettore quando il componente smonta
     return () => client.interceptors.response.eject(interceptor);
   }, [navigate]);
 
