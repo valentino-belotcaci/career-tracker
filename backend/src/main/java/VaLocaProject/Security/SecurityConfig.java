@@ -37,8 +37,7 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(corsConfigurationSource())) 
             // As we are using cookie to send the JWT we need csrf protection
             .csrf(csrf -> csrf
-            .csrfTokenRepository(cookieCsrfTokenRepository()) 
-            // withHttpOnlyFalse allows React to read the CSRF token string
+            .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())            // withHttpOnlyFalse allows React to read the CSRF token string
             .csrfTokenRequestHandler(createSpaRequestHandler())
             // Add this so that the csrf token is not necessary for login and register
             .ignoringRequestMatchers("/Account/authenticate", "/Account/insertAccount", "/Account/logout")
@@ -146,12 +145,6 @@ public class SecurityConfig {
         return source;
     }
 
-    @Bean
-    CookieCsrfTokenRepository cookieCsrfTokenRepository() {
-        CookieCsrfTokenRepository repository = CookieCsrfTokenRepository.withHttpOnlyFalse();
-        repository.setCookiePath("/"); // Assicura che il cookie sia inviato per TUTTE le rotte API
-    return repository;
-    }
 
     // Helper needed to manually define a new csrf token with null name 
     // to bypass the lazy loading of the token and send it at the first request
