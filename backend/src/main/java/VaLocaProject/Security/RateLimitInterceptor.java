@@ -24,7 +24,7 @@ public class RateLimitInterceptor implements HandlerInterceptor {
             redisService.checkRateLimit(key);
             return true; // Allow request
         } catch (RuntimeException e) {
-            throw new RuntimeException("You are making too many requests!!!");
+            throw new RuntimeException("You are making too many requests!!!!!!!!!!!!!");
         }
     }
 }

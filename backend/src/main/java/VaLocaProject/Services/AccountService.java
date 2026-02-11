@@ -21,7 +21,6 @@ import VaLocaProject.Models.User;
 import VaLocaProject.Repositories.CompanyRepository;
 import VaLocaProject.Repositories.UserRepository;
 import VaLocaProject.Security.JWTService;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -82,7 +81,7 @@ public class AccountService {
         // 2) Try user repository
         Account account = userRepository.findByEmail(email)
                 .map(user -> (Account) user)
-                .orElseThrow(() -> new EntityNotFoundException("Account not found with email: " + email));
+                .orElse(null);
 
         // 3) Try company repository
         if (account == null) {
@@ -103,8 +102,7 @@ public class AccountService {
     public Account getAccountById(UUID id) {
         // 1) Try user repository
         Account account = userRepository.findById(id)
-                .map(user -> (Account) user)
-                .orElseThrow(() -> new EntityNotFoundException("Account not found with id: " + id));
+                .map(user -> (Account) user).orElse(null);
 
         // 3) Try company repository
         if (account == null) {
@@ -119,7 +117,7 @@ public class AccountService {
     }
 
     
-    @CachePut(value = "accountsByEmail", key = "#email")
+    
     public String insertAccount(String email, String password, String type) {
         String encoded = passwordEncoder.encode(password);
 

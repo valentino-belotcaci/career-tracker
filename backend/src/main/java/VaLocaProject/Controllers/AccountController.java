@@ -102,7 +102,7 @@ public class AccountController {
         // The token needs to have the same configurations as the one defined in the SecurityConfig
         ResponseCookie cookie = ResponseCookie.from("token", jwtToken)
             .httpOnly(true)
-            .secure(true) // Assicurati che React sia su HTTPS o usa false per localhost
+            .secure(true) 
             .path("/")
             .maxAge(Duration.ofMinutes(30))
             .sameSite("Lax")
