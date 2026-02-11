@@ -113,7 +113,7 @@ public class AccountController {
     // To remove all headers abd cookies when loggin out
     @PostMapping("/logout")
     public ResponseEntity<Map<String, String>> logout() {
-        ResponseCookie cookie = ResponseCookie.from("token", "")
+        ResponseCookie jwtCookie = ResponseCookie.from("token", "")
                 .httpOnly(true)
                 .secure(true)   // keep consistent with authenticate cookie settings
                 .path("/")
@@ -121,8 +121,17 @@ public class AccountController {
                 .sameSite("Lax")
                 .build();
 
+        ResponseCookie csrfCookie = ResponseCookie.from("XSRF-TOKEN", "")
+            .httpOnly(false) 
+            .secure(true)
+            .path("/")
+            .maxAge(0)
+            .sameSite("Lax")
+            .build();
+
         return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
+                .header(HttpHeaders.SET_COOKIE, csrfCookie.toString())
                 .body(Map.of("message", "Logged out"));
     }
 
