@@ -19,7 +19,7 @@ export const WebSocketTest = () => {
       onConnect: () => {
         setStatus('Connesso');
         
-        client.subscribe('/topic/greetings', (message) => {
+        client.subscribe('/user/specific', (message) => {
           if (message.body) {
             const parsedMessage: ChatMessage = JSON.parse(message.body);
             setMessages((prev) => [...prev, parsedMessage]);
@@ -45,7 +45,7 @@ export const WebSocketTest = () => {
     if (stompClient.current?.connected) {
       const payload: ChatMessage = { content: "Messaggio di test" };
       stompClient.current.publish({
-        destination: '/app/hello',
+        destination: '/app/private',
         body: JSON.stringify(payload),
       });
     }
@@ -60,7 +60,7 @@ export const WebSocketTest = () => {
       <div style={{ marginTop: '10px' }}>
         <strong>Stream messaggi:</strong>
         {messages.map((m, i) => (
-          <div key={i}>📩 {m.content}</div>
+          <div key={i}>AAAAAAAA{m.content}</div>
         ))}
       </div>
     </div>

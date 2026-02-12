@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import DashboardComponent from "../../components/DashBoard/DashboardComponent";
 import { Context } from "../../components/Context";
 export default function DashboardPage() {
@@ -14,5 +14,8 @@ export default function DashboardPage() {
 
     if (!accountType) return null;
 
-    return <DashboardComponent />;
+    return  <>
+                <DashboardComponent />
+                <Link to="/messages">Messages</Link>
+            </>;
 }
