@@ -71,9 +71,9 @@ public class SecurityConfig {
                 "/error",
 
                 "/Account/authenticate",
-                "/Account/insertAccount",
+                "/Account/insertAccount"
 
-                "/ws/**"
+                
             ).permitAll()
 
             .requestMatchers(
@@ -83,7 +83,9 @@ public class SecurityConfig {
                 "/Account/deleteAccount/**",
                 "/Account/getAllAccounts",
                 "/JobPost/getPostById/**",
-                "/JobApplication/getApplicationById/**"
+                "/JobApplication/getApplicationById/**",
+
+                "/ws/**"
             ).hasAnyRole("USER", "COMPANY")
             
             .requestMatchers(

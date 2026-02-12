@@ -4,6 +4,8 @@ import { Client } from '@stomp/stompjs';
 // Definiamo la struttura del messaggio per evitare l'errore del compilatore
 interface ChatMessage {
   content: string;
+  sender: string;
+  destinationUser: string;
 }
 
 export const WebSocketTest = () => {
@@ -43,7 +45,11 @@ export const WebSocketTest = () => {
 
   const sendMessage = () => {
     if (stompClient.current?.connected) {
-      const payload: ChatMessage = { content: "Messaggio di test" };
+      const payload: ChatMessage = { 
+        content: "Messaggio di test" ,
+        sender: "l@1",
+        destinationUser: "l@2"
+      };
       stompClient.current.publish({
         destination: '/app/private',
         body: JSON.stringify(payload),
@@ -60,7 +66,7 @@ export const WebSocketTest = () => {
       <div style={{ marginTop: '10px' }}>
         <strong>Stream messaggi:</strong>
         {messages.map((m, i) => (
-          <div key={i}>AAAAAAAA{m.content}</div>
+          <div key={i}>{m.content}</div>
         ))}
       </div>
     </div>

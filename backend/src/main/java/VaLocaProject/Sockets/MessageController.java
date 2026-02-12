@@ -27,7 +27,7 @@ public class MessageController {
     // and sending them to the specific user subscribed to the "/specific" topic
     @MessageMapping("/private")
     public void handlePrivateMessage(ChatMessage message) {
-        simpMessagingTemplate.convertAndSendToUser(message.getSender(), "/specific", message);
+        simpMessagingTemplate.convertAndSendToUser(message.getDestinationUser(), "/specific", message);
         System.out.println(message);
     }
 }
