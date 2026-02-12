@@ -37,8 +37,11 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(corsConfigurationSource())) 
             // As we are using cookie to send the JWT we need csrf protection
             .csrf(csrf -> csrf
+                .ignoringRequestMatchers("/ws/**")
+                
             // withHttpOnlyFalse allows React to read the CSRF token string
-            .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())     
+            .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()) 
+                
             // We need to call this bean to force the lazy csrf token creation at the first request       
             .csrfTokenRequestHandler(createSpaRequestHandler())
             // Add this so that the csrf token is not necessary for login and register
@@ -68,7 +71,9 @@ public class SecurityConfig {
                 "/error",
 
                 "/Account/authenticate",
-                "/Account/insertAccount"
+                "/Account/insertAccount",
+
+                "/ws/**"
             ).permitAll()
 
             .requestMatchers(
