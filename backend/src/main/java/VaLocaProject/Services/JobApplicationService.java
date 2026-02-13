@@ -7,6 +7,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import VaLocaProject.Models.JobApplication;
@@ -102,6 +103,8 @@ public class JobApplicationService{
 
 
     @Transactional
+    // Additional security check to ensure that only the owner of the application can update it
+    @PreAuthorize("#jobApplication.userId.toString() == authentication.principal.id")
     // Now the updatePost method updates the cache for the specific job post
     // and invalidates the cache for the list of posts by the company
     @Caching(
@@ -111,6 +114,7 @@ public class JobApplicationService{
         @CacheEvict(value = "jobApplicationsByIds", key = "#result.postId.toString().concat('-').concat(#result.userId.toString())")    })      
     public JobApplication updateApplication(UUID id, JobApplication jobApplication) {
         // 1) Fetch from DB (managed entity)
+        
         JobApplication presentApplication = jobApplicationRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("JobApplication not found with id " + id));
 

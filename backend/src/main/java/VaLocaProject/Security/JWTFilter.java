@@ -31,7 +31,6 @@ public class JWTFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
                 
-                
         String token = extractToken(request);
         if (token != null) {
             // extract username(email in our case) from the token
@@ -45,6 +44,8 @@ public class JWTFilter extends OncePerRequestFilter {
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                     auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(auth);
+                } else {
+                    clearTokenCookie(response);
                 }
             }
         }
@@ -52,9 +53,9 @@ public class JWTFilter extends OncePerRequestFilter {
         chain.doFilter(request, response);
     }
 
-    // Helper to get token from cookies
+    // Helper to get token from cookies or Auth header
     private String extractToken(HttpServletRequest request) {
-    // 1. Try to get token from Authorization Header (For React/Axios)
+    // Try to get token from Authorization Header (For React/Axios)
         String authHeader = request.getHeader("Authorization");
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             return authHeader.substring(7); // Remove "Bearer " prefix
@@ -66,5 +67,14 @@ public class JWTFilter extends OncePerRequestFilter {
             }
         }
         return null;
+    }
+
+    // Helper method to clear the token cookie
+    private void clearTokenCookie(HttpServletResponse response) {
+        Cookie cookie = new Cookie("token", null);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(0); // Scade ora
+        response.addCookie(cookie);
     }
 }

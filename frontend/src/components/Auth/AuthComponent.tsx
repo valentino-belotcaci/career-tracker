@@ -59,7 +59,7 @@ export default function AuthComponent({onSubmit, mode}: AuthProps) {
         {isRegister && (
             <select aria-label="Account type" title="Account type" value={type} onChange={(e) => setType(e.target.value)}>
                 <option value="USER">{t('userOption')}</option>
-                <option value="COMPANY">{t('CompanyOption')}</option>
+                <option value="COMPANY">{t('companyOption')}</option>
             </select>
         )}
             

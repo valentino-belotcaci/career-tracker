@@ -8,24 +8,28 @@ import { ContextProvider } from './components/Context';
 import CreateJobDataPage from './pages/CreateJobDataPage/CreateJobDataPage';
 import JobDataDetailsPage from './pages/JobDataDetails/JobDataDetailsPage';
 import ProfileComponent from './components/Profile/ProfileComponent';
-
+import { WebSocketTest } from './pages/socketTest';
+import AxiosInterceptor from './utils/expiredTokenRedirect';
 function App() {
 
   return (
     <ContextProvider>
       <BrowserRouter>
-        <Routes>
-          <Route element={<LayoutComponent />}>
-            <Route path="/" element={<OnBoardingPage />} />
-            <Route path="/authentication/:type" element={<AuthPage/>}/> 
-            <Route path="/dashboard" element={<DashBoardPage />} />
-            <Route path="/display/:dataType" element={<DisplayJobDataPage/>}/>
-            <Route path="/create/:dataType" element={<CreateJobDataPage/>} />
-            {/*Defines the place for the useParams data to be expected */}
-            <Route path="/:jobType/:jobId" element={<JobDataDetailsPage/>}/>
-            <Route path="/profile" element={<ProfileComponent />} /> 
-          </Route>
-        </Routes>
+      <AxiosInterceptor>
+          <Routes>
+            <Route element={<LayoutComponent />}>
+              <Route path="/" element={<OnBoardingPage />} />
+              <Route path="/authentication/:type" element={<AuthPage/>}/> 
+              <Route path="/dashboard" element={<DashBoardPage />} />
+              <Route path="/display/:dataType" element={<DisplayJobDataPage/>}/>
+              <Route path="/create/:dataType" element={<CreateJobDataPage/>} />
+              {/*Defines the place for the useParams data to be expected */}
+              <Route path="/:jobType/:jobId" element={<JobDataDetailsPage/>}/>
+              <Route path="/profile" element={<ProfileComponent />} />
+              <Route path="/messages" element={<WebSocketTest/>}/>
+            </Route>
+          </Routes>
+        </AxiosInterceptor>
       </BrowserRouter>
     </ContextProvider>
   );

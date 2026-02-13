@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import {type JobPost} from "../../types/JobPost";
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { insertPost } from '../../api/jobPostApi';
 import { type JobApplication } from '../../types/JobApplication';
 import { insertApplication } from '../../api/jobApplicationApi';
@@ -12,7 +12,9 @@ export default function CreateJobDataComponent() {
     const { dataType } = useParams();
     const { loggedId } = Context(); // Get the ID from Context
     
-    const isPost = dataType === "JobPost";
+    const location = useLocation();
+    
+    const { jobId } = (location.state as { jobId?: string }) || {};    const isPost = dataType === "JobPost";
     const [jobData, setJobData] = useState<Partial<JobPost | JobApplication>>({});    
     const navigate = useNavigate();
 
@@ -20,7 +22,7 @@ export default function CreateJobDataComponent() {
         try {
             const payload = isPost 
                 ? { ...jobData, companyId: loggedId } as JobPost
-                : { ...jobData, userId: loggedId } as JobApplication;
+                : { ...jobData, userId: loggedId, postId: jobId, status: "SUBMITTED" } as JobApplication;
 
             if (isPost) {
                 await insertPost(payload as JobPost);

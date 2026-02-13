@@ -7,9 +7,12 @@ import java.util.Map;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import static org.mockito.Mockito.times;
@@ -70,38 +73,7 @@ class AccountControllerTest {
         verify(accountService, times(1)).getAllAccounts();
     }
 
-    @Test
-    public void testInsertAccount() {
 
-        // Arrange
-        Map<String, String> body = new HashMap<>();
-        body.put("email", "vale@gmail.com");
-        body.put("password", "1234");
-        body.put("type", "USER");
-
-        User account = new User(body.get("email"), body.get("password"));
-
-        when(accountService.insertAccount(
-            body.get("email"), 
-            body.get("password"), 
-            body.get("type")
-        )).thenReturn(account);
-
-        // Act
-        ResponseEntity<Account> response = accountController.insertAccount(body);
-
-        // Assert
-        assertEquals(200, response.getStatusCode().value());
-
-        assertEquals(account, response.getBody());
-
-        verify(accountService, times(1)).insertAccount(
-            body.get("email"), 
-            body.get("password"), 
-            body.get("type")
-        );
-
-    }
 
     @Test
     public void testDeleteAllAccounts(){
@@ -115,6 +87,41 @@ class AccountControllerTest {
 
         verify(accountService, times(1)).deleteAllAccounts();
 
+    }
+
+    @Test
+    public void testInsertAccount() {
+        // Arrange
+        Map<String, String> body = new HashMap<>();
+        body.put("email", "vale@gmail.com");
+        body.put("password", "1234");
+        body.put("type", "USER");
+
+        String mockToken = "mocked-jwt-token";
+        Account mockAccount = new User(body.get("email"), "encoded-password");
+
+        when(accountService.insertAccount(
+            anyString(), 
+            anyString(), 
+            anyString()
+        )).thenReturn(mockToken);
+
+        when(accountService.getAccountByEmail(anyString())).thenReturn(mockAccount);
+
+        // Act 
+        ResponseEntity<Account> response = accountController.insertAccount(body);
+
+        // Assert 
+        assertNotNull(response);
+        assertEquals(200, response.getStatusCode().value());
+        assertEquals(mockAccount, response.getBody());
+        
+        List<String> cookieHeader = response.getHeaders().get(HttpHeaders.SET_COOKIE);
+        assertNotNull(cookieHeader);
+        assertTrue(cookieHeader.get(0).contains("token=" + mockToken));
+
+        verify(accountService, times(1)).insertAccount(eq("vale@gmail.com"), eq("1234"), eq("USER"));
+        verify(accountService, times(1)).getAccountByEmail("vale@gmail.com");
     }
 
     @Test
@@ -156,8 +163,7 @@ class AccountControllerTest {
         assertEquals(u, response.getBody());
         verify(accountService, times(1)).getAccountById(id1);
     }
-
-    @Test
+@Test
     public void testAuthenticateAccount() {
 
         UUID id1 = UUID.fromString("00000000-0000-0000-0000-000000000001");
@@ -183,15 +189,15 @@ class AccountControllerTest {
         // Assert
         assertEquals(200, response.getStatusCode().value());
 
-        Map<String, Object> responseBody = (Map<String, Object>) response.getBody();
-        assertEquals("USER", responseBody.get("type"));
-        assertEquals(id1, responseBody.get("id"));
+        
+        Account responseBody = (Account) response.getBody();
+        assertNotNull(responseBody);
+        assertEquals(id1, responseBody.getId());
+        assertEquals("USER", responseBody.getType());
 
         verify(accountService, times(1)).authenticate(body.get("email"), body.get("password"));
         verify(accountService, times(1)).getAccountByEmail(body.get("email"));
     }
-
-
     @Test
     public void testLogout() {
         ResponseEntity<Map<String, String>> response = accountController.logout();

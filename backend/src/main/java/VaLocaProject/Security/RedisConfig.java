@@ -56,7 +56,7 @@ public class RedisConfig {
 
         // Creates the actual cache manager
         return RedisCacheManager.builder(factory)
-                .cacheDefaults(config)
-                .build();
+            .cacheDefaults(config)
+            .build();
     }
 }

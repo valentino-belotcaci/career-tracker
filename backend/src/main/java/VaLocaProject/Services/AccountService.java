@@ -11,7 +11,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -103,8 +102,7 @@ public class AccountService {
     public Account getAccountById(UUID id) {
         // 1) Try user repository
         Account account = userRepository.findById(id)
-                .map(user -> (Account) user)
-                .orElse(null);
+                .map(user -> (Account) user).orElse(null);
 
         // 3) Try company repository
         if (account == null) {
@@ -118,36 +116,40 @@ public class AccountService {
         return account;
     }
 
-
-    @Caching( put = {
-        @CachePut(value = "accountsByEmail", key = "#result.email"),
-        @CachePut(value = "accountsById", key = "#result.id")})
-    public Account insertAccount(String email, String password, String type) {
+    
+    
+    public String insertAccount(String email, String password, String type) {
         String encoded = passwordEncoder.encode(password);
 
         switch (type.toUpperCase()) {
             case "USER" -> {
                 User newUser = new User(email, encoded);
-                return userRepository.save(newUser);
+                userRepository.save(newUser);
             }
             case "COMPANY" -> {
                 Company newCompany = new Company(email, encoded);
-                return companyRepository.save(newCompany);
+                companyRepository.save(newCompany);
             }
             default -> throw new RuntimeException("Unknown account type: " + type);
         }
+    
+        return jwtService.generateToken(email);
  
     }
 
-   public String authenticate(String email, String password) {
-        Authentication authentication = authManager.authenticate(
+    public String authenticate(String email, String password) {
+        if (email == null || password == null) {
+            throw new IllegalArgumentException("Email e password obbligatorie");
+        }
+
+        // Use Spring security to authenticate
+        // Authentication authentication = 
+        // if we need to perform some operations on the authentication we can store it
+        authManager.authenticate(
                 new UsernamePasswordAuthenticationToken(email, password)
         );
 
-        if (!authentication.isAuthenticated()) {
-            throw new RuntimeException("Invalid credentials for email: " + email);
-        }
-
+        // Return the JWT token
         return jwtService.generateToken(email);
     }
 

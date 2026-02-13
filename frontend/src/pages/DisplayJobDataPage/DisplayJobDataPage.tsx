@@ -8,6 +8,7 @@ export default function DisplayJobDataPage() {
     return (
         <div>
             {isCompany && <Link to="/create/JobPost">new Post</Link>}
+            {!isCompany && <Link to="/display/JobPost">Apply to a post</Link>}
             <DisplayJobDataComponent />
         </div>
     );

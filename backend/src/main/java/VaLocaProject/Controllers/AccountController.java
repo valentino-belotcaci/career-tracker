@@ -51,12 +51,24 @@ public class AccountController {
         if (email == null || password == null || type == null) {
             return ResponseEntity.badRequest().build(); // return a ResponseEntity with no body with the header of badRequest
         }
+        String jwtToken = accountService.insertAccount(email, password, type);
 
-        Account saved = accountService.insertAccount(email, password, type);
+        Account saved = accountService.getAccountByEmail(email);
+
+        ResponseCookie cookie = ResponseCookie.from("token", jwtToken)
+            .httpOnly(true)
+            .secure(true) // Assicurati che React sia su HTTPS o usa false per localhost
+            .path("/")
+            .maxAge(Duration.ofMinutes(30))
+            .sameSite("Lax")
+            .build();
+
         if (saved == null) {
             return ResponseEntity.status(500).build();
         }
-        return ResponseEntity.ok(saved);
+        return ResponseEntity.ok()
+        .header(HttpHeaders.SET_COOKIE, cookie.toString())
+        .body(saved);
     }
 
 
@@ -76,54 +88,59 @@ public class AccountController {
         return ResponseEntity.ok(accountService.getAccountById(id));
     }
 
+    // NOTE: This logic needs to stay here as it is Response handling logic,
+    // so the service shouldn't interact with it
     @PostMapping("/authenticate")
-    public ResponseEntity<?> authenticateAccount(@RequestBody Map<String, String> body) {
+    public ResponseEntity<Account> authenticateAccount(@RequestBody Map<String, String> body) {
         String email = body.get("email");
         String password = body.get("password");
 
-        if (email == null || password == null) {
-            return ResponseEntity.badRequest().body("Error: email and password required");
-        }
+        // 1) Authenticate to the service and receive the JWT token as string
+        String jwtToken = accountService.authenticate(email, password);
 
-        
-        String token = accountService.authenticate(email, password);
-        if (token == null) {
-            return ResponseEntity.status(401).body("Error: Login failed");
-        }
+        // 2) DEfine the ResponseCookie with the JWT token.
+        // The token needs to have the same configurations as the one defined in the SecurityConfig
+        ResponseCookie cookie = ResponseCookie.from("token", jwtToken)
+            .httpOnly(true)
+            .secure(true) 
+            .path("/")
+            .maxAge(Duration.ofMinutes(30))
+            .sameSite("Lax")
+            .build();
 
-        // Get account directly
+        // 3) Fetch the account details to add in the body of the response
         Account account = accountService.getAccountByEmail(email);
 
-        // JWT cookie
-        ResponseCookie cookie = ResponseCookie.from("token", token)
-                .httpOnly(true)
-                .secure(true)
-                .path("/")
-                .maxAge(Duration.ofMinutes(15))
-                .sameSite("Lax")
-                .build();
-
-        // Return JSON body with concrete type and id
+        // Return the actual response with cookie inside the
+        // the header and the logged account as the body
         return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .body(account
-                );
+            .header(HttpHeaders.SET_COOKIE, cookie.toString())
+            .body(account);
     }
 
     // To remove all headers abd cookies when loggin out
     @PostMapping("/logout")
     public ResponseEntity<Map<String, String>> logout() {
-        ResponseCookie cookie = ResponseCookie.from("token", "")
-                .httpOnly(true)
-                .secure(true)   // keep consistent with authenticate cookie settings
-                .path("/")
-                .maxAge(0)      // expires immediately
-                .sameSite("Lax")
-                .build();
+        ResponseCookie jwtCookie = ResponseCookie.from("token", "")
+            .httpOnly(true)
+            .secure(true)   // keep consistent with authenticate cookie settings
+            .path("/")
+            .maxAge(0)      // expires immediately
+            .sameSite("Lax")
+            .build();
+
+        ResponseCookie csrfCookie = ResponseCookie.from("XSRF-TOKEN", "")
+            .httpOnly(true) 
+            .secure(true)
+            .path("/")
+            .maxAge(0)
+            .sameSite("Lax")
+            .build();
 
         return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .body(Map.of("message", "Logged out"));
+            .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
+            .header(HttpHeaders.SET_COOKIE, csrfCookie.toString())
+            .body(Map.of("message", "Logged out"));
     }
 
 
