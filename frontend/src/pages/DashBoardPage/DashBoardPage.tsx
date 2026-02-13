@@ -14,6 +14,7 @@ export default function DashboardPage() {
 
     if (!accountType) return null;
 
+
     return  <>
                 <DashboardComponent />
                 <Link to="/messages">Messages</Link>
