@@ -1,5 +1,6 @@
 # career-tracker
-Career Tracker is a full-stack web app that helps users organize and monitor their job applications. It lets users record roles, companies, statuses, and notes, track progress through hiring stages, and review their activity using a clear, simple interface powered by a Springboot API, PostgreSQL, Redis(for caching) and React for frontend. Docker will be used for deployment.
+Career Tracker is a full-stack web app that helps users organize and monitor their job applications. It lets users record roles, companies, statuses, and notes, and review their activity using a clear, simple interface powered by a Springboot API, PostgreSQL, Redis(for caching) and React for frontend. Docker will be used for deployment.
+We plan using Elastic search in the future to make the application more user-friendly.
 
 
 # COMMANDS
@@ -20,6 +21,12 @@ docker buildx build --platform linux/amd64 -t loca0307/careertracker --push .
 
 ##  Features
 
+### Accounts Management
+Companies can create dedicated accounts to publish job posts, providing detailed information about open positions, required skills, responsibilities, and application deadlines.
+The platform is designed to help organizations efficiently reach candidates who are actively searching for new opportunities.
+On the other hand, users can register, create personal profiles.The application process is simple and intuitive, allowing users to track the status of their applications and manage multiple submissions in one place.
+Additionally, the platform facilitates interaction between companies and candidates by enabling companies to review applicant profiles.
+
 ###  Job Application Management
 - Create a job application  
 - View list of applications  
@@ -34,72 +41,12 @@ Each application stores:
 - Status (Applied, Interview, Offer, Rejected, etc.)  
 - Notes  
 
----
-
-###  Status Progress Tracking
-- Track movement through hiring stages  
-- Log every status change with:
-  - Date  
-  - New status  
-  - Optional comment  
-- Generates a timeline per application  
-
----
-
-###  Contact Management (Recruiters / Interviewers)
-- Add contacts related to an application  
-- Store:
-  - Name  
-  - Email  
-  - Role  
-  - Phone  
-  - Notes  
-- Multiple contacts can be linked to the same application  
-
----
-
-###  Activity / Follow-Up Reminders
-- Add reminders (e.g., “Follow up in 7 days”)  
-- Due date + description  
-- Mark reminders as completed  
-
----
-
-###  Tags / Categories (optional)
-- Create tags such as: internship, remote, backend, graduate  
-- Assign multiple tags to a single application  
-
----
-
-###  Dashboard & Insights
-- Count applications by status  
-- Applications over time  
-- (Optional) Average time spent per hiring stage  
-- **Redis caching** may be used to speed up aggregate queries  
-
----
 
 ## Project Goals
 
 This project is designed for:
 - Learning full-stack development with modern tools  
 - Practicing clean architecture and REST API design  
-- Demonstrating real-world portfolio skills  
-
----
-
-## Roadmap (Next Improvements)
-
-- Authentication / user accounts  
-- File uploads (CV, cover letter, contracts)  
-- Email reminders  
-- Export to CSV / PDF  
-
----
-
-## License
-
-This project is intended for learning and portfolio use. You may choose and add a license (MIT recommended).
 
 ---
 
