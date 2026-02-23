@@ -50,6 +50,14 @@ This project is designed for:
 
 ---
 
-## Run the project
+## Run Backend
 
 ./gradlew bootRun
+
+## Run Frontend
+
+npm run dev
+
+## Run redis server
+
+sudo systemctl start redis-server
