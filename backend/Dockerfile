@@ -1,9 +1,6 @@
 # Imports java 21 from temurin
 FROM eclipse-temurin:21
 
-# Meta data (DEPRECATED)
-LABEL maintainer="javaguides.net@gmail.com"
-
 # Define the work directory inside the container file system
 WORKDIR /app
 
